@@ -4,6 +4,7 @@
  */
 
 var passport = require('passport')
+  , keys = require('./keys.json')
   , TwitterStrategy = require('passport-twitter').Strategy;
 
 var client = module.parent.exports.client;
@@ -19,9 +20,9 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use(new TwitterStrategy({
-    consumerKey: "jurDRnWS9xaRPErUttVxPQ",
-    consumerSecret: "bEztrG7ir0F1Q2oZNcH0n2bfzBG36mpiDJWhEVBtA3A",
-    callbackURL: "http://local.host:3000/auth/twitter/callback"
+    consumerKey: keys.consumer_key,
+    consumerSecret: keys.consumer_secret,
+    callbackURL: keys.twitter_callback
   },
   function(token, tokenSecret, profile, done) {
     client.set('users:' + profile.id, JSON.stringify(profile), function(){

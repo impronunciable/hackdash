@@ -5,6 +5,7 @@
 
 var express = require('express')
   , passport = require('passport')
+  , keys = require('./keys.json')
   , http = require('http');
 
 /*
@@ -35,8 +36,8 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.cookieParser('iegn23ipgnv'));
-  app.use(express.session({secret: 'ief12ne21r', store: new RedisStore }));
+  app.use(express.cookieParser(keys.session));
+  app.use(express.session({secret: keys.session, store: new RedisStore }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
