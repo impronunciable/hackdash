@@ -1,0 +1,16 @@
+{
+  "name": "hhba-hackdash",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "express": "3.0.0alpha4",
+    "jade": "*",
+    "passport": "0.1.x",
+    "passport-twitter": "0.1.x",
+    "redis": "0.7.x",
+    "connect-redis": "1.4.x"
+  }
+}

@@ -1,0 +1,14 @@
+
+.container { margin-top: 60px; }
+
+.signIn { margin-top: 80px; text-align: center; padding-top: 60px; padding-bottom: 60px; }
+  .signIn h1 {margin-bottom: 60px; }
+
+.newProject { margin-top: 4px; }
+
+.cancel { margin-left: 10px; }
+
+.projects { margin-top: 20px; }
+
+.project{}
+

@@ -1,0 +1,56 @@
+extends layout
+
+block content
+
+  .row
+    .span4
+      h1 Projects
+
+    .span2.offset6
+      a.newProject.btn.btn-primary(href="#newProject", data-toggle="modal") New project
+
+  .row.projects
+    each project in projects
+      .span4.project.well
+        h3 #{project.title} 
+        p
+          strong (@#{project.owner_username})
+        p
+          strong Description: 
+          | #{project.description}
+        
+        p
+          strong Code repository:  
+          | #{project.repo}
+ 
+        p
+          - if(project.owner_id == user.id){
+            p You own this project
+          - } else if(project.contributors.indexOf(user.username) !== -1){
+          a.join.btn(href="/projects/leave/" + project.id) Leave project
+          - } else {
+            a.join.btn(href="/projects/join/" + project.id) Join project
+          - }
+ 
+  #newProject.modal.hide
+    form.form-horizontal(action="/projects/new", method="POST")
+      fieldset
+        legend New Project
+        .control-group
+          label.control-label(for="title") Title
+          .controls
+            input(class="input-xlarge", type="text", name="title", id="title")
+
+        .control-group
+          label.control-label(for="description") Description
+          .controls
+            textarea(class="input-xlarge", id="description", name="description", rows="3")
+
+       .control-group
+          label.control-label(for="repo") Code Repository
+          .controls
+            input(class="input-xlarge", type="text", name="repo", id="repo")
+
+      .form-actions
+        button.btn.btn-primary(type="submit") Create project
+        button.btn.cancel Cancel
