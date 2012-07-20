@@ -8,7 +8,14 @@
 
 .cancel { margin-left: 10px; margin-right: 10px; }
 
-.projects { margin-top: 20px; }
+.projects { margin-top: 20px; margin-left: 100px; }
 
 .form-search { margin-top: -15px }
   .form-search button { margin-left: 20px; }
+
+
+.users { list-style: none; margin: 0; }
+  .users li { display: inline; margin-right: 8px; width: 48px;}
+    .users li span { font-size: 0.9em; }
+
+.more { display: none; }

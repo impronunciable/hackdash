@@ -22,11 +22,14 @@ block content
           strong (@#{project.owner_username})
         p
           strong Description: 
-          | #{project.description}
+          | #{project.description.replace(/\n/, '<br />')}
         
         p
-          strong Code repository:  
-          | #{project.repo}
+          strong Links:  
+          ul
+            each link in project.links
+              li
+                a(href=link)= link
  
         p
           - if(project.owner_id == user.id){
@@ -36,7 +39,15 @@ block content
           - } else {
             a.join.btn(href="/projects/join/" + project.id) Join project
           - }
- 
+
+        ul.users
+          each contrib in project.contributors
+            li
+              a(href="https://twitter.com/" + contrib) 
+                img(src="http://avatars.io/twitter/" + contrib) 
+                br
+                span @#{contrib}
+
   #newProject.modal.hide
     form.form-horizontal(action="/projects/new", method="POST")
       fieldset
@@ -52,9 +63,9 @@ block content
             textarea(class="input-xlarge", id="description", name="description", rows="3")
 
        .control-group
-          label.control-label(for="repo") Code Repository
+          label.control-label(for="links") Links (comma separated)
           .controls
-            input(class="input-xlarge", type="text", name="repo", id="repo")
+            input(class="input-xlarge", type="text", name="links", id="links")
 
       .form-actions
         button.btn.btn-primary(type="submit") Create project
@@ -62,3 +73,7 @@ block content
 
 
   #editProject.modal.hide
+
+  script()
+      window.username = '#{user.username}';
+

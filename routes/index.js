@@ -34,7 +34,7 @@ app.get('/dashboard', isAuth, function(req, res){
       projects = projects.map(function(project){
         return JSON.parse(project);
       });
-  
+      console.log(projects);
       res.render('dashboard', {projects: projects, user: req.user});
     });
   });
@@ -87,13 +87,14 @@ app.get('/projects/leave/:id', function(req, res){
 app.post('/projects/new', isAuth, function(req, res){
   if(req.body.title && req.body.description){
     var hash = Math.floor(Math.random() * 9999999 + 1);
+    console.log(req.body);
     var project = {
         id: hash
       , title: req.body.title
       , owner_id: req.user.id
       , owner_username: req.user.username
       , description: req.body.description
-      , repo: req.body.repo || ''
+      , links: req.body.links.split(',') || []
       , contributors: [req.user.username]
     };
 
@@ -122,6 +123,7 @@ app.post('/projects/edit/:id', isAuth, isOwner, function(req, res){
 
       project.title = req.body.title;
       project.description = req.body.description;
+      project.links = req.body.links.split(',') || [];
 
       client.set('hhba:projects:' + req.params.id, JSON.stringify(project), function(){
         search.remove(req.params.id, function(){

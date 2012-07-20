@@ -12,9 +12,9 @@ form.form-horizontal(action="/projects/edit/" + project.id, method="POST")
         textarea(class="input-xlarge", id="description", name="description", rows="3")= project.description
 
    .control-group
-     label.control-label(for="repo") Code Repository
+     label.control-label(for="links") Code Repository
        .controls
-         input(class="input-xlarge", type="text", name="repo", id="repo", value= project.repo)
+         input(class="input-xlarge", type="text", name="links", id="links", value= project.links)
 
   .form-actions
     button.btn.btn-primary(type="submit") Edit project
