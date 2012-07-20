@@ -10,5 +10,5 @@
 
 .projects { margin-top: 20px; }
 
-.project{}
-
+.form-search { margin-top: -15px }
+  .form-search button { margin-left: 20px; }
