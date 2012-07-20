@@ -8,6 +8,14 @@ var isAuth = function(req, res, next){
   else res.redirect('/');
 };
 
+var isOwner = function(req, res, next){
+  client.get('projects:' + req.params.id, function(err, project){
+    project = JSON.parse(project);
+    if(project && project.owner_id == req.user.id) next();
+    else res.redirect('back');
+  });
+};
+
 app.get('/', function(req, res){
   if(req.isAuthenticated()){
     res.redirect('/dashboard');
@@ -88,6 +96,36 @@ app.post('/projects/new', isAuth, function(req, res){
   } else {
     res.redirect('back');
   }
+});
+
+app.get('/projects/edit/:id', isAuth, isOwner, function(req, res){
+  client.get('projects:' + req.params.id, function(err, project){
+    project = JSON.parse(project);
+    res.render('edit', {project: project});
+  });
+});
+
+app.post('/projects/edit/:id', isAuth, isOwner, function(req, res){
+  if(req.body.title && req.body.description){
+    client.get('projects:' + req.params.id, function(err, project){
+      project = JSON.parse(project);
+
+      project.title = req.body.title;
+      project.description = req.body.description;
+
+      client.set('projects:' + req.params.id, JSON.stringify(project), function(){
+        res.redirect('back');
+      });
+    });
+  } else {
+
+  }
+});
+
+app.get('/projects/remove/:id', isAuth, isOwner, function(req, res){
+  client.del('projects:' + req.params.id, function(err){
+    res.redirect('back');
+  });
 });
 
 app.get('/auth/twitter',

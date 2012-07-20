@@ -18,7 +18,6 @@ passport.deserializeUser(function(id, done) {
     done(err, JSON.parse(user));
   });
 });
-
 passport.use(new TwitterStrategy({
     consumerKey: keys.consumer_key,
     consumerSecret: keys.consumer_secret,

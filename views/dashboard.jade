@@ -25,9 +25,9 @@ block content
  
         p
           - if(project.owner_id == user.id){
-            p You own this project
+            a.edit.btn(href="/projects/edit/" + project.id) Edit project
           - } else if(project.contributors.indexOf(user.username) !== -1){
-          a.join.btn(href="/projects/leave/" + project.id) Leave project
+            a.join.btn(href="/projects/leave/" + project.id) Leave project
           - } else {
             a.join.btn(href="/projects/join/" + project.id) Join project
           - }
@@ -54,3 +54,6 @@ block content
       .form-actions
         button.btn.btn-primary(type="submit") Create project
         button.btn.cancel Cancel
+
+
+  #editProject.modal.hide

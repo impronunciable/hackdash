@@ -16,4 +16,12 @@ $(function(){
       }
     });   
   });
+
+  $('.edit').click(function(e){
+    e.preventDefault();
+    $('#editProject').load($(this).attr('href'), function(){
+      $('#editProject').modal('show');
+    });
+  });
+
 });

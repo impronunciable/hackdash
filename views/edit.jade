@@ -1,0 +1,22 @@
+form.form-horizontal(action="/projects/edit/" + project.id, method="POST")
+  fieldset
+    legend New Project
+    .control-group
+      label.control-label(for="title") Title
+      .controls
+        input(class="input-xlarge", type="text", name="title", id="title", value= project.title)
+
+    .control-group
+      label.control-label(for="description") Description
+      .controls
+        textarea(class="input-xlarge", id="description", name="description", rows="3")= project.description
+
+   .control-group
+     label.control-label(for="repo") Code Repository
+       .controls
+         input(class="input-xlarge", type="text", name="repo", id="repo", value= project.repo)
+
+  .form-actions
+    button.btn.btn-primary(type="submit") Edit project
+    button.btn.cancel Cancel
+    a.btn.btn-danger(href="/projects/remove/" + project.id) Remove Project
