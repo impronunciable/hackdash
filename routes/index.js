@@ -9,7 +9,7 @@ var isAuth = function(req, res, next){
 };
 
 var isOwner = function(req, res, next){
-  client.get('projects:' + req.params.id, function(err, project){
+  client.get('hhba:projects:' + req.params.id, function(err, project){
     project = JSON.parse(project);
     if(project && project.owner_id == req.user.id) next();
     else res.redirect('back');
@@ -25,7 +25,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/dashboard', isAuth, function(req, res){
-  client.keys('projects:*', function(err, keys){
+  client.keys('hhba:projects:*', function(err, keys){
     client.mget(keys, function(err, projects){
 
       projects = projects || [];      
@@ -43,13 +43,13 @@ app.get('/projects/join/:id', function(req, res){
   if(!req.isAuthenticated()){
     res.end('0');
   } else {
-    client.get('projects:' + req.params.id, function(err, project) {
+    client.get('hhba:projects:' + req.params.id, function(err, project) {
       project = JSON.parse(project);
       if(project.contributors.indexOf(req.user.username) !== -1) {
         res.end('1');
       } else {
         project.contributors.push(req.user.username);
-        client.set('projects:' + req.params.id, JSON.stringify(project), function(){
+        client.set('hhba:projects:' + req.params.id, JSON.stringify(project), function(){
           res.end('1');
         });
       }  
@@ -62,11 +62,11 @@ app.get('/projects/leave/:id', function(req, res){
   if(!req.isAuthenticated()){
     res.end('0');
   } else {
-    client.get('projects:' + req.params.id, function(err, project) {
+    client.get('hhba:projects:' + req.params.id, function(err, project) {
       project = JSON.parse(project);
       if(project.contributors.indexOf(req.user.username) !== -1 && project.owner_id != req.user.id) {
         project.contributors.splice(project.contributors.indexOf(req.user.username), 1);
-        client.set('projects:' + req.params.id, JSON.stringify(project), function(){
+        client.set('hhba:projects:' + req.params.id, JSON.stringify(project), function(){
           res.end('2');
         });
       } else {
@@ -89,7 +89,7 @@ app.post('/projects/new', isAuth, function(req, res){
       , contributors: [req.user.username]
     };
 
-    client.set('projects:' + hash, JSON.stringify(project), function(){
+    client.set('hhba:projects:' + hash, JSON.stringify(project), function(){
       res.redirect('back');
     });
 
@@ -99,7 +99,7 @@ app.post('/projects/new', isAuth, function(req, res){
 });
 
 app.get('/projects/edit/:id', isAuth, isOwner, function(req, res){
-  client.get('projects:' + req.params.id, function(err, project){
+  client.get('hhba:projects:' + req.params.id, function(err, project){
     project = JSON.parse(project);
     res.render('edit', {project: project});
   });
@@ -107,13 +107,13 @@ app.get('/projects/edit/:id', isAuth, isOwner, function(req, res){
 
 app.post('/projects/edit/:id', isAuth, isOwner, function(req, res){
   if(req.body.title && req.body.description){
-    client.get('projects:' + req.params.id, function(err, project){
+    client.get('hhba:projects:' + req.params.id, function(err, project){
       project = JSON.parse(project);
 
       project.title = req.body.title;
       project.description = req.body.description;
 
-      client.set('projects:' + req.params.id, JSON.stringify(project), function(){
+      client.set('hhba:projects:' + req.params.id, JSON.stringify(project), function(){
         res.redirect('back');
       });
     });
@@ -123,7 +123,7 @@ app.post('/projects/edit/:id', isAuth, isOwner, function(req, res){
 });
 
 app.get('/projects/remove/:id', isAuth, isOwner, function(req, res){
-  client.del('projects:' + req.params.id, function(err){
+  client.del('hhba:projects:' + req.params.id, function(err){
     res.redirect('back');
   });
 });
