@@ -34,7 +34,6 @@ app.get('/dashboard', isAuth, function(req, res){
       projects = projects.map(function(project){
         return JSON.parse(project);
       });
-      console.log(projects);
       res.render('dashboard', {projects: projects, user: req.user});
     });
   });
@@ -46,15 +45,11 @@ app.get('/projects/join/:id', function(req, res){
   } else {
     client.get('hhba:projects:' + req.params.id, function(err, project) {
       project = JSON.parse(project);
-      if(project.contributors.indexOf(req.user.username) !== -1) {
+      if(project.contributors.indexOf(req.user.username) !== -1 && project.pendent.indexOf(req.user.username) !== -1) {
         res.end('1');
       } else {
-        project.contributors.push(req.user.username);
+        project.pending.push(req.user.username);
         client.set('hhba:projects:' + req.params.id, JSON.stringify(project), function(){
-          search.remove(req.params.id, function(){
-            search.index(project.title + ' ' + project.description + ' ' + project.contributors.join(' ')
-            , req.params.id);
-          });
           res.end('1');
         });
       }  
@@ -77,8 +72,86 @@ app.get('/projects/leave/:id', function(req, res){
             , req.params.id);
           });
         });
+      } else if(project.pending.indexOf(req.user.username) !== -1) {
+        project.pending.splice(project.pending.indexOf(req.user.username), 1);
+        client.set('hhba:projects:' + req.params.id, JSON.stringify(project), function(){
+          res.end('2');
+          search.remove(req.params.id, function(){
+            search.index(project.title + ' ' + project.description + ' ' + project.contributors.join(' ')
+            , req.params.id);
+          });
+        });
       } else {
         res.end('2');
+      }  
+    });
+  } 
+});
+
+app.get('/accept/:pid/:uid', function(req, res){
+  if(!req.isAuthenticated()){
+    res.end('0');
+  } else {
+    client.get('hhba:projects:' + req.params.pid, function(err, project) {
+      project = JSON.parse(project);
+      if(project.owner_id != req.user.id) {
+        res.end('1');
+      } else if(project.pending.indexOf(req.params.uid) === -1) {
+        res.end('2');
+      } else {
+        project.contributors.push(req.params.uid);
+        project.pending.splice(project.pending.indexOf(req.params.uid), 1);
+        client.set('hhba:projects:' + req.params.pid, JSON.stringify(project), function(){
+          search.remove(req.params.pid, function(){
+            search.index(project.title + ' ' + project.description + ' ' + project.contributors.join(' ')
+            , req.params.id);
+          });
+          res.end('3');
+        });
+      }  
+    });
+  } 
+});
+
+app.get('/decline/:pid/:uid', function(req, res){
+  if(!req.isAuthenticated()){
+    res.end('0');
+  } else {
+    client.get('hhba:projects:' + req.params.pid, function(err, project) {
+      project = JSON.parse(project);
+      if(project.owner_id != req.user.id) {
+        res.end('0');
+      } else if(project.pending.indexOf(req.params.uid) === -1) {
+        res.end('1');
+      } else {
+        project.pending.splice(project.pending.indexOf(req.params.uid), 1);
+        client.set('hhba:projects:' + req.params.pid, JSON.stringify(project), function(){
+          res.end('1');
+          search.remove(req.params.pid, function(){
+            search.index(project.title + ' ' + project.description + ' ' + project.contributors.join(' ')
+            , req.params.id);
+          });
+        });
+      }  
+    });
+  } 
+});
+
+app.get('/decline/:pid/:uid', function(req, res){
+  if(!req.isAuthenticated()){
+    res.end('0');
+  } else {
+    client.get('hhba:projects:' + req.params.id, function(err, project) {
+      project = JSON.parse(project);
+      if(project.owner_id != req.user.id) {
+        res.end('0');
+      } else if(project.pending.indexOf(req.user.username) === -1) {
+        res.end('1');
+      } else {
+        project.pending.splice(project.pending.indexOf(req.user.username), 1);
+        client.set('hhba:projects:' + req.params.id, JSON.stringify(project), function(){
+          res.end('1');
+        });
       }  
     });
   } 
@@ -96,6 +169,7 @@ app.post('/projects/new', isAuth, function(req, res){
       , description: req.body.description
       , links: req.body.links.split(',') || []
       , contributors: [req.user.username]
+      , pending: []
     };
 
     client.set('hhba:projects:' + hash, JSON.stringify(project), function(){
@@ -134,7 +208,7 @@ app.post('/projects/edit/:id', isAuth, isOwner, function(req, res){
       });
     });
   } else {
-
+    res.redirect('/dashboard');
   }
 });
 
@@ -151,10 +225,12 @@ app.get('/search', isAuth, function(req, res){
   .end(function(err, ids){
     ids = ids.map(function(id){ return 'hhba:projects:' + id; });
     client.mget(ids, function(err, projects){
-      console.log(projects);
       projects = projects || [];
       projects = projects.map(function(project){
         return JSON.parse(project);
+      });
+      projects = projects.filter(function(project){
+        return !!project;
       });
       res.render('dashboard', {projects: projects, user: req.user});
     });

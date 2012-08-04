@@ -1,6 +1,6 @@
 form.form-horizontal(action="/projects/edit/" + project.id, method="POST")
   fieldset
-    legend New Project
+    legend Edit Project
     .control-group
       label.control-label(for="title") Title
       .controls
@@ -20,3 +20,19 @@ form.form-horizontal(action="/projects/edit/" + project.id, method="POST")
     button.btn.btn-primary(type="submit") Edit project
     button.btn.cancel Cancel
     a.btn.btn-danger(href="/projects/remove/" + project.id) Remove Project
+
+h3 Pending users
+
+-if(!project.pending.length){
+  strong No users to moderate
+-}
+
+table.table.pending
+  tbody
+    each user in project.pending
+      tr
+        td= user
+        td 
+          a.btn-success.btn(href="/accept/"+project.id+"/"+user) Accept
+        td 
+          a.btn-danger.btn(href="/decline/"+project.id+"/"+user) Decline
