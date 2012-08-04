@@ -29,7 +29,7 @@ block content
           ul
             each link in project.links
               li
-                a(href=link)= link
+                a(href=link, target="blank")= link
  
         p
           - if(project.owner_id == user.id){
@@ -43,7 +43,7 @@ block content
         ul.users
           each contrib in project.contributors
             li
-              a(href="https://twitter.com/" + contrib) 
+              a(href="/search?q=" + contrib, target="_blank") 
                 span @#{contrib}
 
   #newProject.modal.hide

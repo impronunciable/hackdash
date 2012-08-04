@@ -104,7 +104,7 @@ app.get('/accept/:pid/:uid', function(req, res){
         client.set('hhba:projects:' + req.params.pid, JSON.stringify(project), function(){
           search.remove(req.params.pid, function(){
             search.index(project.title + ' ' + project.description + ' ' + project.contributors.join(' ')
-            , req.params.id);
+            , req.params.pid);
           });
           res.end('3');
         });

@@ -30,11 +30,18 @@ $(function(){
   });
 
   $('.read').click(function(e){
-    e.preventDefault();
 
+    e.preventDefault();
     $(this).next().show();
     $(this).remove();
-    
+  });
+
+  $('.accept,.decline').live('click', function(e){
+    e.preventDefault();
+    var self = this;
+    $.get($(this).attr('href'), function(){
+      $(self).parents('tr').remove();
+    });
   });
 
 });
