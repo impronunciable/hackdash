@@ -44,4 +44,9 @@ $(function(){
     });
   });
 
+  $('.project').hover(function(){
+    $(this).css('overflow', 'visible');
+  }, function(){
+    $(this).css('overflow', 'hidden');
+  });
 });

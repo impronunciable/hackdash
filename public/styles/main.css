@@ -10,6 +10,8 @@
 
 .projects { margin-top: 20px; margin-left: 100px; }
 
+.projects .project { height: 233px; overflow: hidden; }
+
 .form-search { margin-top: -15px }
   .form-search button { margin-left: 20px; }
 
