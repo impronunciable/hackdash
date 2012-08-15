@@ -23,11 +23,13 @@ block content
         p
           strong (@#{project.owner_username}) 
           - if(user && project.owner_id == user.id){
-            a.edit(href="/projects/edit/" + project.id) Edit project
+            a.edit(href="/projects/edit/" + project.id) Editar proyecto (#{project.pending.length})
           - } else if(user && project.contributors.indexOf(user.username) !== -1){
-            a.join(href="/projects/leave/" + project.id) Leave project
+            a.join(href="/projects/leave/" + project.id) Abandonar proyecto
+          - } else if(user && project.pending.indexOf(user.username) !== -1){
+            a.join(href="/projects/leave/" + project.id) Pendiente de aprobación
           - } else {
-            a.join(href="/projects/join/" + project.id) Join project
+            a.join(href="/projects/join/" + project.id) Unirte al proyecto
           - }
         p.description
           | #{project.description.replace('\n', '<br />')}
@@ -45,35 +47,33 @@ block content
         ul.users
           each contrib in project.contributors
             li
-              a(href="/search?q=" + contrib, target="_blank") 
+              a(href="https://twitter.com/" + contrib, target="_blank") 
                 span @#{contrib}
 
   #newProject.modal.hide
     form.form-horizontal(action="/projects/new", method="POST")
       fieldset
-        legend New Project
+        legend Crear proyecto
         .control-group
-          label.control-label(for="title") Title
+          label.control-label(for="title") Titulo
           .controls
             input(class="input-xlarge", type="text", name="title", id="title")
 
         .control-group
-          label.control-label(for="description") Description
+          label.control-label(for="description") Descripción
           .controls
             textarea(class="input-xlarge", id="description", name="description", rows="3", maxlength="400")
 
        .control-group
-          label.control-label(for="links") Links (comma separated)
+          label.control-label(for="links") Links (separados por coma ",")
           .controls
             input(class="input-xlarge", type="text", name="links", id="links")
 
       .form-actions
-        button.btn.btn-primary(type="submit") Create project
-        button.btn.cancel Cancel
+        button.btn.btn-primary(type="submit") Crear proyecto
+        button.btn.cancel Cancelar
 
   #editProject.modal.hide
-
-if(!user) user = {username: ''}
 
   script()
       window.username = '#{user.username}';

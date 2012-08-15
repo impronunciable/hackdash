@@ -30,7 +30,7 @@ app.get('/dashboard', function(req, res){
       projects = projects.map(function(project){
         return JSON.parse(project);
       });
-      res.render('dashboard', {projects: projects, user: req.user});
+      res.render('dashboard', {projects: projects, user: req.user || {username: ''}});
     });
   });
 });
@@ -219,7 +219,7 @@ app.get('/projects/remove/:id', isAuth, isOwner, function(req, res){
   });
 });
 
-app.get('/search', isAuth, function(req, res){
+app.get('/search', function(req, res){
   search
   .query(req.query.q)
   .end(function(err, ids){
@@ -232,7 +232,8 @@ app.get('/search', isAuth, function(req, res){
       projects = projects.filter(function(project){
         return !!project;
       });
-      res.render('dashboard', {projects: projects, user: req.user});
+	var user = req.user || {'username': ''};
+      res.render('dashboard', {projects: projects, user: user});
     });
   });
 });

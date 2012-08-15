@@ -1,30 +1,30 @@
 form.form-horizontal(action="/projects/edit/" + project.id, method="POST")
   fieldset
-    legend Edit Project
+    legend Editar Proyecto
     .control-group
-      label.control-label(for="title") Title
+      label.control-label(for="title") Titulo
       .controls
         input(class="input-xlarge", type="text", name="title", id="title", value= project.title)
 
     .control-group
-      label.control-label(for="description") Description
+      label.control-label(for="description") Descripción
       .controls
         textarea(class="input-xlarge", id="description", name="description", rows="5", maxlength="400")= project.description
 
    .control-group
-     label.control-label(for="links") Code Repository
+     label.control-label(for="links") links (separados por coma ",")
        .controls
          input(class="input-xlarge", type="text", name="links", id="links", value= project.links)
 
   .form-actions
-    button.btn.btn-primary(type="submit") Edit project
-    button.btn.cancel Cancel
-    a.btn.btn-danger(href="/projects/remove/" + project.id) Remove Project
+    button.btn.btn-primary(type="submit") Guardar
+    button.btn.cancel Cerrar
+    a.btn.btn-danger(href="/projects/remove/" + project.id) Borrar proyecto
 
-h3 Pending users
+h3 Usuarios pendientes
 
 -if(!project.pending.length){
-  strong No users to moderate
+  strong No hay usuarios por moderar
 -}
 
 table.table.pending
@@ -33,6 +33,6 @@ table.table.pending
       tr
         td= user
         td 
-          a.accept.btn-success.btn(href="/accept/"+project.id+"/"+user) Accept
+          a.accept.btn-success.btn(href="/accept/"+project.id+"/"+user) Aceptar
         td 
-          a.decline.btn-danger.btn(href="/decline/"+project.id+"/"+user) Decline
+          a.decline.btn-danger.btn(href="/decline/"+project.id+"/"+user) Rechazar

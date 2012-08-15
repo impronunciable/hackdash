@@ -43,13 +43,10 @@
 }
 
 .project .title {
-  height: 54px;
-  overflow: hidden;
 }
 
 .project .description {
   min-height: 72px;
-  overflow: hidden;
 }
 
 .header .newProject {
