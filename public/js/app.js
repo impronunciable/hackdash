@@ -7,6 +7,11 @@ $(function(){
     }
 
   });
+
+  $('#newProject').click(function(){
+    if(!window.username.length) window.location = 'http://hackdash.hhba.info/auth/twitter';
+  });
+
   $('.modal').modal({show: false});
 
   $('.join').click(function(e){
