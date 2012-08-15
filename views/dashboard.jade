@@ -2,43 +2,45 @@ extends layout
 
 block content
 
-  .row
-    .span4
-      h1 Projects
+  .row-fluid.header
+    .span3.logo
+      img(src="/images/logo.png", width="225")
 
-    .span4
+    .span3
+    .span3
       form.well.form-search(action="/search", method="get")
         input.input-medium.search-query(type="text", name="q")
-        button.btn(type="submit") Search
+        button.btn(type="submit") Buscar
 
-    .span2.offset2
-      a.newProject.btn.btn-primary(href="#newProject", data-toggle="modal") New project
+    .span3
+      a.span12.newProject(href="#newProject", data-toggle="modal")
+        img.span12(src="/images/new-project.png")
 
-  .row.projects
-    each project in projects
-      .span4.project.well
-        h3 #{project.title} 
+  .row-fluid.projects
+    each project, index in projects
+      .project.well
+        h3.title #{project.title}
         p
-          strong (@#{project.owner_username})
-        p
-          strong Description: 
-          | #{project.description.replace(/\n/, '<br />')}
+          strong (@#{project.owner_username}) 
+          - if(user && project.owner_id == user.id){
+            a.edit(href="/projects/edit/" + project.id) Edit project
+          - } else if(user && project.contributors.indexOf(user.username) !== -1){
+            a.join(href="/projects/leave/" + project.id) Leave project
+          - } else {
+            a.join(href="/projects/join/" + project.id) Join project
+          - }
+        p.description
+          | #{project.description.replace('\n', '<br />')}
         
         p
-          strong Links:  
-          ul
-            each link in project.links
-              li
+            each link, index in project.links
+              if(index != project.links.length - 1)
+                a(href=link, target="blank")= link
+                |  |
+              else 
                 a(href=link, target="blank")= link
  
-        p
-          - if(project.owner_id == user.id){
-            a.edit.btn(href="/projects/edit/" + project.id) Edit project
-          - } else if(project.contributors.indexOf(user.username) !== -1){
-            a.join.btn(href="/projects/leave/" + project.id) Leave project
-          - } else {
-            a.join.btn(href="/projects/join/" + project.id) Join project
-          - }
+
 
         ul.users
           each contrib in project.contributors
@@ -58,7 +60,7 @@ block content
         .control-group
           label.control-label(for="description") Description
           .controls
-            textarea(class="input-xlarge", id="description", name="description", rows="3")
+            textarea(class="input-xlarge", id="description", name="description", rows="3", maxlength="400")
 
        .control-group
           label.control-label(for="links") Links (comma separated)
@@ -69,9 +71,9 @@ block content
         button.btn.btn-primary(type="submit") Create project
         button.btn.cancel Cancel
 
-
   #editProject.modal.hide
+
+if(!user) user = {username: ''}
 
   script()
       window.username = '#{user.username}';
-

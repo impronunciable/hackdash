@@ -1,11 +1,18 @@
 $(function(){
 
+  $('.projects').masonry({
+    itemSelector: '.project',
+    columnWidth: function( containerWidth ) {
+      return containerWidth / 4;
+    }
+
+  });
   $('.modal').modal({show: false});
 
   $('.join').click(function(e){
     e.preventDefault();
     var self = this;
-
+    if(!window.username) window.location = 'http://local.host:3000/auth/twitter';
     $.get($(this).attr('href'), function(data){
       if(data == 1) {
         $(self).attr('href', $(self).attr('href').replace('join','leave'));
@@ -23,6 +30,7 @@ $(function(){
   });
 
   $('.edit').click(function(e){
+    if(!window.username.length) window.location = 'http://local.host:3000/auth/twitter';
     e.preventDefault();
     $('#editProject').load($(this).attr('href'), function(){
       $('#editProject').modal('show');
@@ -30,13 +38,14 @@ $(function(){
   });
 
   $('.read').click(function(e){
-
+    if(!window.username.length) window.location = 'http://local.host:3000/auth/twitter';
     e.preventDefault();
     $(this).next().show();
     $(this).remove();
   });
 
   $('.accept,.decline').live('click', function(e){
+    if(!window.username.length) window.location = 'http://local.host:3000/auth/twitter';
     e.preventDefault();
     var self = this;
     $.get($(this).attr('href'), function(){

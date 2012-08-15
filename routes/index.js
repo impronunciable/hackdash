@@ -20,14 +20,10 @@ var isOwner = function(req, res, next){
 };
 
 app.get('/', function(req, res){
-  if(req.isAuthenticated()){
-    res.redirect('/dashboard');
-  } else {
-    res.render('index');
-  }
+  res.redirect('/dashboard');
 });
 
-app.get('/dashboard', isAuth, function(req, res){
+app.get('/dashboard', function(req, res){
   client.keys('hhba:projects:*', function(err, keys){
     client.mget(keys, function(err, projects){
       projects = projects || [];      
@@ -197,7 +193,11 @@ app.post('/projects/edit/:id', isAuth, isOwner, function(req, res){
 
       project.title = req.body.title;
       project.description = req.body.description;
-      project.links = req.body.links.split(',') || [];
+      if(project.links.length) {
+        project.links = req.body.links.split(',');
+      } else {
+        project.links = [];
+      }
 
       client.set('hhba:projects:' + req.params.id, JSON.stringify(project), function(){
         search.remove(req.params.id, function(){

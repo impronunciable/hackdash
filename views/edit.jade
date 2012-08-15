@@ -9,7 +9,7 @@ form.form-horizontal(action="/projects/edit/" + project.id, method="POST")
     .control-group
       label.control-label(for="description") Description
       .controls
-        textarea(class="input-xlarge", id="description", name="description", rows="3")= project.description
+        textarea(class="input-xlarge", id="description", name="description", rows="5", maxlength="400")= project.description
 
    .control-group
      label.control-label(for="links") Code Repository

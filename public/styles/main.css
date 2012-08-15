@@ -8,9 +8,9 @@
 
 .cancel { margin-left: 10px; margin-right: 10px; }
 
-.projects { margin-top: 20px; margin-left: 100px; }
+.projects { margin-top: 20px;  }
 
-.projects .project { height: 233px; overflow: hidden; }
+.projects .project { width: 20%; overflow: hidden; }
 
 .form-search { margin-top: -15px }
   .form-search button { margin-left: 20px; }
@@ -21,3 +21,42 @@
     .users li span { font-size: 0.9em; }
 
 .more { display: none; }
+
+
+.logo {
+  
+}
+
+.header {
+  margin-top: 30px;
+}
+
+.header .form-search {
+  margin-top: 30px;
+}
+
+ .header .newProject {
+  right: 0;
+  padding: 23px;
+  background-color: #c83737;
+  background-image: none;
+}
+
+.project .title {
+  height: 54px;
+  overflow: hidden;
+}
+
+.project .description {
+  min-height: 72px;
+  overflow: hidden;
+}
+
+.header .newProject {
+  text-indent: -999em;
+  background: transparent;
+}
+
+.header .newProject img {
+  height: 75px;
+}
