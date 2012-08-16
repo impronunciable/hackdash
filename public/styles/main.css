@@ -17,7 +17,7 @@
 
 
 .users { list-style: none; margin: 0; }
-  .users li { display: inline; margin-right: 8px; width: 48px;}
+  .users li { display: inline; margin-right: 2px; width: 48px;}
     .users li span { font-size: 0.9em; }
 
 .more { display: none; }

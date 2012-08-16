@@ -16,6 +16,10 @@ var redis = require('redis')
   , RedisStore = require('connect-redis')(express)
   , client = exports.client = redis.createClient();
 
+setTimeout(function(){
+	client.save();
+}, 5 * 60 * 1000);
+
 /*
  * Auth
  */
