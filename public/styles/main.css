@@ -57,3 +57,30 @@
 .header .newProject img {
   height: 75px;
 }
+
+
+a {
+    color: #C13E38;
+    text-decoration: none;
+}
+
+
+
+.well {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 1px rgba(0, 2, 0, 0.11) inset;
+    margin-bottom: 20px;
+    min-height: 20px;
+    padding: 19px;
+}
+
+
+h3 {
+    font-family: Georgia,"Times New Roman",Times,serif !important;
+    font-size: 24px;
+    font-weight: normal;
+    line-height: 27px;
+}
+
