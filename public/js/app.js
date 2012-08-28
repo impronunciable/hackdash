@@ -72,7 +72,8 @@ $('#newProject').click(function(){if(!window.username.length) window.location="h
 
   $('.sort').click(function(){
     var vid = $(this).attr('id');
-    $('.projects').isotope({'sortBy': vid });
+    var asc = vid === 'name';
+    $('.projects').isotope({'sortBy': vid, 'sortAscending': asc });
   });
 
   twttr.anywhere(function (T) {
