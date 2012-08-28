@@ -74,12 +74,6 @@ $('#newProject').click(function(){if(!window.username.length) window.location="h
     });
   });
 
-  $('.project').hover(function(){
-    $(this).css('overflow', 'visible');
-  }, function(){
-    $(this).css('overflow', 'hidden');
-  });
-
   $('.sort').click(function(){
     var vid = $(this).attr('id');
     var asc = vid === 'name';
