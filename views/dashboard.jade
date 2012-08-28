@@ -17,9 +17,10 @@ block content
 
     .span3#sort
       h3 filtrar
-      button.span4.btn-large.sort.btn#date Fecha
-      button.span4.btn-large.sort.btn#name Nombre
-      button.span8.btn-large.sort.btn#contribs Cant. de usuarios
+      .btn-group
+        button.btn-large.sort.btn#date Fecha
+        button.btn-large.sort.btn#name Nombre
+        button.btn-large.sort.btn#contribs Usuarios
       
     .span3
       form.well.form-search(action="/search", method="get")
@@ -29,10 +30,10 @@ block content
     .span3
       if(user.username.length)
         a.span12.newProject(href="#newProject", data-toggle="modal")
-          img.span12(src="/images/new-project.png")
+          img.span12(src="/images/new-project.jpg", height="100%")
       else
          a.span12.newProject(href="/auth/twitter")
-          img.span12(src="/images/new-project.png")
+          img.span12(src="/images/new-project.jpg")
        
 
   .row-fluid.projects#projects

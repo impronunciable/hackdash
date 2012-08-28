@@ -83,8 +83,7 @@ h3 {
 }
 
 
-#contribs {
-  margin-top: 10px;
-}
-
 .form-search { border: none; box-shadow: none;}
+
+.btn-group { margin-top: 25px;  }
+
