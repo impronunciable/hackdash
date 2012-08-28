@@ -4,7 +4,7 @@
 .signIn { margin-top: 40px; text-align: center; padding-top: 60px; padding-bottom: 60px; }
   .signIn img {margin-bottom: 20px; }
 
-.newProject { margin-top: 4px; width: 273px; }
+.newProject { margin-top: 4px;  }
 
 .cancel { margin-left: 10px; margin-right: 10px; }
 
@@ -40,6 +40,7 @@
   padding: 23px;
   background-color: #c83737;
   background-image: none;
+  width: 303px;
 }
 
 .project .title {
