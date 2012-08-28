@@ -61,10 +61,10 @@ block content
         p
             each link, index in project.links
               if(index != project.links.length - 1)
-                a(href=(/https?:/.test(link)) ? link : 'http://' + link, target="blank")= link
+                a(href=link.replace(/^[^hh]/, 'http://$&'), target="blank")= link
                 |  |
               else 
-                a(href=link, target="blank")= link
+                a(href=link.replace(/^[^hh]/, 'http://$&'), target="blank")= link
  
 
 
