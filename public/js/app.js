@@ -1,10 +1,13 @@
 $(function(){
 
-  $('.projects').isotope({
+  $projects = $('#projects');
+
+  $projects.isotope({
     itemSelector: '.project'
     , animationEngine: 'jquery'
+    , resizable: false
     , masonry: {
-      columnWidth: 100
+      columnWidth: $projects.width() / 4
     },  getSortData : {
       date : function ( $elem ) {
         return $elem.attr('data-date');
@@ -15,6 +18,13 @@ $(function(){
     }
 
   }});
+
+$(window).smartresize(function(){
+  $projects.isotope({
+    masonry: { columnWidth: $projects.width() / 4 }
+  });
+});
+
 
 $('#newProject').click(function(){if(!window.username.length) window.location="http://hackdash.hhba.info/auth/twitter"; })
 
