@@ -157,10 +157,10 @@ app.get('/decline/:pid/:uid', function(req, res){
 app.post('/projects/new', isAuth, function(req, res){
   if(req.body.title && req.body.description){
     var hash = Math.floor(Math.random() * 9999999 + 1);
-    console.log(req.body);
     var project = {
         id: hash
       , title: req.body.title
+      , created_at: Date.now()
       , owner_id: req.user.id
       , owner_username: req.user.username
       , description: req.body.description
@@ -214,9 +214,16 @@ app.post('/projects/edit/:id', isAuth, isOwner, function(req, res){
 });
 
 app.get('/projects/remove/:id', isAuth, isOwner, function(req, res){
-  client.del('hhba:projects:' + req.params.id, function(err){
-    res.redirect('/dashboard');
-    search.remove(req.params.id);
+  client.get('hhba:projects:' + req.params.id, function(err, project){
+    project = JSON.parse(project);
+    if(project.contributors.length == 1) {
+      client.del('hhba:projects:' + req.params.id, function(err){
+        res.redirect('/dashboard');
+        search.remove(req.params.id);
+      });
+    } else {
+      res.redirect('/dashboard');
+    }
   });
 });
 
@@ -234,7 +241,7 @@ app.get('/search', function(req, res){
         return !!project;
       });
 	var user = req.user || {'username': ''};
-      res.render('dashboard', {projects: projects, user: user});
+      res.render('dashboard', {projects: projects, user: user, q: req.query.q});
     });
   });
 });

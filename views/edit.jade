@@ -19,7 +19,8 @@ form.form-horizontal(action="/projects/edit/" + project.id, method="POST")
   .form-actions
     button.btn.btn-primary(type="submit") Guardar
     button.btn.cancel Cerrar
-    a.btn.btn-danger(href="/projects/remove/" + project.id) Borrar proyecto
+    if(project.contributors.length === 1)
+      a.btn.btn-danger(href="/projects/remove/" + project.id) Borrar proyecto
 
 h3 Usuarios pendientes
 
