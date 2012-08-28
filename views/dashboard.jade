@@ -60,9 +60,10 @@ block content
         
         p
             each link, index in project.links
+              -link = link.replace(' ','')
               if(index != project.links.length - 1)
                 a(href=link.replace(/^[^hh]/, 'http://$&'), target="blank")= link
-                |  |
+                |  | 
               else 
                 a(href=link.replace(/^[^hh]/, 'http://$&'), target="blank")= link
  
