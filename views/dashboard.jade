@@ -31,6 +31,7 @@ block content
     .span3
       if(user.username.length)
         a.span12.newProject(href="#newProject", data-toggle="modal")
+          img.span12(src="/images/new-project.jpg")
       else
          a.span12.newProject(href="/auth/twitter")
           img.span12(src="/images/new-project.jpg")
