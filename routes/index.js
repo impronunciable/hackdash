@@ -246,6 +246,20 @@ app.get('/search', function(req, res){
   });
 });
 
+app.get('/p/:id', function(req, res){
+  client.get('hhba:projects:' + req.params.id, function(err, project){
+    if(err || !project) res.redirect('/dashboard');
+    else {
+      try {
+      project = JSON.parse(project);
+      res.render('project', {project: project, user: req.user || {username: ''}});
+      } catch(e) {
+        res.redirect('/dashboard');
+      };
+    }
+  });
+});
+
 app.get('/auth/twitter',
   passport.authenticate('twitter')
 );

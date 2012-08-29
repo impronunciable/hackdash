@@ -43,7 +43,9 @@
   width: 279px;
 }
 
-.project .title {
+.project .title a {
+  color: #000;
+  text-decoration: none;
 }
 
 .project .description {

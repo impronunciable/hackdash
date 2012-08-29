@@ -31,7 +31,6 @@ block content
     .span3
       if(user.username.length)
         a.span12.newProject(href="#newProject", data-toggle="modal")
-          img.span12(src="/images/new-project.jpg", height="100%")
       else
          a.span12.newProject(href="/auth/twitter")
           img.span12(src="/images/new-project.jpg")
@@ -42,7 +41,8 @@ block content
       .project.well(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at)
         if(user.username == "blejman")
           a(href="/projects/remove/"+project.id, style="float:right") x
-        h3.title #{project.title}
+        h3.title 
+          a(href="/p/" + project.id) #{project.title}
         p
           //strong
             a(href="https://twitter.com/" + project.owner_username, target="_blank") (@#{project.owner_username}) 
