@@ -34,20 +34,8 @@ $('#newProject').click(function(){if(!window.username.length) window.location="h
     e.preventDefault();
     var self = this;
     if(!window.username.length) window.location = 'http://hackdash.hhba.info/auth/twitter';
-    $.get($(this).attr('href'), function(data){
-      if(data == 1) {
-        $(self).attr('href', $(self).attr('href').replace('join', 'leave'));
-        $(self).text('Pendiente de aprobación');
-      } else if(data == 2) {
-        $(self).attr('href', $(self).attr('href').replace('leave','join'));
-        $(self).text('Unirse al proyecto');
-        $(self).parent().siblings('.users').children('li').each(function(){
-          var src = $(this).find('span').text();
-          src = src.substr(1);
-          if(src ===  window.username) $(this).remove();
-        });
-      }
-    }).error(function(data){
+    $.get($(this).attr('href'), function(data, state, res){
+      data = parseInt(res.responseText);
       if(data == 1) {
         $(self).attr('href', $(self).attr('href').replace('join', 'leave'));
         $(self).text('Pendiente de aprobación');
