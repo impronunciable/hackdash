@@ -157,6 +157,19 @@ app.get('/decline/:pid/:uid', function(req, res){
 app.post('/projects/new', isAuth, function(req, res){
   if(req.body.title && req.body.description){
     var hash = Math.floor(Math.random() * 9999999 + 1);
+
+    var gtmp = req.body.github.split('/');
+
+    var github = {
+      username: '',
+      reponame: ''
+    };
+
+    if(gmtp.length > 0) {
+      github.username = gtmp[gtmp.length-2];
+      github.reponame = gtmp[gtmp.length-1];
+    }
+
     var project = {
         id: hash
       , title: req.body.title
@@ -167,6 +180,7 @@ app.post('/projects/new', isAuth, function(req, res){
       , links: req.body.links.split(',') || []
       , contributors: [req.user.username]
       , pending: []
+      , github: github
     };
 
     client.set('hhba:projects:' + hash, JSON.stringify(project), function(){

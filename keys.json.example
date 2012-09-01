@@ -1,0 +1,6 @@
+{ 
+	"consumer_key" : 	"",
+	"consumer_secret" : "",
+	"callback_url": 	"http://localhost/auth/twitter/callback",
+	"session": "hackdash"
+}

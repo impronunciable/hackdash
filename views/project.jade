@@ -2,40 +2,12 @@ extends layout
 
 block content
 
-  .ulogin(style="float:right;")
-    if(!user.username.length) 
-      | No estás conectado. 
-      a(href="/auth/twitter") Entrá con Twitter
-    else
-      | Bienvenido 
-      a(target="_blank",href="https://twitter.com/" + user.username) @#{user.username} 
-      a(href="/logout") Salir
-
-  .row-fluid.header
-    .span3.logo
-      img(src="/images/logo.png", width="225")
-
-    .span3
-
-    .span3
-      form.well.form-search(action="/search", method="get")
-        input.input-medium.search-query(type="text", name="q", value=("undefined" == typeof q) ? '' : q)
-        button.btn(type="submit") Buscar
-
-    .span3
-      if(user.username.length)
-        a.span12.newProject(href="#newProject", data-toggle="modal")
-          img.span12(src="/images/new-project.jpg", height="100%")
-      else
-         a.span12.newProject(href="/auth/twitter")
-          img.span12(src="/images/new-project.jpg")
-       
-
   .row-fluid
     .span4
     .span4
       h1.title= project.title
-      p
+
+      p.tools
         - if(user && project.owner_id == user.id){
           a.edit(href="/projects/edit/" + project.id) Editar proyecto (#{project.pending.length})
         - } else if(user && project.contributors.indexOf(user.username) !== -1){
@@ -45,6 +17,7 @@ block content
         - } else {
           a.join(href="/projects/join/" + project.id) Unirte al proyecto
         - }
+
       p.description
         | #{project.description.replace('\n', '<br />')}
         
@@ -66,6 +39,7 @@ block content
                   span @#{contrib}
               else
                 span @#{contrib}
+      a.twitter-share-button(href="https://twitter.com/share", data-text=project.title) Tweet
 
   script()
       window.username = '#{user.username}';
