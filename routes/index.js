@@ -7,7 +7,7 @@ var User = mongoose.model('User')
   , Project = mongoose.model('Project');
 
 var isAuth = function(req, res, next){
-  if(req.isAuthenticated()) next();
+m if(req.isAuthenticated()) next();
   else res.redirect('/');
 };
 
@@ -26,6 +26,30 @@ app.get('/dashboard', function(req, res){
   Project.find({}, function(err, projects){
     res.render('dashboard', {projects: projects, user: req.user || {username: ''}});
   });
+});
+
+app.get('/projects/new', isAuth, function(req, res){
+  if(req.body.title && req.body.description){
+
+    var project_data = {
+        title: req.body.title
+      , description: req.body.description
+      , created_at: Date.now()
+      , leader: req.user._id;
+      , followers: [req.user._id]
+      , contributors: [req.user._id]
+      , link: req.body.link
+      , tags: req.body.tags.split(',') || []
+    };
+
+    var project = new Project(project_data);
+    project.save(function(){
+      res.redirect('/dashboard');
+    });
+
+  } else {
+    res.redirect('/dashboard');
+  }
 });
 
 app.get('/auth/twitter',
