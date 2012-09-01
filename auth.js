@@ -30,7 +30,7 @@ passport.use(new TwitterStrategy({
       if(!user) {
         var user = new User();
         user.provider = 'twitter';
-        user.provider_id = 'twitter_id';
+        user.provider_id = profile.id;
         user.username = profile.username;
         user.save(function(err, user){
           done(null, user);
