@@ -7,33 +7,13 @@ block content
   .row-fluid.projects#projects
     each project, index in projects
       .project.well(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at)
-        if(user.username == "blejman")
-          a(href="/projects/remove/"+project.id, style="float:right") x
         h3.title 
           a(href="/p/" + project.id) #{project.title}
-        p
-          //strong
-            a(href="https://twitter.com/" + project.owner_username, target="_blank") (@#{project.owner_username}) 
-          - if(user && project.owner_id == user.id){
-            a.edit(href="/projects/edit/" + project.id) Editar proyecto (#{project.pending.length})
-          - } else if(user && project.contributors.indexOf(user.username) !== -1){
-            a.join(href="/projects/leave/" + project.id) Abandonar proyecto
-          - } else if(user && project.pending.indexOf(user.username) !== -1){
-            a.join(href="/projects/leave/" + project.id) Pendiente de aprobación
-          - } else {
-            a.join(href="/projects/join/" + project.id) Unirte al proyecto
-          - }
         p.description
           | #{project.description.replace('\n', '<br />')}
         
         p
-            each link, index in project.links
-              -link = link.replace(' ','')
-              if(index != project.links.length - 1)
-                a(href=link.replace(/^[^hH]ttp/, 'http://$&'), target="blank")= link
-                |  | 
-              else 
-                a(href=link.replace(/^[^hH]ttp/, 'http://$&'), target="blank")= link
+          a(href=project.link)= project.link
  
 
 
@@ -69,7 +49,7 @@ block content
        .control-group
           label.control-label(for="tags") Tags comma separated (,)
           .controls
-            input(class="input-xlarge", type="text", name="link", id="link")
+            input(class="input-xlarge", type="text", name="tags", id="tags")
 
       .form-actions
         button.btn.btn-primary(type="submit") Create project
