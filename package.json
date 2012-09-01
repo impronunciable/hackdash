@@ -10,7 +10,7 @@
     "jade": "*",
     "passport": "0.1.x",
     "passport-twitter": "0.1.x",
-    "mongoose": "3.1.x",
+    "mongoose": "2.x.x",
     "connect-mongo": "0.1.x"
   }
 }

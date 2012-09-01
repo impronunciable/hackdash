@@ -21,3 +21,5 @@ var Project = new Schema({
   , "tags": [String]
   , "created_at": { type: Date, default: Date.now }
 });
+
+mongoose.model('Project', Project);
