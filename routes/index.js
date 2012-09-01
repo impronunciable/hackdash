@@ -28,13 +28,12 @@ app.get('/dashboard', function(req, res){
   });
 });
 
-
 app.get('/auth/twitter',
   passport.authenticate('twitter')
 );
 
 app.get('/auth/twitter/callback',
-  passport.authenticate('twitter', { failureRedirect: '/login' }),
+  passport.authenticate('twitter', { failureRedirect: '/' }),
   function(req, res){
     res.redirect('/dashboard');
 });
