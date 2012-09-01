@@ -57,18 +57,23 @@ block content
             input(class="input-xlarge", type="text", name="title", id="title")
 
         .control-group
-          label.control-label(for="description") Descripción
+          label.control-label(for="description") Description
           .controls
             textarea(class="input-xlarge", id="description", name="description", rows="3", maxlength="400")
 
        .control-group
-          label.control-label(for="links") Links (separados por coma ",")
+          label.control-label(for="link") Link
           .controls
-            input(class="input-xlarge", type="text", name="links", id="links")
+            input(class="input-xlarge", type="text", name="link", id="link")
+
+       .control-group
+          label.control-label(for="tags") Tags comma separated (,)
+          .controls
+            input(class="input-xlarge", type="text", name="link", id="link")
 
       .form-actions
-        button.btn.btn-primary(type="submit") Crear proyecto
-        button.btn.cancel Cancelar
+        button.btn.btn-primary(type="submit") Create project
+        button.btn.cancel Cancel
 
   #editProject.modal.hide
 

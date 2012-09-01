@@ -28,18 +28,18 @@ app.get('/dashboard', function(req, res){
   });
 });
 
-app.get('/projects/new', isAuth, function(req, res){
+app.post('/projects/new', isAuth, function(req, res){
   if(req.body.title && req.body.description){
 
     var project_data = {
         title: req.body.title
       , description: req.body.description
+      , link: req.body.link
+      , tags: req.body.tags.split(',') || []
       , created_at: Date.now()
       , leader: req.user._id
       , followers: [req.user._id]
       , contributors: [req.user._id]
-      , link: req.body.link
-      , tags: req.body.tags.split(',') || []
     };
 
     var project = new Project(project_data);
