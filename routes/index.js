@@ -7,7 +7,7 @@ var User = mongoose.model('User')
   , Project = mongoose.model('Project');
 
 var isAuth = function(req, res, next){
-m if(req.isAuthenticated()) next();
+  if(req.isAuthenticated()) next();
   else res.redirect('/');
 };
 
