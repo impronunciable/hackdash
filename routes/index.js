@@ -28,6 +28,7 @@ app.get('/dashboard', function(req, res){
   });
 });
 
+
 app.get('/auth/twitter',
   passport.authenticate('twitter')
 );

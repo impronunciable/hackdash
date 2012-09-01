@@ -11,6 +11,11 @@ form.form-horizontal(action="/projects/edit/" + project.id, method="POST")
       .controls
         textarea(class="input-xlarge", id="description", name="description", rows="5", maxlength="400")= project.description
 
+    .control-group
+      label.control-label(for="title") URL de Github
+      .controls
+        input(class="input-xlarge", type="text", name="github", id="github", value= project.github)
+
    .control-group
      label.control-label(for="links") links (separados por coma ",")
        .controls
