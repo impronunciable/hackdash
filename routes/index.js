@@ -35,7 +35,7 @@ app.get('/projects/new', isAuth, function(req, res){
         title: req.body.title
       , description: req.body.description
       , created_at: Date.now()
-      , leader: req.user._id;
+      , leader: req.user._id
       , followers: [req.user._id]
       , contributors: [req.user._id]
       , link: req.body.link
