@@ -14,18 +14,16 @@ block content
         
         p
           a(href=project.link)= project.link
- 
-
 
         ul.users
           each contrib, i in project.contributors
             li
-              a(href="https://twitter.com/" + contrib, target="_blank") 
+              a(href="https://twitter.com/" + contrib.username, target="_blank") 
                 if(i == 0)
                   strong
-                    span @#{contrib}
+                    span @#{contrib.username}
                 else
-                  span @#{contrib}
+                  span @#{contrib.username}
 
   #newProject.modal.hide
     form.form-horizontal(action="/projects/new", method="POST")

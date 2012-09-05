@@ -23,7 +23,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/dashboard', function(req, res){
-  Project.find({}, function(err, projects){
+  Project.find({}).populate('contributors').exec(function(err, projects){
     res.render('dashboard', {projects: projects, user: req.user || {username: ''}});
   });
 });
