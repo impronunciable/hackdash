@@ -2,83 +2,28 @@ extends layout
 
 block content
 
-  .ulogin(style="float:right;")
-    if(!user.username.length) 
-      | No estás conectado. 
-      a(href="/auth/twitter") Entrá con Twitter
-    else
-      | Bienvenido 
-      a(target="_blank",href="https://twitter.com/" + user.username) @#{user.username} 
-      a(href="/logout") Salir
-
-  .row-fluid.header
-    .span3.logo
-      img(src="/images/logo.png", width="225")
-
-    .span3#sort
-      h3 Filtrar
-      .btn-group
-        button.btn-large.sort.btn#date Fecha
-        button.btn-large.sort.btn#name Nombre
-        button.btn-large.sort.btn#contribs Usuarios
-      
-
-    .span3
-      form.well.form-search(action="/search", method="get")
-        input.input-medium.search-query(type="text", name="q", value=("undefined" == typeof q) ? '' : q)
-        button.btn(type="submit") Buscar
-
-    .span3
-      if(user.username.length)
-        a.span12.newProject(href="#newProject", data-toggle="modal")
-          img.span12(src="/images/new-project.jpg")
-      else
-         a.span12.newProject(href="/auth/twitter")
-          img.span12(src="/images/new-project.jpg")
-       
+  
 
   .row-fluid.projects#projects
     each project, index in projects
       .project.well(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at)
-        if(user.username == "blejman")
-          a(href="/projects/remove/"+project.id, style="float:right") x
         h3.title 
           a(href="/p/" + project.id) #{project.title}
-        p
-          //strong
-            a(href="https://twitter.com/" + project.owner_username, target="_blank") (@#{project.owner_username}) 
-          - if(user && project.owner_id == user.id){
-            a.edit(href="/projects/edit/" + project.id) Editar proyecto (#{project.pending.length})
-          - } else if(user && project.contributors.indexOf(user.username) !== -1){
-            a.join(href="/projects/leave/" + project.id) Abandonar proyecto
-          - } else if(user && project.pending.indexOf(user.username) !== -1){
-            a.join(href="/projects/leave/" + project.id) Pendiente de aprobación
-          - } else {
-            a.join(href="/projects/join/" + project.id) Unirte al proyecto
-          - }
         p.description
           | #{project.description.replace('\n', '<br />')}
         
         p
-            each link, index in project.links
-              -link = link.replace(' ','')
-              if(index != project.links.length - 1)
-                a(href=link.replace(/^[^hH]ttp/, 'http://$&'), target="blank")= link
-                |  | 
-              else 
-                a(href=link.replace(/^[^hH]ttp/, 'http://$&'), target="blank")= link
- 
-
+          a(href=project.link)= project.link
 
         ul.users
           each contrib, i in project.contributors
             li
-              a(href="https://twitter.com/" + contrib, target="_blank") 
+              a(href="https://twitter.com/" + contrib.username, target="_blank") 
                 if(i == 0)
                   strong
-                    span @#{contrib}
+                    span @#{contrib.username}
                 else
-                  span @#{contrib}
+                  span @#{contrib.username}
 
   #newProject.modal.hide
     form.form-horizontal(action="/projects/new", method="POST")
@@ -90,18 +35,23 @@ block content
             input(class="input-xlarge", type="text", name="title", id="title")
 
         .control-group
-          label.control-label(for="description") Descripción
+          label.control-label(for="description") Description
           .controls
             textarea(class="input-xlarge", id="description", name="description", rows="3", maxlength="400")
 
        .control-group
-          label.control-label(for="links") Links (separados por coma ",")
+          label.control-label(for="link") Link
           .controls
-            input(class="input-xlarge", type="text", name="links", id="links")
+            input(class="input-xlarge", type="text", name="link", id="link")
+
+       .control-group
+          label.control-label(for="tags") Tags comma separated (,)
+          .controls
+            input(class="input-xlarge", type="text", name="tags", id="tags")
 
       .form-actions
-        button.btn.btn-primary(type="submit") Crear proyecto
-        button.btn.cancel Cancelar
+        button.btn.btn-primary(type="submit") Create project
+        button.btn.cancel Cancel
 
   #editProject.modal.hide
 

@@ -8,12 +8,47 @@ html
     link(rel='stylesheet', href='/styles/main.css')
   body
 
-    .container-fluid
+   .container-fluid
+      .loginhead
+        .ulogin(style="float:right;")
+        if(!user.username.length) 
+          | No estás conectado. 
+          a(href="/auth/twitter") Entrá con Twitter
+        else
+          | Bienvenido 
+          a(target="_blank",href="https://twitter.com/" + user.username) @#{user.username} 
+          a(href="/logout") Salir
+
+      .row-fluid.header
+        a.span3.logo(href="/dashboard")
+          img(src="/images/logo.png", width="225")
+
+        .span3#sort
+          h3 Filtrar
+          .btn-group
+            button.btn-large.sort.btn#date Fecha
+            button.btn-large.sort.btn#name Nombre
+            button.btn-large.sort.btn#contribs Usuarios
+          
+
+        .span3
+          form.well.form-search(action="/search", method="get")
+            input.input-medium.search-query(type="text", name="q", value=("undefined" == typeof q) ? '' : q)
+            button.btn(type="submit") Buscar
+
+        .span3
+          if(user.username.length)
+            a.span12.newProject(href="#newProject", data-toggle="modal")
+              img.span12(src="/images/new-project.jpg")
+          else
+             a.span12.newProject(href="/auth/twitter")
+              img.span12(src="/images/new-project.jpg")
+         
       block content
 
 
-    script(src="/js/jquery.min.js")
-    script(src="/js/isotope.min.js")
-    script(src="/js/bootstrap.min.js")
-    script(src="http://platform.twitter.com/anywhere.js?id=YOUR_API_KEY&v=1")
-    script(src="/js/app.js")
+      script(src="/js/jquery.min.js")
+      script(src="/js/isotope.min.js")
+      script(src="/js/bootstrap.min.js")
+      script(src="http://platform.twitter.com/anywhere.js?id=YOUR_API_KEY&v=1")
+      script(src="/js/app.js")

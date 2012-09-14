@@ -10,8 +10,7 @@
     "jade": "*",
     "passport": "0.1.x",
     "passport-twitter": "0.1.x",
-    "redis": "0.7.x",
-    "connect-redis": "1.4.x",
-    "reds": "0.1.x"
+    "mongoose": "2.x.x",
+    "connect-mongo": "0.1.x"
   }
 }

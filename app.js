@@ -6,19 +6,17 @@
 var express = require('express')
   , passport = require('passport')
   , keys = require('./keys.json')
+  , mongoose = require('mongoose')
+  , MongoStore = require('connect-mongo')(express)
   , http = require('http');
 
 /*
  * DB
  */
 
-var redis = require('redis')
-  , RedisStore = require('connect-redis')(express)
-  , client = exports.client = redis.createClient();
+mongoose.connect('mongodb://localhost/hackdash');
 
-setTimeout(function(){
-	client.save();
-}, 5 * 60 * 1000);
+require('./models');
 
 /*
  * Auth
@@ -41,7 +39,7 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser(keys.session));
-  app.use(express.session({secret: keys.session, store: new RedisStore }));
+  app.use(express.session({secret: keys.session, store: new MongoStore({db: 'hackdash'}) }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
