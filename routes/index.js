@@ -52,6 +52,12 @@ app.post('/projects/new', isAuth, function(req, res){
   }
 });
 
+app.get('/p/:project_id', function(req, res){
+  Project.findById(req.params.project_id).populate('contributors').exec(function(err, project){
+    res.render('project', {project: project, user: req.user});
+  });
+});
+
 app.get('/auth/twitter',
   passport.authenticate('twitter')
 );

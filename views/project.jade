@@ -8,27 +8,12 @@ block content
       h1.title= project.title
 
       p.tools
-        - if(user && project.owner_id == user.id){
-          a.edit(href="/projects/edit/" + project.id) Editar proyecto (#{project.pending.length})
-        - } else if(user && project.contributors.indexOf(user.username) !== -1){
-          a.join(href="/projects/leave/" + project.id) Abandonar proyecto
-        - } else if(user && project.pending.indexOf(user.username) !== -1){
-          a.join(href="/projects/leave/" + project.id) Pendiente de aprobación
-        - } else {
-          a.join(href="/projects/join/" + project.id) Unirte al proyecto
-        - }
-
       p.description
+
         | #{project.description.replace('\n', '<br />')}
         
       p
-        each link, index in project.links
-          -link = link.replace(' ','')
-            if(index != project.links.length - 1)
-              a(href=link.replace(/^[^hH]ttp/, 'http://$&'), target="blank")= link
-              |  | 
-            else 
-              a(href=link.replace(/^[^hH]ttp/, 'http://$&'), target="blank")= link
+        a(href=project.link.replace(/^[^hH]ttp/, 'http://$&'), target="blank")= project.link
  
       ul.users
         each contrib, i in project.contributors
@@ -36,9 +21,9 @@ block content
             a(href="https://twitter.com/" + contrib, target="_blank") 
               if(i == 0)
                 strong
-                  span @#{contrib}
+                  span @#{contrib.username}
               else
-                span @#{contrib}
+                span @#{contrib.username}
       a.twitter-share-button(href="https://twitter.com/share", data-text=project.title) Tweet
 
   script()
