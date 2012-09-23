@@ -13,6 +13,13 @@ block content
         p
           a(href=project.link)= project.link
 
+        p.tags
+          each tag, index in project.tags
+            if(index !== project.tags.length - 1)
+              | #{tag} | 
+            else
+              | #{tag}
+
         ul.users
           each contrib, i in project.contributors
             li
