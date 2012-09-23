@@ -2,8 +2,6 @@ extends layout
 
 block content
 
-  
-
   .row-fluid.projects#projects
     each project, index in projects
       .project.well(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at)
@@ -54,13 +52,6 @@ block content
         button.btn.cancel Cancel
 
   #editProject.modal.hide
-
-  .footer(style="text-align: left; margin-top: 80px;")
-    a(href="http://meetupba.hackshackers.com", target="_blank")
-      img(src="http://photos4.meetupstatic.com/photos/event/6/8/b/b/global_22346811.jpeg",width="75")
-    a(href="https://github.com/hhba/hackdash", target="_blank")
-      img(src="https://a248.e.akamai.net/assets.github.com/images/modules/about_page/github_logo.png?1338956357", width="75")
-
 
   script()
       window.username = '#{user.username}';
