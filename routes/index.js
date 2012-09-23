@@ -54,6 +54,22 @@ app.post('/projects/new', isAuth, function(req, res){
   }
 });
 
+app.post('/projects/edit/:id', isProjectLeader, function(req, res){
+  var project = req.project;
+  if(req.body.title && req.body.description){
+    project.title = req.body.title || project.title;
+    project.description = req.body.description || project.description;
+    project.link = req.body.link || project.link;
+    project.tags = req.body.tags.split(',') || project.tags;
+
+    project.save(function(){
+      res.redirect('/dashboard');
+    });
+  } else {
+    res.redirect('/dashboard');
+  }
+});
+
 app.get('/projects/:project_id/join', isAuth, function(req, res){
   Project.findById(req.params.project_id, function(error, project){
     if(error || !project) return res.end('server error', 500);
