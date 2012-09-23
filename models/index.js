@@ -16,7 +16,7 @@ var Project = new Schema({
     "title": { type: String, required: true }
   , "description": { type: String, required: true }
   , "leader": { type: ObjectId, required: true, ref: 'User' }
-  , "followers": [{ type: ObjectId, ref: 'User'}]
+  , "pending": [{ type: ObjectId, ref: 'User'}]
   , "contributors": [{ type: ObjectId, ref: 'User'}]
   , "link": String 
   , "tags": [String]
