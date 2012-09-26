@@ -4,7 +4,7 @@
  */
 
 var passport = require('passport')
-  , keys = require('./keys.json')
+  , twitter_keys = require('./twitter-keys.json')
   , mongoose = require('mongoose')
   , TwitterStrategy = require('passport-twitter').Strategy;
 
@@ -21,9 +21,9 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use(new TwitterStrategy({
-    consumerKey: keys.consumer_key,
-    consumerSecret: keys.consumer_secret,
-    callbackURL: keys.twitter_callback
+    consumerKey: twitter_keys.consumer_key,
+    consumerSecret: twitter_keys.consumer_secret,
+    callbackURL: twitter_keys.twitter_callback
   },
   function(token, tokenSecret, profile, done) {
     User.findOne({provider_id: profile.id, provider: 'twitter'}, function(err, user){
