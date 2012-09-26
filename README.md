@@ -1,18 +1,18 @@
 hackdash
 ========
 
-Dashboard para organizar las ideas en un hackatón
+Dashboard para organizar las ideas en un hackatón (No estable)
 
 Instalación
 ===========
 
 * Instalar [Node.js](http://nodejs.org)
 
-* Instalar [Redis](http://redis.io)
+* Instalar [MongoDB](http://mongodb.org)
 
 * Crear una [aplicación en twitter](https://dev.twitter.com/)
 
-* Correr redis: $ redis-server
+* Correr MongoDB: $ mongod
 
 * Instalar dependencias: $ npm install
 
