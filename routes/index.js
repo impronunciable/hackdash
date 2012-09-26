@@ -7,8 +7,8 @@ var User = mongoose.model('User')
 
 module.exports = function(app) {
   app.get('/', loadProjects, render('dashboard'));
-  app.post('/projects/create', isAuth, validateProject, saveProject, res.render('project'));
-  app.post('/projects/edit/:project_id', isProjectLeader, validateProject, updateProject, res.render('project'));
+  app.post('/projects/create', isAuth, validateProject, saveProject, render('project'));
+  app.post('/projects/edit/:project_id', isProjectLeader, validateProject, updateProject, render('project'));
   app.get('/projects/:project_id/join', isAuth, isNotProjectMember, joinGroup); 
   app.get('/projects/:project_id/leave', isAuth, isProjectMember, leaveGroup); 
   app.get('/project/:project_id/accept/:user_id', isProjectLeader, isUserPendingMember, acceptUser);
