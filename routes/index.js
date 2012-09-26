@@ -77,6 +77,22 @@ var loadProjects = function(req, res, next) {
 };
 
 /*
+ * Load specific project
+ */
+
+var loadProject = function(req, res, next) {
+  Project.findById(req.params.project_id)
+  .populate('contributors')
+  .exec(function(err, project) {
+    if(err) return res.send(500);
+    res.locals.project = project;
+    res.locals.user = req.user;
+    next();
+  });
+};
+
+
+/*
  * Check project fields
  */
 
