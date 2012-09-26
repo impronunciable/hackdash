@@ -38,7 +38,7 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.cookieParser(keys.session));
+  app.use(express.cookieParser(app.get('config').session));
   app.use(express.session({
       secret: app.get('config').session
     , store: new MongoStore({db: app.get('config').db}) 
@@ -53,7 +53,7 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-require('./routes');
+require('./routes')(app);
 
 http.createServer(app).listen(app.get('port'), function() {
   console.log("Express server listening on port " + app.get('port'));
