@@ -1,152 +1,235 @@
 
-var app = module.parent.exports.app
-  , passport = require('passport')
+var passport = require('passport')
   , mongoose = require('mongoose');
 
 var User = mongoose.model('User')
   , Project = mongoose.model('Project');
 
+module.exports = function(app) {
+  app.get('/', loadProjects, render('dashboard'));
+  app.post('/projects/create', isAuth, validateProject, saveProject, res.render('project'));
+  app.post('/projects/edit/:project_id', isProjectLeader, validateProject, updateProject, res.render('project'));
+  app.get('/projects/:project_id/join', isAuth, isNotProjectMember, joinGroup); 
+  app.get('/projects/:project_id/leave', isAuth, isProjectMember, leaveGroup); 
+  app.get('/project/:project_id/accept/:user_id', isProjectLeader, isUserPendingMember, acceptUser);
+  app.get('/project/:project_id/decline/:user_id', isProjectLeader, isUserPendingMember, declineUser);
+  app.get('/p/:project_id', loadProject, render('project'));
+  app.get('/auth/twitter', passport.authenticate('twitter'));
+  app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/' }), redirect('/'));
+  app.get('/logout', logout, redirect('/'));
+};
+
+/*
+ * Render templates
+ */
+
+var render = function(path) {
+  return function(req, res) {
+    res.render(path);
+  };
+};
+
+/*
+ * Redirect to a route
+ */
+
+var redirect = function(route) {
+  return function(req, res) {
+    res.redirect(route);
+  };
+};
+
+/*
+ * Check if current user is authenticated
+ */
+
 var isAuth = function(req, res, next){
   if(req.isAuthenticated()) next();
-  else res.end('Not authorized', 403);
+  else res.send(403);
 };
+
+/*
+ * Check if current user is project leader
+ */
 
 var isProjectLeader = function(req, res, next){
   Project.findById(req.params.project_id, function(err, project){
-    if(err || !project) return res.end('Internal server error', 500);
-
+    if(err || !project) return res.send(500);
     req.project = project;
-    if(project && project.leader === req.user._id) next();
-    else res.end('Not authorized', 403);
+    if(project.leader === req.user._id) next();
+    else res.send(403);
   });
 };
 
-app.get('/', function(req, res){
-  res.redirect('/dashboard');
-});
+/*
+ * Load all projects
+ */
 
-app.get('/dashboard', function(req, res){
-  Project.find({}).populate('contributors').exec(function(err, projects){
-    res.render('dashboard', {projects: projects, user: req.user || {username: ''}});
+var loadProjects = function(req, res, next) {
+  Project.find({})
+  .populate('contributors')
+  .exec(function(err, projects) {
+    if(err) return res.send(500);
+    res.locals.projects = projects;
+    res.locals.user = req.user;
+    next();
   });
-});
+};
 
-app.post('/projects/new', isAuth, function(req, res){
-  if(req.body.title && req.body.description){
-    var project_data = {
-        title: req.body.title
-      , description: req.body.description
-      , link: req.body.link
-      , tags: req.body.tags.split(',') || []
-      , created_at: Date.now()
-      , leader: req.user._id
-      , followers: [req.user._id]
-      , contributors: [req.user._id]
-    };
+/*
+ * Check project fields
+ */
 
-    var project = new Project(project_data);
-    project.save(function(){
-      res.redirect('/dashboard');
-    });
+var validateProject = function(req, res, next) {
+  if(req.body.title && req.body.description) next();
+  else res.send(500);
+};
 
-  } else {
-    res.redirect('/dashboard');
-  }
-});
+/*
+ * Save new projec
+ */
 
-app.post('/projects/edit/:id', isProjectLeader, function(req, res){
+var saveProject = function(req, res, next) {
+  var project = new Project({
+      title: req.body.title
+    , description: req.body.description
+    , link: req.body.link
+    , tags: req.body.tags.split(',') || []
+    , created_at: Date.now()
+    , leader: req.user._id
+    , followers: [req.user._id]
+    , contributors: [req.user._id]
+  });
+
+  project.save(function(err, project){
+    if(err) return res.send(500); 
+    res.locals.project = project;
+    next();
+  });
+};
+
+/*
+ * Update existing project
+ */
+
+var updateProject = function(req, res, next) {
   var project = req.project;
-  if(req.body.title && req.body.description){
-    project.title = req.body.title || project.title;
-    project.description = req.body.description || project.description;
-    project.link = req.body.link || project.link;
-    project.tags = req.body.tags.split(',') || project.tags;
+  project.title = req.body.title || project.title;
+  project.description = req.body.description || project.description;
+  project.link = req.body.link || project.link;
+  project.tags = req.body.tags.split(',') || project.tags;
+  project.save(function(err, project){
+    if(err) return res.send(500);
+    res.locals.project = project;
+    next();
+  });
+};
 
-    project.save(function(){
-      res.redirect('/dashboard');
-    });
-  } else {
-    res.redirect('/dashboard');
-  }
-});
+/*
+ * Check if current user is member of a group
+ */
 
-app.get('/projects/:project_id/join', isAuth, function(req, res){
+var isProjectMember = function(req, res, next) {
   Project.findById(req.params.project_id, function(error, project){
-    if(error || !project) return res.end('server error', 500);
+    req.project = project;
+    if(error || !project) return res.send(500);
+    if(~project.pending.indexOf(req.user._id) 
+    && ~project.contributors.indexOf(req.user._id)) return res.send(500);
 
-    if(!~project.pending.indexOf(req.user._id) || !~project.contributors.indexOf(req.user._id)) {
-      res.end('1');
-    } else {
-      project.pending.push(req.user._id);
-      project.save(function(){
-        res.end('1');
-      });
-    }  
+    next(); 
   });
-});
+};
 
-app.get('/projects/:project_id/leave', isAuth, function(req, res){
+
+/*
+ * Check if specific user is not a group member
+ */
+
+var isNotProjectMember = function(req, res, next) {
   Project.findById(req.params.project_id, function(error, project){
-    if(error || !project) return res.end('server error', 500);
+    req.project = project;
+    if(error || !project) return res.send(500);
+    if(!~project.pending.indexOf(req.user._id) 
+    || !~project.contributors.indexOf(req.user._id)) return res.send(500);
 
-    if(!~project.contributors.indexOf(req.user._id)) {
-      project.contributors.splice(project.contributors.indexOf(req.user._id), 1);
-      project.save(function(){
-        res.end('2');
-      });
-    } else if(!~project.pending.indexOf(req.user.username) !== -1) {
-      project.pending.splice(project.pending.indexOf(req.user._id), 1);
-      project.save(function(){
-        res.end('2');
-      });
-    } else {
-      res.end('2');
-    }   
+    next(); 
   });
-});
+};
 
-app.get('/project/:project_id/accept/:user_id', isProjectLeader, function(req, res){
-  var project = req.project;
-  if(!~project.pending.indexOf(req.params.user_id)) {
-        res.end('2');
-   } else {
-    project.contributors.push(req.params.user_id);
-    project.pending.splice(project.pending.indexOf(req.params.user_id), 1);
-    project.save(function(){
-      res.end('3');
-    });
-  } 
-});
 
-app.get('/project/:project_id/decline/:user_id', isProjectLeader, function(req, res){
-  var project = req.project;
-  if(!~project.pending.indexOf(req.params.user_id)) {
-    res.end('2');
-  } else {
-    project.pending.splice(project.pending.indexOf(req.params.user_id), 1);
-    project.save(function(){
-      res.end('3');
-    });
-  } 
-});
+/*
+ * Check if current user is pending on a group
+ */
 
-app.get('/p/:project_id', function(req, res){
-  Project.findById(req.params.project_id).populate('contributors').exec(function(err, project){
-    res.render('project', {project: project, user: req.user});
+var isUserPendingMember = function(req, res, next) {
+  if(~project.pending.indexOf(req.params.user_id)) res.send(500);
+  else next(); 
+};
+
+/*
+ * Check if specific user is a group contributor
+ */
+
+var isUserContributor = function(req, res, next) {
+  if(~project.contributors.indexOf(req.params.user_id)) res.send(500);
+  else next(); 
+};
+
+/*
+ * Add current user as pending on a group
+ */
+
+var joinGroup = function(req, res) {
+  req.project.pending.push(req.user._id);  
+  req.project.save(function(err){
+    if(err) return res.send(500);
+    res.send(200, req.user._id);
   });
-});
+};
 
-app.get('/auth/twitter',
-  passport.authenticate('twitter')
-);
+/*
+ * Remove current user from a group
+ */
 
-app.get('/auth/twitter/callback',
-  passport.authenticate('twitter', { failureRedirect: '/' }),
-  function(req, res){
-    res.redirect('/dashboard');
-});
+var leaveGroup = function(req, res) {
+  req.project.pending.splice(req.project.pending.indexOf(req.user._id), 1);  
+  req.project.contributors.splice(req.project.pending.indexOf(req.user._id), 1);  
+  req.project.save(function(err){
+    if(err) return res.send(500);
+    res.send(200, req.user._id);
+  });
+};
 
-app.get('/logout', function(req, res){
+/*
+ * Accept a user into a group
+ */
+
+var acceptUser = function(req, res, next) {
+  req.project.pending.splice(req.project.pending.indexOf(req.params.user_id), 1);  
+  req.project.contributors.push(req.params.user_id);  
+  req.project.save(function(err, project){
+    if(err) return res.send(500);
+    res.send(200, req.params.user_id);
+  });
+};
+
+/*
+ * Decline a user group request
+ */
+
+var declineUser = function(req, res, next) {
+  req.project.pending.splice(req.project.pending.indexOf(req.params.user_id), 1);  
+  req.project.save(function(err, project){
+    if(err) return res.send(500);
+    res.send(200, req.params.user_id);
+  });
+};
+
+/*
+ * Log out current user
+ */
+
+var logout = function(req, res, next) {
   req.logout();
-  res.redirect('/');
-});
+  next();
+};
