@@ -5,7 +5,6 @@
 
 var express = require('express')
   , passport = require('passport')
-  , keys = require('./keys.json')
   , mongoose = require('mongoose')
   , MongoStore = require('connect-mongo')(express)
   , http = require('http');
@@ -31,7 +30,8 @@ require('./auth');
 var app = exports.app = express();
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
+  app.set('config', require('./config.json'));
+  app.set('port', process.env.PORT || app.get('config').port);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon());
@@ -39,7 +39,10 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser(keys.session));
-  app.use(express.session({secret: keys.session, store: new MongoStore({db: 'hackdash'}) }));
+  app.use(express.session({
+      secret: app.get('config').session
+    , store: new MongoStore({db: app.get('config').db}) 
+  }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
