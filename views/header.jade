@@ -2,26 +2,26 @@
   .ulogin(style="float:right;")
     if(!user) 
       | No estás conectado. 
-      a(href="/auth/twitter") Entrá con Twitter
+      a(href="/auth/twitter") Log In using Twitter
     else
-      | Bienvenido 
+      | Welcome
       a(target="_blank",href="https://twitter.com/" + user.username) @#{user.username} 
-      a(href="/logout") Salir
+      a(href="/logout") Logout
 
 .row-fluid.header
   a.span3.logo(href="/")
     img(src="/images/logo.png", width="225")
 
   .span3#sort
-    h3 Filtrar
+    h3 Filter
     .btn-group
-      button.btn-large.sort.btn#date Fecha
-      button.btn-large.sort.btn#name Nombre
-      button.btn-large.sort.btn#contribs Usuarios
+      button.btn-large.sort.btn#date Date
+      button.btn-large.sort.btn#name Title
+      button.btn-large.sort.btn#contribs Users
 
   .span3.form-search
     input#searchInput.input-medium.search-query(type="text", name="q", value=("undefined" == typeof q) ? '' : q)
-    a.btn(href="/search") Buscar
+    a.btn(href="/search") Search
 
   .span3
     if(user)
