@@ -12,6 +12,7 @@ module.exports = function(app) {
   app.get('/p/:project_id', loadUser, render('dashboard'));
   app.get('/search', loadUser, render('dashboard'));
   app.post('/projects/create', isAuth, validateProject, saveProject, redirect('/'));
+
   app.get('/api/projects', loadProjects, render('projects'));
   app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject);
   app.get('/api/projects/edit/:project_id', isAuth, isProjectLeader, loadProject, render('edit'));
@@ -22,6 +23,7 @@ module.exports = function(app) {
   app.get('/api/projects/:project_id/decline/:user_id', isProjectLeader, isUserPendingMember, declineUser);
   app.get('/api/p/:project_id', loadProject, render('project'));
   app.get('/api/search', loadSearchProjects, render('projects'));
+
   app.get('/auth/twitter', passport.authenticate('twitter'));
   app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/' }), redirect('/'));
   app.get('/logout', logout, redirect('/'));
@@ -73,7 +75,7 @@ var isProjectLeader = function(req, res, next){
   Project.findById(req.params.project_id, function(err, project){
     if(err || !project) return res.send(500);
     req.project = project;
-    if(project.leader.toString() == req.user._id.toString()) next();
+    if(project.leader.toString() === req.user.id) next();
     else res.send(403);
   });
 };
@@ -101,6 +103,7 @@ var loadProjects = function(req, res, next) {
 var loadProject = function(req, res, next) {
   Project.findById(req.params.project_id)
   .populate('contributors')
+  .populate('pending')
   .populate('leader')
   .exec(function(err, project) {
     if(err) return res.send(500);
@@ -195,8 +198,8 @@ var isProjectMember = function(req, res, next) {
   Project.findById(req.params.project_id, function(error, project){
     req.project = project;
     if(error || !project) return res.send(500);
-    if(~project.pending.indexOf(req.user._id) 
-    && ~project.contributors.indexOf(req.user._id)) return res.send(500);
+    if(!project.pending.some(function(id){ return id == req.user._id}) 
+    && !project.contributors.some(function(id){ return id == req.user._id})) return res.send(500);
 
     next(); 
   });
@@ -211,8 +214,8 @@ var isNotProjectMember = function(req, res, next) {
   Project.findById(req.params.project_id, function(error, project){
     req.project = project;
     if(error || !project) return res.send(500);
-    if(!~project.pending.indexOf(req.user._id) 
-    || !~project.contributors.indexOf(req.user._id)) next();
+    if(project.pending.some(function(id){ return id == req.user._id})  
+    || !~project.contributors.some(function(id){ return id == req.user._id})) next();
     else
       res.send(500); 
   });
@@ -224,7 +227,7 @@ var isNotProjectMember = function(req, res, next) {
  */
 
 var isUserPendingMember = function(req, res, next) {
-  if(~project.pending.indexOf(req.params.user_id)) res.send(500);
+  if(!req.project.pending.some(function(id){return id == req.params.user_id})) res.send(500);
   else next(); 
 };
 
@@ -233,7 +236,7 @@ var isUserPendingMember = function(req, res, next) {
  */
 
 var isUserContributor = function(req, res, next) {
-  if(~project.contributors.indexOf(req.params.user_id)) res.send(500);
+  if(!req.project.contributors.some(function(id){ return id == req.params.user_id})) res.send(500);
   else next(); 
 };
 
