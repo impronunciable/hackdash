@@ -6,14 +6,18 @@ var User = mongoose.model('User')
   , Project = mongoose.model('Project');
 
 module.exports = function(app) {
-  app.get('/', loadProjects, render('dashboard'));
-  app.post('/projects/create', isAuth, validateProject, saveProject, render('project'));
-  app.post('/projects/edit/:project_id', isProjectLeader, validateProject, updateProject, render('project'));
+  app.get('/', loadUser, render('dashboard'));
+  app.get('/projects', loadProjects, render('projects'));
+  app.post('/projects/create', isAuth, validateProject, saveProject, redirect('/'));
+  app.get('/projects/remove/:project_id', isAuth, isProjectLeader, removeProject);
+  app.get('/projects/edit/:project_id', isAuth, isProjectLeader, loadProject, render('edit'));
+  app.post('/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, redirect('/'));
   app.get('/projects/:project_id/join', isAuth, isNotProjectMember, joinGroup); 
   app.get('/projects/:project_id/leave', isAuth, isProjectMember, leaveGroup); 
-  app.get('/project/:project_id/accept/:user_id', isProjectLeader, isUserPendingMember, acceptUser);
-  app.get('/project/:project_id/decline/:user_id', isProjectLeader, isUserPendingMember, declineUser);
+  app.get('/projects/:project_id/accept/:user_id', isProjectLeader, isUserPendingMember, acceptUser);
+  app.get('/projects/:project_id/decline/:user_id', isProjectLeader, isUserPendingMember, declineUser);
   app.get('/p/:project_id', loadProject, render('project'));
+  app.get('/search', loadSearchProjects, render('projects'));
   app.get('/auth/twitter', passport.authenticate('twitter'));
   app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/' }), redirect('/'));
   app.get('/logout', logout, redirect('/'));
@@ -40,6 +44,15 @@ var redirect = function(route) {
 };
 
 /*
+ * Add current user template variable
+ */
+
+var loadUser = function(req, res, next) {
+  res.locals.user = req.user;
+  next();
+};
+
+/*
  * Check if current user is authenticated
  */
 
@@ -56,7 +69,7 @@ var isProjectLeader = function(req, res, next){
   Project.findById(req.params.project_id, function(err, project){
     if(err || !project) return res.send(500);
     req.project = project;
-    if(project.leader === req.user._id) next();
+    if(project.leader.toString() == req.user._id.toString()) next();
     else res.send(403);
   });
 };
@@ -68,6 +81,7 @@ var isProjectLeader = function(req, res, next){
 var loadProjects = function(req, res, next) {
   Project.find({})
   .populate('contributors')
+  .populate('leader')
   .exec(function(err, projects) {
     if(err) return res.send(500);
     res.locals.projects = projects;
@@ -83,6 +97,7 @@ var loadProjects = function(req, res, next) {
 var loadProject = function(req, res, next) {
   Project.findById(req.params.project_id)
   .populate('contributors')
+  .populate('leader')
   .exec(function(err, project) {
     if(err) return res.send(500);
     res.locals.project = project;
@@ -91,6 +106,22 @@ var loadProject = function(req, res, next) {
   });
 };
 
+/*
+ * Load searched projects
+ */
+
+var loadSearchProjects = function(req, res, next) {
+  var regex = new RegExp(req.query.q);
+  Project
+  .find()
+  .or([{title: regex}, {description: regex}, {tags: req.query.q}])
+  .exec(function(err, projects) {
+    if(err) return res.send(500);
+    res.locals.projects = projects;
+    res.locals.user = req.user;
+    next();
+  });
+};
 
 /*
  * Check project fields
@@ -125,6 +156,17 @@ var saveProject = function(req, res, next) {
 };
 
 /*
+ * Remove a project
+ */
+
+var removeProject = function(req, res) {
+  req.project.remove(function(err){
+    if(err) res.send(500);
+    else res.send(200);
+  });
+};
+
+/*
  * Update existing project
  */
 
@@ -133,7 +175,7 @@ var updateProject = function(req, res, next) {
   project.title = req.body.title || project.title;
   project.description = req.body.description || project.description;
   project.link = req.body.link || project.link;
-  project.tags = req.body.tags.split(',') || project.tags;
+  project.tags = (req.body.tags && req.body.tags.split(',')) || project.tags;
   project.save(function(err, project){
     if(err) return res.send(500);
     res.locals.project = project;

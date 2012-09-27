@@ -32,7 +32,11 @@
 }
 
 .header .form-search {
-  margin-top: 30px;
+  margin-top: 50px;
+}
+
+#searchInput {
+  margin-right: 20px;
 }
 
  .header .newProject {
@@ -88,6 +92,8 @@ h3 {
 .form-search { border: none; box-shadow: none;}
 
 .btn-group { margin-top: 18px;  }
+
+.btn-disabled {cursor: default}
 
 .tools {  }
 .description { margin: 20px 0 }

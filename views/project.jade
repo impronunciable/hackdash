@@ -1,16 +1,16 @@
 .project.well(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at)
   h3.title 
-  a(href="/p/" + project.id) #{project.title}
+    a(href="/p/" + project.id) #{project.title}
   p
-    a(href="https://twitter.com/" + project.owner_username, target="_blank") (@#{project.owner_username}) 
-    if(user && project.leader === user._id)
-      a.edit(href="/projects/edit/" + project._id) Editar proyecto (#{project.pending.length})
+    a(href="https://twitter.com/" + project.leader.username, target="_blank") (@#{project.leader.username}) 
+    if(user && project.leader.id === user.id)
+      a.edit(href="/projects/edit/" + project.id) Editar proyecto (#{project.pending.length})
     else if(user && project.contributors.indexOf(user.username) !== -1)
-      a.join(href="/projects/leave/" + project._id) Abandonar proyecto
+      a.join(href="/projects/leave/" + project.id) Abandonar proyecto
     else if(user && project.pending.indexOf(user.username) !== -1)
-      a.join(href="/projects/leave/" + project._id) Pendiente de aprobación
+      a.join(href="/projects/leave/" + project.id) Pendiente de aprobación
     else
-      a.join(href="/projects/join/" + project._id) Unirte al proyecto
+      a.join(href="/projects/join/" + project.id) Unirte al proyecto
 
   p.description
     | #{project.description.replace('\n', '<br />')}
