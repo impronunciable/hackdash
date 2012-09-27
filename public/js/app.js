@@ -88,12 +88,31 @@
     });
   };
 
+  var acceptUser = function(ctx) {
+    request
+    .get('/api/projects/' + ctx.params.project_id + '/accept/' + ctx.params.user_id)
+    .end(function(res){
+      page('/');
+    });
+  };
+
+  var declineUser = function(ctx) {
+    request
+    .get('/api/projects/' + ctx.params.project_id + '/decline/' + ctx.params.user_id)
+    .end(function(res){
+      page('/');
+    });
+  };
+
   page('/', loadProjects, isotopeDashboard);
   page('/search', loadSearchProjects, isotopeDashboard);
   page('/projects/edit/:project_id', editProject);
   page('/projects/remove/:project_id', removeProject);
   page('/projects/join/:project_id', joinProject);
   page('/projects/leave/:project_id', leaveProject);
+  page('/projects/:project_id/accept/:user_id', acceptUser);
+  page('/projects/:project_id/decline/:user_id', declineUser);
+
   page();
 
   /*
