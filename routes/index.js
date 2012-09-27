@@ -7,11 +7,12 @@ var User = mongoose.model('User')
 
 module.exports = function(app) {
   app.get('/', loadUser, render('dashboard'));
+  app.get('/projects/create/:project_id', loadUser, render('dashboard'));
   app.get('/projects/edit/:project_id', loadUser, render('dashboard'));
   app.get('/p/:project_id', loadUser, render('dashboard'));
   app.get('/search', loadUser, render('dashboard'));
-  app.get('/api/projects', loadProjects, render('projects'));
   app.post('/projects/create', isAuth, validateProject, saveProject, redirect('/'));
+  app.get('/api/projects', loadProjects, render('projects'));
   app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject);
   app.get('/api/projects/edit/:project_id', isAuth, isProjectLeader, loadProject, render('edit'));
   app.post('/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, redirect('/'));
@@ -211,9 +212,9 @@ var isNotProjectMember = function(req, res, next) {
     req.project = project;
     if(error || !project) return res.send(500);
     if(!~project.pending.indexOf(req.user._id) 
-    || !~project.contributors.indexOf(req.user._id)) return res.send(500);
-
-    next(); 
+    || !~project.contributors.indexOf(req.user._id)) next();
+    else
+      res.send(500); 
   });
 };
 
@@ -244,7 +245,7 @@ var joinGroup = function(req, res) {
   req.project.pending.push(req.user._id);  
   req.project.save(function(err){
     if(err) return res.send(500);
-    res.send(200, req.user._id);
+    res.json(200, {group: req.project._id, user: req.user._id });
   });
 };
 
@@ -257,7 +258,7 @@ var leaveGroup = function(req, res) {
   req.project.contributors.splice(req.project.pending.indexOf(req.user._id), 1);  
   req.project.save(function(err){
     if(err) return res.send(500);
-    res.send(200, req.user._id);
+    res.json(200, {group: req.project._id, user: req.user._id });
   });
 };
 

@@ -1,16 +1,18 @@
-.project.well(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at)
+.project.well(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id)
   h3.title 
     a(href="/p/" + project.id) #{project.title}
   p
     a(href="https://twitter.com/" + project.leader.username, target="_blank") (@#{project.leader.username}) 
-    if(user && project.leader.id === user.id)
-      a.edit(href="/projects/edit/" + project.id) Editar proyecto (#{project.pending.length})
-    else if(user && project.contributors.indexOf(user.username) !== -1)
-      a.join(href="/projects/leave/" + project.id) Abandonar proyecto
-    else if(user && project.pending.indexOf(user.username) !== -1)
-      a.join(href="/projects/leave/" + project.id) Pendiente de aprobación
+    if(!user)
+      a(href="/auth/twitter") Log in to join this project
+    else if(project.leader.id === user.id)
+      a.edit(href="/projects/edit/" + project.id) Edit project (#{project.pending.length})
+    else if(project.contributors.indexOf(user.id) !== -1)
+      a.leave(href="/projects/leave/" + project.id) Leave project
+    else if(project.pending.indexOf(user.id) !== -1)
+      a(href="#") Pending approval
     else
-      a.join(href="/projects/join/" + project.id) Unirte al proyecto
+      a.join(href="/projects/join/" + project._id) Join project
 
   p.description
     | #{project.description.replace('\n', '<br />')}
@@ -27,10 +29,10 @@
 
   ul.users
     each contrib, i in project.contributors
-      li
+      li(class="contrib-" + contrib.id)
         a(href="https://twitter.com/" + contrib.username, target="_blank") 
-        if(i == 0)
-          strong
+          if(i == 0)
+            strong
+              span @#{contrib.username}
+          else
             span @#{contrib.username}
-        else
-          span @#{contrib.username}

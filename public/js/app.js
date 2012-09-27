@@ -1,8 +1,7 @@
 
 ;(function(){
 
-  var hd = window.hd = {
-  };
+  var hd = window.hd = {};
 
   var routes = {}
     , request = superagent;
@@ -10,11 +9,13 @@
   var $projects = $('#projects')
     , $editProject = $('#editProject')
     , $modals = $('.modal')
-    , $searchInput = $('#searchInput');
+    , $searchInput = $('#searchInput')
+    , $sort = $('.sort')
+    , $cancel = $('.cancel');
 
   var loadProjects = function(ctx, next) {
     request
-    .get('/projects')
+    .get('/api/projects')
     .end(function(res){
       $projects.html(res.text);
       next();
@@ -23,7 +24,7 @@
 
   var loadSearchProjects = function(ctx, next) {
     request
-    .get('/search?q=' + $searchInput.val())
+    .get('/api/search?q=' + $searchInput.val())
     .end(function(res){
       $projects.html(res.text);
       next();
@@ -56,7 +57,7 @@
 
   var editProject = function(ctx) {
     superagent
-    .get('/projects/edit/' + ctx.params.project_id)
+    .get('/api/projects/edit/' + ctx.params.project_id)
     .end(function(res){
       $editProject.html(res.text);
       $editProject.modal('show');
@@ -65,7 +66,23 @@
 
   var removeProject = function(ctx) {
     superagent
-    .get('/projects/remove/' + ctx.params.project_id)
+    .get('/api/projects/remove/' + ctx.params.project_id)
+    .end(function(res){
+      page('/');
+    });
+  };
+
+  var joinProject = function(ctx) {
+    request
+    .get('/api/projects/' + ctx.params.project_id + '/join')
+    .end(function(res){
+      page('/');
+    });
+  };
+
+  var leaveProject = function(ctx) {
+    request
+    .get('/api/projects/' + ctx.params.project_id + '/join')
     .end(function(res){
       page('/');
     });
@@ -75,7 +92,13 @@
   page('/search', loadSearchProjects, isotopeDashboard);
   page('/projects/edit/:project_id', editProject);
   page('/projects/remove/:project_id', removeProject);
+  page('/projects/join/:project_id', joinProject);
+  page('/projects/leave/:project_id', leaveProject);
   page();
+
+  /*
+   * Event listeners
+   */
 
   $(window).smartresize(function(){
     $projects.isotope({
@@ -83,70 +106,14 @@
     });
   });
 
-})();
-
-
-/*
-
-$('#newProject').click(function(){if(!window.username.length) window.location="http://local.host:3000/auth/twitter"; })
-
-  $('.modal').modal({show: false});
-
-  $('.join').click(function(e){
-    e.preventDefault();
-    var self = this;
-    if(!window.username.length) window.location = 'http://local.host:3000/auth/twitter';
-    $.get($(this).attr('href'), function(data, state, res){
-      data = parseInt(res.responseText);
-      if(data == 1) {
-        $(self).attr('href', $(self).attr('href').replace('join', 'leave'));
-        $(self).text('Pendiente de aprobación');
-      } else if(data == 2) {
-        $(self).attr('href', $(self).attr('href').replace('leave','join'));
-        $(self).text('Unirse al proyecto');
-        $(self).parent().siblings('.users').children('li').each(function(){
-          var src = $(this).find('span').text();
-          src = src.substr(1);
-          if(src ===  window.username) $(this).remove();
-        });
-      }
-    });   
-  });
-
-  $('.edit').click(function(e){
-    if(!window.username.length) window.location = 'http://local.host:3000/auth/twitter';
-    e.preventDefault();
-    $('#editProject').load($(this).attr('href'), function(){
-      $('#editProject').modal('show');
-    });
-  });
-
-  $('.read').click(function(e){
-    if(!window.username.length) window.location = 'http://local.host:3000/auth/twitter';
-    e.preventDefault();
-    $(this).next().show();
-    $(this).remove();
-  });
-
-  $('.accept,.decline').live('click', function(e){
-    if(!window.username.length) window.location = 'http://local.host:3000/auth/twitter';
-    e.preventDefault();
-    var self = this;
-    $.get($(this).attr('href'), function(){
-      $(self).parents('tr').remove();
-    });
-  });
-
-  $('.sort').click(function(){
+  $sort.click(function(){
     var vid = $(this).attr('id');
     var asc = vid === 'name';
-    $('.projects').isotope({'sortBy': vid, 'sortAscending': asc });
+    $projects.isotope({'sortBy': vid, 'sortAscending': asc });
   });
 
-  twttr.anywhere(function (T) {
-    T('.users a').hovercards({linkify: false});
+  $cancel.live('click', function(e){
+    page('/');
   });
 
-!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-
-*/
+})();
