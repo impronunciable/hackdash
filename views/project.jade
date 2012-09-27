@@ -1,30 +1,36 @@
-extends layout
+.project.well(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at)
+  h3.title 
+  a(href="/p/" + project.id) #{project.title}
+  p
+    a(href="https://twitter.com/" + project.owner_username, target="_blank") (@#{project.owner_username}) 
+    if(user && project.leader === user._id)
+      a.edit(href="/projects/edit/" + project._id) Editar proyecto (#{project.pending.length})
+    else if(user && project.contributors.indexOf(user.username) !== -1)
+      a.join(href="/projects/leave/" + project._id) Abandonar proyecto
+    else if(user && project.pending.indexOf(user.username) !== -1)
+      a.join(href="/projects/leave/" + project._id) Pendiente de aprobación
+    else
+      a.join(href="/projects/join/" + project._id) Unirte al proyecto
 
-block content
-
-  .row-fluid
-    .span4
-    .span4
-      h1.title= project.title
-
-      p.tools
-      p.description
-
-        | #{project.description.replace('\n', '<br />')}
+  p.description
+    | #{project.description.replace('\n', '<br />')}
         
-      p
-        a(href=project.link.replace(/^[^hH]ttp/, 'http://$&'), target="blank")= project.link
- 
-      ul.users
-        each contrib, i in project.contributors
-          li
-            a(href="https://twitter.com/" + contrib, target="_blank") 
-              if(i == 0)
-                strong
-                  span @#{contrib.username}
-              else
-                span @#{contrib.username}
-      a.twitter-share-button(href="https://twitter.com/share", data-text=project.title) Tweet
+  p
+    a(href=project.link.replace(/^[^hH]ttp/, 'http://$&'), target="_blank")= project.link
 
-  script()
-      window.username = '#{user.username}';
+  p.tags
+  each tag, index in project.tags
+    if(index !== project.tags.length - 1)
+      | #{tag} | 
+    else
+      | #{tag}
+
+  ul.users
+    each contrib, i in project.contributors
+      li
+        a(href="https://twitter.com/" + contrib.username, target="_blank") 
+        if(i == 0)
+          strong
+            span @#{contrib.username}
+        else
+          span @#{contrib.username}

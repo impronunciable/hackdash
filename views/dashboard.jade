@@ -3,45 +3,7 @@ extends layout
 block content
 
   .row-fluid.projects#projects
-    each project, index in projects
-      .project.well(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at)
-        h3.title 
-          a(href="/p/" + project.id) #{project.title}
-        p
-          //strong
-            a(href="https://twitter.com/" + project.owner_username, target="_blank") (@#{project.owner_username}) 
-          - if(user && project.leader === user._id){
-            a.edit(href="/projects/edit/" + project._id) Editar proyecto (#{project.pending.length})
-          - } else if(user && project.contributors.indexOf(user.username) !== -1){
-            a.join(href="/projects/leave/" + project._id) Abandonar proyecto
-          - } else if(user && project.pending.indexOf(user.username) !== -1){
-            a.join(href="/projects/leave/" + project._id) Pendiente de aprobación
-          - } else {
-            a.join(href="/projects/join/" + project._id) Unirte al proyecto
-          - }
-
-        p.description
-          | #{project.description.replace('\n', '<br />')}
-        
-        p
-          a(href=project.link)= project.link
-
-        p.tags
-          each tag, index in project.tags
-            if(index !== project.tags.length - 1)
-              | #{tag} | 
-            else
-              | #{tag}
-
-        ul.users
-          each contrib, i in project.contributors
-            li
-              a(href="https://twitter.com/" + contrib.username, target="_blank") 
-                if(i == 0)
-                  strong
-                    span @#{contrib.username}
-                else
-                  span @#{contrib.username}
+    include projects
 
   #newProject.modal.hide
     form.form-horizontal(action="/projects/new", method="POST")
@@ -72,6 +34,3 @@ block content
         button.btn.cancel Cancel
 
   #editProject.modal.hide
-
-  script()
-      window.username = '#{user.username}';
