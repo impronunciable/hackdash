@@ -7,17 +7,20 @@ var User = mongoose.model('User')
 
 module.exports = function(app) {
   app.get('/', loadUser, render('dashboard'));
-  app.get('/projects', loadProjects, render('projects'));
+  app.get('/projects/edit/:project_id', loadUser, render('dashboard'));
+  app.get('/p/:project_id', loadUser, render('dashboard'));
+  app.get('/search', loadUser, render('dashboard'));
+  app.get('/api/projects', loadProjects, render('projects'));
   app.post('/projects/create', isAuth, validateProject, saveProject, redirect('/'));
-  app.get('/projects/remove/:project_id', isAuth, isProjectLeader, removeProject);
-  app.get('/projects/edit/:project_id', isAuth, isProjectLeader, loadProject, render('edit'));
+  app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject);
+  app.get('/api/projects/edit/:project_id', isAuth, isProjectLeader, loadProject, render('edit'));
   app.post('/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, redirect('/'));
-  app.get('/projects/:project_id/join', isAuth, isNotProjectMember, joinGroup); 
-  app.get('/projects/:project_id/leave', isAuth, isProjectMember, leaveGroup); 
-  app.get('/projects/:project_id/accept/:user_id', isProjectLeader, isUserPendingMember, acceptUser);
-  app.get('/projects/:project_id/decline/:user_id', isProjectLeader, isUserPendingMember, declineUser);
-  app.get('/p/:project_id', loadProject, render('project'));
-  app.get('/search', loadSearchProjects, render('projects'));
+  app.get('/api/projects/:project_id/join', isAuth, isNotProjectMember, joinGroup); 
+  app.get('/api/projects/:project_id/leave', isAuth, isProjectMember, leaveGroup); 
+  app.get('/api/projects/:project_id/accept/:user_id', isProjectLeader, isUserPendingMember, acceptUser);
+  app.get('/api/projects/:project_id/decline/:user_id', isProjectLeader, isUserPendingMember, declineUser);
+  app.get('/api/p/:project_id', loadProject, render('project'));
+  app.get('/api/search', loadSearchProjects, render('projects'));
   app.get('/auth/twitter', passport.authenticate('twitter'));
   app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/' }), redirect('/'));
   app.get('/logout', logout, redirect('/'));
