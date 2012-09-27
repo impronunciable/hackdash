@@ -35,8 +35,8 @@ table.table.pending
   tbody
     each user in project.pending
       tr
-        td= user
+        td= user.username
         td 
-          a.accept.btn-success.btn(href="/projects/"+project.id+"/accept/"+user) Aceptar
+          a.accept.btn-success.btn(href="/projects/"+project.id+"/accept/"+user.id) Accept
         td 
-          a.decline.btn-danger.btn(href="/projects/"+project.id+"/decline/"+user) Rechazar
+          a.decline.btn-danger.btn(href="/projects/"+project.id+"/decline/"+user.id) Decline
