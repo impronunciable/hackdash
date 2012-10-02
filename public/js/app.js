@@ -131,8 +131,10 @@
     $projects.isotope({'sortBy': vid, 'sortAscending': asc });
   });
 
-  $cancel.live('click', function(e){
+  $modals.live('hidden', function(e){
     page('/');
   });
+
+  
 
 })();
