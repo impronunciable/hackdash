@@ -25,7 +25,7 @@ for(var strategy in keys) {
   (function(provider){
 
     var Strategy = require('passport-' + provider).Strategy;
-
+    console.log(keys[provider]);
     passport.use(new Strategy({
       consumerKey: keys[provider].consumerKey,
       consumerSecret: keys[provider].consumerSecret,
@@ -47,7 +47,7 @@ for(var strategy in keys) {
     });
   }));
 
-  })(keys[strategy]);
+  })(strategy);
 
 }
 
