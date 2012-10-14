@@ -7,6 +7,7 @@
     , request = superagent;
 
   var $projects = $('#projects')
+    , $project = $('.project')
     , $editProject = $('#editProject')
     , $logIn = $('#logIn')
     , $modals = $('.modal')
@@ -44,7 +45,17 @@
       , animationEngine: 'jquery'
       , resizable: false
       , masonry: {
-          columnWidth: $projects.width() / 4
+          columnWidth:  
+            ($projects.width() >= 1200) ?
+              300
+            : 
+            ($projects.width() == 960) ?
+              $projects.width() / 3
+            :
+            ($projects.width() == 744) ?
+              $projects.width() / 2
+            :
+              $projects.width()
         }
       , getSortData : {
             date : function ( $elem ) {
@@ -59,7 +70,6 @@
         }
     });
   };
-
   var editProject = function(ctx) {
     superagent
     .get('/api/projects/edit/' + ctx.params.project_id)
@@ -124,13 +134,23 @@
   /*
    * Event listeners
    */
-
   $(window).smartresize(function(){
     $projects.isotope({
-      masonry: { columnWidth: $projects.width() / 4 }
+        masonry: {
+          columnWidth:  
+            ($projects.width() >= 1200) ?
+              300
+            : 
+            ($projects.width() == 960) ?
+              $projects.width() / 3
+            :
+            ($projects.width() == 744) ?
+              $projects.width() / 2
+            :
+              $projects.width()
+        }
     });
   });
-
   $sort.click(function(){
     var vid = $(this).attr('id');
     var asc = vid === 'name';

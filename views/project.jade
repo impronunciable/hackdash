@@ -1,38 +1,14 @@
-.project.well(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id)
-  h3.title 
-    a(href="/p/" + project.id) #{project.title}
-  p
-    a(href="https://twitter.com/" + project.leader.username, target="_blank") (@#{project.leader.username}) 
-    if(!user)
-      a(href="/login") Log in to join this project
-    else if(project.leader.id === user.id)
-      a.edit(href="/projects/edit/" + project.id) Edit project (#{project.pending.length})
-    else if(project.contributors.indexOf(user.id) !== -1)
-      a.leave(href="/projects/leave/" + project.id) Leave project
-    else if(project.pending.indexOf(user.id) !== -1)
-      a(href="#") Pending approval
-    else
-      a.join(href="/projects/join/" + project._id) Join project
-
-  p.description
-    | #{project.description.replace('\n', '<br />')}
-        
-  p
-    a(href=project.link.replace(/^[^hH]ttp/, 'http://$&'), target="_blank")= project.link
-
-  p.tags
-  each tag, index in project.tags
-    if(index !== project.tags.length - 1)
-      | #{tag} | 
-    else
-      | #{tag}
-
-  ul.users
-    each contrib, i in project.contributors
-      li(class="contrib-" + contrib.id)
-        a(href="https://twitter.com/" + contrib.username, target="_blank") 
-          if(i == 0)
-            strong
-              span @#{contrib.username}
-          else
-            span @#{contrib.username}
+.project.span4(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id)
+  
+  .well
+    .row-fluid
+      .span3.activity.people #{project.contributors.length}
+      .span6.aging.activity #{project.created_at.getDay()} days ago
+        span(data-icon="P", aria-hidden="true")
+    .divider
+    p
+      a(href="/p/" + project.id, target="_blank") #{project.description}
+    .info
+      each tag, index in project.tags
+        if(tag.length)
+          span(class="badge") #{tag}

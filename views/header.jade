@@ -1,32 +1,5 @@
-.loginhead
-  .ulogin(style="float:right;")
-    if(!user) 
-      | You are not logged in. 
-      a(href="/login") Log In
-    else
-      | Welcome 
-      a(target="_blank",href="https://twitter.com/" + user.username) @#{user.username} 
-      a(href="/logout") Logout
-
-.row-fluid.header
-  a.span3.logo(href="/")
-    img(src="/images/logo.png", width="225")
-
-  .span3#sort
-    h3 Filter
-    .btn-group
-      button.btn-large.sort.btn#date Date
-      button.btn-large.sort.btn#name Title
-      button.btn-large.sort.btn#contribs Users
-
-  .span3.form-search
-    input#searchInput.input-medium.search-query(type="text", name="q", value=("undefined" == typeof q) ? '' : q)
-    a.btn(href="/search") Search
-
-  .span3
-    if(user)
-      a.span12.newProject(href="#newProject", data-toggle="modal")
-        img.span12(src="/images/new-project.jpg")
-    else
-      a.span12.newProject(href="/login", class=(user) ? "" : "btn-disabled")
-        img.span12(src="/images/new-project.jpg")
+header
+  h1 HackDash
+  .description 
+    p.lead
+      span A Hackaton Dashboard for people
