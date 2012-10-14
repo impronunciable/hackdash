@@ -4,9 +4,9 @@
  */
 
 var passport = require('passport')
-  , twitter_keys = require('./twitter-keys.json')
+  , keys = require('./keys.json')
   , mongoose = require('mongoose')
-  , TwitterStrategy = require('passport-twitter').Strategy;
+
 
 var User = mongoose.model('User');
 
@@ -20,10 +20,13 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-passport.use(new TwitterStrategy({
-    consumerKey: twitter_keys.consumer_key,
-    consumerSecret: twitter_keys.consumer_secret,
-    callbackURL: twitter_keys.twitter_callback
+if(keys.twitter) {
+  var TwitterStrategy = require('passport-twitter').Strategy;
+
+  passport.use(new TwitterStrategy({
+    consumerKey: keys.twitter.consumer_key,
+    consumerSecret: keys.twitter.consumer_secret,
+    callbackURL: keys.twitter.twitter_callback
   },
   function(token, tokenSecret, profile, done) {
     User.findOne({provider_id: profile.id, provider: 'twitter'}, function(err, user){
@@ -39,6 +42,5 @@ passport.use(new TwitterStrategy({
         done(null, user);
       }
     });
-  }
-));
-
+  }));
+}
