@@ -2,7 +2,7 @@
   .ulogin(style="float:right;")
     if(!user) 
       | You are not logged in. 
-      a(href="/auth/twitter") Log In using Twitter
+      a(href="/login") Log In
     else
       | Welcome 
       a(target="_blank",href="https://twitter.com/" + user.username) @#{user.username} 
@@ -28,5 +28,5 @@
       a.span12.newProject(href="#newProject", data-toggle="modal")
         img.span12(src="/images/new-project.jpg")
     else
-      a.span12.newProject(href="/auth/twitter", class=(user) ? "" : "btn-disabled")
+      a.span12.newProject(href="/login", class=(user) ? "" : "btn-disabled")
         img.span12(src="/images/new-project.jpg")

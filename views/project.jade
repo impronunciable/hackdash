@@ -4,7 +4,7 @@
   p
     a(href="https://twitter.com/" + project.leader.username, target="_blank") (@#{project.leader.username}) 
     if(!user)
-      a(href="/auth/twitter") Log in to join this project
+      a(href="/login") Log in to join this project
     else if(project.leader.id === user.id)
       a.edit(href="/projects/edit/" + project.id) Edit project (#{project.pending.length})
     else if(project.contributors.indexOf(user.id) !== -1)

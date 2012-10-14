@@ -22,6 +22,8 @@ passport.deserializeUser(function(id, done) {
 
 module.exports = function(app) {
 
+app.set('providers', Object.keys(keys));
+
 for(var strategy in keys) {
 
   (function(provider){

@@ -6,11 +6,11 @@ var User = mongoose.model('User')
   , Project = mongoose.model('Project');
 
 module.exports = function(app) {
-  app.get('/', loadUser, render('dashboard'));
-  app.get('/projects/create/:project_id', loadUser, render('dashboard'));
-  app.get('/projects/edit/:project_id', loadUser, render('dashboard'));
-  app.get('/p/:project_id', loadUser, render('dashboard'));
-  app.get('/search', loadUser, render('dashboard'));
+  app.get('/', dashboardStack);
+  app.get('/projects/create/:project_id', dashboardStack);
+  app.get('/projects/edit/:project_id', dashboardStack);
+  app.get('/p/:project_id', dashboardStack);
+  app.get('/search', dashboardStack);
   app.post('/projects/create', isAuth, validateProject, saveProject, redirect('/'));
 
   app.get('/api/projects', loadProjects, render('projects'));
@@ -54,6 +54,26 @@ var loadUser = function(req, res, next) {
   res.locals.user = req.user;
   next();
 };
+
+/*
+ * Load app providers
+ */
+
+var loadProviders = function(req, res, next) {
+  res.locals.providers = req.app.get('providers');
+  next();
+};
+
+/*
+ * Dashboard middleware stack
+ */
+
+var dashboardStack = [
+  loadUser, 
+  loadProviders,
+  render('dashboard')
+];
+
 
 /*
  * Check if current user is authenticated

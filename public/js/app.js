@@ -8,6 +8,7 @@
 
   var $projects = $('#projects')
     , $editProject = $('#editProject')
+    , $logIn = $('#logIn')
     , $modals = $('.modal')
     , $searchInput = $('#searchInput')
     , $sort = $('.sort')
@@ -29,6 +30,10 @@
       $projects.html(res.text);
       next();
     }); 
+  };
+
+  var logIn = function(ctx, next) {
+    $logIn.modal('show');
   };
 
   var isotopeDashboard = function() {
@@ -105,6 +110,7 @@
   };
 
   page('/', loadProjects, isotopeDashboard);
+  page('/login', logIn);
   page('/search', loadSearchProjects, isotopeDashboard);
   page('/projects/edit/:project_id', editProject);
   page('/projects/remove/:project_id', removeProject);
