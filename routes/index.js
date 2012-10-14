@@ -26,6 +26,8 @@ module.exports = function(app) {
 
   app.get('/auth/twitter', passport.authenticate('twitter'));
   app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/' }), redirect('/'));
+  app.get('/auth/meetup', passport.authenticate('meetup'));
+  app.get('/auth/meetup/callback', passport.authenticate('meetup', { failureRedirect: '/' }), redirect('/'));
   app.get('/logout', logout, redirect('/'));
 };
 
