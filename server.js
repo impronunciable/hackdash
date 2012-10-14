@@ -20,12 +20,6 @@ require('./models');
 var app = exports.app = express();
 
 /*
- * Auth
- */
-
-require('./auth')(app);
-
-/*
  * Application config
  */
 
@@ -52,6 +46,16 @@ app.configure(function(){
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
+
+/*
+ * Auth
+ */
+
+require('./auth')(app);
+
+/*
+ * Routes
+ */
 
 require('./routes')(app);
 
