@@ -13,7 +13,6 @@
     "passport-meetup": "0.1.x",
     "passport-facebook": "0.1.x",
     "passport-github": "0.1.x",
-    "passport-google-oauth": "0.1.x",
     "mongoose": "2.x.x",
     "connect-mongo": "0.1.x"
   }
