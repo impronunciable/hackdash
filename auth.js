@@ -20,19 +20,22 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-if(keys.twitter) {
-  var TwitterStrategy = require('passport-twitter').Strategy;
+for(var strategy in keys) {
 
-  passport.use(new TwitterStrategy({
-    consumerKey: keys.twitter.consumer_key,
-    consumerSecret: keys.twitter.consumer_secret,
-    callbackURL: keys.twitter.twitter_callback
-  },
+  (function(provider){
+
+    var Strategy = require('passport-' + provider).Strategy;
+
+    passport.use(new Strategy({
+      consumerKey: keys[provider].consumerKey,
+      consumerSecret: keys[provider].consumerSecret,
+      callbackURL: keys[provider].callbackURL
+    },
   function(token, tokenSecret, profile, done) {
-    User.findOne({provider_id: profile.id, provider: 'twitter'}, function(err, user){
+    User.findOne({provider_id: profile.id, provider: provider}, function(err, user){
       if(!user) {
         var user = new User();
-        user.provider = 'twitter';
+        user.provider = provider;
         user.provider_id = profile.id;
         user.username = profile.username;
         user.save(function(err, user){
@@ -43,4 +46,8 @@ if(keys.twitter) {
       }
     });
   }));
+
+  })(keys[strategy]);
+
 }
+

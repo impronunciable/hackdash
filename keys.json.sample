@@ -1,7 +1,7 @@
 {
     "twitter": {
-	      "consumer_key" : 	""
-	    , "consumer_secret" : ""
-	    , "callback_url": 	"http://localhost/auth/twitter/callback"
+	      "consumerKey" : 	""
+	    , "consumerSecret" : ""
+	    , "callbackURL": 	"http://localhost/auth/twitter/callback"
     } 
 }
