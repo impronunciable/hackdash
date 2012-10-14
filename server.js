@@ -17,17 +17,17 @@ mongoose.connect('mongodb://localhost/hackdash');
 
 require('./models');
 
+var app = exports.app = express();
+
 /*
  * Auth
  */
 
-require('./auth');
+require('./auth')(app);
 
 /*
  * Application config
  */
-
-var app = exports.app = express();
 
 app.configure(function(){
   app.set('config', require('./config.json'));
