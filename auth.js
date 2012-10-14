@@ -31,22 +31,21 @@ for(var strategy in keys) {
 
     var Strategy = require('passport-' + provider).Strategy;
     passport.use(new Strategy(keys[provider],
-  function(token, tokenSecret, profile, done) {
-    User.findOne({provider_id: profile.id, provider: provider}, function(err, user){
-      if(!user) {
-        var user = new User();
-        user.provider = provider;
-        user.provider_id = profile.id;
-        user.username = profile.username || profile.displayName;
-        console.log(profile);
-        user.save(function(err, user){
+    function(token, tokenSecret, profile, done) {
+      User.findOne({provider_id: profile.id, provider: provider}, function(err, user){
+        if(!user) {
+          var user = new User();
+          user.provider = provider;
+          user.provider_id = profile.id;
+          user.username = profile.username || profile.displayName;
+          user.save(function(err, user){
+            done(null, user);
+          });
+        } else {
           done(null, user);
-        });
-      } else {
-        done(null, user);
-      }
-    });
-  }));
+        }
+      });
+    }));
 
   })(strategy);
 
