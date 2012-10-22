@@ -70,6 +70,26 @@
         }
     });
   };
+
+  var createProject = function(ctx) {
+    superagent
+    .get('/api/projects/create')
+    .end(function(res){
+      $editProject.html(res.text);
+      $editProject.modal('show');
+    });
+
+  };
+
+  var editProject = function(ctx) {
+    superagent
+    .get('/api/projects/edit/' + ctx.params.project_id)
+    .end(function(res){
+      $editProject.html(res.text);
+      $editProject.modal('show');
+    });
+  };
+
   var editProject = function(ctx) {
     superagent
     .get('/api/projects/edit/' + ctx.params.project_id)
@@ -122,6 +142,7 @@
   page('/', loadProjects, isotopeDashboard);
   page('/login', logIn);
   page('/search', loadSearchProjects, isotopeDashboard);
+  page('/projects/create', createProject);
   page('/projects/edit/:project_id', editProject);
   page('/projects/remove/:project_id', removeProject);
   page('/projects/join/:project_id', joinProject);
@@ -151,6 +172,7 @@
         }
     });
   });
+
   $sort.click(function(){
     var vid = $(this).attr('id');
     var asc = vid === 'name';
