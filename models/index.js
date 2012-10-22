@@ -18,6 +18,7 @@ var Project = new Schema({
   , "leader": { type: ObjectId, required: true, ref: 'User' }
   , "pending": [{ type: ObjectId, ref: 'User'}]
   , "contributors": [{ type: ObjectId, ref: 'User'}]
+  , "followers": [{ type: ObjectId, ref: 'User'}]
   , "link": String 
   , "tags": [String]
   , "created_at": { type: Date, default: Date.now }
