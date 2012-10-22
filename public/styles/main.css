@@ -20,6 +20,8 @@ header h1 { line-height: 1; }
 
 header p.lead { margin-bottom: 0; }
 
+header p.createProject { float: right; }
+
 .isotope {
   -webkit-transition-property: height, width;
      -moz-transition-property: height, width;
