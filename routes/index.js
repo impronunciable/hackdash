@@ -7,7 +7,7 @@ var User = mongoose.model('User')
 
 module.exports = function(app) {
   app.get('/', dashboardStack);
-  app.get('/projects/create/:project_id', dashboardStack);
+  app.get('/projects/create', dashboardStack);
   app.get('/projects/edit/:project_id', dashboardStack);
   app.get('/p/:project_id', dashboardStack);
   app.get('/search', dashboardStack);
@@ -15,6 +15,7 @@ module.exports = function(app) {
 
   app.get('/api/projects', loadProjects, render('projects'));
   app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject);
+  app.get('/api/projects/create', isAuth, render('new_project'));
   app.get('/api/projects/edit/:project_id', isAuth, isProjectLeader, loadProject, render('edit'));
   app.post('/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, redirect('/'));
   app.get('/api/projects/:project_id/join', isAuth, isNotProjectMember, joinGroup); 
