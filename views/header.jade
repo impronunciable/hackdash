@@ -1,5 +1,11 @@
 header
+  p.createProject
+    if(user)
+      a.btn(href="./projects/create") Create Project
+    else
+      a.btn(href="./login") Create Project
   h1 HackDash
   .description 
     p.lead
       span A Hackaton Dashboard for people
+      
