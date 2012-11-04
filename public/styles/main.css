@@ -3,15 +3,14 @@ body {
   margin: 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px; color: #333333; background-color: #f8f8f8; }
 
 @font-face {
-    font-family: 'Entypo';
-    src: url('font-face/entypo-webfont.eot');
-    src: url('font-face/entypo-webfont.eot?#iefix') format('embedded-opentype'),
-         url('font-face/entypo-webfont.woff') format('woff'),
-         url('font-face/entypo-webfont.ttf') format('truetype'),
-         url('font-face/entypo-webfont.svg#EntypoRegular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
+font-family: 'Entypo';
+src: url('font-face/entypo-webfont.eot');
+src: url('font-face/entypo-webfont.eot?#iefix') format('embedded-opentype'),
+url('font-face/entypo-webfont.woff') format('woff'),
+url('font-face/entypo-webfont.ttf') format('truetype'),
+url('font-face/entypo-webfont.svg#EntypoRegular') format('svg');
+font-weight: normal;
+font-style: normal;
 }
 
 header { padding: 18px 0 17px 0; margin: 18px 0; border-bottom: 1px solid #eee; }
@@ -155,4 +154,100 @@ line-height:                     0;
   .project.span4 {
     width: 270px;
   }
+}
+
+.signup-btn  {
+  display: block;
+    border: 1px solid #136ac1;
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 12px 30px 12px 0;
+    border-radius: 3px;
+    margin: 10px 0 25px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset;
+    text-shadow: 0 1px 0 #1a64bf;
+    cursor: pointer;
+    text-align: left;
+    margin: 20px 0;
+}
+
+.signup-btn i {
+      height: 24px;
+      width: 20px;
+      background-size: 24px;
+      display: inline-block;
+      vertical-align: text-top;
+      margin-right: 15px;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      padding-right: 30px;
+      box-shadow: 1px 0 0px rgba(255, 255, 255, 0.2); }
+
+.signup-btn:hover {
+  color: #ffffff;
+  box-shadow: 0 0 2px #CCC;
+  text-decoration: none;
+  background-position: 0 0 !important;
+}
+
+.signup-twitter {
+    background-color: #0ba8d6;
+    background-image: -moz-linear-gradient(#35bfe7, #0ba8d6);
+    background-image: -o-linear-gradient(#35bfe7, #0ba8d6);
+    background-image: -ms-linear-gradient(#35bfe7, #0ba8d6);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #35bfe7), color-stop(1, #0ba8d6));
+    background-image: -webkit-linear-gradient(#35bfe7, #0ba8d6); }
+
+.signup-twitter i {
+      background: url('../images/icon-twitter.svg') center center no-repeat;
+      background-size: 30px auto; }
+
+.signup-facebook {
+    background-color: #4264b3;
+    background-image: -moz-linear-gradient(#679ace, #4264b3);
+    background-image: -o-linear-gradient(#679ace, #4264b3);
+    background-image: -ms-linear-gradient(#679ace, #4264b3);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #679ace), color-stop(1, #4264b3));
+    background-image: -webkit-linear-gradient(#679ace, #4264b3);
+    border-color: #1b345a;
+    text-shadow: 0 1px 0 #2d449e; }
+
+.signup-facebook i {
+      background: url('../images/icon-facebook.svg') center center no-repeat;
+      background-size: 30px auto;
+}
+
+.signup-meetup {
+    background-color: #E11B36;
+    background-image: -moz-linear-gradient(#E11B36, #C61E2F);
+    background-image: -o-linear-gradient(#E11B36, #C61E2F);
+    background-image: -ms-linear-gradient(#E11B36, #C61E2F);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #E11B36), color-stop(1, #C61E2F));
+    background-image: -webkit-linear-gradient(#E11B36, #C61E2F);
+    border-color: #C61E2F;
+    text-shadow: 0 1px 0 #D12038; }
+
+.signup-meetup i {
+      background: url('../images/icon-meetup.png') center center no-repeat;
+      background-size: 30px auto;
+}
+
+.signup-github {
+    color: #4C4C4C;
+    background-color: #EAEAEA;
+    background-image: -moz-linear-gradient(#FAFAFA, #EAEAEA);
+    background-image: -o-linear-gradient(#FAFAFA, #EAEAEA);
+    background-image: -ms-linear-gradient(#FAFAFA, #EAEAEA);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FAFAFA), color-stop(1, #EAEAEA));
+    background-image: -webkit-linear-gradient(#FAFAFA, #EAEAEA);
+    border-color: #CACACA;
+    text-shadow: 0 1px 0 #CBCBCB; }
+
+.signup-github i {
+      background: url('../images/icon-github.svg') center center no-repeat;
+      background-size: 30px auto;
+}
+
+a.signup-github:hover {
+  color: #4C4C4C;
 }
