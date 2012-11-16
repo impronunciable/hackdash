@@ -125,7 +125,7 @@ var loadProject = function(req, res, next) {
   .populate('pending')
   .populate('leader')
   .exec(function(err, project) {
-    if(err || !projects) return res.send(500);
+    if(err || !project) return res.send(500);
     res.locals.project = project;
     res.locals.user = req.user;
     next();

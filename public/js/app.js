@@ -139,6 +139,15 @@
     });
   };
 
+  var projectInfo = function(ctx) {
+    request
+    .get('/api/p/' + ctx.params.project_id)
+    .end(function(res){
+      $projects.html(res.text);
+    });
+
+  };
+
   page('/', loadProjects, isotopeDashboard);
   page('/login', logIn);
   page('/search', loadSearchProjects, isotopeDashboard);
@@ -149,6 +158,7 @@
   page('/projects/leave/:project_id', leaveProject);
   page('/projects/:project_id/accept/:user_id', acceptUser);
   page('/projects/:project_id/decline/:user_id', declineUser);
+  page('/p/:project_id', projectInfo);
 
   page();
 
