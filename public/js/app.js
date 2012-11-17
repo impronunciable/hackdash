@@ -14,7 +14,8 @@
     , $modals = $('.modal')
     , $searchInput = $('#searchInput')
     , $sort = $('.sort')
-    , $cancel = $('.cancel');
+    , $cancel = $('.cancel')
+    , $slogan = $('#slogan');
 
   var loadProjects = function(ctx, next) {
     request
@@ -192,5 +193,13 @@
     page('/');
     e.preventDefault();
   });
+
+  var forwho = ['for people','for geeks','for mutants','for your wife'];
+  setInterval(function(){
+    var rand = forwho[Math.floor(Math.random() * forwho.length)];
+    $slogan.fadeOut('fast');
+    $slogan.text(rand);
+    $slogan.fadeIn('fast');
+  },2000);
 
 })();
