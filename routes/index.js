@@ -266,7 +266,7 @@ var isNotProjectMember = function(req, res, next) {
  */
 
 var isNotProjectFollower = function(req, res, next) {
-  Project.findOne({ _id: req.params.project_id, $not: {followers: req.user.id} }, function(error, project){
+  Project.findOne({ _id: req.params.project_id, $not: {followers: req.user._id} }, function(error, project){
     if(error || !project) return res.send(500);
     req.project = project;
     next(); 

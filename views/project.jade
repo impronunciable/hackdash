@@ -14,10 +14,9 @@
       each tag, index in project.tags
         if(tag.length)
           span(class="badge") #{tag}
-
-    .btn-group
-      a.btn(href='/projects/edit/'+project._id) Follow
-
-      if(project.leader._id.toString() == user._id.toString())
-        a.btn(href='/projects/edit/'+project._id) Edit  
+      .actions
+        .btn-group
+          a.btn(href='/projects/'+ project._id +'/follow') Follow
+          if(project.leader._id.toString() == user._id.toString())
+            a.btn(href='/projects/edit/'+project._id) Edit  
 
