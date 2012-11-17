@@ -10,6 +10,7 @@
     p
       a(href="/p/" + project.id, target="_blank") #{project.description}
     .info
+      span.status #{project.status}
       each tag, index in project.tags
         if(tag.length)
           span(class="badge") #{tag}
