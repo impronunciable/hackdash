@@ -210,6 +210,6 @@
     $slogan.fadeOut('fast', function(){
       $(this).text(rand).fadeIn();
     });
-  }, 2000);
+  }, 5000);
 
 })();
