@@ -118,6 +118,10 @@ line-height:                     0;
 
 } 
 
+.actions {
+  margin-top:5px;
+}
+
 
 @media (max-width: 480px) {
 
