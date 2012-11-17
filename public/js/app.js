@@ -8,6 +8,7 @@
 
   var $projects = $('#projects')
     , $project = $('.project')
+    , $newProject = $('#newProject')
     , $editProject = $('#editProject')
     , $logIn = $('#logIn')
     , $modals = $('.modal')
@@ -72,22 +73,7 @@
   };
 
   var createProject = function(ctx) {
-    superagent
-    .get('/api/projects/create')
-    .end(function(res){
-      $editProject.html(res.text);
-      $editProject.modal('show');
-    });
-
-  };
-
-  var editProject = function(ctx) {
-    superagent
-    .get('/api/projects/edit/' + ctx.params.project_id)
-    .end(function(res){
-      $editProject.html(res.text);
-      $editProject.modal('show');
-    });
+    $newProject.modal('show');
   };
 
   var editProject = function(ctx) {
@@ -193,6 +179,9 @@
     page('/');
   });
 
-  
+  $cancel.on('click', function(e){
+    page('/');
+    e.preventDefault();
+  });
 
 })();
