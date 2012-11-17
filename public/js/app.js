@@ -204,11 +204,12 @@
   });
 
   var forwho = ['for people','for geeks','for mutants','for your wife'];
+  var i = 0;
   setInterval(function(){
-    var rand = forwho[Math.floor(Math.random() * forwho.length)];
-    $slogan.fadeOut('fast');
-    $slogan.text(rand);
-    $slogan.fadeIn('fast');
-  },2000);
+    var rand = forwho[++i % forwho.length];
+    $slogan.fadeOut('fast', function(){
+      $(this).text(rand).fadeIn();
+    });
+  }, 2000);
 
 })();
