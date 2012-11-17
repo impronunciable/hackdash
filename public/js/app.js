@@ -139,7 +139,7 @@
     request
     .get('/api/projects/' + ctx.params.project_id + '/follow')
     .end(function(res){
-      console.log(res);
+      page('/');
     });
   };
 

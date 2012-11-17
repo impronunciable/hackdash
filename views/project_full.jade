@@ -16,8 +16,7 @@
           span(class="badge") #{tag}
       .actions
         .btn-group
-          if(user)
-            a.btn(href='/projects/'+ project._id +'/follow') Follow
-          if(user && project.leader._id.toString() == user._id.toString())
+          a.btn(href='/projects/'+ project._id +'/follow') Follow
+          if(project.leader._id.toString() == user._id.toString())
             a.btn(href='/projects/edit/'+project._id) Edit  
 
