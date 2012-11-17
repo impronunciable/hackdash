@@ -15,7 +15,9 @@
     , $searchInput = $('#searchInput')
     , $sort = $('.sort')
     , $cancel = $('.cancel')
-    , $slogan = $('#slogan');
+    , $slogan = $('#slogan')
+    , $unfollow = $('.unfollow')
+    , $follow = $('.follow');
 
   var loadProjects = function(ctx, next) {
     request
@@ -135,20 +137,30 @@
 
   };
 
-  var followProject = function(ctx) {
+  var followProject = function(e) {
+    var self = this;
     request
-    .get('/api/projects/' + ctx.params.project_id + '/follow')
+    .get($(self).attr('href'))
     .end(function(res){
-      page('/');
+      $(self).text('unfollow')
+             .removeClass('unfollow')
+             .addClass('follow');      
     });
+
+    e.preventDefault();
   };
 
-  var unfollowProject = function(ctx) {
+  var unfollowProject = function(e) {
+    var self = this;
     request
-    .get('/api/projects/' + ctx.params.project_id + '/unfollow')
+    .get($(self).attr('href'))
     .end(function(res){
-      page('/');
+      $(self).text('follow')
+             .removeClass('unfollow')
+             .addClass('follow');
     });
+
+    e.preventDefault();
   };
 
   page('/', loadProjects, isotopeDashboard);
@@ -162,8 +174,6 @@
   page('/projects/:project_id/accept/:user_id', acceptUser);
   page('/projects/:project_id/decline/:user_id', declineUser);
   page('/p/:project_id', projectInfo);
-  page('/projects/:project_id/follow', followProject);
-  page('/projects/:project_id/unfollow', unfollowProject);
 
   page();
 
@@ -202,6 +212,9 @@
     page('/');
     e.preventDefault();
   });
+
+  $follow.live('click', followProject);
+  $unfollow.live('click', unfollowProject);
 
   var forwho = ['for people','for geeks','for mutants','for your wife'];
   var i = 0;
