@@ -104,6 +104,14 @@ line-height:                     0;
   margin-bottom: 8px;
 }
 
+.divider.brainstorming {
+  border-color: red;
+}
+
+.divider.prototyping {
+  border-color: green;
+}
+
 .info {
   padding-left: 10px;
   margin-bottom: 16px;
