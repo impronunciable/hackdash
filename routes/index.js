@@ -22,8 +22,6 @@ module.exports = function(app) {
   app.get('/api/projects/:project_id/leave', isAuth, isProjectMember, leaveProject); 
   app.get('/api/projects/:project_id/follow', isAuth, isNotProjectFollower, followProject); 
   app.get('/api/projects/:project_id/unfollow', isAuth, isProjectFollower, unfollowProject); 
-  app.get('/api/projects/:project_id/accept/:user_id', isProjectLeader, isUserPendingMember, acceptUser);
-  app.get('/api/projects/:project_id/decline/:user_id', isProjectLeader, isUserPendingMember, declineUser);
   app.get('/api/p/:project_id', loadProject, render('project'));
   app.get('/api/search', loadSearchProjects, render('projects'));
   app.get('/logout', logout, redirect('/'));
@@ -91,11 +89,10 @@ var isAuth = function(req, res, next){
  */
 
 var isProjectLeader = function(req, res, next){
-  Project.findById(req.params.project_id, function(err, project){
+  Project.findOne({_id: req.params.project_id, leader: req.user.id}, function(err, project){
     if(err || !project) return res.send(500);
     req.project = project;
-    if(project.leader.toString() === req.user.id) next();
-    else res.send(403);
+    next();
   });
 };
 
@@ -218,14 +215,10 @@ var updateProject = function(req, res, next) {
  */
 
 var isProjectMember = function(req, res, next) {
-  Project.findById(req.params.project_id, function(err, project){
+  Project.findOne({_id: req.params.project_id, contributors: req.user.id}, function(err, project){
     if(error || !project) return res.send(500);
 
     req.project = project;
-
-    if(!project.pending.some(function(id){ return id == req.user._id}) 
-    && !project.contributors.some(function(id){ return id == req.user._id})) return res.send(500);
-
     next(); 
   });
 };
@@ -235,11 +228,9 @@ var isProjectMember = function(req, res, next) {
  */
 
 var isProjectFollower = function(req, res, next) {
-  Project.findById(req.params.project_id, function(error, project){
-    req.project = project;
+  Project.findOne({_id: req.params.project_id, followers: req.user.id}, function(error, project){
     if(error || !project) return res.send(500);
-    if(!project.followers.some(function(id){ return id == req.user._id})) return res.send(500);
-
+    req.project = project;
     next(); 
   });
 };
@@ -250,13 +241,10 @@ var isProjectFollower = function(req, res, next) {
  */
 
 var isNotProjectMember = function(req, res, next) {
-  Project.findById(req.params.project_id, function(error, project){
-    req.project = project;
+  Project.findOne({_id: req.params.project_id, $not:  {contributors: req.user.id}}, function(error, project){
     if(error || !project) return res.send(500);
-    if(project.pending.some(function(id){ return id == req.user._id})  
-    || !~project.contributors.some(function(id){ return id == req.user._id})) next();
-    else
-      res.send(500); 
+    req.project = project;
+    next();
   });
 };
 
@@ -265,55 +253,30 @@ var isNotProjectMember = function(req, res, next) {
  */
 
 var isNotProjectFollower = function(req, res, next) {
-  Project.findById(req.params.project_id, function(error, project){
-    req.project = project;
+  Project.findOne({ _id: req.params.project_id, $not: {followers: req.user.id} }, function(error, project){
     if(error || !project) return res.send(500);
-    if(project.followers.some(function(id){ return id == req.user._id})) return res.send(500);
-
+    req.project = project;
     next(); 
   });
 };
 
-
-/*
- * Check if current user is pending on a group
- */
-
-var isUserPendingMember = function(req, res, next) {
-  if(!req.project.pending.some(function(id){return id == req.params.user_id})) res.send(500);
-  else next(); 
-};
-
-/*
- * Check if specific user is a group contributor
- */
-
-var isUserContributor = function(req, res, next) {
-  if(!req.project.contributors.some(function(id){ return id == req.params.user_id})) res.send(500);
-  else next(); 
-};
-
-/*
- * Add current user as pending on a project
+ /*
+ * Add current user as a group contributor
  */
 
 var joinProject = function(req, res) {
-  req.project.pending.splice(req.project.pending.indexOf(req.user._id), 1);  
-  req.project.pending.push(req.user._id);  
-  req.project.save(function(err){
+  req.project.update({_id: req.project._id}, { $addToSet : { 'contributors': req.user.id }}, function(err){
     if(err) return res.send(500);
     res.json(200, {group: req.project._id, user: req.user._id });
   });
 };
 
 /*
- * Remove current user from a project
+ * Remove current user from a group
  */
 
 var leaveProject = function(req, res) {
-  req.project.pending.splice(req.project.pending.indexOf(req.user._id), 1);  
-  req.project.contributors.splice(req.project.pending.indexOf(req.user._id), 1);  
-  req.project.save(function(err){
+  req.project.update({_id: req.project._id},{ $pull: {'followers': req.user._id }}, function(err){
     if(err) return res.send(500);
     res.json(200, {group: req.project._id, user: req.user._id });
   });
@@ -324,9 +287,7 @@ var leaveProject = function(req, res) {
  */
 
 var followProject = function(req, res) {
-  req.project.followers.splice(req.project.followers.indexOf(req.user._id), 1);  
-  req.project.followers.push(req.user._id);  
-  req.project.save(function(err){
+  req.project.update({_id: req.project._id}, { $addToSet : { 'followers': req.user.id }}, function(err){
     if(err) return res.send(500);
     res.json(200, {group: req.project._id, user: req.user._id });
   });
@@ -337,36 +298,9 @@ var followProject = function(req, res) {
  */
 
 var unfollowProject = function(req, res) {
-  req.project.pending.splice(req.project.pending.indexOf(req.user._id), 1);  
-  req.project.contributors.splice(req.project.pending.indexOf(req.user._id), 1);  
-  req.project.save(function(err){
+  req.project.update({_id: req.project._id},{ $pull: {'followers': req.user._id }}, function(err){
     if(err) return res.send(500);
     res.json(200, {group: req.project._id, user: req.user._id });
-  });
-};
-
-/*
- * Accept a user into a group
- */
-
-var acceptUser = function(req, res, next) {
-  req.project.pending.splice(req.project.pending.indexOf(req.params.user_id), 1);  
-  req.project.contributors.push(req.params.user_id);  
-  req.project.save(function(err, project){
-    if(err) return res.send(500);
-    res.send(200, req.params.user_id);
-  });
-};
-
-/*
- * Decline a user group request
- */
-
-var declineUser = function(req, res, next) {
-  req.project.pending.splice(req.project.pending.indexOf(req.params.user_id), 1);  
-  req.project.save(function(err, project){
-    if(err) return res.send(500);
-    res.send(200, req.params.user_id);
   });
 };
 
