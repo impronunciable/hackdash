@@ -24,11 +24,10 @@ module.exports = function(app) {
   app.get('/p/:project_id', dashboardStack);
   app.get('/search', dashboardStack);
   app.post('/projects/create', isAuth, validateProject, saveProject, redirect('/'));
-
   app.get('/api/projects', loadProjects, render('projects'));
   app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject);
   app.get('/api/projects/create', isAuth, setViewVar('statuses', app.get('statuses')), render('new_project'));
-  app.get('/api/projects/edit/:project_id', isAuth, isProjectLeader, loadProject, render('edit'));
+  app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), isProjectLeader, loadProject, render('edit'));
   app.post('/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, redirect('/'));
   app.get('/api/projects/:project_id/join', isAuth, isNotProjectMember, joinProject); 
   app.get('/api/projects/:project_id/leave', isAuth, isProjectMember, leaveProject); 
@@ -69,7 +68,7 @@ var loadUser = function(req, res, next) {
 };
 
 /*
- * Add current user template variable
+ * Makes vars available to views
  */
 
 var setViewVar = function(key, value) {
@@ -214,6 +213,7 @@ var updateProject = function(req, res, next) {
   project.title = req.body.title || project.title;
   project.description = req.body.description || project.description;
   project.link = req.body.link || project.link;
+  project.status = req.body.status || project.status;
   project.tags = (req.body.tags && req.body.tags.split(',')) || project.tags;
 
   project.save(function(err, project){

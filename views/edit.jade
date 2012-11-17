@@ -21,6 +21,13 @@ form.form-horizontal(action="/projects/edit/" + project.id, method="POST")
        .controls
          input(class="input-xlarge", type="text", name="tags", id="tags", value=(project.tags) ? project.tags.join(',') : '')
 
+    .control-group
+       label.control-label(for="status") Status
+       .controls
+         select(class="input-xlarge", name="status", id="status")
+          each status in statuses
+            option(value=status,selected=selected)= status
+
     .form-actions
       button.btn.btn-primary(type="submit") Edit project
       button.btn.cancel Cancel
