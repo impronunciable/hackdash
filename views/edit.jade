@@ -26,7 +26,7 @@ form.form-horizontal(action="/projects/edit/" + project.id, method="POST")
        .controls
          select(class="input-xlarge", name="status", id="status")
           each status in statuses
-            option(value=status,selected=selected)= status
+            option(value=status)= status
 
     .form-actions
       button.btn.btn-primary(type="submit") Edit project
