@@ -33,7 +33,7 @@ module.exports = function(app) {
   app.get('/api/projects/:project_id/leave', isAuth, isProjectMember, leaveProject); 
   app.get('/api/projects/:project_id/follow', isAuth, isNotProjectFollower, followProject); 
   app.get('/api/projects/:project_id/unfollow', isAuth, isProjectFollower, unfollowProject); 
-  app.get('/api/p/:project_id', loadProject, render('project'));
+  app.get('/api/p/:project_id', loadProject, render('project_full'));
   app.get('/api/search', loadSearchProjects, render('projects'));
   app.get('/logout', logout, redirect('/'));
 };
@@ -74,7 +74,6 @@ var loadUser = function(req, res, next) {
 var setViewVar = function(key, value) {
   return function(req, res, next) {
     res.locals[key] = value;
-    console.log(res.locals);
     next();
   };
 };  
