@@ -15,8 +15,6 @@ var express = require('express')
 
 mongoose.connect('mongodb://localhost/hackdash');
 
-require('./models');
-
 var app = exports.app = express();
 
 /*
@@ -41,11 +39,14 @@ app.configure(function(){
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
+  app.set('statuses',['brainstorming','wireframing','building','reasearching','protoyping','releasing']);
 });
 
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
+
+require('./models')(app);
 
 /*
  * Auth
