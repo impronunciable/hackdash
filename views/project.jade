@@ -2,13 +2,15 @@
   
   .well
     .row-fluid
-      .span3.activity.people #{project.contributors.length}
-      .span6.aging.activity #{project.created_at.getDay()} days ago
+      .span3.activity.people #{project.followers.length}
+        span(data-icon="6", aria-hidden="true")
+      .span6.pull-right.aging.activity #{project.created_at.getDay()} days ago
         span(data-icon="P", aria-hidden="true")
     .divider
     p
       a(href="/p/" + project.id, target="_blank") #{project.description}
     .info
+      span.status #{project.status}
       each tag, index in project.tags
         if(tag.length)
           span(class="badge") #{tag}
