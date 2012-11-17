@@ -2,3 +2,4 @@ config.json
 keys.json
 node_modules
 .DS_Store
+.sublime-project
