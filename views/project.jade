@@ -6,7 +6,7 @@
         span(data-icon="6", aria-hidden="true")
       .span6.pull-right.aging.activity #{project.created_at.getDay()} days ago
         span(data-icon="P", aria-hidden="true")
-    .divider
+    .divider(class=project.status)
     p
       a(href="/p/" + project.id, target="_blank") #{project.description}
     .info

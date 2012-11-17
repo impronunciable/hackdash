@@ -17,6 +17,7 @@ var Project = new Schema({
   , "description": { type: String, required: true }
   , "leader": { type: ObjectId, required: true, ref: 'User' }
   , "pending": [{ type: ObjectId, ref: 'User'}]
+  , "status": { type: String, enum:['brainstorming','wireframing','building','reasearching','protoyping','releasing'], default: 'brainstorming'}
   , "contributors": [{ type: ObjectId, ref: 'User'}]
   , "followers": [{ type: ObjectId, ref: 'User'}]
   , "link": String 
