@@ -19,3 +19,8 @@ Instalación
 * Fill config.json with your configuration
 
 * Run the application: $ node server.js
+
+
+Changelog
+===========
+
