@@ -225,7 +225,6 @@ var updateProject = function(req, res, next) {
 
 /*
  * Check if current user is member of a project
- * TODO: use a better query instead of this stupid search
  */
 
 var isProjectMember = function(req, res, next) {
@@ -279,7 +278,7 @@ var isNotProjectFollower = function(req, res, next) {
  */
 
 var joinProject = function(req, res) {
-  req.project.update({_id: req.project._id}, { $addToSet : { 'contributors': req.user.id }}, function(err){
+  req.project.update({_id: req.project._id}, { $addToSet : { 'contributors': req.user.id }, $addToSet : { 'followers': req.user.id }}, function(err){
     if(err) return res.send(500);
     res.json(200, {group: req.project._id, user: req.user._id });
   });
@@ -290,7 +289,7 @@ var joinProject = function(req, res) {
  */
 
 var leaveProject = function(req, res) {
-  req.project.update({_id: req.project._id},{ $pull: {'followers': req.user._id }}, function(err){
+  req.project.update({_id: req.project._id},{ $pull: {'contributors': req.user._id }}, function(err){
     if(err) return res.send(500);
     res.json(200, {group: req.project._id, user: req.user._id });
   });
