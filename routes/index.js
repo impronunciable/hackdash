@@ -29,10 +29,10 @@ module.exports = function(app) {
   app.get('/api/projects/create', isAuth, setViewVar('statuses', app.get('statuses')), render('new_project'));
   app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), isProjectLeader, loadProject, render('edit'));
   app.post('/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, redirect('/'));
-  app.get('/api/projects/:project_id/join', isAuth, isNotProjectMember, joinProject); 
+  app.get('/api/projects/:project_id/join', isAuth, joinProject); 
   app.get('/api/projects/:project_id/leave', isAuth, isProjectMember, leaveProject); 
-  app.get('/api/projects/:project_id/follow', isAuth, isNotProjectFollower, followProject); 
-  app.get('/api/projects/:project_id/unfollow', isAuth, isProjectFollower, unfollowProject); 
+  app.get('/api/projects/:project_id/follow', isAuth, followProject); 
+  app.get('/api/projects/:project_id/unfollow', isAuth, unfollowProject); 
   app.get('/api/p/:project_id', loadProject, render('project_full'));
   app.get('/api/search', loadSearchProjects, render('projects'));
   app.get('/logout', logout, redirect('/'));
@@ -247,39 +247,14 @@ var isProjectFollower = function(req, res, next) {
   });
 };
 
-
-/*
- * Check if specific user is not a group member
- */
-
-var isNotProjectMember = function(req, res, next) {
-  Project.findOne({_id: req.params.project_id, $not:  {contributors: req.user.id}}, function(error, project){
-    if(error || !project) return res.send(500);
-    req.project = project;
-    next();
-  });
-};
-
-/*
- * Check if current user is not follower of a project
- */
-
-var isNotProjectFollower = function(req, res, next) {
-  Project.findOne({ _id: req.params.project_id, $not: {followers: req.user._id} }, function(error, project){
-    if(error || !project) return res.send(500);
-    req.project = project;
-    next(); 
-  });
-};
-
  /*
  * Add current user as a group contributor
  */
 
 var joinProject = function(req, res) {
-  req.project.update({_id: req.project._id}, { $addToSet : { 'contributors': req.user.id }, $addToSet : { 'followers': req.user.id }}, function(err){
+  Project.update({_id: req.params.project_id}, { $addToSet : { 'contributors': req.user.id }, $addToSet : { 'followers': req.user.id }}, function(err){
     if(err) return res.send(500);
-    res.json(200, {group: req.project._id, user: req.user._id });
+    res.json(200, {group: req.params.project_id, user: req.user._id });
   });
 };
 
@@ -288,9 +263,9 @@ var joinProject = function(req, res) {
  */
 
 var leaveProject = function(req, res) {
-  req.project.update({_id: req.project._id},{ $pull: {'contributors': req.user._id }}, function(err){
+  Project.update({_id: req.params.project_id}, { $pull: {'contributors': req.user._id }}, function(err){
     if(err) return res.send(500);
-    res.json(200, {group: req.project._id, user: req.user._id });
+    res.json(200, {group: req.params.project_id, user: req.user._id });
   });
 };
 
@@ -299,9 +274,9 @@ var leaveProject = function(req, res) {
  */
 
 var followProject = function(req, res) {
-  req.project.update({_id: req.project._id}, { $addToSet : { 'followers': req.user.id }}, function(err){
+  Project.update({_id: req.params.project_id}, { $addToSet : { 'followers': req.user.id }}, function(err){
     if(err) return res.send(500);
-    res.json(200, {group: req.project._id, user: req.user._id });
+    res.json(200, {project: req.params.project_id, user: req.user._id });
   });
 };
 
@@ -310,7 +285,7 @@ var followProject = function(req, res) {
  */
 
 var unfollowProject = function(req, res) {
-  req.project.update({_id: req.project._id},{ $pull: {'followers': req.user._id }}, function(err){
+  Project.update({_id: req.project._id},{ $pull: {'followers': req.user._id }}, function(err){
     if(err) return res.send(500);
     res.json(200, {group: req.project._id, user: req.user._id });
   });
