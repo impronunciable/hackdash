@@ -142,6 +142,14 @@
     });
   };
 
+  var unfollowProject = function(ctx) {
+    request
+    .get('/api/projects/' + ctx.params.project_id + '/unfollow')
+    .end(function(res){
+      page('/');
+    });
+  };
+
   page('/', loadProjects, isotopeDashboard);
   page('/login', logIn);
   page('/search', loadSearchProjects, isotopeDashboard);
@@ -154,6 +162,7 @@
   page('/projects/:project_id/decline/:user_id', declineUser);
   page('/p/:project_id', projectInfo);
   page('/projects/:project_id/follow', followProject);
+  page('/projects/:project_id/unfollow', unfollowProject);
 
   page();
 
