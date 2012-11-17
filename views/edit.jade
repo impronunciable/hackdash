@@ -25,18 +25,4 @@ form.form-horizontal(action="/projects/edit/" + project.id, method="POST")
       button.btn.btn-primary(type="submit") Edit project
       button.btn.cancel Cancel
 
-h3 Pending users
 
--if(!project.pending.length){
-  strong No pending users
--}
-
-table.table.pending
-  tbody
-    each user in project.pending
-      tr
-        td= user.username
-        td 
-          a.accept.btn-success.btn(href="/projects/"+project.id+"/accept/"+user.id) Accept
-        td 
-          a.decline.btn-danger.btn(href="/projects/"+project.id+"/decline/"+user.id) Decline
