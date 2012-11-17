@@ -285,9 +285,9 @@ var followProject = function(req, res) {
  */
 
 var unfollowProject = function(req, res) {
-  Project.update({_id: req.project._id},{ $pull: {'followers': req.user._id }}, function(err){
+  Project.update({_id: req.params.project_id},{ $pull: {'followers': req.user._id }}, function(err){
     if(err) return res.send(500);
-    res.json(200, {group: req.project._id, user: req.user._id });
+    res.json(200, {group: req.params.project_id, user: req.user._id });
   });
 };
 
