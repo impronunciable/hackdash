@@ -6,6 +6,18 @@ var User = mongoose.model('User')
   , Project = mongoose.model('Project');
 
 module.exports = function(app) {
+
+  /*
+   * Dashboard middleware stack
+   */
+
+  var dashboardStack = [
+    loadUser, 
+    loadProviders,
+    setViewVar('statuses', app.get('statuses')),
+    render('dashboard')
+  ];
+
   app.get('/', dashboardStack);
   app.get('/projects/create', dashboardStack);
   app.get('/projects/edit/:project_id', dashboardStack);
@@ -15,7 +27,7 @@ module.exports = function(app) {
 
   app.get('/api/projects', loadProjects, render('projects'));
   app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject);
-  app.get('/api/projects/create', isAuth, render('new_project'));
+  app.get('/api/projects/create', isAuth, setViewVar('statuses', app.get('statuses')), render('new_project'));
   app.get('/api/projects/edit/:project_id', isAuth, isProjectLeader, loadProject, render('edit'));
   app.post('/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, redirect('/'));
   app.get('/api/projects/:project_id/join', isAuth, isNotProjectMember, joinProject); 
@@ -57,6 +69,18 @@ var loadUser = function(req, res, next) {
 };
 
 /*
+ * Add current user template variable
+ */
+
+var setViewVar = function(key, value) {
+  return function(req, res, next) {
+    res.locals[key] = value;
+    console.log(res.locals);
+    next();
+  };
+};  
+
+/*
  * Load app providers
  */
 
@@ -64,16 +88,6 @@ var loadProviders = function(req, res, next) {
   res.locals.providers = req.app.get('providers');
   next();
 };
-
-/*
- * Dashboard middleware stack
- */
-
-var dashboardStack = [
-  loadUser, 
-  loadProviders,
-  render('dashboard')
-];
 
 
 /*

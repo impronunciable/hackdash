@@ -20,6 +20,13 @@ form.form-horizontal(action="/projects/create", method="POST")
        label.control-label(for="tags") Tags - Comma separated (,)
        .controls
          input(class="input-xlarge", type="text", name="tags", id="tags")
+    
+    .control-group
+       label.control-label(for="tags") Tags - Comma separated (,)
+       .controls
+         select(class="input-xlarge", name="status", id="status")
+          each status in statuses
+            option(value=status)= status
 
     .form-actions
       button.btn.btn-primary(type="submit") Create project
