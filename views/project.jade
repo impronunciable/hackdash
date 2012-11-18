@@ -11,7 +11,8 @@
       a(href="/p/" + project.id, target="_blank") #{project.summary}
     .info
       span.status Status:  #{project.status}
-      span.tags Tags: #{project.tags.join(', ')}
+      if(project.tags.length)
+        span.tags Tags: #{project.tags.join(', ')}
 
       .actions
         .btn-group
