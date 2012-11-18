@@ -10,10 +10,12 @@
     p
       a(href="/p/" + project.id, target="_blank") #{project.description}
     .info
-      span.status #{project.status}
-      each tag, index in project.tags
-        if(tag.length)
-          span(class="badge") #{tag}
+      span.status Status:  #{project.status}
+      span.tags Tags:
+       each tag, index in project.tags
+         if(tag.length)
+           span(class="tag") #{tag}
+//
       .actions
         .btn-group
           if(user)
@@ -23,5 +25,4 @@
               a.unfollow.btn(href='/api/projects/'+ project._id +'/unfollow') unfollow
 
           if(user && project.leader._id.toString() == user._id.toString())
-            a.btn(href='/projects/edit/'+project._id) Edit  
-
+            a.btn(href='/projects/edit/'+project._id) Edit
