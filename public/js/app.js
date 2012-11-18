@@ -110,22 +110,6 @@
     });
   };
 
-  var acceptUser = function(ctx) {
-    request
-    .get('/api/projects/' + ctx.params.project_id + '/accept/' + ctx.params.user_id)
-    .end(function(res){
-      page('/');
-    });
-  };
-
-  var declineUser = function(ctx) {
-    request
-    .get('/api/projects/' + ctx.params.project_id + '/decline/' + ctx.params.user_id)
-    .end(function(res){
-      page('/');
-    });
-  };
-
   var projectInfo = function(ctx) {
     request
     .get('/api/p/' + ctx.params.project_id)
@@ -159,8 +143,6 @@
   page('/projects/remove/:project_id', removeProject);
   page('/projects/join/:project_id', joinProject);
   page('/projects/leave/:project_id', leaveProject);
-  page('/projects/:project_id/accept/:user_id', acceptUser);
-  page('/projects/:project_id/decline/:user_id', declineUser);
   page('/p/:project_id', projectInfo);
   page('/projects/:project_id/follow', followProject);
   page('/projects/:project_id/unfollow', unfollowProject);
