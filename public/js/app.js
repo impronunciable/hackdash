@@ -143,8 +143,8 @@
     .get($(self).attr('href'))
     .end(function(res){
       $(self).text('unfollow')
-             .removeClass('unfollow')
-             .addClass('follow');      
+             .removeClass('follow')
+             .addClass('unfollow');      
     });
 
     e.preventDefault();
