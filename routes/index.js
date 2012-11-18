@@ -149,7 +149,7 @@ var loadSearchProjects = function(req, res, next) {
   var regex = new RegExp(req.query.q);
   Project
   .find()
-  .or([{title: regex}, {description: regex}, {tags: req.query.q}])
+  .or([{title: regex}, {summary: regex}, {tags: req.query.q}])
   .exec(function(err, projects) {
     if(err) return res.send(500);
     res.locals.projects = projects;
