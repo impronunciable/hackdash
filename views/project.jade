@@ -8,7 +8,7 @@
         span(data-icon="P", aria-hidden="true")
     .divider(class=project.status)
     p
-      a(href="/p/" + project.id, target="_blank") #{project.description}
+      a(href="/p/" + project.id, target="_blank") #{project.summary}
     .info
       span.status Status:  #{project.status}
       span.tags Tags: #{project.tags.join(', ')}
