@@ -1,11 +1,16 @@
-header
-  p.createProject
-    if(user)
-      a.btn.btn-large.btn-primary(href="./projects/create") Create Project
-    else
-      a.btn.btn-large.btn-primary(href="./login") Create Project
-  h1 HackDash
-  .description 
-    p.lead
-      span A Hackaton Dashboard 
-      span#slogan for people
+header.jumbotron.subhead
+ .row-fluid
+  .span6
+    h1
+     a(href="/") HackDash
+    .description 
+      p.lead
+        span A Hackaton Dashboard 
+        span#slogan for people
+  .span6
+   .span7.pull-right
+    p.createProject
+      if(user)
+        a.btn.btn-large.btn-block.btn-custom(href="./projects/create") Create Project
+      else
+        a.btn.btn-large.btn-block.btn-custom(href="./login") Create Project

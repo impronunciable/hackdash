@@ -15,11 +15,21 @@ font-style: normal;
 
 header { padding: 18px 0 17px 0; margin: 18px 0; border-bottom: 1px solid #eee; }
 
-header h1 { line-height: 1; }
+header h1 {
+  margin: 5px 0;
+}
 
-header p.lead { margin-bottom: 0; }
+header p.lead {
+          margin-bottom: 0;
+           font-size: 14px;
+         font-weight: bold;
+            color: #474747;
+}
 
-header p.createProject { float: right; }
+
+header p.createProject {
+                        
+                       }
 
 .isotope {
   -webkit-transition-property: height, width;
@@ -115,8 +125,20 @@ line-height:                     0;
 .info {
   padding-left: 10px;
   margin-bottom: 16px;
+}
 
-} 
+.status {
+  display: block;
+}
+
+.tags {
+  display: block;
+}
+
+.tag {
+  display: inline-block;
+
+}
 
 .actions {
   margin-top:5px;
@@ -267,3 +289,23 @@ line-height:                     0;
 a.signup-github:hover {
   color: #4C4C4C;
 }
+
+.btn-custom {
+  background-color: hsl(0, 0%, 76%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#E4E4E4", endColorstr="#E4E4E4");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#E4E4E4), to(#E4E4E4));
+  background-image: -moz-linear-gradient(top, #E4E4E4, #E4E4E4);
+  background-image: -ms-linear-gradient(top, #E4E4E4, #E4E4E4);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E4E4E4), color-stop(100%, #E4E4E4));
+  background-image: -webkit-linear-gradient(top, #E4E4E4, #E4E4E4);
+  background-image: -o-linear-gradient(top, #E4E4E4, #E4E4E4);
+  background-image: linear-gradient(#E4E4E4, #E4E4E4);
+  border-color: #E4E4E4 #E4E4E4 hsl(0, 0%, 76%);
+  color: #000 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
+  font-weight: bolder;
+}
+
+
+
