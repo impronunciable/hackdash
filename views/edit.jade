@@ -7,6 +7,11 @@ form.form-horizontal(action="/projects/edit/" + project.id, method="POST")
         input(class="input-xlarge", type="text", name="title", id="title", value=project.title)
 
     .control-group
+      label.control-label(for="summary") Summary
+      .controls
+        textarea(class="input-xlarge", id="summary", name="summary", rows="3", maxlength="400")= project.summary
+
+    .control-group
       label.control-label(for="description") Description
       .controls
         textarea(class="input-xlarge", id="description", name="description", rows="3", maxlength="400")= project.description
