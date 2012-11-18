@@ -31,8 +31,8 @@ module.exports = function(app) {
   app.post('/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, redirect('/'));
   app.get('/api/projects/:project_id/join', isAuth, joinProject); 
   app.get('/api/projects/:project_id/leave', isAuth, isProjectMember, leaveProject); 
-  app.get('/api/projects/:project_id/follow', isAuth, followProject); 
-  app.get('/api/projects/:project_id/unfollow', isAuth, unfollowProject); 
+  app.get('/api/projects/:project_id/follow', isAuth, followProject, loadProject, render('project')); 
+  app.get('/api/projects/:project_id/unfollow', isAuth, unfollowProject, loadProject, render('project')); 
   app.get('/api/p/:project_id', loadProject, render('project_full'));
   app.get('/api/search', loadSearchProjects, render('projects'));
   app.get('/logout', logout, redirect('/'));
@@ -41,7 +41,6 @@ module.exports = function(app) {
 /*
  * Render templates
  */
-
 var render = function(path) {
   return function(req, res) {
     res.render(path);
@@ -274,10 +273,10 @@ var leaveProject = function(req, res) {
  * Add current user as project follower
  */
 
-var followProject = function(req, res) {
+var followProject = function(req, res, next) {
   Project.update({_id: req.params.project_id}, { $addToSet : { 'followers': req.user.id }}, function(err){
     if(err) return res.send(500);
-    res.json(200, {project: req.params.project_id, user: req.user._id });
+    next();
   });
 };
 
@@ -285,10 +284,10 @@ var followProject = function(req, res) {
  * Unfollow
  */
 
-var unfollowProject = function(req, res) {
+var unfollowProject = function(req, res, next) {
   Project.update({_id: req.params.project_id},{ $pull: {'followers': req.user._id }}, function(err){
     if(err) return res.send(500);
-    res.json(200, {group: req.params.project_id, user: req.user._id });
+    next();
   });
 };
 

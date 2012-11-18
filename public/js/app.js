@@ -15,9 +15,8 @@
     , $searchInput = $('#searchInput')
     , $sort = $('.sort')
     , $cancel = $('.cancel')
-    , $slogan = $('#slogan')
-    , $unfollow = $('.unfollow')
-    , $follow = $('.follow');
+    , $follow = $('.follow')
+    , $unfollow = $('.unfollow');
 
   var loadProjects = function(ctx, next) {
     request
@@ -123,12 +122,11 @@
 
   var followProject = function(e) {
     var self = this;
+
     request
     .get($(self).attr('href'))
     .end(function(res){
-      $(self).text('unfollow')
-             .removeClass('follow')
-             .addClass('unfollow');      
+      $(self).parents('.project').html($(res.text).html());
     });
 
     e.preventDefault();
@@ -136,12 +134,11 @@
 
   var unfollowProject = function(e) {
     var self = this;
+
     request
     .get($(self).attr('href'))
     .end(function(res){
-      $(self).text('follow')
-             .removeClass('unfollow')
-             .addClass('follow');
+      $(self).parents('.project').html($(res.text).html());
     });
 
     e.preventDefault();
@@ -153,8 +150,8 @@
   page('/projects/create', createProject);
   page('/projects/edit/:project_id', editProject);
   page('/projects/remove/:project_id', removeProject);
-  page('/projects/join/:project_id', joinProject);
-  page('/projects/leave/:project_id', leaveProject);
+  page('/projects/:project_id/follow', followProject);
+  page('/projects/:project_id/unfollow', unfollowProject);
   page('/p/:project_id', projectInfo);
 
   page();
