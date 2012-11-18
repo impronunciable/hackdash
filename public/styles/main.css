@@ -125,8 +125,20 @@ line-height:                     0;
 .info {
   padding-left: 10px;
   margin-bottom: 16px;
+}
 
-} 
+.status {
+  display: block;
+}
+
+.tags {
+  display: block;
+}
+
+.tag {
+  display: inline-block;
+
+}
 
 .actions {
   margin-top:5px;
