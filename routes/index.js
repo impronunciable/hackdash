@@ -177,6 +177,7 @@ var saveProject = function(req, res, next) {
       title: req.body.title
     , description: req.body.description
     , link: req.body.link
+    , status: req.body.status
     , tags: req.body.tags.split(',') || []
     , created_at: Date.now()
     , leader: req.user._id
