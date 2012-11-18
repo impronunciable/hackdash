@@ -16,6 +16,7 @@ module.exports = function(app) {
 
   var Project = new Schema({
       "title": { type: String, required: true }
+    , "summary": { type: String, required: true }
     , "description": { type: String, required: true }
     , "leader": { type: ObjectId, required: true, ref: 'User' }
     , "status": { type: String, enum: app.get('statuses'), default: app.get('statuses')[0] }
