@@ -178,7 +178,7 @@ var saveProject = function(req, res, next) {
     , summary: req.body.summary
     , link: req.body.link
     , status: req.body.status
-    , tags: req.body.tags.split(',') || []
+    , tags: req.body.tags.length ? req.body.tags.split(',') : []
     , created_at: Date.now()
     , leader: req.user._id
     , followers: [req.user._id]
