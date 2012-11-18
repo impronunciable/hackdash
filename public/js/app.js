@@ -15,6 +15,7 @@
     , $searchInput = $('#searchInput')
     , $sort = $('.sort')
     , $cancel = $('.cancel')
+    , $slogan = $('#slogan')
     , $follow = $('.follow')
     , $unfollow = $('.unfollow');
 
