@@ -11,7 +11,7 @@
       a(href="/p/" + project.id, target="_blank") #{project.description}
     .info
       span.status Status:  #{project.status}
-      span.tags Tags:
+      span.tags Tags: 
        each tag, index in project.tags
          if(tag.length)
            span(class="tag") #{tag}
