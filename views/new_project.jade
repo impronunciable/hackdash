@@ -2,12 +2,12 @@ form.form-horizontal(action="/projects/create", method="POST")
   fieldset
     legend Create project
     .control-group
-      label.control-label(for="title") Title
+      label.control-label(for="title") Title*
       .controls
         input(class="input-xlarge", type="text", name="title", id="title")
 
     .control-group
-      label.control-label(for="summary") Summary
+      label.control-label(for="summary") Summary*
       .controls
         textarea(class="input-xlarge", id="summary", name="summary", rows="3", maxlength="400")
 
