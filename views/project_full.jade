@@ -21,6 +21,6 @@
               a.follow.btn(href='/api/projects/'+ project._id +'/follow') follow
             else
               a.unfollow.btn(href='/api/projects/'+ project._id +'/unfollow') unfollow
-          if(project.leader._id.toString() == user._id.toString())
-            a.btn(href='/projects/edit/'+project._id) Edit  
+            if(project.leader._id.toString() == user._id.toString())
+              a.btn(href='/projects/edit/'+project._id) Edit  
 
