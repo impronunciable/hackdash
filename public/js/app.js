@@ -23,7 +23,7 @@
     request
     .get('/api/projects')
     .end(function(res){
-      $projects.html(res.text);
+      $projects.html(res.body.html);
       next();
     }); 
   };
@@ -32,7 +32,7 @@
     request
     .get('/api/search?q=' + $searchInput.val())
     .end(function(res){
-      $projects.html(res.text);
+      $projects.html(res.body.html);
       next();
     }); 
   };
@@ -83,7 +83,7 @@
     superagent
     .get('/api/projects/edit/' + ctx.params.project_id)
     .end(function(res){
-      $editProject.html(res.text);
+      $editProject.html(res.body.html);
       $editProject.modal('show');
     });
   };
@@ -116,7 +116,7 @@
     request
     .get('/api/p/' + ctx.params.project_id)
     .end(function(res){
-      $projects.html(res.text);
+      $projects.html(res.body.html);
     });
 
   };
@@ -127,7 +127,7 @@
     request
     .get($(self).attr('href'))
     .end(function(res){
-      $(self).parents('.project').html($(res.text).html());
+      $(self).parents('.project').html($(res.body.html).html());
     });
 
     e.preventDefault();
@@ -139,7 +139,7 @@
     request
     .get($(self).attr('href'))
     .end(function(res){
-      $(self).parents('.project').html($(res.text).html());
+      $(self).parents('.project').html($(res.body.html).html());
     });
 
     e.preventDefault();
@@ -204,5 +204,11 @@
       $(this).text(rand).fadeIn();
     });
   }, 5000);
+
+  
+  $('.ajaxForm').ajaxForm(function(){
+    $modals.modal('hide');
+  });
+
 
 })();
