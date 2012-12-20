@@ -9,6 +9,8 @@
 - Follow/Contribute on hover
 - Add moment.js
 - Footer
+- AJAX validation forms
+- filter by tag
 
 ## Project view
 
