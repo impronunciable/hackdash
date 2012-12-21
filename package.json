@@ -15,6 +15,7 @@
     "passport-github": "0.1.x",
     "mongoose": "2.x.x",
     "connect-mongo": "0.1.x",
-    "moment": "~1.7.2"
+    "moment": "~1.7.2",
+    "markdown": "~0.4.0"
   }
 }
