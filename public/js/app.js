@@ -211,11 +211,20 @@
     });
   }, 5000);
 
-  
-  $('.ajaxForm').ajaxForm(function(){
-    $modals.modal('hide');
-  });
+  var formError = function() {
+    $modals.prepend('<div class="formError">Please fill Title and Summary fields</div>');
+  };
 
+  var formSuccess = function(){
+    $modals.modal('hide');
+    $('.formError').remove();  
+  };
+
+  $('.ajaxForm').ajaxForm({
+    error: formError,
+    success: formSuccess,
+    resetForm: true
+  });
 
   $searchInput.keyup(function(e){
     if(e.which === 13) {
