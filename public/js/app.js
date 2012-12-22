@@ -13,11 +13,16 @@
     , $logIn = $('#logIn')
     , $modals = $('.modal')
     , $searchInput = $('#searchInput')
+    , $searchBox = $('#searchBox')
     , $sort = $('.sort')
     , $cancel = $('.cancel')
     , $slogan = $('#slogan')
     , $follow = $('.follow')
     , $unfollow = $('.unfollow');
+
+  /*
+   * Route helpers
+   */
 
   var loadProjects = function(ctx, next) {
     request
@@ -28,9 +33,9 @@
     }); 
   };
 
-  var loadSearchProjects = function(ctx, next) {
+  var loadSearchProjects = function(ctx, next) { 
     request
-    .get('/api/search?q=' + $searchInput.val())
+    .get('/api/search?' + ctx.querystring)
     .end(function(res){
       $projects.html(res.body.html);
       next();
@@ -160,6 +165,7 @@
   /*
    * Event listeners
    */
+
   $(window).smartresize(function(){
     $projects.isotope({
         masonry: {
@@ -210,5 +216,11 @@
     $modals.modal('hide');
   });
 
+
+  $searchInput.keyup(function(e){
+    if(e.which === 13) {
+      page('/search?q=' + $searchInput.val() + '&type=' + $searchBox.val());
+    }
+  });
 
 })();

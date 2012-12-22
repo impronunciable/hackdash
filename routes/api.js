@@ -144,10 +144,14 @@ var loadProject = function(req, res, next) {
 
 var loadSearchProjects = function(req, res, next) {
   var regex = new RegExp(req.query.q);
+  var query = {};
+
+  if(req.query.type === "title") query['title'] = regex;
+  else if(req.query.type === "tag") query['tags'] = regex;
+  else return res.send(500);
+
   Project
-  .find()
-  .or([{title: regex}, {summary: regex}, {tags: req.query.q}])
-  .exec(function(err, projects) {
+  .find(query, function(err, projects) {
     if(err) return res.send(500);
     res.locals.projects = projects;
     res.locals.user = req.user;
