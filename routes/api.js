@@ -146,6 +146,8 @@ var loadSearchProjects = function(req, res, next) {
   var regex = new RegExp(req.query.q);
   var query = {};
 
+  if(!req.query.q.length) return res.redirect('/api/projects');
+
   if(req.query.type === "title") query['title'] = regex;
   else if(req.query.type === "tag") query['tags'] = regex;
   else return res.send(500);
