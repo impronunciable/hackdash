@@ -150,6 +150,10 @@
     e.preventDefault();
   };
 
+  var validateProject = function() {
+
+  };
+
   page('/', loadProjects, isotopeDashboard);
   page('/login', logIn);
   page('/search', loadSearchProjects, isotopeDashboard);
@@ -203,7 +207,9 @@
   $unfollow.live('click', unfollowProject);
 
   var forwho = ['for people','for geeks','for mutants','for your wife'];
+
   var i = 0;
+
   setInterval(function(){
     var rand = forwho[++i % forwho.length];
     $slogan.fadeOut('fast', function(){
@@ -212,6 +218,7 @@
   }, 5000);
 
   var formError = function() {
+    $('.formError').remove();
     $modals.prepend('<div class="formError">Please fill Title and Summary fields</div>');
   };
 
@@ -219,11 +226,24 @@
     $modals.modal('hide');
     $('.formError').remove();  
   };
+  
+  var formValidate = function(arr, $form, options){
+    for(var i = 0; i < arr.length; i++) {
+      if(arr[i]['name'] === "title" && !arr[i].value.length) {
+        formError();
+        return false;
+      } else if(arr[i]['name'] === "summary" && !arr[i].value.length) {
+        formError();
+        return false;  
+      }
+    }
+  };
 
   $('.ajaxForm').ajaxForm({
     error: formError,
     success: formSuccess,
-    resetForm: true
+    resetForm: true,
+    beforeSubmit: formValidate
   });
 
   $searchInput.keyup(function(e){
