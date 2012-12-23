@@ -167,7 +167,7 @@ var loadSearchProjects = function(req, res, next) {
 
 var validateProject = function(req, res, next) {
   if(req.body.title && req.body.summary) next();
-  else res.send(500);
+  else res.send(500, "Project Title and Summary fields must be complete.");
 };
 
 /*
