@@ -1,4 +1,4 @@
-.project.span12(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id)
+.project.span4(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id)
   
   .well
     .row-fluid
@@ -7,19 +7,20 @@
       .span6.pull-right.aging.activity.created_at= moment(project.created_at).fromNow()
         span(data-icon="P", aria-hidden="true")
     .divider(class=project.status)
-    .description!= md(project.description)
+    p
+      a(href="/p/" + project.id, target="_blank") #{project.summary}
     .info
-      span.status #{project.status}
-      each tag, index in project.tags
-        if(tag.length)
-          span(class="badge") #{tag}
+      span.status Status:  #{project.status}
+      if(project.tags.length)
+        span.tags Tags: #{project.tags.join(', ')}
+
       .actions
         .btn-group
           if(user)
-            if(project.followers.indexOf(user._id) == -1)
+            if(user && project.followers.indexOf(user._id) == -1)
               a.follow.btn(href='/api/projects/'+ project._id +'/follow') follow
             else
               a.unfollow.btn(href='/api/projects/'+ project._id +'/unfollow') unfollow
-            if(project.leader._id.toString() == user._id.toString())
-              a.btn(href='/projects/edit/'+project._id) Edit  
 
+          if(user && project.leader.id == user.id)
+            a.btn(href='/projects/edit/'+project._id) Edit
