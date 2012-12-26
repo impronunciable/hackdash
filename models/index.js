@@ -28,4 +28,10 @@ module.exports = function(app) {
   });
 
   mongoose.model('Project', Project);
+
+  var Dashboard = new Schema({
+    "admin": { type: ObjectId, ref: 'User' }
+  });
+
+  mongoose.model('Dashboard', Dashboard);
 };
