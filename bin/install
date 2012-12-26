@@ -1,0 +1,181 @@
+#!/usr/bin/env node
+
+/*
+ * node modules
+ */
+
+var program = require('commander')
+  , fs = require('fs')
+  , util = require('util')
+  , os = require('os');
+
+// CLI
+
+program
+  .version('0.2.0')
+  .parse(process.argv);
+
+// end-of-line code
+
+var eol = 'win32' == os.platform() ? '\r\n' : '\n'
+
+
+var askConfig = function() {
+
+var config;
+
+try {
+  config = require('../config.json');
+} catch (e) {
+  config = {};
+};
+require('crypto').randomBytes(32, function(ex, buf) {
+  config.session = buf.toString('hex');
+});
+
+console.log('\n--Environment configuration--\n');
+
+program.prompt('Title ('+ (config.title || 'Hackdash') +'): ', function(title){
+  config.title = title || config.title || 'HackDash';
+
+program.prompt('Database Name ('+(config.db || 'hackdash')+'): ', function(db){
+  config.db = db || config.db || 'hackdash';
+
+program.prompt('URL Domain ('+(config.domain || 'localhost')+'): ', function(domain){
+  config.domain = domain || config.domain || 'localhost';
+
+program.prompt('Port ('+(config.port || 80)+'): ', Number, function(port){
+  config.port = parseInt(port) || config.port || 80;
+
+  ensureConfig(config);
+});
+
+});
+
+});
+
+});
+
+};
+
+var ensureConfig = function(config) {
+
+console.log('This is your configuration: \n%s\n', util.inspect(config));
+program.confirm('Do you want to keep it? ', function(ok){
+  if(!ok) askConfig();
+  else createConfigFile(config);
+});
+
+};
+
+var createConfigFile = function(config) {
+ 
+  fs.writeFile('./config.json', JSON.stringify(config), function(err){
+    if(err) { 
+      console.log('There was an error writing to config.json, please try again.');
+      process.exit();
+    } else {
+      configAuth();
+    }
+  });
+
+};
+
+var providers = {
+  twitter:{fields: ['consumerKey', 'consumerSecret', 'callbackURL'], info: 'tip: You can create your twitter app credentials from http://dev.twitter.com'},
+  meetup: { fields: ['consumerKey', 'consumerSecret', 'callbackURL'], info: '' },
+  facebook:{ fields: ['clientID', 'clientSecret', 'callbackURL'], info: 'tip: You can create your facebook app credentials from http://developers.facebook.com'},
+  github: { fields: ['clientID', 'clientSecret', 'callbackURL'], info: '' }
+};
+
+var keys;
+
+try {
+  keys = require('../keys.json');
+} catch(e) {
+  keys = {};
+};
+
+var configAuth = function() {
+
+console.log('\n--Auth providers configuration--\n');
+
+program.confirm('Do you want to config some providers? ', function(ok){
+
+  if(ok) configProvider();
+
+  else process.exit();
+
+});
+
+};
+
+var configProvider = function() {
+
+  program.choose(Object.keys(providers), function(i){
+    
+    configProv(Object.keys(providers)[i]);
+
+  });
+
+};
+
+var configProv = function(k) {
+
+  var p = providers[k];
+
+  var creds = {};
+
+  console.log('\nYou are about to add credentials for ' + k);
+  console.log(p.info + '\n');
+
+  askCred(creds, p, k, 0);
+
+};
+
+var askCred = function(cs, p, k, i) {
+   
+  program.prompt(p.fields[i] + ': ', function(c){
+
+    cs[p.fields[i]] = c;
+
+    if(i < p.fields.length - 1) askCred(cs, p, k, i + 1);
+    else confirmProvider(cs, k);
+  });    
+
+};
+
+var confirmProvider = function(cs, k) {
+  console.log('This is your ' + k + ' credential configuration:\n%s\n', util.inspect(cs));
+  program.confirm('Do you want to keep it? ', function(ok){
+
+    if(ok) keys[k] = cs;
+ 
+    program.confirm('Do you want to config another provider? ', function(ok){
+  
+      if(ok) configProvider();
+
+      else createKeysFile();
+
+    });
+
+  });
+};
+
+var createKeysFile = function() {
+
+  fs.writeFile('./keys.json', JSON.stringify(keys), function(err){
+
+    if(err) {
+      console.log('There was an error writing to keys.json, please try again.');
+    } else {
+      console.log('Installation succesfully finished!');
+    }
+
+    process.exit();
+
+  });
+
+};
+
+askConfig();

@@ -16,7 +16,8 @@
     "mongoose": "2.x.x",
     "connect-mongo": "0.1.x",
     "moment": "~1.7.2",
-    "markdown": "~0.4.0"
+    "markdown": "~0.4.0",
+    "commander": "~1.1.1"
   },
   "devDependencies": {
     "mocha": "~1.7.4",
