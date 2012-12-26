@@ -22,7 +22,7 @@ module.exports = function(app) {
 
   app.get('/api/projects/:project_id/leave', isAuth, isProjectMember, leaveProject), gracefulRes; 
 
-  app.get('/api/projects/:project_id/follow', isAuth, followProject, loadProject, render('project')); 
+  app.get('/api/projects/:project_id/follow', isAuth, followProject, loadProject, render('project'), gracefulRes); 
 
   app.get('/api/projects/:project_id/unfollow', isAuth, unfollowProject, loadProject, render('project')); 
 
@@ -199,10 +199,11 @@ var saveProject = function(req, res, next) {
  * Remove a project
  */
 
-var removeProject = function(req, res) {
+var removeProject = function(req, res, next) {
+  res.locals.project = {id: req.project.id};
   req.project.remove(function(err){
     if(err) res.send(500);
-    else res.send(200);
+    else next();
   });
 };
 
