@@ -5,8 +5,7 @@
 
 var passport = require('passport')
   , keys = require('./keys.json')
-  , mongoose = require('mongoose')
-
+  , mongoose = require('mongoose');
 
 var User = mongoose.model('User');
 
@@ -53,4 +52,26 @@ for(var strategy in keys) {
 
 }
 
+// Anonymous auth for test porpouses 
+
+if(process.env.NODE_ENV == "test") {
+
+  var BasicStrategy = require('passport-http').BasicStrategy;
+
+  var u;
+  var user = new User({provider: 'basic', provider_id: 1, username: 'test'});
+  user.save(function(err, usr){ u = usr; });
+
+  passport.use(new BasicStrategy({}, function(username, password, done) {
+    process.nextTick(function () {
+      return done(null, u);
+    });
+  }));
+
+  app.all('*', passport.authenticate('basic'));
+
+}
+
 };
+
+
