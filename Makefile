@@ -6,4 +6,7 @@ test:
 	./node_modules/.bin/mocha $(ALL_TESTS) -R spec
 	pkill node
 
+install:
+	./bin/install
+
 .PHONY: test
