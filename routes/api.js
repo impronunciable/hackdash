@@ -38,7 +38,7 @@ module.exports = function(app) {
  */
 var render = function(path) {
   return function(req, res) { 
-    res.render(path, function(err, html){console.log(err);
+    res.render(path, function(err, html){
       if(err) return res.send(500);
       res.json({html: html});
     });
