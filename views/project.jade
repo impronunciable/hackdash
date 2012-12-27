@@ -15,7 +15,7 @@
             a.btn(href='/projects/edit/'+project._id) Edit
 
     .row-fluid
-      .span3.activity.people #{project.followers.length}
+      .span2.activity.people #{project.followers.length}
         span(data-icon="6", aria-hidden="true")
-      .span6.pull-right.aging.activity.created_at= moment(project.created_at).fromNow()
-        span(data-icon="P", aria-hidden="true")
+      .span6.aging.activity.created_at=  moment(project.created_at).fromNow()
+        span.tooltips(data-icon="P", aria-hidden="true", rel="tooltip", title="A nice tooltip")

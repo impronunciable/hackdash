@@ -261,4 +261,6 @@
     }
   });
 
+  $('.tooltips').tooltip(options)
+
 })();
