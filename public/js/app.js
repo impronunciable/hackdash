@@ -15,6 +15,7 @@
     , $searchInput = $('#searchInput')
     , $searchBox = $('#searchBox')
     , $sort = $('.sort')
+    , $tooltips = $('.tooltips')
     , $cancel = $('.cancel')
     , $slogan = $('#slogan')
     , $follow = $('.follow')
@@ -47,6 +48,8 @@
   };
 
   var isotopeDashboard = function() {
+    $('.tooltips').tooltip({});
+
     $modals.modal('hide');
     if($projects.hasClass('isotope')) $projects.isotope('destroy');
     $projects.isotope({
@@ -260,7 +263,5 @@
       page('/search?q=' + $searchInput.val() + '&type=' + $searchBox.val());
     }
   });
-
-  $('.tooltips').tooltip(options)
 
 })();
