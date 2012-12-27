@@ -4,8 +4,7 @@
     
     h3
       a(href="/p/" + project.id, target="_blank") #{project.summary}
-    p
-      Soy una descripcion que deberia ser dinamica, pero no lo soy. Cuuuumbiah
+    p #{project.description}
     .info
       if(project.tags.length)
         span.tags Tags: #{project.tags.join(', ')}
