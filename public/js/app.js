@@ -88,8 +88,17 @@
     superagent
     .get('/api/projects/edit/' + ctx.params.project_id)
     .end(function(res){
+      //fix me
+
       $editProject.html(res.body.html);
       $editProject.modal('show');
+      $('.ajaxForm').ajaxForm({
+        error: formError,
+        success: formSuccess,
+        resetForm: true,
+        beforeSubmit: formValidate
+      });
+
     });
   };
 
