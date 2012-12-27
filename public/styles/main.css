@@ -70,7 +70,7 @@ header p.createProject {
   margin-left: 5px;
 }
 
-.well p > a {
+.well h3 > a {
   display:              block;
   font-size:             18pt;
   margin:                16px;
@@ -314,5 +314,10 @@ a.signup-github:hover {
   font-weight: bolder;
 }
 
+.project .well {
+  border-top:10px solid #000;
+}
+
+.project.prototyping .well { border-top-color:#ff5f8c;}
 
 
