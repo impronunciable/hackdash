@@ -7,12 +7,7 @@ form.ajaxForm.form-horizontal(action="/api/projects/create", method="POST")
         input(class="input-xlarge", type="text", name="title", id="title")
 
     .control-group
-      label.control-label(for="summary") Summary*
-      .controls
-        textarea(class="input-xlarge", id="summary", name="summary", rows="3", maxlength="400")
-
-    .control-group
-      label.control-label(for="description") description
+      label.control-label(for="description") Description*
       .controls
         textarea(class="input-xlarge", id="description", name="description", rows="3", maxlength="400")
 
