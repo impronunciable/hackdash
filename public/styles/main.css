@@ -393,15 +393,13 @@ header {
   box-shadow:             0 2px 2px rgba(0, 0, 0, 0.05);
 }
 
-.form-search {
+.formSearch {
   text-align: center;
 }
 
-.form-search input {
+.formSearch input {
   height: 30px;
-  width:540px;
   border-radius: 50px;
-  background: 
 }
 
 .people {

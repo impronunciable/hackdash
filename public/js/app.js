@@ -15,7 +15,7 @@
     , $logIn = $('#logIn')
     , $modals = $('.modal')
     , $searchInput = $('#searchInput')
-    , $searchBox = $('#searchBox')
+    , $formSearch = $('.form-search')
     , $sort = $('.sort')
     , $tooltips = $('.tooltips')
     , $cancel = $('.cancel')
@@ -254,10 +254,9 @@
     page('/');
   });
 
-  $searchInput.keyup(function(e){
-    if(e.which === 13) {
-      page('/search?q=' + $searchInput.val() + '&type=' + $searchBox.val());
-    }
+  $formSearch.submit(function(e){
+    page('/search?q=' + $searchInput.val() + '&type=title');
+    e.preventDefault();
   });
 
 })();
