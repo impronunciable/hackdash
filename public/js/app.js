@@ -131,13 +131,13 @@
   };
 
   var projectInfo = function(ctx) {
+  console.log(ctx);
     request
     .get('/api/p/' + ctx.params.project_id)
     .end(function(res){
       $fullProject.html(res.body.html)
                   .modal('show');
     });
-
   };
 
   var followProject = function(e) {
@@ -202,16 +202,6 @@
     });
   });
 
-  $sort.click(function(){
-    var vid = $(this).attr('id');
-    var asc = vid === 'name';
-    $projects.isotope({'sortBy': vid, 'sortAscending': asc });
-  });
-
-  $modals.live('hidden', function(e){
-    page('/');
-  });
-
   $cancel.on('click', function(e){
     page('/');
     e.preventDefault();
@@ -239,6 +229,7 @@
   var formSuccess = function(){
     $modals.modal('hide');
     $('.formError').remove();  
+    page('/');
   };
   
   var formValidate = function(arr, $form, options){
