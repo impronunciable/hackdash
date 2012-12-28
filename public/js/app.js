@@ -250,7 +250,7 @@
     beforeSubmit: formValidate
   });
 
-  $ajaxForm.live('hidden', function(){
+  $('#newProject, #editProject').live('hidden', function(){
     page('/');
   });
 
