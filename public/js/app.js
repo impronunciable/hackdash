@@ -8,6 +8,7 @@
 
   var $projects = $('#projects')
     , $project = $('.project')
+    , $ajaxForm = $('.ajaxForm')
     , $newProject = $('#newProject')
     , $editProject = $('#editProject')
     , $fullProject = $('#fullProject')
@@ -131,7 +132,6 @@
   };
 
   var projectInfo = function(ctx) {
-  console.log(ctx);
     request
     .get('/api/p/' + ctx.params.project_id)
     .end(function(res){
@@ -229,7 +229,6 @@
   var formSuccess = function(){
     $modals.modal('hide');
     $('.formError').remove();  
-    page('/');
   };
   
   var formValidate = function(arr, $form, options){
@@ -244,11 +243,15 @@
     }
   };
 
-  $('.ajaxForm').ajaxForm({
+  $ajaxForm.ajaxForm({
     error: formError,
     success: formSuccess,
     resetForm: true,
     beforeSubmit: formValidate
+  });
+
+  $ajaxForm.live('hidden', function(){
+    page('/');
   });
 
   $searchInput.keyup(function(e){
