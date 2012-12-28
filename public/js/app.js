@@ -15,7 +15,7 @@
     , $logIn = $('#logIn')
     , $modals = $('.modal')
     , $searchInput = $('#searchInput')
-    , $formSearch = $('.form-search')
+    , $formSearch = $('.formSearch')
     , $sort = $('.sort')
     , $tooltips = $('.tooltips')
     , $cancel = $('.cancel')
