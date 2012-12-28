@@ -406,8 +406,7 @@ header {
 
 .people {
   font-weight: bold;
-  color: #999;
-  padding: 6px 12px;
+  color: #d2d2d2;
 }
 
 .people span {margin-left: 3px;}
