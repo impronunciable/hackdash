@@ -10,6 +10,7 @@
     , $project = $('.project')
     , $newProject = $('#newProject')
     , $editProject = $('#editProject')
+    , $fullProject = $('#fullProject')
     , $logIn = $('#logIn')
     , $modals = $('.modal')
     , $searchInput = $('#searchInput')
@@ -133,7 +134,8 @@
     request
     .get('/api/p/' + ctx.params.project_id)
     .end(function(res){
-      $projects.html(res.body.html);
+      $fullProject.html(res.body.html)
+                  .modal('show');
     });
 
   };
