@@ -250,7 +250,7 @@
     beforeSubmit: formValidate
   });
 
-  $('#newProject, #editProject').live('hidden', function(){
+  $modals.live('hidden', function(){
     page('/');
   });
 
