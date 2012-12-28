@@ -1,4 +1,4 @@
-header.jumbotron.subhead
+header
   .row-fluid
     .span3
       h1
@@ -8,17 +8,17 @@ header.jumbotron.subhead
           span A Hackaton Dashboard 
           span#slogan for people
 
-    .span3
-      select(id="searchBox")
-        option(value="title") Query by project title
-        option(value="tag") Query by project tags
 
-      input(type="text",id="searchInput", placeholder="Insert query")
+    .span3
+
+      form.form-search
+        input.input-xlarge.search-query(type='text')
+        button.btn(type='submit') Search
+
 
     .span3.pull-right
-      p.createProject
+      p.createProject.pull-right
         if(user)
           a.btn.btn-large.btn-custom(href="/projects/create") Create Project
         else
           a.btn.btn-large.btn-custom(href="/login") Log in to create a project
-

@@ -33,7 +33,7 @@ header p.lead {
 
 header p.createProject {
                         
-                       }
+  }
 
 .isotope {
   -webkit-transition-property: height, width;
@@ -58,10 +58,8 @@ header p.createProject {
   background-color:                       #ffffff !important;
   border:                                  1px solid #e4e4e4;
   border:                                                  0;
-  -webkit-border-radius:                                 4px;
-  -moz-border-radius:                                    4px;
-  border-radius:                                         4px;
-  -webkit-box-shadow:    inset 0 px 0px rgba(0, 0, 0, 0.2);
+  border-radius:                                 0!important;
+  -webkit-box-shadow:    inset 0 0px 0px rgba(0, 0, 0, 0.2);
   -moz-box-shadow:       inset 0 0px 0px rgba(0, 0, 0, 0.2);
   box-shadow:            inset 0 0px 0px rgba(0, 0, 0, 0.2);
   -webkit-box-shadow:          0 1px 2px rgba(0, 0, 0, 0.2);
@@ -70,13 +68,13 @@ header p.createProject {
   padding:                                                 0;
   position: relative;
     /* Firefox */
-  -moz-transition: all 0.1s ease-in;
+  -moz-transition: all 0.1s ease-in-out;
   /* WebKit */
-  -webkit-transition: all 0.1s ease-in;
+  -webkit-transition: all 0.1s ease-in-out;
   /* Opera */
-  -o-transition: all 0.1s ease-in;
+  -o-transition: all 0.1s ease-in-out;
   /* Standard */
-  transition: all 0.1s ease-in;
+  transition: all 0.1s ease-in-out;
 }
 
 .well:hover {
@@ -312,12 +310,26 @@ a.signup-github:hover {
 }
 
 .btn-custom {
-  background:#FFF;
+  background:#4bcf0a;
   border:#4bcf0a 2px solid;
   border-radius: 50px;
-  color: #4bcf0a !important;
+  color: #fff !important;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
+  box-shadow: none;
   font-weight: bolder;
+      /* Firefox */
+  -moz-transition: all 0.2s ease-in-out;
+  /* WebKit */
+  -webkit-transition: all 0.2s ease-in-out;
+  /* Opera */
+  -o-transition: all 0.2s ease-in-out;
+  /* Standard */
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-custom:hover {
+    background:#4bcf0a;
+    border:#3d9c0d 2px solid;
 }
 
 .project .well {
@@ -369,3 +381,11 @@ h1,h2,h3,h4,h5,h6,p {
 
 }
 
+header {
+  background: #FFF;
+  margin:0 0 30px 0;
+  border-bottom: 1px solid #CCC;
+   -webkit-box-shadow:     0 2px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow:        0 2px 2px rgba(0, 0, 0, 0.05);
+  box-shadow:             0 2px 2px rgba(0, 0, 0, 0.05);
+}
