@@ -1,6 +1,6 @@
 
 body {
-  margin: 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px; color: #333333; background: #202020 url("../images/stressed_linen.png") }
+  margin: 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px; color: #333333; background: #e1e1e1 }
 
 @font-face {
 font-family: 'Entypo';
@@ -330,7 +330,7 @@ a.signup-github:hover {
 
 .project.prototyping .well { border-top-color:#ff5f8c;}
 .project.releasing .well { border-top-color:#77db45;}
-.project.wireframing .well { border-top-color:#EEE;}
+.project.wireframing .well { border-top-color:#55c5ff;}
 .project.reasearching .well { border-top-color:#fffd58;}
 .project.brainstorming .well { border-top-color:#ff5a00;}
 
