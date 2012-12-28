@@ -167,8 +167,8 @@ var loadSearchProjects = function(req, res, next) {
  */
 
 var validateProject = function(req, res, next) {
-  if(req.body.title && req.body.summary) next();
-  else res.send(500, "Project Title and Summary fields must be complete.");
+  if(req.body.title && req.body.description) next();
+  else res.send(500, "Project Title and Description fields must be complete.");
 };
 
 /*
@@ -179,7 +179,6 @@ var saveProject = function(req, res, next) {
   var project = new Project({
       title: req.body.title
     , description: req.body.description
-    , summary: req.body.summary
     , link: req.body.link
     , status: req.body.status
     , tags: req.body.tags && req.body.tags.length ? req.body.tags.split(',') : []
@@ -217,7 +216,6 @@ var updateProject = function(req, res, next) {
 
   project.title = req.body.title || project.title;
   project.description = req.body.description || project.description;
-  project.summary = req.body.summary || project.summary;
   project.link = req.body.link || project.link;
   project.status = req.body.status || project.status;
   project.tags = (req.body.tags && req.body.tags.split(',')) || project.tags;
