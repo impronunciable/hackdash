@@ -21,10 +21,10 @@ module.exports = function(app) {
   app.get('/', dashboardStack);
   app.get('/projects/create', dashboardStack);
   app.get('/projects/edit/:project_id', dashboardStack);
-  app.get('/p/:project_id', dashboardStack);
   app.get('/search', dashboardStack);
   app.get('/logout', logout, redirect('/'));
 
+  app.get('/p/:project_id', loadUser, loadProviders, loadProject, setViewVar('statuses', app.get('statuses')), render('project_show'));
 };
 
 /*
@@ -75,6 +75,22 @@ var loadProviders = function(req, res, next) {
   next();
 };
 
+/*
+ * Load specific project
+ */
+
+var loadProject = function(req, res, next) {
+  Project.findById(req.params.project_id)
+  .populate('contributors')
+  .populate('pending')
+  .populate('leader')
+  .exec(function(err, project) {
+    if(err || !project) return res.send(500);
+    res.locals.project = project;
+    res.locals.user = req.user;
+    next();
+  });
+};
 
 
 /*

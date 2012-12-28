@@ -1,11 +1,12 @@
 extends layout
 
 block content
-
-  .row.projects#projects
-
-  #logIn.modal.hide.fade
-    include login
-  #editProject.modal.hide
-  #newProject.modal.hide.fade
-    include new_project
+	form.form-search
+		input.search-query(type='text',placeholder='Search a project')
+	.row.projects#projects
+	#logIn.modal.hide.fade
+		include login
+	#editProject.modal.hide
+	#fullProject.modal.hide
+	#newProject.modal.hide.fade
+		include new_project

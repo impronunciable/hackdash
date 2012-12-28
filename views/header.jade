@@ -1,24 +1,17 @@
-header.jumbotron.subhead
-  .row-fluid
-    .span3
-      h1
-        a(href="/") HackDash
-      .description 
-        p.lead
-          span A Hackaton Dashboard 
-          span#slogan for people
+header
+  .container
+    .row-fluid
+      .span3
+        h1
+          a(href="/") HackDash
+        .description 
+          p.lead
+            span A Hackaton Dashboard 
+            span#slogan for people
 
-    .span3
-      select(id="searchBox")
-        option(value="title") Query by project title
-        option(value="tag") Query by project tags
-
-      input(type="text",id="searchInput", placeholder="Insert query")
-
-    .span3.pull-right
-      p.createProject
-        if(user)
-          a.btn.btn-large.btn-block.btn-custom(href="/projects/create") Create Project
-        else
-          a.btn.btn-large.btn-block.btn-custom(href="/login") Log in to create a project
-
+      .span3.pull-right
+        p.createProject.pull-right
+          if(user)
+            a.btn.btn-large.btn-custom(href="/projects/create") Create Project
+          else
+            a.btn.btn-large.btn-custom(href="/login") Log in to create a project

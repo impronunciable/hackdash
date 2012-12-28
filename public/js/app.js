@@ -8,13 +8,16 @@
 
   var $projects = $('#projects')
     , $project = $('.project')
+    , $ajaxForm = $('.ajaxForm')
     , $newProject = $('#newProject')
     , $editProject = $('#editProject')
+    , $fullProject = $('#fullProject')
     , $logIn = $('#logIn')
     , $modals = $('.modal')
     , $searchInput = $('#searchInput')
     , $searchBox = $('#searchBox')
     , $sort = $('.sort')
+    , $tooltips = $('.tooltips')
     , $cancel = $('.cancel')
     , $slogan = $('#slogan')
     , $follow = $('.follow')
@@ -47,6 +50,8 @@
   };
 
   var isotopeDashboard = function() {
+    $('.tooltips').tooltip({});
+
     $modals.modal('hide');
     if($projects.hasClass('isotope')) $projects.isotope('destroy');
     $projects.isotope({
@@ -88,8 +93,17 @@
     superagent
     .get('/api/projects/edit/' + ctx.params.project_id)
     .end(function(res){
+      //fix me
+
       $editProject.html(res.body.html);
       $editProject.modal('show');
+      $('.ajaxForm').ajaxForm({
+        error: formError,
+        success: formSuccess,
+        resetForm: true,
+        beforeSubmit: formValidate
+      });
+
     });
   };
 
@@ -121,9 +135,9 @@
     request
     .get('/api/p/' + ctx.params.project_id)
     .end(function(res){
-      $projects.html(res.body.html);
+      $fullProject.html(res.body.html)
+                  .modal('show');
     });
-
   };
 
   var followProject = function(e) {
@@ -188,16 +202,6 @@
     });
   });
 
-  $sort.click(function(){
-    var vid = $(this).attr('id');
-    var asc = vid === 'name';
-    $projects.isotope({'sortBy': vid, 'sortAscending': asc });
-  });
-
-  $modals.live('hidden', function(e){
-    page('/');
-  });
-
   $cancel.on('click', function(e){
     page('/');
     e.preventDefault();
@@ -239,11 +243,15 @@
     }
   };
 
-  $('.ajaxForm').ajaxForm({
+  $ajaxForm.ajaxForm({
     error: formError,
     success: formSuccess,
     resetForm: true,
     beforeSubmit: formValidate
+  });
+
+  $modals.live('hidden', function(){
+    page('/');
   });
 
   $searchInput.keyup(function(e){

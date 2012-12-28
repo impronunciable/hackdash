@@ -1,0 +1,30 @@
+extends project_layout
+
+block content
+
+  .project(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id)
+  
+    .well
+      .row-fluid
+        .span3.activity.people #{project.followers.length}
+          span(data-icon="6", aria-hidden="true")
+        .span6.pull-right.aging.activity.created_at= moment(project.created_at).fromNow()
+          span(data-icon="P", aria-hidden="true")
+      .divider(class=project.status)
+      p
+        a(href="/p/" + project.id, target="_blank") #{project.summary}
+      .info
+        span.status Status:  #{project.status}
+        if(project.tags.length)
+          span.tags Tags: #{project.tags.join(', ')}
+
+        .actions
+          .btn-group
+            if(user)
+              if(user && project.followers.indexOf(user._id) == -1)
+                a.follow.btn(href='/api/projects/'+ project._id +'/follow') follow
+              else
+                a.unfollow.btn(href='/api/projects/'+ project._id +'/unfollow') unfollow
+
+            if(user && project.leader.id == user.id)
+              a.btn(href='/projects/edit/'+project._id) Edit
