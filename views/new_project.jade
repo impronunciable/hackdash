@@ -1,33 +1,25 @@
 form.ajaxForm.form-horizontal(action="/api/projects/create", method="POST")
-  fieldset
-    legend Create project
+  .modal-header
+    h3 Create project
+
+  .modal-body
     .control-group
-      label.control-label(for="title") Title*
-      .controls
-        input(class="input-xlarge", type="text", name="title", id="title")
+      input(class="input-xlarge", type="text", name="title", id="title", placeholder="Title")
 
     .control-group
-      label.control-label(for="description") Description*
-      .controls
-        textarea(class="input-xlarge", id="description", name="description", rows="3", maxlength="400")
+      textarea(class="input-xlarge", id="description", name="description", rows="3", maxlength="400", placeholder="Description")
 
     .control-group
-      label.control-label(for="link") Link
-      .controls
-        input(class="input-xlarge", type="text", name="link", id="link")
+      input(class="input-xlarge", type="text", name="link", id="link", placeholder="Link")
 
     .control-group
-       label.control-label(for="tags") Tags - Comma separated (,)
-       .controls
-         input(class="input-xlarge", type="text", name="tags", id="tags")
+       input(class="input-xlarge", type="text", name="tags", id="tags", placeholder="Tags")
     
     .control-group
-       label.control-label(for="status") Status
-       .controls
-         select(class="input-xlarge", name="status", id="status")
+        select(class="input-xlarge", name="status", id="status")
           each status in statuses
             option(value=status)= status
 
-    .form-actions
-      button.btn.btn-primary(type="submit") Create project
-      button.btn.cancel Cancel
+  .modal-footer
+    button.btn.cancel Cancel
+    button.btn.btn-primary(type="submit") Create project

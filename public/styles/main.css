@@ -350,12 +350,14 @@ h1,h2,h3,h4,h5,h6,p {
 
 .activity {
   padding: 6px;
-  display: block;
+  display: inline-block;
   border-right: 1px solid #EEE;
   text-align: center;
+  margin:0!important;
 }
 
 .activity span {
+
   opacity: 0.2;
   /* Firefox */
   -moz-transition: all 0.3s ease;
@@ -399,5 +401,20 @@ header {
   height: 30px;
   width:540px;
   border-radius: 50px;
+  background: 
 }
 
+.people {
+  font-weight: bold;
+  color: #999;
+  padding: 6px 12px;
+}
+
+.people span {margin-left: 3px;}
+
+.modal form {margin:0;}
+
+#newProject {
+  width:315px;
+  margin: -250px 0 0 -158px;
+}

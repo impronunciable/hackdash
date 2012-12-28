@@ -7,9 +7,9 @@
       p #{project.description}
 
     .row-fluid
-      .span2.aging.activity.created_at
+      .aging.activity.created_at
         span.tooltips(data-icon="N", aria-hidden="true", rel="tooltip", title= moment(project.created_at).fromNow())
-      .span2.activity.people #{project.followers.length}
+      .activity.people #{project.followers.length}
         span(data-icon="6", aria-hidden="true")
       .span3.pull-right.edit
         if(user && project.leader.id == user.id)
