@@ -1,24 +1,17 @@
 header
-  .row-fluid
-    .span3
-      h1
-        a(href="/") HackDash
-      .description 
-        p.lead
-          span A Hackaton Dashboard 
-          span#slogan for people
+  .container
+    .row-fluid
+      .span3
+        h1
+          a(href="/") HackDash
+        .description 
+          p.lead
+            span A Hackaton Dashboard 
+            span#slogan for people
 
-
-    .span3
-
-      form.form-search
-        input.input-xlarge.search-query(type='text')
-        button.btn(type='submit') Search
-
-
-    .span3.pull-right
-      p.createProject.pull-right
-        if(user)
-          a.btn.btn-large.btn-custom(href="/projects/create") Create Project
-        else
-          a.btn.btn-large.btn-custom(href="/login") Log in to create a project
+      .span3.pull-right
+        p.createProject.pull-right
+          if(user)
+            a.btn.btn-large.btn-custom(href="/projects/create") Create Project
+          else
+            a.btn.btn-large.btn-custom(href="/login") Log in to create a project

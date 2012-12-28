@@ -16,7 +16,7 @@ font-style: normal;
 header { padding: 18px 0 17px 0; margin: 18px 0; border-bottom: 1px solid #eee; }
 
 header h1 {
-  margin: 5px 0;
+  margin: 0;
 }
 
 header h1 a {
@@ -26,13 +26,14 @@ header h1 a {
 header p.lead {
           margin-bottom: 0;
            font-size: 14px;
-         font-weight: bold;
-            color: #474747;
+         font-weight: regular;
+            color: #999;
+            margin-top:-5px;
 }
 
 
 header p.createProject {
-                        
+            margin:5px 0 0 0!important;            
   }
 
 .isotope {
@@ -389,3 +390,14 @@ header {
   -moz-box-shadow:        0 2px 2px rgba(0, 0, 0, 0.05);
   box-shadow:             0 2px 2px rgba(0, 0, 0, 0.05);
 }
+
+.form-search {
+  text-align: center;
+}
+
+.form-search input {
+  height: 30px;
+  width:540px;
+  border-radius: 50px;
+}
+
