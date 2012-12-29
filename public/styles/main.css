@@ -215,16 +215,33 @@ line-height:                     0;
 }
 
 .signup-btn  {
+
+  background:#4bcf0a;
+  border:#4bcf0a 2px solid;
+  border-radius: 50px;
+  color: #fff !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
+  box-shadow: none;
+  font-weight: bolder;
+      /* Firefox */
+  -moz-transition: all 0.2s ease-in-out;
+  /* WebKit */
+  -webkit-transition: all 0.2s ease-in-out;
+  /* Opera */
+  -o-transition: all 0.2s ease-in-out;
+  /* Standard */
+  transition: all 0.2s ease-in-out;
+
+
+
+
+
+
   display: block;
-    border: 1px solid #136ac1;
-    color: #fff;
     font-weight: bold;
     font-size: 18px;
     padding: 12px 30px 12px 0;
-    border-radius: 3px;
     margin: 10px 0 25px;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset;
-    text-shadow: 0 1px 0 #1a64bf;
     cursor: pointer;
     text-align: left;
     margin: 20px 0;
@@ -242,6 +259,7 @@ line-height:                     0;
       box-shadow: 1px 0 0px rgba(255, 255, 255, 0.2); }
 
 .signup-btn:hover {
+
   color: #ffffff;
   box-shadow: 0 0 2px #CCC;
   text-decoration: none;
@@ -250,11 +268,17 @@ line-height:                     0;
 
 .signup-twitter {
     background-color: #0ba8d6;
+    border-color: #0ba8d6;
     background-image: -moz-linear-gradient(#35bfe7, #0ba8d6);
     background-image: -o-linear-gradient(#35bfe7, #0ba8d6);
     background-image: -ms-linear-gradient(#35bfe7, #0ba8d6);
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #35bfe7), color-stop(1, #0ba8d6));
     background-image: -webkit-linear-gradient(#35bfe7, #0ba8d6); }
+
+.signup-twitter:hover {
+    background-color: #0ba8d6;
+    border-color: #35bfe7;  
+}
 
 .signup-twitter i {
       background: url('../images/icon-twitter.svg') center center no-repeat;
@@ -267,7 +291,7 @@ line-height:                     0;
     background-image: -ms-linear-gradient(#679ace, #4264b3);
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #679ace), color-stop(1, #4264b3));
     background-image: -webkit-linear-gradient(#679ace, #4264b3);
-    border-color: #1b345a;
+    border-color: #679ace;
     text-shadow: 0 1px 0 #2d449e; }
 
 .signup-facebook i {
@@ -307,7 +331,9 @@ line-height:                     0;
 }
 
 a.signup-github:hover {
-  color: #4C4C4C;
+  background-color:#EAEAEA;
+  border:#CACACA 2px solid; 
+
 }
 
 .btn-custom {
@@ -331,6 +357,29 @@ a.signup-github:hover {
 .btn-custom:hover {
     background:#4bcf0a;
     border:#3d9c0d 2px solid;
+}
+
+.btn-cancel {
+  background:#E6E6E6;
+  border: #E6E6E6 2px solid;
+  border-radius: 50px;
+  color: #fff !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
+  box-shadow: none;
+  font-weight: bolder;
+      /* Firefox */
+  -moz-transition: all 0.2s ease-in-out;
+  /* WebKit */
+  -webkit-transition: all 0.2s ease-in-out;
+  /* Opera */
+  -o-transition: all 0.2s ease-in-out;
+  /* Standard */
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-cancel:hover {
+    background: #E6E6E6;
+    border: #333333 2px solid;
 }
 
 .project .well {
@@ -413,6 +462,14 @@ header {
 .modal form {margin:0;}
 
 #newProject {
-  width:315px;
-  margin: -250px 0 0 -158px;
+  font-family: 'Lato', sans-serif;
+  /*margin: -250px 0 0 -158px;*/
+}
+
+#newProject legend {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 60px;
+  margin: 0px 0px 0px 10px;
+  border: none;
 }
