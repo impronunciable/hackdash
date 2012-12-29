@@ -12,8 +12,25 @@ form.ajaxForm.form-horizontal(action="/api/projects/create", method="POST")
 
     .control-group
      label.control-label(for="description") Description* 
-     textarea(class="input-xlarge", id="description", name="description", rows="4", maxlength="400", placeholder="Description")
+     .controls
+      textarea(class="input-xlarge", id="description", name="description", rows="4", maxlength="400", placeholder="Description")
 
+    .control-group
+     label.control-label(for="link") Link 
+     .controls
+      input(class="input-xlarge", type="text", name="link", id="link", placeholder="Link")
+
+    .control-group
+     label.control-label(for="tags") Tags 
+     .controls
+      input(class="input-xlarge", type="text", name="tags", id="tags", placeholder="Tags")
+    
+    .control-group
+     label.control-label(for="status") Status 
+     .controls
+      select(class="input-xlarge", name="status", id="status")
+       each status in statuses
+        option(value=status)= status
     
   .modal-footer
     button.btn.btn-cancel Cancel
