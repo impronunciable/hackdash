@@ -236,7 +236,7 @@
       if(arr[i]['name'] === "title" && !arr[i].value.length) {
         formError();
         return false;
-      } else if(arr[i]['name'] === "summary" && !arr[i].value.length) {
+      } else if(arr[i]['name'] === "description" && !arr[i].value.length) {
         formError();
         return false;  
       }
