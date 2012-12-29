@@ -11,7 +11,15 @@
 			"file": "views/new_project.jade",
 			"settings":
 			{
-				"buffer_size": 1328,
+				"buffer_size": 1047,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "public/styles/main.css",
+			"settings":
+			{
+				"buffer_size": 9827,
 				"line_ending": "Unix"
 			}
 		}
@@ -40,6 +48,9 @@
 	},
 	"file_history":
 	[
+		"/WRKK/H/hackdash/views/project.jade",
+		"/WRKK/H/hackdash/views/projects.jade",
+		"/WRKK/H/hackdash/views/dashboard.jade",
 		"/WRKK/N/New Amsterdam Ideas/RWI/src/revenuewatch/data/data-summary-nocode.csv",
 		"/WRKK/N/New Amsterdam Ideas/RWI/src/revenuewatch/donut-multiples/index-code.html",
 		"/WRKK/N/New Amsterdam Ideas/RWI/src/revenuewatch/parallel-coordinates/demos/rwi.html",
@@ -146,20 +157,48 @@
 					"file": "views/new_project.jade",
 					"settings":
 					{
-						"buffer_size": 1328,
+						"buffer_size": 1047,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								97,
-								97
+								276,
+								276
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "public/styles/main.css",
+					"settings":
+					{
+						"buffer_size": 9827,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								729,
+								729
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},

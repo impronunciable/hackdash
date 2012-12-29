@@ -476,3 +476,14 @@ header {
 .form-horizontal .controls {
   margin-left: 120px;
 }
+
+
+
+
+/*
+Click on project effect
+*/
+
+.zoomed {
+  visibility: hidden;
+}
