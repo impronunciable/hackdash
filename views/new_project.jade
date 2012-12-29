@@ -5,23 +5,36 @@ form.ajaxForm.form-horizontal(action="/api/projects/create", method="POST")
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
   .modal-body
+    
+    
     .control-group
-      input(class="input-xlarge", type="text", name="title", id="title", placeholder="Title")
+     label.control-label(for="title") Title* 
+     .controls
+      input#title(type="text", class="input-xlarge", placeholder="title")
 
     .control-group
-      textarea(class="input-xlarge", id="description", name="description", rows="3", maxlength="400", placeholder="Description")
+     label.control-label(for="description") Description* 
+     .controls
+      textarea(class="input-xlarge", id="description", name="description", rows="4", maxlength="400", placeholder="Description")
 
     .control-group
+     label.control-label(for="link") Link 
+     .controls
       input(class="input-xlarge", type="text", name="link", id="link", placeholder="Link")
 
     .control-group
-       input(class="input-xlarge", type="text", name="tags", id="tags", placeholder="Tags")
+     label.control-label(for="tags") Tags 
+     .controls
+      input(class="input-xlarge", type="text", name="tags", id="tags", placeholder="Tags")
     
     .control-group
-        select(class="input-xlarge", name="status", id="status")
-          each status in statuses
-            option(value=status)= status
-
+     label.control-label(for="status") Status 
+     .controls
+      select(class="input-xlarge", name="status", id="status")
+       each status in statuses
+        option(value=status)= status
+    
   .modal-footer
-    button.btn.cancel Cancel
-    button.btn.btn-success(type="submit") Create project
+
+    button.btn.btn-cancel Cancel
+    button.btn.btn-custom(type="submit") Create project
