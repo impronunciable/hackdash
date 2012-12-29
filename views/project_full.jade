@@ -5,8 +5,17 @@
       h3
         a(href="/p/" + project.id, target="_blank") #{project.title}
       p #{project.description}
+
+      h6 Managed by
+      img(src=project.leader.picture)
+
+      h6 Contributors
       each contributor in project.contributors
-        img(src="https://graph.facebook.com/dan.zajdband/picture")
+        img(src=contributor.picture)
+      
+      h6 Followers
+      each follower in project.followers
+        img(src=follower.picture)
 
     .row-fluid
       .aging.activity.created_at

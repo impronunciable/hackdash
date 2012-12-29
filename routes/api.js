@@ -128,7 +128,7 @@ var loadProjects = function(req, res, next) {
 var loadProject = function(req, res, next) {
   Project.findById(req.params.project_id)
   .populate('contributors')
-  .populate('pending')
+  .populate('followers')
   .populate('leader')
   .exec(function(err, project) {
     if(err || !project) return res.send(500);

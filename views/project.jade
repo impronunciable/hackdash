@@ -6,7 +6,7 @@
         a(href="/p/" + project.id, target="_blank") #{project.title}
       p #{project.description}
       each contributor in project.contributors
-        img(src="https://graph.facebook.com/dan.zajdband/picture")
+        img(src=contributor.picture)
 
     .row-fluid
       .aging.activity.created_at
