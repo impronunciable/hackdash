@@ -472,3 +472,7 @@ header {
   margin: 0px 0px 0px 10px;
   border: none;
 }
+
+.form-horizontal .controls {
+  margin-left: 120px;
+}
