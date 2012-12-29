@@ -11,6 +11,7 @@ module.exports = function(app) {
     , "username": { type: String, required: true }
     , "name": { type: String, required: true }
     , "email": { type: String, validate: /.+@.+\..+/ }
+    , "picture": String
     , "created_at": {type: Date, default: Date.now }
   });
 

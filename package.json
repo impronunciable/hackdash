@@ -19,7 +19,8 @@
     "connect-mongo": "0.1.x",
     "moment": "~1.7.2",
     "markdown": "~0.4.0",
-    "commander": "~1.1.1"
+    "commander": "~1.1.1",
+    "gravatar": "~1.0.6"
   },
   "devDependencies": {
     "mocha": "~1.7.4",

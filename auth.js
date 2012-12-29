@@ -5,7 +5,8 @@
 
 var passport = require('passport')
   , keys = require('./keys.json')
-  , mongoose = require('mongoose');
+  , mongoose = require('mongoose')
+  , gravatar = require('gravatar');
 
 var User = mongoose.model('User');
 
@@ -38,10 +39,19 @@ for(var strategy in keys) {
           var user = new User();
           user.provider = provider;
           user.provider_id = profile.id;
-          user.email = profile.emails && profile.emails.length && profiles.emails[0].value;
+
+          if(profile.emails && profile.emails.length && profile.emails[0].value)
+            user.email = profile.emails[0].value;
+
+          if(profile.photos && profile.photos.length && profile.photos[0].value) {
+            user.picture =  profile.photos[0].value.replace('_normal', '_bigger');
+          } else {
+            user.picture = gravatar.url(user.email || '', {s: '73'});
+          }
+
           user.name = profile.displayName;
           user.username = profile.username || profile.displayName;
-          user.save(function(err, user){
+          user.save(function(err, user){  console.log(err, user);
             done(null, user);
           });
         } else {
