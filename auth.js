@@ -38,6 +38,8 @@ for(var strategy in keys) {
           var user = new User();
           user.provider = provider;
           user.provider_id = profile.id;
+          user.email = profile.emails && profile.emails.length && profiles.emails[0].value;
+          user.name = profile.displayName;
           user.username = profile.username || profile.displayName;
           user.save(function(err, user){
             done(null, user);

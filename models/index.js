@@ -9,6 +9,8 @@ module.exports = function(app) {
       "provider": { type: String, required: true }
     , "provider_id": { type: Number, required: true }
     , "username": { type: String, required: true }
+    , "name": { type: String, required: true }
+    , "email": { type: String, validate: /.+@.+\..+/ }
     , "created_at": {type: Date, default: Date.now }
   });
 
