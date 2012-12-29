@@ -48,7 +48,7 @@ for(var strategy in keys) {
           } else if(profile.provider == 'facebook') {
             user.picture = "https://graph.facebook.com/" + profile.id + "/picture";
             user.picture += "?width=73&height=73";
-          }
+          } else {
             user.picture = gravatar.url(user.email || '', {s: '73'});
           }
 
