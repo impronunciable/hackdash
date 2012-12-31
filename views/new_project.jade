@@ -7,7 +7,7 @@ form.ajaxForm.form-horizontal(action="/api/projects/create", method="POST", enct
     
     .control-group
      .controls
-      input(type="text", class="input-xlarge", placeholder="title", name="title")
+      input(type="text", class="input-xlarge", placeholder="Title", name="Title")
 
     .control-group
      .controls
@@ -15,8 +15,9 @@ form.ajaxForm.form-horizontal(action="/api/projects/create", method="POST", enct
 
     .control-group
       .controls
-        label(for="cover") Cover
-        input(type="file", name="cover", id="cover")
+        #dragdrop 
+          p Drag Photo Here
+          input(type="file", name="cover", id="cover")        
 
     .control-group
      .controls
