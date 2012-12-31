@@ -145,7 +145,7 @@ var loadProject = function(req, res, next) {
  */
 
 var loadSearchProjects = function(req, res, next) {
-  var regex = new RegExp(req.query.q);
+  var regex = new RegExp(req.query.q, 'i');
   var query = {};
 
   if(!req.query.q.length) return res.redirect('/api/projects');
@@ -186,11 +186,11 @@ var saveProject = function(req, res, next) {
     , created_at: Date.now()
     , leader: req.user._id
     , followers: [req.user._id]
-    , cover: req.files.cover && req.files.cover.type.indexOf('image/') != -1 && '/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop()
+    , cover: req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1 && '/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop()
     , contributors: [req.user._id]
   });
 
-  if(req.files.cover) {
+  if(req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1) {
     var tmp_path = req.files.cover.path
       , target_path = './public' + project.cover;
 
@@ -232,10 +232,10 @@ var updateProject = function(req, res, next) {
   project.description = req.body.description || project.description;
   project.link = req.body.link || project.link;
   project.status = req.body.status || project.status;
-  project.cover = (req.files.cover && req.files.cover.type.indexOf('image/') != -1 && '/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop()) || project.cover;
+  project.cover = (req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1 && '/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop()) || project.cover;
   project.tags = (req.body.tags && req.body.tags.split(',')) || project.tags;
 
-  if(req.files.cover) {
+  if(req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1) {
     var tmp_path = req.files.cover.path
       , target_path = './public' + project.cover;
 
