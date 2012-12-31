@@ -260,8 +260,9 @@
   });
 
   $project.live('click', function(e){
-    page('/p/' + $(this).data('id'));
-    e.preventDefault();
+    if(e.target.tagName !== 'A') {
+      page('/p/' + $(this).data('id'));
+    }
   });
 
 })();
