@@ -1,12 +1,14 @@
 .project.span4(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id, class=project.status)
   
   .well
+    .cover.shadow 
+      img(src='images/cover.jpg', alt='#{project.title}')
     .well-content
       h3
         a(href="/p/" + project.id, target="_blank") #{project.title}
       p #{project.description}
       each contributor in project.contributors
-        img(src=contributor.picture)
+        img.avatar(src=contributor.picture)
 
     .row-fluid
       .aging.activity.created_at

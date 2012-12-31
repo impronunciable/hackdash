@@ -1,7 +1,7 @@
-{
+ {
   "twitter": {
-      "consumerKey": "rylwa7mumzeeysvipyro4g"
-    , "consumerSecret": "wgs78sy26debpxhzren1xwynguq7zxabzlyoikxtr8"
+      "consumerKey": "qdY8SiihTUFbhHO90cAQ"
+    , "consumerSecret": "IBS1EuPDFnQpqJpur4GcswliDRW1PqVnQSbFfCSbA"
     , "callbackURL": "http://local.host:3000/auth/twitter/callback"
   }
 , "meetup": {
@@ -10,8 +10,8 @@
     , "callbackURL": "http://local.host:3000/auth/meetup/callback"
   }
 , "facebook": {
-      "clientID": "541247902567411"
-    , "clientSecret": "9ac702092b516d672d4c5b626ee1ece5"
+      "clientID": "384366281645427"
+    , "clientSecret": "ff90ac0e88ed2bc8c016bbd48b0fbb59"
     , "callbackURL": "http://local.host:3000/auth/facebook/callback"
   }
 , "github": {

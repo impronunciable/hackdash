@@ -1,27 +1,38 @@
 .project(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id, class=project.status)
   
   .well
-    .well-content
+    .well-header
       h3
         a(href="/p/" + project.id, target="_blank") #{project.title}
       p #{project.description}
+    
+    .well-sidebar
 
-      h6 Managed by
+      h6 Created
+      strong Hace 30 minutos
+
+      h6 State
+      strong Brainstorm
+
+      h6 Comments
+      p After gathering data the team startedto get coding.
+
+      h6 Tags
+      ul
+        li Data Mining
+        li Cartopgrahy
+        li Crowdsource
+
+
+    .well-content
+     
+      h5 Managed by
       img(src=project.leader.picture)
 
-      h6 Contributors
+      h5 Contributors
       each contributor in project.contributors
         img(src=contributor.picture)
       
-      h6 Followers
+      h5 #{project.followers.length} Likes
       each follower in project.followers
         img(src=follower.picture)
-
-    .row-fluid
-      .aging.activity.created_at
-        span.tooltips(data-icon="N", aria-hidden="true", rel="tooltip", title= moment(project.created_at).fromNow())
-      .activity.people #{project.followers.length}
-        span(data-icon="6", aria-hidden="true")
-      .span3.pull-right.edit
-        if(user && project.leader.id == user.id)
-          a.btn.btn-link(href='/projects/edit/'+project._id) Edit
