@@ -1,11 +1,11 @@
-.project.span4(data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id, class=project.status)
+.project.span4(data-id=project.id, data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id, class=project.status)
   
   .well
     .cover.shadow 
-      img(src='images/cover.jpg', alt='#{project.title}')
+      img(src='/images/cover.jpg', alt='#{project.title}')
     .well-content
-      h3
-        a(href="/p/" + project.id, target="_blank") #{project.title}
+      h3 #{project.title}
+
       p #{project.description}
       each contributor in project.contributors
         img.avatar(src=contributor.picture)
