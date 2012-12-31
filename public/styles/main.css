@@ -402,7 +402,7 @@ a.signup-github:hover {
   background:#E6E6E6;
   border: #E6E6E6 2px solid;
   border-radius: 50px;
-  color: #fff !important;
+  color: #999 !important;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
   box-shadow: none;
   font-weight: bolder;
@@ -418,7 +418,8 @@ a.signup-github:hover {
 
 .btn-cancel:hover {
     background: #E6E6E6;
-    border: #333333 2px solid;
+    border: #999 2px solid;
+    color:#999!important;
 }
 
 .project .well {
