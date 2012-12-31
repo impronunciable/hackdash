@@ -1,5 +1,6 @@
 var passport = require('passport')
-  , mongoose = require('mongoose');
+  , mongoose = require('mongoose')
+  , fs = require('fs');
 
 var User = mongoose.model('User')
   , Project = mongoose.model('Project');
@@ -185,8 +186,21 @@ var saveProject = function(req, res, next) {
     , created_at: Date.now()
     , leader: req.user._id
     , followers: [req.user._id]
+    , cover: req.files.cover && req.files.cover.type.indexOf('image/') != -1 && '/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop()
     , contributors: [req.user._id]
   });
+
+  if(req.files.cover) {
+    var tmp_path = req.files.cover.path
+      , target_path = './public' + project.cover;
+
+    fs.rename(tmp_path, target_path, function(err) {
+      if (err) throw err;
+      fs.unlink(tmp_path, function() {
+        if (err) throw err;
+      });
+    });
+  }
 
   project.save(function(err, project){
     if(err) return res.send(500); 
@@ -218,7 +232,20 @@ var updateProject = function(req, res, next) {
   project.description = req.body.description || project.description;
   project.link = req.body.link || project.link;
   project.status = req.body.status || project.status;
+  project.cover = (req.files.cover && req.files.cover.type.indexOf('image/') != -1 && '/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop()) || project.cover;
   project.tags = (req.body.tags && req.body.tags.split(',')) || project.tags;
+
+  if(req.files.cover) {
+    var tmp_path = req.files.cover.path
+      , target_path = './public' + project.cover;
+
+    fs.rename(tmp_path, target_path, function(err) {
+      if (err) throw err;
+      fs.unlink(tmp_path, function() {
+        if (err) throw err;
+      });
+    });
+  }
 
   project.save(function(err, project){
     if(err) return res.send(500);

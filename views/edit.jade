@@ -12,6 +12,11 @@ form.ajaxForm.form-horizontal(action="/api/projects/edit/" + project.id, method=
         textarea(class="input-xlarge", id="description", name="description", rows="3", maxlength="400")= project.description
 
     .control-group
+      .controls
+        label(for="cover") Cover
+        input(type="file", name="cover", id="cover")
+
+    .control-group
       label.control-label(for="link") Link
       .controls
         input(class="input-xlarge", type="text", name="link", id="link", value=project.link)
