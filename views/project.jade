@@ -2,7 +2,8 @@
   
   .well
     .cover.shadow 
-      img(src=project.cover || '/images/cover.jpg', alt='#{project.title}')
+      if(project.cover)
+        img(src=project.cover, alt='#{project.title}')
     .well-content
       h3 #{project.title}
 
