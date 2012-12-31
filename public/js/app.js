@@ -259,4 +259,9 @@
     e.preventDefault();
   });
 
+  $project.live('click', function(e){
+    page('/p/' + $(this).data('id'));
+    e.preventDefault();
+  });
+
 })();
