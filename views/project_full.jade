@@ -9,19 +9,18 @@
     .well-sidebar
 
       h6 Created
-      strong Hace 30 minutos
+      strong= moment(project.created_at).fromNow()
 
       h6 State
-      strong Brainstorm
+      strong= project.status
 
       h6 Comments
       p After gathering data the team startedto get coding.
 
       h6 Tags
       ul
-        li Data Mining
-        li Cartopgrahy
-        li Crowdsource
+        each tag in project.tags
+          li= tag
 
 
     .well-content
