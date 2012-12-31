@@ -16,6 +16,6 @@
         span.tooltips(data-icon="N", aria-hidden="true", rel="tooltip", title= moment(project.created_at).fromNow())
       .activity.people #{project.followers.length}
         span(data-icon="6", aria-hidden="true")
-      .span3.pull-right.edit
+      .pull-right.edit
         if(user && project.leader.id == user.id)
           a.btn.btn-link(href='/projects/edit/'+project._id) Edit
