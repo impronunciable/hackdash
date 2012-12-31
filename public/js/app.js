@@ -37,9 +37,10 @@
   };
 
   var loadSearchProjects = function(ctx, next) { 
+    $searchInput.val(ctx.querystring.split('&')[0].replace('q=',''));
     request
     .get('/api/search?' + ctx.querystring)
-    .end(function(res){
+    .end(function(res){ 
       $projects.html(res.body.html);
       next();
     }); 
