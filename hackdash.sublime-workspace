@@ -3,15 +3,31 @@
 	{
 		"selected_items":
 		[
+			[
+				"fon",
+				"font-weight"
+			],
+			[
+				"fo",
+				"font-size"
+			]
 		]
 	},
 	"buffers":
 	[
 		{
+			"file": "views/project_show.jade",
+			"settings":
+			{
+				"buffer_size": 1198,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "views/new_project.jade",
 			"settings":
 			{
-				"buffer_size": 1047,
+				"buffer_size": 1130,
 				"line_ending": "Unix"
 			}
 		},
@@ -19,7 +35,39 @@
 			"file": "public/styles/main.css",
 			"settings":
 			{
-				"buffer_size": 9827,
+				"buffer_size": 10989,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "routes/api.js",
+			"settings":
+			{
+				"buffer_size": 7230,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "public/js/app.js",
+			"settings":
+			{
+				"buffer_size": 5963,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "keys.json",
+			"settings":
+			{
+				"buffer_size": 746,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "\n<!doctype html>\n<html lang=\"en-us\" dir=\"ltr\" class=\"no-js\">\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n<title>Hover Panels // CSS3 Playground</title>\n<link rel=\"stylesheet\" href=\"/main.css\" />\n<link rel=\"stylesheet\" href=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css\" />\n<script src=\"/js/modernizr.min.js\"></script>\n<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js\"></script>\n<script src=\"https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js\"></script>\n\n	<style type=\"text/css\">\n		#container {\n			width: 720px;\n		}\n		.panel {\n			float: left;\n			width: 200px;\n			height: 200px;\n			margin: -20px;\n			position: relative;\n		}\n		\n		/* -- make sure to declare a default for every property that you want animated -- */\n		.panel .hover {\n			float: none;\n			position: absolute;\n			top: 0;\n			left: 0;\n			z-index: 100;\n			width: 200px;\n			height: 200px;\n			border: 1px solid #aaa;\n			border-top: 1px solid #888; \n			border-left: 1px solid #888; \n			background: #6b7077;\n			text-align: center;\n			\n			-o-transform: scale(.7);\n			-moz-transform: scale(.7); \n			-webkit-transform: scale(.7);\n			transform: scale(.7);\n\n			-moz-box-shadow: inset 1px 2px 8px #222;\n			-webkit-box-shadow: inset 1px 2px 8px rgba(0,0,0,0.7);\n			box-shadow: inset 1px 2px 8px rgba(0,0,0,0.7);\n			\n\n			/* -- transition is the magic sauce for animation -- */\n			-o-transition: all .15s;\n			-moz-transition: all .15s ease-out;\n			-webkit-transition: all .15s ease-out;\n			transition: all .15s ease-out;\n		}\n		.panel .hover:hover {\n			z-index: 1000;\n			border-color: #bbb;\n			border-right: 1px solid #aaa; \n			border-bottom: 1px solid #aaa; \n\n			-o-transform: scale(1);\n			-moz-transform: scale(1); \n			-webkit-transform: scale(1);\n			transform: scale(1);\n\n			-moz-box-shadow: 0 15px 50px rgba(0,0,0,0.3);\n			-webkit-box-shadow: 0 15px 50px rgba(0,0,0,0.3);\n			box-shadow: 0 15px 50px rgba(0,0,0,0.3);\n		}\n		\n	</style>\n</head>\n\n<body>\n\n<div id=\"container\">\n	<h1><a href=\"http://css3playground.com\">css3</a> // Hover Panels</h1>\n		<p class=\"intro\">\n		This is a demo site for CSS3. For most stuff you need <a href=\"http://www.apple.com/safari/\">Safari 4+</a>, <a href=\"http://www.google.com/chrome\">Chrome</a>, <a href=\"http://www.mozilla.com/en-US/firefox/new/\">Firefox 4+</a> or <a href=\"http://www.opera.com/browser/next/\">Opera 10.5x</a> to make these demos work.\n		For 3D stuff, you need Safari 5, Chrome 10+ or the <a href=\"http://nightly.webkit.org/\">WebKit Nightly build</a>.<br /><br />\n	</p>	\n	<div class=\"panel\"><div class=\"hover\"></div></div>\n	<div class=\"panel\"><div class=\"hover\"></div></div>\n	<div class=\"panel\"><div class=\"hover\"></div></div>\n	<div class=\"panel\"><div class=\"hover\"></div></div>\n	<div class=\"panel\"><div class=\"hover\"></div></div>\n	<div class=\"panel\"><div class=\"hover\"></div></div>\n	<div class=\"panel\"><div class=\"hover\"></div></div>\n	<div class=\"panel\"><div class=\"hover\"></div></div>\n</div>\n\n\n</body>\n</html>\n",
+			"settings":
+			{
+				"buffer_size": 3014,
 				"line_ending": "Unix"
 			}
 		}
@@ -48,9 +96,17 @@
 	},
 	"file_history":
 	[
+		"/WRKK/H/hackdash/routes/admin.js",
 		"/WRKK/H/hackdash/views/project.jade",
+		"/WRKK/H/hackdash/views/project_full.jade",
+		"/WRKK/H/hackdash/server.js",
+		"/WRKK/H/hackdash/routes/site.js",
+		"/WRKK/H/hackdash/routes/index.js",
 		"/WRKK/H/hackdash/views/projects.jade",
 		"/WRKK/H/hackdash/views/dashboard.jade",
+		"/WRKK/H/hackdash/public/styles/main.css",
+		"/WRKK/H/hackdash/views/new_project.jade",
+		"/WRKK/H/hackdash/views/project_show.jade",
 		"/WRKK/N/New Amsterdam Ideas/RWI/src/revenuewatch/data/data-summary-nocode.csv",
 		"/WRKK/N/New Amsterdam Ideas/RWI/src/revenuewatch/donut-multiples/index-code.html",
 		"/WRKK/N/New Amsterdam Ideas/RWI/src/revenuewatch/parallel-coordinates/demos/rwi.html",
@@ -88,6 +144,15 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"fullProject",
+			"title",
+			"tit",
+			"xlarge",
+			", required",
+			"4bcf0a",
+			"'",
+			"control-label",
+			"border-radius",
 			"static/",
 			"../assets",
 			"../",
@@ -149,23 +214,23 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 6,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "views/new_project.jade",
+					"file": "views/project_show.jade",
 					"settings":
 					{
-						"buffer_size": 1047,
+						"buffer_size": 1198,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								276,
-								276
+								0,
+								0
 							]
 						],
 						"settings":
@@ -182,18 +247,46 @@
 				},
 				{
 					"buffer": 1,
-					"file": "public/styles/main.css",
+					"file": "views/new_project.jade",
 					"settings":
 					{
-						"buffer_size": 9827,
+						"buffer_size": 1130,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								729,
-								729
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "public/styles/main.css",
+					"settings":
+					{
+						"buffer_size": 10989,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10957,
+								10963
 							]
 						],
 						"settings":
@@ -203,7 +296,117 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
+						"translation.y": 5916.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "routes/api.js",
+					"settings":
+					{
+						"buffer_size": 7230,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2665,
+								2665
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1201.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "public/js/app.js",
+					"settings":
+					{
+						"buffer_size": 5963,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1393.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "keys.json",
+					"settings":
+					{
+						"buffer_size": 746,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								746,
+								746
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"settings":
+					{
+						"buffer_size": 3014,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2998,
+								2998
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 412.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -260,6 +463,10 @@
 		"height": 500.0,
 		"selected_items":
 		[
+			[
+				"",
+				"/WRKK/N/New Amsterdam Ideas/RWI/src/rwi.sublime-project"
+			]
 		],
 		"width": 380.0
 	},
