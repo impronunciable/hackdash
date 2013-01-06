@@ -15,6 +15,8 @@ module.exports = function(app) {
 
   app.get('/api/projects/create', isAuth, setViewVar('statuses', app.get('statuses')), render('new_project'));
 
+  app.post('/api/cover', isAuth, uploadCover);
+
   app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), isProjectLeader, loadProject, render('edit'));
 
   app.post('/api/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, gracefulRes);
@@ -167,7 +169,7 @@ var loadSearchProjects = function(req, res, next) {
  * Check project fields
  */
 
-var validateProject = function(req, res, next) {
+var validateProject = function(req, res, next) {console.log(req.body);
   if(req.body.title && req.body.description) next();
   else res.send(500, "Project Title and Description fields must be complete.");
 };
@@ -186,21 +188,9 @@ var saveProject = function(req, res, next) {
     , created_at: Date.now()
     , leader: req.user._id
     , followers: [req.user._id]
-    , cover: req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1 && '/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop()
     , contributors: [req.user._id]
+    , cover: req.body.cover
   });
-
-  if(req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1) {
-    var tmp_path = req.files.cover.path
-      , target_path = './public' + project.cover;
-
-    fs.rename(tmp_path, target_path, function(err) {
-      if (err) throw err;
-      fs.unlink(tmp_path, function() {
-        if (err) throw err;
-      });
-    });
-  }
 
   project.save(function(err, project){
     if(err) return res.send(500); 
@@ -232,26 +222,36 @@ var updateProject = function(req, res, next) {
   project.description = req.body.description || project.description;
   project.link = req.body.link || project.link;
   project.status = req.body.status || project.status;
-  project.cover = (req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1 && '/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop()) || project.cover;
+  project.cover = req.body.cover || project.cover;
   project.tags = (req.body.tags && req.body.tags.split(',')) || project.tags;
-
-  if(req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1) {
-    var tmp_path = req.files.cover.path
-      , target_path = './public' + project.cover;
-
-    fs.rename(tmp_path, target_path, function(err) {
-      if (err) throw err;
-      fs.unlink(tmp_path, function() {
-        if (err) throw err;
-      });
-    });
-  }
 
   project.save(function(err, project){
     if(err) return res.send(500);
     res.locals.project = project;
     next();
   });
+};
+
+/*
+ * Upload cover if exist
+ */
+
+var uploadCover = function(req, res, next) {
+  var cover = (req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1 
+    && '/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop());
+
+  if(req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1) {
+    var tmp_path = req.files.cover.path
+      , target_path = './public' + cover;
+
+    fs.rename(tmp_path, target_path, function(err) {
+      if (err) throw err;
+      fs.unlink(tmp_path, function() {
+        if (err) throw err;
+        res.json({href: cover});
+      });
+    });
+  }
 };
 
 /*

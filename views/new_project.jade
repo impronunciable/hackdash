@@ -1,4 +1,4 @@
-form.ajaxForm.form-horizontal(action="/api/projects/create", method="POST", enctype="multipart/form-data")
+form.ajaxForm.form-horizontal(action="/api/projects/create", method="POST")
   .modal-header
     button(class="close", type="button", data-dismiss="modal", aria-hidde"true")&times;
     h3 Create project
@@ -7,7 +7,7 @@ form.ajaxForm.form-horizontal(action="/api/projects/create", method="POST", enct
     
     .control-group
      .controls
-      input(type="text", class="input-xlarge", placeholder="Title", name="Title")
+      input(type="text", class="input-xlarge", placeholder="Title", name="title")
 
     .control-group
      .controls
@@ -17,7 +17,7 @@ form.ajaxForm.form-horizontal(action="/api/projects/create", method="POST", enct
       .controls
         #dragdrop 
           p Drag Photo Here
-          input(type="file", name="cover", id="cover")        
+          input(type="file", name="cover_fall", id="cover_fall")        
 
     .control-group
      .controls

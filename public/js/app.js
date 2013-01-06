@@ -21,7 +21,8 @@
     , $cancel = $('.cancel')
     , $slogan = $('#slogan')
     , $follow = $('.follow')
-    , $unfollow = $('.unfollow');
+    , $unfollow = $('.unfollow')
+    , $dragdrop = $('#dragdrop');
 
   /*
    * Route helpers
@@ -222,14 +223,16 @@
     });
   }, 5000);
 
-  var formError = function() {
+  var formError = function(res, text) {
     $('.formError').remove();
-    $modals.prepend('<div class="formError">Please fill Title and Summary fields</div>');
+    $modals.prepend('<div class="formError">Please fill Title and Description fields</div>');
   };
 
   var formSuccess = function(){
     $modals.modal('hide');
-    $('.formError').remove();  
+    $('.formError').remove(); 
+    $dragdrop.css('background', 'none')
+             .children('input').show(); 
   };
   
   var formValidate = function(arr, $form, options){
@@ -242,6 +245,7 @@
         return false;  
       }
     }
+    arr.push({name: 'cover', 'value': cover_path});
   };
 
   $ajaxForm.ajaxForm({
@@ -263,6 +267,22 @@
   $project.live('click', function(e){
     if(e.target.tagName !== 'A') {
       page('/p/' + $(this).data('id'));
+    }
+  });
+
+  var cover_path = null;
+
+  $dragdrop.filedrop({
+    fallback_id: 'cover_fall',
+    url: '/api/cover',
+    paramname: 'cover',
+    allowedfiletypes: ['image/jpeg','image/png','image/gif'],
+    maxfiles: 1,
+    maxfilesize: 3,
+    uploadFinished: function(i, file, res, time) {
+      cover_path = res.href;
+      $dragdrop.css('background', 'url('+res.href+') center center')
+               .children('input').hide();
     }
   });
 

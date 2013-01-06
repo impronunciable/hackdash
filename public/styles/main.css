@@ -583,6 +583,10 @@ margin:25px auto 0 auto;
 
 }
 
+#dragdrop.success {
+  background: #669900;
+}
+
 /*
 Click on project effect
 */
