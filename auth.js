@@ -33,7 +33,7 @@ for(var strategy in keys) {
 
     var Strategy = require('passport-' + provider).Strategy;
     passport.use(new Strategy(keys[provider],
-    function(token, tokenSecret, profile, done) {
+    function(token, tokenSecret, profile, done) {console.log(profile);
       User.findOne({provider_id: profile.id, provider: provider}, function(err, user){
         if(!user) {
           var user = new User();
@@ -45,13 +45,16 @@ for(var strategy in keys) {
 
           if(profile.photos && profile.photos.length && profile.photos[0].value) {
             user.picture =  profile.photos[0].value.replace('_normal', '_bigger');
+          } else if(profile.provider == 'facebook') {
+            user.picture = "https://graph.facebook.com/" + profile.id + "/picture";
+            user.picture += "?width=73&height=73";
           } else {
             user.picture = gravatar.url(user.email || '', {s: '73'});
           }
 
           user.name = profile.displayName;
           user.username = profile.username || profile.displayName;
-          user.save(function(err, user){  console.log(err, user);
+          user.save(function(err, user){  
             done(null, user);
           });
         } else {

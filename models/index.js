@@ -24,6 +24,7 @@ module.exports = function(app) {
     , "status": { type: String, enum: app.get('statuses'), default: app.get('statuses')[0] }
     , "contributors": [{ type: ObjectId, ref: 'User'}]
     , "followers": [{ type: ObjectId, ref: 'User'}]
+    , "cover": String
     , "link": String 
     , "tags": [String]
     , "created_at": { type: Date, default: Date.now }

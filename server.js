@@ -29,6 +29,7 @@ app.configure(function(){
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
+  app.use(express.limit('3.5mb'));
   app.use(express.methodOverride());
   app.use(express.cookieParser(app.get('config').session));
   app.use(express.session({

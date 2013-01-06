@@ -1,5 +1,6 @@
 var passport = require('passport')
-  , mongoose = require('mongoose');
+  , mongoose = require('mongoose')
+  , fs = require('fs');
 
 var User = mongoose.model('User')
   , Project = mongoose.model('Project');
@@ -13,6 +14,8 @@ module.exports = function(app) {
   app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject, gracefulRes);
 
   app.get('/api/projects/create', isAuth, setViewVar('statuses', app.get('statuses')), render('new_project'));
+
+  app.post('/api/cover', isAuth, uploadCover);
 
   app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), isProjectLeader, loadProject, render('edit'));
 
@@ -128,7 +131,7 @@ var loadProjects = function(req, res, next) {
 var loadProject = function(req, res, next) {
   Project.findById(req.params.project_id)
   .populate('contributors')
-  .populate('pending')
+  .populate('followers')
   .populate('leader')
   .exec(function(err, project) {
     if(err || !project) return res.send(500);
@@ -144,7 +147,7 @@ var loadProject = function(req, res, next) {
  */
 
 var loadSearchProjects = function(req, res, next) {
-  var regex = new RegExp(req.query.q);
+  var regex = new RegExp(req.query.q, 'i');
   var query = {};
 
   if(!req.query.q.length) return res.redirect('/api/projects');
@@ -166,7 +169,7 @@ var loadSearchProjects = function(req, res, next) {
  * Check project fields
  */
 
-var validateProject = function(req, res, next) {
+var validateProject = function(req, res, next) {console.log(req.body);
   if(req.body.title && req.body.description) next();
   else res.send(500, "Project Title and Description fields must be complete.");
 };
@@ -186,6 +189,7 @@ var saveProject = function(req, res, next) {
     , leader: req.user._id
     , followers: [req.user._id]
     , contributors: [req.user._id]
+    , cover: req.body.cover
   });
 
   project.save(function(err, project){
@@ -218,6 +222,7 @@ var updateProject = function(req, res, next) {
   project.description = req.body.description || project.description;
   project.link = req.body.link || project.link;
   project.status = req.body.status || project.status;
+  project.cover = req.body.cover || project.cover;
   project.tags = (req.body.tags && req.body.tags.split(',')) || project.tags;
 
   project.save(function(err, project){
@@ -225,6 +230,28 @@ var updateProject = function(req, res, next) {
     res.locals.project = project;
     next();
   });
+};
+
+/*
+ * Upload cover if exist
+ */
+
+var uploadCover = function(req, res, next) {
+  var cover = (req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1 
+    && '/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop());
+
+  if(req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1) {
+    var tmp_path = req.files.cover.path
+      , target_path = './public' + cover;
+
+    fs.rename(tmp_path, target_path, function(err) {
+      if (err) throw err;
+      fs.unlink(tmp_path, function() {
+        if (err) throw err;
+        res.json({href: cover});
+      });
+    });
+  }
 };
 
 /*

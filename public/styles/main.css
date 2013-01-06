@@ -46,6 +46,7 @@ header p.createProject {
 }
 
 .isotope .project {
+  cursor: pointer;
   -webkit-transition-property: -webkit-transform, opacity;
      -moz-transition-property:    -moz-transform, opacity;
       -ms-transition-property:     -ms-transform, opacity;
@@ -78,28 +79,66 @@ header p.createProject {
   transition: all 0.1s ease-in-out;
 }
 
-.well:hover {
+.well .cover {
+  background: #000;
+}
+
+.well .cover img{
+  opacity: 0.8;
+        /* Firefox */
+  -moz-transition: all 0.2s ease-in-out;
+  /* WebKit */
+  -webkit-transition: all 0.2s ease-in-out;
+  /* Opera */
+  -o-transition: all 0.2s ease-in-out;
+  /* Standard */
+  transition: all 0.2s ease-in-out;
+}
+
+
+.well:hover .cover img {
+  opacity: 1
+}
+
+
+#projects .well:hover {
   box-shadow: 0 2px 3px rgba(0,0,0,0.3);
   cursor: pointer;
     top:-2px;
 
 }
 
+.well .avatar {
+  width:32px;
+  height: 32px;
+
+}
+.modal .well {
+  margin: 0
+}
 .well-content {
   padding:15px;
+}
+.well-content img {
+  border-radius: 50px;
+  width: 48px;
+  height: 48px;
+
+}
+
+.well-content img:hover {
+  box-shadow: 0 0 6px #999;
 }
 
 .well h3 {
   margin:0 0 10px 0;
-}
-.well h3 > a {
-  display:              block;
   font-size:             16pt;
   font-weight:            700;
   color:                 #000;
   line-height:           20pt;
   text-align:            left;
 }
+
 .well p > a:hover {
   text-decoration: none;
 }
@@ -107,7 +146,7 @@ header p.createProject {
 
 .well p {
   color:#777;
-  margin:0;
+  margin:0 0 10px 0; 
 }
 
 
@@ -363,7 +402,7 @@ a.signup-github:hover {
   background:#E6E6E6;
   border: #E6E6E6 2px solid;
   border-radius: 50px;
-  color: #fff !important;
+  color: #999 !important;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
   box-shadow: none;
   font-weight: bolder;
@@ -379,7 +418,8 @@ a.signup-github:hover {
 
 .btn-cancel:hover {
     background: #E6E6E6;
-    border: #333333 2px solid;
+    border: #999 2px solid;
+    color:#999!important;
 }
 
 .project .well {
@@ -477,8 +517,75 @@ header {
   margin-left: 120px;
 }
 
+.well-header {
+  padding: 15px;
+  background:#F8F8F8;
+}
 
+#fullProject.modal {
+  width:640px;
+  margin:-250px 0 0 -320px!important;
+}
 
+.well-sidebar {
+  display: inline-block;  width:150px;
+  padding: 15px;
+
+}
+
+.well-sidebar h6:first-child {
+  margin: 0 0 5px 0;
+}
+.well-sidebar h6 {
+  margin:10px 0 5px 0;
+  font-size:14px;
+  color:#999999;
+  font-weight: normal;
+
+}
+
+.well-sidebar p, .well-sidebar li, .well-sidebar strong{
+  font-weight: bold;
+  color:#000;
+}
+
+ .well-sidebar ul {
+  margin:0;
+  padding: 0;
+  list-style: none;
+ }
+
+.modal .well-content {
+  width:430px;
+display: inline-block;
+vertical-align: top;
+}
+
+#dragdrop {
+  width: 280px;
+height: 70px;
+border: dashed 2px #999;
+border-radius: 5px;
+text-align: center;
+}
+
+#dragdrop p {
+  font-weight: bold;
+font-size: 16px;
+vertical-align: middle;
+margin-top: 25px;
+display: none;
+
+}
+
+#dragdrop input {
+margin:25px auto 0 auto;
+
+}
+
+#dragdrop.success {
+  background: #669900;
+}
 
 /*
 Click on project effect
