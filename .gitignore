@@ -4,3 +4,4 @@ node_modules
 src
 keys.json
 config.json
+public/uploads/*
