@@ -245,7 +245,9 @@
         return false;  
       }
     }
-    arr.push({name: 'cover', 'value': cover_path});
+  
+    if(cover_path)
+      arr.push({name: 'cover', 'value': cover_path});
   };
 
   $ajaxForm.ajaxForm({
