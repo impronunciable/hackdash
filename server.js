@@ -7,13 +7,14 @@ var express = require('express')
   , passport = require('passport')
   , mongoose = require('mongoose')
   , MongoStore = require('connect-mongo')(express)
+  , config = require('./config.json')
   , http = require('http');
 
 /*
  * DB
  */
 
-mongoose.connect('mongodb://localhost/hackdash');
+mongoose.connect('mongodb://' + config.db.host + '/'+ config.db.name);
 
 var app = exports.app = express();
 
@@ -22,7 +23,7 @@ var app = exports.app = express();
  */
 
 app.configure(function(){
-  app.set('config', require('./config.json'));
+  app.set('config', config);
   app.set('port', process.env.PORT || app.get('config').port);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
@@ -34,7 +35,7 @@ app.configure(function(){
   app.use(express.cookieParser(app.get('config').session));
   app.use(express.session({
       secret: app.get('config').session
-    , store: new MongoStore({db: app.get('config').db}) 
+    , store: new MongoStore({db: app.get('config').db.name}) 
   }));
   app.use(passport.initialize());
   app.use(passport.session());

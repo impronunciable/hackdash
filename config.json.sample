@@ -1,6 +1,9 @@
 {
-    "db": "hackdash"
-  , "host": "http://local.host"
-  , "port": 3000
-  , "session": "wefewfef"
+  "db": {
+    "name": "hackdash",
+    "host": "localhost"
+  },  
+  "host": "local.host",
+  "port": 3000,
+  "session": "wefewfef"
 }
