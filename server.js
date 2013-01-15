@@ -35,7 +35,7 @@ app.configure(function(){
   app.use(express.cookieParser(app.get('config').session));
   app.use(express.session({
       secret: app.get('config').session
-    , store: new MongoStore({db: app.get('config').db}) 
+    , store: new MongoStore({db: app.get('config').db.name}) 
   }));
   app.use(passport.initialize());
   app.use(passport.session());
