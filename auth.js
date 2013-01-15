@@ -33,7 +33,7 @@ for(var strategy in keys) {
 
     var Strategy = require('passport-' + provider).Strategy;
     passport.use(new Strategy(keys[provider],
-    function(token, tokenSecret, profile, done) {console.log(profile);
+    function(token, tokenSecret, profile, done) {
       User.findOne({provider_id: profile.id, provider: provider}, function(err, user){
         if(!user) {
           var user = new User();
@@ -57,7 +57,7 @@ for(var strategy in keys) {
           user.save(function(err, user){  
             done(null, user);
           });
-        } else {
+        } else {  
           done(null, user);
         }
       });
