@@ -320,7 +320,7 @@ line-height:                     0;
 }
 
 .signup-twitter i {
-      background: url('../images/icon-twitter.svg') center center no-repeat;
+      background: url('../images/icon-twitter.svg') 14px center no-repeat;
       background-size: 30px auto; }
 
 .signup-facebook {
@@ -334,7 +334,7 @@ line-height:                     0;
     text-shadow: 0 1px 0 #2d449e; }
 
 .signup-facebook i {
-      background: url('../images/icon-facebook.svg') center center no-repeat;
+      background: url('../images/icon-facebook.svg') 14px center no-repeat;
       background-size: 30px auto;
 }
 
@@ -349,12 +349,12 @@ line-height:                     0;
     text-shadow: 0 1px 0 #D12038; }
 
 .signup-meetup i {
-      background: url('../images/icon-meetup.png') center center no-repeat;
+      background: url('../images/icon-meetup.png') 14px center no-repeat;
       background-size: 30px auto;
 }
 
 .signup-github {
-    color: #4C4C4C;
+    color: #4C4C4C !important;
     background-color: #EAEAEA;
     background-image: -moz-linear-gradient(#FAFAFA, #EAEAEA);
     background-image: -o-linear-gradient(#FAFAFA, #EAEAEA);
@@ -365,7 +365,7 @@ line-height:                     0;
     text-shadow: 0 1px 0 #CBCBCB; }
 
 .signup-github i {
-      background: url('../images/icon-github.svg') center center no-repeat;
+      background: url('../images/icon-github.svg') 14px center no-repeat;
       background-size: 30px auto;
 }
 
