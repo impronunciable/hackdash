@@ -27,7 +27,7 @@
 			"file": "views/new_project.jade",
 			"settings":
 			{
-				"buffer_size": 1130,
+				"buffer_size": 1191,
 				"line_ending": "Unix"
 			}
 		},
@@ -35,7 +35,7 @@
 			"file": "public/styles/main.css",
 			"settings":
 			{
-				"buffer_size": 10989,
+				"buffer_size": 12494,
 				"line_ending": "Unix"
 			}
 		},
@@ -43,7 +43,7 @@
 			"file": "routes/api.js",
 			"settings":
 			{
-				"buffer_size": 7230,
+				"buffer_size": 8061,
 				"line_ending": "Unix"
 			}
 		},
@@ -51,7 +51,15 @@
 			"file": "public/js/app.js",
 			"settings":
 			{
-				"buffer_size": 5963,
+				"buffer_size": 6768,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "keys.json",
+			"settings":
+			{
+				"buffer_size": 746,
 				"line_ending": "Unix"
 			}
 		},
@@ -68,6 +76,14 @@
 			"settings":
 			{
 				"buffer_size": 3014,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": ".gitignore",
+			"settings":
+			{
+				"buffer_size": 103,
 				"line_ending": "Unix"
 			}
 		}
@@ -250,7 +266,7 @@
 					"file": "views/new_project.jade",
 					"settings":
 					{
-						"buffer_size": 1130,
+						"buffer_size": 1191,
 						"regions":
 						{
 						},
@@ -278,15 +294,15 @@
 					"file": "public/styles/main.css",
 					"settings":
 					{
-						"buffer_size": 10989,
+						"buffer_size": 12494,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10957,
-								10963
+								0,
+								0
 							]
 						],
 						"settings":
@@ -306,15 +322,15 @@
 					"file": "routes/api.js",
 					"settings":
 					{
-						"buffer_size": 7230,
+						"buffer_size": 8061,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2665,
-								2665
+								0,
+								0
 							]
 						],
 						"settings":
@@ -334,7 +350,7 @@
 					"file": "public/js/app.js",
 					"settings":
 					{
-						"buffer_size": 5963,
+						"buffer_size": 6768,
 						"regions":
 						{
 						},
@@ -369,7 +385,7 @@
 						"selection":
 						[
 							[
-								746,
+								0,
 								746
 							]
 						],
@@ -387,6 +403,34 @@
 				},
 				{
 					"buffer": 6,
+					"file": "keys.json",
+					"settings":
+					{
+						"buffer_size": 746,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								746
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
 					"settings":
 					{
 						"buffer_size": 3014,
@@ -396,8 +440,8 @@
 						"selection":
 						[
 							[
-								2998,
-								2998
+								1213,
+								1216
 							]
 						],
 						"settings":
@@ -407,6 +451,32 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 412.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": ".gitignore",
+					"settings":
+					{
+						"buffer_size": 103,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								63,
+								63
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
