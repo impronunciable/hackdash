@@ -1,44 +1,40 @@
 form.ajaxForm.form-horizontal(action="/api/projects/edit/" + project.id, method="POST")
-  fieldset
-    legend Edit project
+  .modal-header
+    button(class="close", type="button", data-dismiss="modal", aria-hidde"true")&times;
+    h3 Edit project
+
+  .modal-body
+    
     .control-group
-      label.control-label(for="title") Title*
-      .controls
-        input(class="input-xlarge", type="text", name="title", id="title", value=project.title)
+     .controls
+      input(type="text", class="input-xlarge", placeholder="Title", name="title", value=project.title)
 
     .control-group
-      label.control-label(for="description") Description*
-      .controls
-        textarea(class="input-xlarge", id="description", name="description", rows="3", maxlength="400")= project.description
+     .controls
+      textarea(class="input-xlarge", id="description", name="description", rows="4", maxlength="400", placeholder="Description") #{project.description}
 
     .control-group
       .controls
         #dragdrop 
           p Drag Photo Here
-          input(type="file", name="cover_fall", id="cover_fall")
+          input(type="file", name="cover_fall", id="cover_fall")        
 
     .control-group
-      label.control-label(for="link") Link
-      .controls
-        input(class="input-xlarge", type="text", name="link", id="link", value=project.link)
+     .controls
+      input(class="input-xlarge", type="text", name="link", id="link", placeholder="Link", value=project.link)
 
     .control-group
-       label.control-label(for="tags") Tags - Comma separated (,)
-       .controls
-         input(class="input-xlarge", type="text", name="tags", id="tags", value=(project.tags) ? project.tags.join(',') : '')
-
+     .controls
+      input(class="input-xlarge", type="text", name="tags", id="tags", placeholder="Tags", value=project.tags.join(','))
+    
     .control-group
-       label.control-label(for="status") Status
-       .controls
-         select(class="input-xlarge", name="status", id="status")
-          each status in statuses
-            if(status == project.status)
-              option(value=status,selected)= status
-            else
-              option(value=status)= status
+     .controls
+      select(class="input-xlarge", name="status", id="status", value=project.status)
+       each status in statuses
+        option(value=status)= status
+    
+  .modal-footer
 
-
-    .form-actions
-      button.btn.btn-primary(type="submit") Save project
-
+    button.btn.btn-cancel Cancel
+    button.btn.btn-custom(type="submit") Save changes
 
