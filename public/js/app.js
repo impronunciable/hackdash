@@ -261,6 +261,10 @@
     page('/');
   });
 
+  $searchInput.on('keyup', function(e){
+    $(this).parents('form').submit();
+  });
+
   $formSearch.submit(function(e){
     page('/search?q=' + $searchInput.val() + '&type=title');
     e.preventDefault();
