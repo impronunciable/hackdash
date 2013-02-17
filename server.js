@@ -41,7 +41,7 @@ app.configure(function(){
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
-  app.set('statuses',['brainstorming','wireframing','building','reasearching','prototyping','releasing']);
+  app.set('statuses',['brainstorming','wireframing','building','researching','prototyping','releasing']);
 });
 
 app.configure('development', function(){
