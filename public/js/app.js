@@ -51,6 +51,11 @@
     $logIn.modal('show');
   };
 
+  var cleanSearch = function(ctx, next){
+    $searchInput.val('');
+    next();
+  };
+
   var isotopeDashboard = function() {
     $('.tooltips').tooltip({});
 
@@ -170,7 +175,7 @@
 
   };
 
-  page('/', loadProjects, isotopeDashboard);
+  page('/', loadProjects, cleanSearch, isotopeDashboard);
   page('/login', logIn);
   page('/search', loadSearchProjects, isotopeDashboard);
   page('/projects/create', createProject);
