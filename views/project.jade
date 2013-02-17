@@ -7,7 +7,7 @@
     .well-content
       h3 #{project.title}
 
-      p #{project.description}
+      | !{md(project.description)}
       each contributor in project.contributors
         img.avatar(src=contributor.picture)
 
