@@ -31,7 +31,10 @@ form.ajaxForm.form-horizontal(action="/api/projects/edit/" + project.id, method=
      .controls
       select(class="input-xlarge", name="status", id="status", value=project.status)
        each status in statuses
-        option(value=status)= status
+        if(status === project.status)
+          option(value=status, selected)= status
+        else
+          option(value=status)= status
     
   .modal-footer
 
