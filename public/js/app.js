@@ -92,8 +92,22 @@
     });
   };
 
+  var initSelect2 = function(){
+    $('#status').select2({
+      minimumResultsForSearch: 10
+    });
+
+    $('#tags').select2({
+      tags:[],
+      formatNoMatches: function(){ return ''; },
+      maximumInputLength: 20,
+      tokenSeparators: [","]
+    });
+  };
+
   var createProject = function(ctx) {
     $newProject.modal('show');
+    initSelect2();
   };
 
   var editProject = function(ctx) {
@@ -104,6 +118,8 @@
 
       $editProject.html(res.body.html);
       $editProject.modal('show');
+      initSelect2();
+
       $('.ajaxForm').ajaxForm({
         error: formError,
         success: formSuccess,
