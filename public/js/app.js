@@ -276,7 +276,7 @@
   });
 
   $project.live('click', function(e){
-    if(e.target.tagName !== 'A') {
+    if(e.target.tagName !== 'A' && $(this).data('id')) {
       page('/p/' + $(this).data('id'));
     }
   });

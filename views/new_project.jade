@@ -1,6 +1,6 @@
 form.ajaxForm.form-horizontal(action="/api/projects/create", method="POST")
   .modal-header
-    button(class="close", type="button", data-dismiss="modal", aria-hidde"true")&times;
+    a(class="close", data-dismiss="modal", aria-hidde"true")&times;
     h3 Create project
 
   .modal-body
@@ -35,5 +35,5 @@ form.ajaxForm.form-horizontal(action="/api/projects/create", method="POST")
     
   .modal-footer
 
-    button.cancel.btn.btn-cancel Cancel
-    input.btn.btn-custom(type="submit", value="Create project")
+    a.cancel.btn.btn-cancel Cancel
+    input.btn.primary.btn-custom(type="submit", value="Create project")
