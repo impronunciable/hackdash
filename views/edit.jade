@@ -1,6 +1,6 @@
 form.ajaxForm.form-horizontal(action="/api/projects/edit/" + project.id, method="POST")
   .modal-header
-    button(class="close", type="button", data-dismiss="modal", aria-hidde"true")&times;
+    a(class="close", data-dismiss="modal", aria-hidde"true")&times;
     h3 Edit project
 
   .modal-body
@@ -38,6 +38,6 @@ form.ajaxForm.form-horizontal(action="/api/projects/edit/" + project.id, method=
     
   .modal-footer
 
-    button.btn.btn-cancel Cancel
+    a.cancel.btn.btn-cancel(data-dismiss="modal") Cancel
     button.btn.btn-custom(type="submit") Save changes
 
