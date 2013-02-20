@@ -228,25 +228,45 @@
     });
   }, 5000);
 
-  var formError = function(res, text) {
-    $('.formError').remove();
-    $modals.prepend('<div class="formError">Please fill Title and Description fields</div>');
+  var getRequiredFields = function(){
+    return {
+      title: $('[name=title]'),
+      description: $('[name=description]')
+    };
+  };
+
+  var cleanErrors = function(){
+    var fields = getRequiredFields();
+
+    _.each(fields, function(field){
+      field.parents('.control-group').removeClass('error');
+      field.next('span.help-inline').remove();
+    });
+  };
+
+  var formError = function(field) {
+    cleanErrors();
+    var fields = getRequiredFields();
+
+    if (field){
+      fields[field].parents('.control-group').addClass('error');
+      fields[field].after('<span class="help-inline">Requerido</span>');
+    }
   };
 
   var formSuccess = function(){
     $modals.modal('hide');
-    $('.formError').remove(); 
-    $dragdrop.css('background', 'none')
-             .children('input').show(); 
+    cleanErrors();
+    $dragdrop.css('background', 'none').children('input').show(); 
   };
   
   var formValidate = function(arr, $form, options){
     for(var i = 0; i < arr.length; i++) {
       if(arr[i]['name'] === "title" && !arr[i].value.length) {
-        formError();
+        formError("title");
         return false;
       } else if(arr[i]['name'] === "description" && !arr[i].value.length) {
-        formError();
+        formError("description");
         return false;  
       }
     }
