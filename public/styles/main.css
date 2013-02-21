@@ -563,24 +563,23 @@ vertical-align: top;
 
 #dragdrop {
   width: 280px;
-height: 70px;
-border: dashed 2px #999;
-border-radius: 5px;
-text-align: center;
+  height: 100px;
+  border: dashed 2px #999;
+  border-radius: 5px;
+  text-align: center;
 }
 
 #dragdrop p {
   font-weight: bold;
-font-size: 16px;
-vertical-align: middle;
-margin-top: 25px;
-display: none;
-
+  font-size: 16px;
+  vertical-align: middle;
+  margin-top: 40px;
+  color: silver;
 }
 
 #dragdrop input {
-margin:25px auto 0 auto;
-
+  margin:25px auto 0 auto;
+  display: none;
 }
 
 #dragdrop.success {

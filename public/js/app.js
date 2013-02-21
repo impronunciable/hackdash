@@ -108,6 +108,7 @@
   var createProject = function(ctx) {
     $newProject.modal('show');
     initSelect2();
+    initImageDrop();
   };
 
   var editProject = function(ctx) {
@@ -119,6 +120,7 @@
       $editProject.html(res.body.html);
       $editProject.modal('show');
       initSelect2();
+      initImageDrop();
 
       $('.ajaxForm').ajaxForm({
         error: formError,
@@ -319,18 +321,45 @@
 
   var cover_path = null;
 
-  $dragdrop.filedrop({
-    fallback_id: 'cover_fall',
-    url: '/api/cover',
-    paramname: 'cover',
-    allowedfiletypes: ['image/jpeg','image/png','image/gif'],
-    maxfiles: 1,
-    maxfilesize: 3,
-    uploadFinished: function(i, file, res, time) {
-      cover_path = res.href;
-      $dragdrop.css('background', 'url('+res.href+') center center')
-               .children('input').hide();
-    }
-  });
+  function initImageDrop(){
+
+    var dd = $('#dragdrop');
+    var input = $('#cover_fall', dd);
+
+    input.on('click', function(e){
+      e.stopPropagation();
+    });
+
+    dd.on('click', function(e){
+      input.click();
+      e.preventDefault();
+      return false;
+    });
+
+    dd.filedrop({
+      fallback_id: 'cover_fall',
+      url: '/api/cover',
+      paramname: 'cover',
+      allowedfiletypes: ['image/jpeg','image/png','image/gif'],
+      maxfiles: 1,
+      maxfilesize: 3,
+      dragOver: function () {
+        $('#dragdrop').css('background', 'rgb(226, 255, 226)');
+      },
+      dragLeave: function () {
+        $('#dragdrop').css('background', 'rgb(241, 241, 241)');
+      },
+      drop: function () {
+        $('#dragdrop').css('background', 'rgb(241, 241, 241)');
+      },
+      uploadFinished: function(i, file, res, time) {
+        cover_path = res.href;
+        $('#dragdrop')
+          .css('background', 'url('+res.href+') center center')
+          .css('background-size', '100% 100%')
+          .children('p').hide();
+      }
+    });
+  }
 
 })();
