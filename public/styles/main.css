@@ -496,7 +496,25 @@ header {
   color: #d2d2d2;
 }
 
-.people span {margin-left: 3px;}
+.people a {
+  padding: 0px 0 1px 0px;
+}
+
+.people a:hover {
+  text-decoration: none;
+}
+
+.people a span {
+  margin-left: 3px;
+}
+
+.people.unfollow {
+  color: #E2B6B6;
+}
+
+.people.unfollow [data-icon]::before{
+  color: #FF0000;
+}
 
 .modal form {margin:0;}
 

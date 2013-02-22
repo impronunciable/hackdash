@@ -22,7 +22,20 @@
     , $slogan = $('#slogan')
     , $follow = $('.follow')
     , $unfollow = $('.unfollow')
-    , $dragdrop = $('#dragdrop');
+    , $dragdrop = $('#dragdrop') 
+    , masonryIsotope = {
+        columnWidth:  
+          ($projects.width() >= 1200) ?
+            300
+          : 
+          ($projects.width() == 960) ?
+            $projects.width() / 3
+          :
+          ($projects.width() == 744) ?
+            $projects.width() / 2
+          :
+            $projects.width()
+      };
 
   /*
    * Route helpers
@@ -65,19 +78,7 @@
         itemSelector: '.project'
       , animationEngine: 'jquery'
       , resizable: false
-      , masonry: {
-          columnWidth:  
-            ($projects.width() >= 1200) ?
-              300
-            : 
-            ($projects.width() == 960) ?
-              $projects.width() / 3
-            :
-            ($projects.width() == 744) ?
-              $projects.width() / 2
-            :
-              $projects.width()
-        }
+      , masonry: masonryIsotope
       , getSortData : {
             date : function ( $elem ) {
               return $elem.attr('data-date');
@@ -90,6 +91,10 @@
             }
         }
     });
+
+    setTimeout(function(){
+      $projects.isotope('reLayout');
+    }, 50);
   };
 
   var initSelect2 = function(){
@@ -169,28 +174,30 @@
     var self = this;
 
     request
-    .get($(self).attr('href'))
+    .get($('a', self).attr('href'))
     .end(function(res){
-      $(self).parents('.project').html($(res.body.html).html());
+      var project = $(self).parents('.project')
+      project.html($(res.body.html).html());
+      $('.people', project).on('click', unfollowProject);
     });
 
     e.preventDefault();
+    e.stopPropagation();
   };
 
   var unfollowProject = function(e) {
     var self = this;
 
     request
-    .get($(self).attr('href'))
+    .get($('a', self).attr('href'))
     .end(function(res){
-      $(self).parents('.project').html($(res.body.html).html());
+      var project = $(self).parents('.project')
+      project.html($(res.body.html).html());
+      $('.people', project).on('click', followProject);
     });
 
     e.preventDefault();
-  };
-
-  var validateProject = function() {
-
+    e.stopPropagation();
   };
 
   page('/', loadProjects, cleanSearch, isotopeDashboard);
@@ -199,8 +206,6 @@
   page('/projects/create', createProject);
   page('/projects/edit/:project_id', editProject);
   page('/projects/remove/:project_id', removeProject);
-  page('/projects/:project_id/follow', followProject);
-  page('/projects/:project_id/unfollow', unfollowProject);
   page('/p/:project_id', projectInfo);
 
   page();
@@ -211,19 +216,7 @@
 
   $(window).smartresize(function(){
     $projects.isotope({
-        masonry: {
-          columnWidth:  
-            ($projects.width() >= 1200) ?
-              300
-            : 
-            ($projects.width() == 960) ?
-              $projects.width() / 3
-            :
-            ($projects.width() == 744) ?
-              $projects.width() / 2
-            :
-              $projects.width()
-        }
+      masonry: masonryIsotope
     });
   });
 
@@ -323,20 +316,20 @@
 
   function initImageDrop(){
 
-    var dd = $('#dragdrop');
-    var input = $('#cover_fall', dd);
+    var $dragdrop = $('#dragdrop');
+    var input = $('#cover_fall', $dragdrop);
 
     input.on('click', function(e){
       e.stopPropagation();
     });
 
-    dd.on('click', function(e){
+    $dragdrop.on('click', function(e){
       input.click();
       e.preventDefault();
       return false;
     });
 
-    dd.filedrop({
+    $dragdrop.filedrop({
       fallback_id: 'cover_fall',
       url: '/api/cover',
       paramname: 'cover',
@@ -344,17 +337,17 @@
       maxfiles: 1,
       maxfilesize: 3,
       dragOver: function () {
-        $('#dragdrop').css('background', 'rgb(226, 255, 226)');
+        $dragdrop.css('background', 'rgb(226, 255, 226)');
       },
       dragLeave: function () {
-        $('#dragdrop').css('background', 'rgb(241, 241, 241)');
+        $dragdrop.css('background', 'rgb(241, 241, 241)');
       },
       drop: function () {
-        $('#dragdrop').css('background', 'rgb(241, 241, 241)');
+        $dragdrop.css('background', 'rgb(241, 241, 241)');
       },
       uploadFinished: function(i, file, res, time) {
         cover_path = res.href;
-        $('#dragdrop')
+        $dragdrop
           .css('background', 'url('+res.href+') center center')
           .css('background-size', '100% 100%')
           .children('p').hide();

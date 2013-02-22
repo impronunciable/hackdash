@@ -25,9 +25,9 @@ module.exports = function(app) {
 
   app.get('/api/projects/:project_id/leave', isAuth, isProjectMember, leaveProject), gracefulRes; 
 
-  app.get('/api/projects/:project_id/follow', isAuth, followProject, loadProject, render('project'), gracefulRes); 
+  app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, render('project'), gracefulRes); 
 
-  app.get('/api/projects/:project_id/unfollow', isAuth, unfollowProject, loadProject, render('project')); 
+  app.get('/api/projects/unfollow/:project_id', isAuth, unfollowProject, loadProject, render('project')); 
 
   app.get('/api/p/:project_id', loadProject, render('project_full'));
 
