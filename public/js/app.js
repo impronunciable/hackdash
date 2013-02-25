@@ -138,11 +138,15 @@
   };
 
   var removeProject = function(ctx) {
-    superagent
-    .get('/api/projects/remove/' + ctx.params.project_id)
-    .end(function(res){
+    if (window.confirm("This action will remove the project. Are you sure?")){
+      superagent
+        .get('/api/projects/remove/' + ctx.params.project_id)
+        .end(function(res){
+          page('/');
+        });
+    }
+    else 
       page('/');
-    });
   };
 
   var joinProject = function(ctx) {
