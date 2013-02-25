@@ -1,5 +1,6 @@
 var passport = require('passport')
   , mongoose = require('mongoose')
+  , _ = require('underscore')
   , fs = require('fs');
 
 var User = mongoose.model('User')
@@ -21,13 +22,13 @@ module.exports = function(app) {
 
   app.post('/api/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, gracefulRes);
 
-  app.get('/api/projects/:project_id/join', isAuth, joinProject, gracefulRes); 
+  app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, gracefulRes); 
 
-  app.get('/api/projects/:project_id/leave', isAuth, isProjectMember, leaveProject), gracefulRes; 
+  app.get('/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, gracefulRes); 
 
-  app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, render('project'), gracefulRes); 
+  app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, gracefulRes); 
 
-  app.get('/api/projects/unfollow/:project_id', isAuth, unfollowProject, loadProject, render('project')); 
+  app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, gracefulRes); 
 
   app.get('/api/p/:project_id', loadProject, render('project_full'));
 
@@ -115,11 +116,13 @@ var isProjectLeader = function(req, res, next){
 var loadProjects = function(req, res, next) {
   Project.find({})
   .populate('contributors')
+  .populate('followers')
   .populate('leader')
   .exec(function(err, projects) {
     if(err) return res.send(500);
     res.locals.projects = projects;
     res.locals.user = req.user;
+    res.locals.userExists = userExistsInArray;
     next();
   });
 };
@@ -137,7 +140,14 @@ var loadProject = function(req, res, next) {
     if(err || !project) return res.send(500);
     res.locals.project = project;
     res.locals.user = req.user;
+    res.locals.userExists = userExistsInArray;
     next();
+  });
+};
+
+var userExistsInArray = function(user, arr){
+  return _.find(arr, function(u){
+    return (u.id == user.id);
   });
 };
 
@@ -161,6 +171,7 @@ var loadSearchProjects = function(req, res, next) {
     if(err) return res.send(500);
     res.locals.projects = projects;
     res.locals.user = req.user;
+    res.locals.userExists = userExistsInArray;
     next();
   });
 };
@@ -260,8 +271,7 @@ var uploadCover = function(req, res, next) {
 
 var isProjectMember = function(req, res, next) {
   Project.findOne({_id: req.params.project_id, contributors: req.user.id}, function(err, project){
-    if(error || !project) return res.send(500);
-
+    if(err || !project) return res.send(500);
     req.project = project;
     next(); 
   });
@@ -272,8 +282,8 @@ var isProjectMember = function(req, res, next) {
  */
 
 var isProjectFollower = function(req, res, next) {
-  Project.findOne({_id: req.params.project_id, followers: req.user.id}, function(error, project){
-    if(error || !project) return res.send(500);
+  Project.findOne({_id: req.params.project_id, followers: req.user.id}, function(err, project){
+    if(err || !project) return res.send(500);
     req.project = project;
     next(); 
   });
@@ -283,10 +293,10 @@ var isProjectFollower = function(req, res, next) {
  * Add current user as a group contributor
  */
 
-var joinProject = function(req, res) {
-  Project.update({_id: req.params.project_id}, { $addToSet : { 'contributors': req.user.id }, $addToSet : { 'followers': req.user.id }}, function(err){
+var joinProject = function(req, res, next) {
+  Project.update({_id: req.params.project_id}, { $addToSet : { 'contributors': req.user.id }}, function(err){
     if(err) return res.send(500);
-    res.json(200, {group: req.params.project_id, user: req.user._id });
+    next();
   });
 };
 
@@ -294,10 +304,10 @@ var joinProject = function(req, res) {
  * Remove current user from a group
  */
 
-var leaveProject = function(req, res) {
+var leaveProject = function(req, res, next) {
   Project.update({_id: req.params.project_id}, { $pull: {'contributors': req.user._id }}, function(err){
     if(err) return res.send(500);
-    res.json(200, {group: req.params.project_id, user: req.user._id });
+    next();
   });
 };
 

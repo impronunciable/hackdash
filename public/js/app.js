@@ -20,8 +20,6 @@
     , $tooltips = $('.tooltips')
     , $cancel = $('.cancel')
     , $slogan = $('#slogan')
-    , $follow = $('.follow')
-    , $unfollow = $('.unfollow')
     , $dragdrop = $('#dragdrop') 
     , masonryIsotope = {
         columnWidth:  
@@ -151,7 +149,7 @@
 
   var joinProject = function(ctx) {
     request
-    .get('/api/projects/' + ctx.params.project_id + '/join')
+    .get('/api/projects/join/' + ctx.params.project_id)
     .end(function(res){
       page('/');
     });
@@ -159,7 +157,7 @@
 
   var leaveProject = function(ctx) {
     request
-    .get('/api/projects/' + ctx.params.project_id + '/join')
+    .get('/api/projects/leave/' + ctx.params.project_id)
     .end(function(res){
       page('/');
     });
@@ -174,34 +172,20 @@
     });
   };
 
-  var followProject = function(e) {
-    var self = this;
-
+  var followProject = function(ctx) {
     request
-    .get($('a', self).attr('href'))
+    .get('/api/projects/follow/' + ctx.params.project_id)
     .end(function(res){
-      var project = $(self).parents('.project')
-      project.html($(res.body.html).html());
-      $('.people', project).on('click', unfollowProject);
+      page('/');
     });
-
-    e.preventDefault();
-    e.stopPropagation();
   };
 
-  var unfollowProject = function(e) {
-    var self = this;
-
+  var unfollowProject = function(ctx) {
     request
-    .get($('a', self).attr('href'))
+    .get('/api/projects/unfollow/' + ctx.params.project_id)
     .end(function(res){
-      var project = $(self).parents('.project')
-      project.html($(res.body.html).html());
-      $('.people', project).on('click', followProject);
+      page('/');
     });
-
-    e.preventDefault();
-    e.stopPropagation();
   };
 
   page('/', loadProjects, cleanSearch, isotopeDashboard);
@@ -210,6 +194,10 @@
   page('/projects/create', createProject);
   page('/projects/edit/:project_id', editProject);
   page('/projects/remove/:project_id', removeProject);
+  page('/projects/follow/:project_id', followProject);
+  page('/projects/unfollow/:project_id', unfollowProject);
+  page('/projects/join/:project_id', joinProject);
+  page('/projects/leave/:project_id', leaveProject);
   page('/p/:project_id', projectInfo);
 
   page();
@@ -228,9 +216,6 @@
     page('/');
     e.preventDefault();
   });
-
-  $follow.live('click', followProject);
-  $unfollow.live('click', unfollowProject);
 
   var forwho = ['for people','for geeks','for mutants','for your wife'];
 

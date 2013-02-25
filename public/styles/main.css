@@ -461,13 +461,13 @@ h1,h2,h3,h4,h5,h6,p {
 .activity span:hover {
   opacity: 0.5;
 }
-.edit, .remove {
+.edit, .remove, .contributor, .follower {
   border-left: 1px solid #EEE;
   text-align: center;
   font-weight: bold;
 }
 
-.edit a, .remove a {
+.edit a, .remove a, .contributor a, .follower a {
   color:#999;
   font-size: 12px
 }
