@@ -2,6 +2,10 @@
 body {
   margin: 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px; color: #333333; background: #e1e1e1 url(../images/dust.png) }
 
+.navbar-fixed-top > header {
+ background-color: red;
+}
+
 @font-face {
 font-family: 'Entypo';
 src: url('font-face/entypo-webfont.eot');
@@ -35,6 +39,10 @@ header p.lead {
 header p.createProject {
             margin:5px 0 0 0!important;            
   }
+
+.kindafixed-top {
+  top: 90px;
+}
 
 .isotope {
   -webkit-transition-property: height, width;
@@ -393,6 +401,24 @@ a.signup-github:hover {
   transition: all 0.2s ease-in-out;
 }
 
+.btn-group>.btn:first-child {
+  -webkit-border-bottom-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  -webkit-border-top-left-radius: 50px;
+  border-top-left-radius: 50px;
+  -moz-border-radius-bottomleft: 50px;
+  -moz-border-radius-topleft: 50px;
+}
+
+.btn-group>.btn:last-child {
+-webkit-border-top-right-radius: 50px;
+border-top-right-radius: 50px;
+-webkit-border-bottom-right-radius: 50px;
+border-bottom-right-radius: 50px;
+-moz-border-radius-topright: 50px;
+-moz-border-radius-bottomright: 50px;
+}
+
 .btn-custom:hover {
     background:#4bcf0a;
     border:#3d9c0d 2px solid;
@@ -406,6 +432,7 @@ a.signup-github:hover {
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
   box-shadow: none;
   font-weight: bolder;
+  margin-left: 5px;
       /* Firefox */
   -moz-transition: all 0.2s ease-in-out;
   /* WebKit */

@@ -1,4 +1,4 @@
-header
+header    
   .container
     .row-fluid
       .span3
@@ -10,8 +10,10 @@ header
             span#slogan for people
 
       .span3.pull-right
-        p.createProject.pull-right
+        p.createProject
+         .btn-group
           if(user)
             a.btn.btn-large.btn-custom(href="/projects/create") Create Project
           else
             a.btn.btn-large.btn-custom(href="/login") Log in to create a project
+          a.btn.btn-large.btn-cancel(href="/login") Logout
