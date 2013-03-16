@@ -36,9 +36,12 @@ header p.lead {
 }
 
 
-header p.createProject {
-            margin:5px 0 0 0!important;            
+header .createProject {
+            margin: 5px 0 0 0!important;
+            display: inline-block;          
   }
+
+
 
 .kindafixed-top {
   top: 90px;
@@ -121,6 +124,9 @@ header p.createProject {
   height: 32px;
 
 }
+
+
+
 .modal .well {
   margin: 0
 }
@@ -131,7 +137,6 @@ header p.createProject {
   border-radius: 50px;
   width: 48px;
   height: 48px;
-
 }
 
 .well-content img:hover {
@@ -401,6 +406,15 @@ a.signup-github:hover {
   transition: all 0.2s ease-in-out;
 }
 
+.btn-group>.btn+.btn {
+ margin-left: 0px;
+}
+
+.btn-large {
+  padding: 13px;
+}
+
+
 .btn-group>.btn:first-child {
   -webkit-border-bottom-left-radius: 50px;
   border-bottom-left-radius: 50px;
@@ -423,6 +437,33 @@ border-bottom-right-radius: 50px;
     background:#4bcf0a;
     border:#3d9c0d 2px solid;
 }
+
+
+.btn-profile {
+  padding: 0;
+  border: none;
+  background:#E6E6E6;
+  color: #999 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
+  box-shadow: none;
+  font-weight: bolder;
+  margin-left: 5px;
+      /* Firefox */
+  -moz-transition: all 0.2s ease-in-out;
+  /* WebKit */
+  -webkit-transition: all 0.2s ease-in-out;
+  /* Opera */
+  -o-transition: all 0.2s ease-in-out;
+  /* Standard */
+  transition: all 0.2s ease-in-out;
+}
+
+
+.btn-profile img {
+  width: 50px;
+  height: 50px;
+}
+
 
 .btn-cancel {
   background:#E6E6E6;

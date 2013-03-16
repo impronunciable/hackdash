@@ -13,6 +13,7 @@ module.exports = function(app) {
     , "email": { type: String, validate: /.+@.+\..+/ }
     , "picture": String
     , "admin_in": { type: [String], default: [] }
+    , "bio": String
     , "created_at": {type: Date, default: Date.now }
   });
 

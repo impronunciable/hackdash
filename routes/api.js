@@ -49,6 +49,17 @@ var render = function(path) {
   };
 };
 
+
+/*
+ * Render jade view
+ */
+var renderView = function(path) {
+  return function(req, res) {
+    res.render(path);
+  };
+};
+
+
 /*
  * Redirect to a route
  */
