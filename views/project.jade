@@ -9,7 +9,7 @@
 
       | !{md(project.description)}
       each contributor in project.contributors
-        img.avatar(src=contributor.picture)
+        img.avatar.tooltips(src=contributor.picture, title=contributor.name, rel="tooltip")
 
     .row-fluid
       .aging.activity.created_at

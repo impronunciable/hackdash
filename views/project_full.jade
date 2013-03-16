@@ -26,12 +26,12 @@
     .well-content
      
       h5 Managed by
-      img(src=project.leader.picture)
+      img.tooltips(src=project.leader.picture, title=project.leader.name)
 
       h5 Contributors
       each contributor in project.contributors
-        img(src=contributor.picture)
+        img.tooltips(src=contributor.picture, title=contributor.name)
       
       h5 #{project.followers.length} Likes
       each follower in project.followers
-        img(src=follower.picture)
+        img.tooltips(src=follower.picture, title=follower.name)

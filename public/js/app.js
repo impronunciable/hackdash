@@ -1,4 +1,3 @@
-
 ;(function(){
 
   var hd = window.hd = {};
@@ -168,6 +167,7 @@
     .end(function(res){
       $fullProject.html(res.body.html)
                   .modal('show');
+      $('.tooltips').tooltip({});
     });
   };
 
