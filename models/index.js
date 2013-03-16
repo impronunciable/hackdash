@@ -20,13 +20,14 @@ module.exports = function(app) {
 
   var Project = new Schema({
       "title": { type: String, required: true }
+    , "domain": String
     , "description": { type: String, required: true }
     , "leader": { type: ObjectId, required: true, ref: 'User' }
     , "status": { type: String, enum: app.get('statuses'), default: app.get('statuses')[0] }
     , "contributors": [{ type: ObjectId, ref: 'User'}]
     , "followers": [{ type: ObjectId, ref: 'User'}]
     , "cover": String
-    , "link": String 
+    , "link": String
     , "tags": [String]
     , "created_at": { type: Date, default: Date.now }
   });
@@ -34,7 +35,8 @@ module.exports = function(app) {
   mongoose.model('Project', Project);
 
   var Dashboard = new Schema({
-    "admin": { type: ObjectId, ref: 'User' }
+      "domain": String
+    , "admin": { type: ObjectId, ref: 'User' }
   });
 
   mongoose.model('Dashboard', Dashboard);
