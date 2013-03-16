@@ -25,10 +25,11 @@ module.exports = function(app) {
   app.get('/p/:project_id', dashboardStack);
   app.get('/search', dashboardStack);
   app.get('/logout', logout, redirect('/'));
-
+  app.get('/about', render('about'));
   app.get('/users/profile', isAuth, loadUser, render('edit_profile'));
   app.get('/users/:user_id', findUser, render('profile'));
   app.post('/users/:user_id', isAuth, updateUser, redirect('/'));
+  
 };
 
 /*
