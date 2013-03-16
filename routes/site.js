@@ -87,6 +87,7 @@ var updateUser = function(req, res, next) {
   
   user.name = req.body.name;
   user.email = req.body.email;
+  user.bio = req.body.bio;
 
   user.save(function(err, user){
     if(err) {

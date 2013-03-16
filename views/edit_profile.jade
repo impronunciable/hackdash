@@ -16,4 +16,6 @@ block content
 		.control-group
 			input(name="email", type='text', placeholder='Email', value=user.email)
 		.control-group
+			textarea(name="bio", placeholder='Some about you') #{user.bio}
+		.control-group
 			input.btn.btn-primary(type='submit', value="Save")

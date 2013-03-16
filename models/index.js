@@ -12,6 +12,7 @@ module.exports = function(app) {
     , "name": { type: String, required: true }
     , "email": { type: String, validate: /.+@.+\..+/ }
     , "picture": String
+    , "bio": String
     , "is_admin": { type: Boolean, default: false }
     , "created_at": {type: Date, default: Date.now }
   });
