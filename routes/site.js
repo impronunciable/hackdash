@@ -25,6 +25,7 @@ module.exports = function(app) {
   app.get('/p/:project_id', dashboardStack);
   app.get('/search', dashboardStack);
   app.get('/logout', logout, redirect('/'));
+  app.get('/about', render('about'));
 };
 
 /*

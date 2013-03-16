@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"mar",
+				"margin-left"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
 				"fon",
 				"font-weight"
 			],
@@ -27,15 +35,7 @@
 			"file": "views/new_project.jade",
 			"settings":
 			{
-				"buffer_size": 1191,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "public/styles/main.css",
-			"settings":
-			{
-				"buffer_size": 12494,
+				"buffer_size": 1211,
 				"line_ending": "Unix"
 			}
 		},
@@ -43,7 +43,7 @@
 			"file": "routes/api.js",
 			"settings":
 			{
-				"buffer_size": 8061,
+				"buffer_size": 8254,
 				"line_ending": "Unix"
 			}
 		},
@@ -51,7 +51,7 @@
 			"file": "public/js/app.js",
 			"settings":
 			{
-				"buffer_size": 6768,
+				"buffer_size": 8145,
 				"line_ending": "Unix"
 			}
 		},
@@ -86,6 +86,22 @@
 				"buffer_size": 103,
 				"line_ending": "Unix"
 			}
+		},
+		{
+			"file": "public/styles/main.css",
+			"settings":
+			{
+				"buffer_size": 13415,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/header.jade",
+			"settings":
+			{
+				"buffer_size": 529,
+				"line_ending": "Unix"
+			}
 		}
 	],
 	"build_system": "",
@@ -112,6 +128,7 @@
 	},
 	"file_history":
 	[
+		"/Users/Davo/Downloads/links.txt",
 		"/WRKK/H/hackdash/routes/admin.js",
 		"/WRKK/H/hackdash/views/project.jade",
 		"/WRKK/H/hackdash/views/project_full.jade",
@@ -160,6 +177,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"4px",
+			"50",
+			"header",
 			"fullProject",
 			"title",
 			"tit",
@@ -230,7 +250,7 @@
 	"groups":
 	[
 		{
-			"selected": 6,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -245,8 +265,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								1198,
+								1198
 							]
 						],
 						"settings":
@@ -266,7 +286,7 @@
 					"file": "views/new_project.jade",
 					"settings":
 					{
-						"buffer_size": 1191,
+						"buffer_size": 1211,
 						"regions":
 						{
 						},
@@ -291,38 +311,10 @@
 				},
 				{
 					"buffer": 2,
-					"file": "public/styles/main.css",
-					"settings":
-					{
-						"buffer_size": 12494,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/CSS/CSS.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 5916.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
 					"file": "routes/api.js",
 					"settings":
 					{
-						"buffer_size": 8061,
+						"buffer_size": 8254,
 						"regions":
 						{
 						},
@@ -340,17 +332,17 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1201.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 3,
 					"file": "public/js/app.js",
 					"settings":
 					{
-						"buffer_size": 6768,
+						"buffer_size": 8145,
 						"regions":
 						{
 						},
@@ -369,6 +361,34 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 1393.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "keys.json",
+					"settings":
+					{
+						"buffer_size": 746,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								746
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -403,34 +423,6 @@
 				},
 				{
 					"buffer": 6,
-					"file": "keys.json",
-					"settings":
-					{
-						"buffer_size": 746,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								746
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JSON.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
 					"settings":
 					{
 						"buffer_size": 3014,
@@ -450,13 +442,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 412.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 7,
 					"file": ".gitignore",
 					"settings":
 					{
@@ -474,6 +466,62 @@
 						"settings":
 						{
 							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "public/styles/main.css",
+					"settings":
+					{
+						"buffer_size": 13415,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9772,
+								9772
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 5107.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "views/header.jade",
+					"settings":
+					{
+						"buffer_size": 529,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								525,
+								525
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -535,7 +583,7 @@
 		[
 			[
 				"",
-				"/WRKK/N/New Amsterdam Ideas/RWI/src/rwi.sublime-project"
+				"/WRKK/G/garagelab/mediasancion/mediasancion-gui/ms.sublime-project"
 			]
 		],
 		"width": 380.0
