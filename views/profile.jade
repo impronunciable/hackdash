@@ -1,13 +1,18 @@
 extends layout
 
 block content
-  h3 Profile
-  form.form-horizontal
-    .control-group
-      img(class="avatar", src=user.picture)
-    .control-group
-      span #{user.name}
-    .control-group
-      span #{user.email}
-    .control-group
-      span #{user.bio}
+
+  .row-fluid
+    .span12.profile
+  
+      h3 Profile
+      
+      form.form-horizontal
+        .control-group
+          img(class="avatar", src=user.picture)
+        .control-group
+          span #{user.name}
+        .control-group
+          span #{user.email}
+        .control-group
+          span #{user.bio}
