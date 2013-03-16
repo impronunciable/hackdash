@@ -8,31 +8,31 @@ var User = mongoose.model('User')
 
 module.exports = function(app) {
 
-  app.get('/:domain/api/projects', loadProjects, render('projects'));
+  app.get('/api/projects', loadProjects, render('projects'));
 
-  app.post('/:domain/api/projects/create', isAuth, validateProject, saveProject, gracefulRes);
+  app.post('/api/projects/create', isAuth, validateProject, saveProject, gracefulRes);
 
-  app.get('/:domain/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject, gracefulRes);
+  app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject, gracefulRes);
 
-  app.get('/:domain/api/projects/create', isAuth, setViewVar('statuses', app.get('statuses')), render('new_project'));
+  app.get('/api/projects/create', isAuth, setViewVar('statuses', app.get('statuses')), render('new_project'));
 
-  app.post('/:domain/api/cover', isAuth, uploadCover);
+  app.post('/api/cover', isAuth, uploadCover);
 
-  app.get('/:domain/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), isProjectLeader, loadProject, render('edit'));
+  app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), isProjectLeader, loadProject, render('edit'));
 
-  app.post('/:domain/api/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, gracefulRes);
+  app.post('/api/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, gracefulRes);
 
-  app.get('/:domain/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, gracefulRes); 
+  app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, gracefulRes); 
 
-  app.get('/:domain/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, gracefulRes); 
+  app.get('/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, gracefulRes); 
 
-  app.get('/:domain/api/projects/follow/:project_id', isAuth, followProject, loadProject, gracefulRes); 
+  app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, gracefulRes); 
 
-  app.get('/:domain/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, gracefulRes); 
+  app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, gracefulRes); 
 
-  app.get('/:domain/api/p/:project_id', loadProject, render('project_full'));
+  app.get('/api/p/:project_id', loadProject, render('project_full'));
 
-  app.get('/:domain/api/search', loadSearchProjects, render('projects'));
+  app.get('/api/search', loadSearchProjects, render('projects'));
 
 };
 
