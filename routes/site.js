@@ -18,13 +18,13 @@ module.exports = function(app) {
     render('dashboard')
   ];
 
-  app.get('/', dashboardStack);
-  app.get('/login', dashboardStack);
-  app.get('/projects/create', dashboardStack);
-  app.get('/projects/edit/:project_id', dashboardStack);
-  app.get('/p/:project_id', dashboardStack);
-  app.get('/search', dashboardStack);
-  app.get('/logout', logout, redirect('/'));
+  app.get('/:domain/', dashboardStack);
+  app.get('/:domain/login', dashboardStack);
+  app.get('/:domain/projects/create', dashboardStack);
+  app.get('/:domain/projects/edit/:project_id', dashboardStack);
+  app.get('/:domain/p/:project_id', dashboardStack);
+  app.get('/:domain/search', dashboardStack);
+  app.get('/:domain/logout', logout, redirect('/'));
 };
 
 /*
