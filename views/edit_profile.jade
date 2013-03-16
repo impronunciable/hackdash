@@ -1,19 +1,23 @@
 extends layout
 
 block content
-	h3 Profile
 
-	if(errors.length)
-		p An error ocurred:
-		each err in errors
-			p(style="margin-left:20px") #{err}
+	.row-fluid
+		.span12.profile
 
-	form.form-horizontal(method="POST", action="/users/" + user.id)
-		.control-group
-			img(class="avatar", src=user.picture)
-		.control-group
-			input(name="name", type='text', placeholder='Name', value=user.name)
-		.control-group
-			input(name="email", type='text', placeholder='Email', value=user.email)
-		.control-group
-			input.btn.btn-primary(type='submit', value="Save")
+			h3 Edit Your Profile
+
+			if(errors.length)
+				p An error ocurred:
+				each err in errors
+					p(style="margin-left:20px") #{err}
+
+			form.form-horizontal(method="POST", action="/users/" + user.id)
+				.control-group
+					img(class="avatar", src=user.picture)
+				.control-group
+					input(name="name", type='text', placeholder='Name', value=user.name)
+				.control-group
+					input(name="email", type='text', placeholder='Email', value=user.email)
+				.control-group
+					input.btn.btn-primary(type='submit', value="Save")

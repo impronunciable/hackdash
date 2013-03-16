@@ -137,10 +137,17 @@ header .createProject {
   border-radius: 50px;
   width: 48px;
   height: 48px;
+  margin-right: 5px;
 }
 
+.well-content img:last-child {
+  margin-right: 0px;
+}
+
+
+
 .well-content img:hover {
-  box-shadow: 0 0 6px #999;
+  box-shadow: 0 0 5px #999;
 }
 
 .well h3 {
