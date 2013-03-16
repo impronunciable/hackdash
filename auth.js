@@ -52,6 +52,7 @@ for(var strategy in keys) {
             user.picture = gravatar.url(user.email || '', {s: '73'});
           }
 
+					user.picture = user.picture || '/default_avatar.png';
           user.name = profile.displayName;
           user.username = profile.username || profile.displayName;
           user.save(function(err, user){  

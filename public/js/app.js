@@ -72,27 +72,26 @@
 
     $modals.modal('hide');
     if($projects.hasClass('isotope')) $projects.isotope('destroy');
-    $projects.isotope({
-        itemSelector: '.project'
-      , animationEngine: 'jquery'
-      , resizable: false
-      , masonry: masonryIsotope
-      , getSortData : {
-            date : function ( $elem ) {
-              return $elem.attr('data-date');
-            }  
-          , name : function ( $elem ) {
-              return $elem.attr('data-name');
-            }
-          , contribs : function ( $elem ) {
-              return $elem.attr('data-contribs');
-            }
-        }
-    });
 
-    setTimeout(function(){
-      $projects.isotope('reLayout');
-    }, 50);
+    $projects.imagesLoaded(function() {
+      $projects.isotope({
+          itemSelector: '.project'
+        , animationEngine: 'jquery'
+        , resizable: false
+        , masonry: masonryIsotope
+        , getSortData : {
+              date : function ( $elem ) {
+                return $elem.attr('data-date');
+              }
+            , name : function ( $elem ) {
+                return $elem.attr('data-name');
+              }
+            , contribs : function ( $elem ) {
+                return $elem.attr('data-contribs');
+              }
+          }
+      });
+    });
   };
 
   var initSelect2 = function(){
