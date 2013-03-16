@@ -36,6 +36,7 @@ app.configure(function(){
   app.use(express.session({
       secret: app.get('config').session
     , store: new MongoStore({db: app.get('config').db.name}) 
+    , cookie: { expires: 365, path: '/', domain: '.' + app.get('config').host }
   }));
   app.use(passport.initialize());
   app.use(passport.session());
