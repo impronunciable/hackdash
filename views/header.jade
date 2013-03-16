@@ -8,12 +8,14 @@ header
           p.lead
             span A Hackaton Dashboard 
             span#slogan for people
-
-      .span3.pull-right
-        p.createProject
+      .span5
+      .span4
+        .createProject
          .btn-group
           if(user)
-            a.btn.btn-large.btn-custom(href="/projects/create") Create Project
-            a.btn.btn-large.btn-cancel(href="/logout") logout
+            a.btn.btn-large.btn-custom(href="/projects/create").tooltips(rel='tooltip', data-placement='bottom', data-original-title='Create a new project') New Project
+            a.btn.btn-large.btn-profile
+             img.avatar(src='http://www.gravatar.com/avatar/1b5777e832ade40d30aa49ca48292404?s=50').tooltips(rel='tooltip', data-placement='bottom', data-original-title='Edit profile')
+            a.btn.btn-large.btn-cancel(href="/logout").tooltips(rel='tooltip', data-placement='bottom', data-original-title='Log out from Hackdash') Logout
           else
             a.btn.btn-large.btn-custom(href="/login") Log in to create a project
