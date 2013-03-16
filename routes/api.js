@@ -126,7 +126,7 @@ var isProjectLeader = function(req, res, next){
  */
 
 var loadProjects = function(req, res, next) {
-  Project.find({domain: req.params.domain})
+  Project.find({domain: req.subdomains[0]})
   .populate('contributors')
   .populate('followers')
   .populate('leader')
@@ -178,7 +178,7 @@ var loadSearchProjects = function(req, res, next) {
   else if(req.query.type === "tag") query['tags'] = regex;
   else return res.send(500);
 
-  query.domain = req.params.domain;
+  query.domain = req.subdomains[0];
 
   Project
   .find(query, function(err, projects) {
@@ -215,7 +215,7 @@ var saveProject = function(req, res, next) {
     , followers: [req.user._id]
     , contributors: [req.user._id]
     , cover: req.body.cover
-    , domain: req.params.domain
+    , domain: req.subdomains[0]
   });
 
   project.save(function(err, project){
