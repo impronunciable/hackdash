@@ -20,14 +20,14 @@
           span(data-icon="6", aria-hidden="true")
 
       .pull-right.remove
-        if(user && project.leader.id == user.id)
+        if(user && isLeader(user, project))
           a.btn.btn-link(href='/projects/remove/'+project._id) Remove
 
       .pull-right.edit
-        if(user && project.leader.id == user.id)
+        if(user && isLeader(user, project))
           a.btn.btn-link(href='/projects/edit/'+project._id) Edit
 
-      if(user && project.leader.id != user.id)
+      if(user && project.leader != user.id)
         if(userExists(user, project.contributors))
           .pull-right.contributor
             a.btn.btn-link(href='/projects/leave/'+project._id) Leave
