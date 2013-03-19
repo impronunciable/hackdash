@@ -13,6 +13,7 @@ module.exports = function(app) {
    */
 
   var dashboardStack = [
+    dashExists,
     loadUser, 
     loadProviders,
     setViewVar('statuses', app.get('statuses')),
@@ -204,4 +205,12 @@ return function(req, res) {
     });
   });
 };
+};
+
+
+var dashExists = function(req, res, next) {
+  Dashboard.findOne({domain: req.subdomains[0]}, function(err, dash){
+    if(err || !dash) return res.send(500);
+    next();
+  });
 };
