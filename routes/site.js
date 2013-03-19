@@ -18,7 +18,7 @@ module.exports = function(app) {
     render('dashboard')
   ];
 
-  app.get('/', checkProfile, dashboardStack);
+  app.get('/', checkProfile, isHomepage, dashboardStack);
   app.get('/login', dashboardStack);
   app.get('/projects/create', dashboardStack);
   app.get('/projects/edit/:project_id', dashboardStack);
@@ -39,7 +39,6 @@ module.exports = function(app) {
  */
 var render = function(path) {
   return function(req, res) {
-    console.log(req, res);
     res.render(path);
   };
 };
@@ -165,4 +164,12 @@ var loadProject = function(req, res, next) {
 var logout = function(req, res, next) {
   req.logout();
   next();
+};
+
+var isHomepage = function(req, res, next) {
+  if(!req.subdomains.length) {
+    res.render('homepage');
+  } else {
+    next();
+  }
 };
