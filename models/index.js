@@ -36,8 +36,7 @@ module.exports = function(app) {
   mongoose.model('Project', Project);
 
   var Dashboard = new Schema({
-      "domain": String
-    , "admin": { type: ObjectId, ref: 'User' }
+    "domain": String
   });
 
   mongoose.model('Dashboard', Dashboard);

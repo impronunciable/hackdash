@@ -3,7 +3,8 @@ var passport = require('passport')
   , mongoose = require('mongoose');
 
 var User = mongoose.model('User')
-  , Project = mongoose.model('Project');
+  , Project = mongoose.model('Project')
+  , Dashboard = mongoose.model('Dashboard');
 
 module.exports = function(app) {
 
@@ -31,7 +32,8 @@ module.exports = function(app) {
   app.get('/users/profile', isAuth, loadUser, render('edit_profile'));
   app.get('/users/:user_id', findUser, render('profile'));
   app.post('/users/:user_id', isAuth, updateUser, redirect('/'));
-  
+
+  app.post('/dashboard/create', isAuth, validateSubdomain, createDashboard(app));
 };
 
 /*
@@ -172,4 +174,34 @@ var isHomepage = function(req, res, next) {
   } else {
     next();
   }
+};
+
+var validateSubdomain = function(req, res, next) {
+  if(!/\w{5,10}/.test(req.body.domain)) return res.send(500);
+  
+  next();
+};
+
+/*
+ * Create a new dashboard
+ */
+
+var createDashboard =  function(app){
+return function(req, res) {
+  Dashboard.findOne({domain: req.body.domain}, function(err, dashboard){
+    if(err || dashboard) return res.send('The sudbomain is in use.');
+
+    var dash = new Dashboard({ domain: req.body.domain});
+    dash.save(function(err){
+      
+      User.findById(req.user.id, function(err, user) {
+        user.admin_in.push(req.body.domain);
+        user.save(function(){
+          res.redirect('http://' + req.body.domain + app.get('config').host + ':' + app.get('config').port);
+        });
+      });
+
+    });
+  });
+};
 };
