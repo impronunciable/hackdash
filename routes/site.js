@@ -198,7 +198,7 @@ return function(req, res) {
       User.findById(req.user.id, function(err, user) {
         user.admin_in.push(req.body.domain);
         user.save(function(){
-          res.redirect('http://' + req.body.domain + app.get('config').host + ':' + app.get('config').port);
+          res.redirect('http://' + req.body.domain + '.' + app.get('config').host + ':' + app.get('config').port);
         });
       });
 
