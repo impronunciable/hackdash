@@ -22,14 +22,27 @@ passport.deserializeUser(function(id, done) {
 
 module.exports = function(app) {
 
+// Helpers
+
+var saveSubdomain = function(req, res, next) {
+  if(!req.session) req.session = {};
+  req.session.subdomain = (req.subdomains.length && req.subdomains[0]) || '';
+  next();
+};
+
+var redirectSubdomain = function(req, res) {
+  res.redirect('http://' + req.session.subdomain + '.' + app.get('config').host + ':' + app.get('config').port);
+};
+
+
 app.set('providers', Object.keys(keys));
 
 for(var strategy in keys) {
 
   (function(provider){
 
-    app.get('/auth/' + provider, passport.authenticate(provider));
-    app.get('/auth/' + provider + '/callback', passport.authenticate(provider, { failureRedirect: '/' }), function(req, res){ res.redirect('/'); });
+    app.get('/auth/' + provider, saveSubdomain, passport.authenticate(provider));
+    app.get('/auth/' + provider + '/callback', passport.authenticate(provider, { failureRedirect: '/' }), redirectSubdomain);
 
     var Strategy = require('passport-' + provider).Strategy;
     passport.use(new Strategy(keys[provider],
@@ -66,6 +79,7 @@ for(var strategy in keys) {
 
   })(strategy);
 
+
 }
 
 // Anonymous auth for test porpouses 
@@ -89,5 +103,4 @@ if(process.env.NODE_ENV == "test") {
 }
 
 };
-
 
