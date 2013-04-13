@@ -1,10 +1,77 @@
-h1 Homepage
+doctype 5
+html
+  head
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title HackDash: Ideas for a hackatón
+    link(rel='stylesheet', href='/styles/bootstrap.min.css')
+    link(rel='stylesheet', href='/styles/bootstrap-responsive.min.css')
+    link(rel='stylesheet', href='/styles/main.css')
+    link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Lato:300,400,700')
+    link(rel='stylesheet', href='/styles/homepage.css')
 
-form(action="/dashboard/create", method="post")
-  p
-    label(for="domain")
-    input(type="text", id="domain", name="domain")
-
-  p
-    input(type="submit", value="Create Dashboard")
-
+  body
+    main(role="main")
+      .container-narrow
+        .row-fluid
+          .span12
+            section.brand
+              header
+                h1 HackDash
+              .content
+                h2 Ideas for a hackathon
+                p Upload your project. Add colaborators. Inform status. Share your app.
+                if(user)
+                  form(action="/dashboard/create", method="post")
+                    p
+                      input(type="text", id="domain", name="domain", placeholder="Hackathon Name")
+                    p
+                      input(type="submit", value="Create my Hackathon").btn.btn-large.btn-custom
+                else
+                  p
+                    a.btn.btn-large.btn-custom(href="/login") Log in to create a Hackathon
+        .row-fluid
+          .span12
+            section.block
+              header
+                h3 Projects born at a hackathon
+              .content
+                .row-fluid
+                  .span10.offset1.brand-hacks
+                    .span3
+                      .icon.fb
+                    .span3
+                      .icon.digg
+                    .span3
+                      .icon.tc
+                    .span3
+                      .icon.pinterest
+        .row-fluid
+          .span12
+            section.block
+              header
+                h3 Why Hackdash?
+              .content
+                .row-fluid
+                  .span10.offset1.brand-why
+                    .span3
+                      .icon.quick
+                      h5 Quick and Easy
+                    .span3
+                      .icon.nerds
+                      h5 For Nerds
+                    .span3
+                      .icon.fast
+                      h5 Fast
+                    .span3
+                      .icon.geeks
+                      h5 Love & Geeks
+        .row-fluid
+          .span12
+            section.block
+              header
+                h3 Partners
+              .content
+                .row-fluid
+                  .span10.offset2.partners
+                    .span5.hhba
+                    .span5.nxtp

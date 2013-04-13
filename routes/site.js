@@ -20,7 +20,7 @@ module.exports = function(app) {
     render('dashboard')
   ];
 
-  app.get('/', checkProfile, isHomepage, dashboardStack);
+  app.get('/', checkProfile, loadUser, isHomepage, dashboardStack);
   app.get('/login', dashboardStack);
   app.get('/projects/create', dashboardStack);
   app.get('/projects/edit/:project_id', dashboardStack);
