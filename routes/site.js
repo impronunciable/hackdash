@@ -20,7 +20,17 @@ module.exports = function(app) {
     render('dashboard')
   ];
 
-  app.get('/', checkProfile, loadUser, isHomepage, dashboardStack);
+  var homeStack = [
+    loadUser,
+    loadProviders,
+    isHomepage,
+    dashExists,
+    checkProfile,
+    setViewVar('statuses', app.get('statuses')),
+    render('dashboard')
+  ];
+
+  app.get('/', homeStack);
   app.get('/login', dashboardStack);
   app.get('/projects/create', dashboardStack);
   app.get('/projects/edit/:project_id', dashboardStack);
