@@ -1,6 +1,10 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
 
 body {
-  margin: 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px; color: #333333; background: #e1e1e1 url(../images/dust.png) }
+  margin: 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px;
+  line-height: 18px; color: #333333; background: #e1e1e1 url(../images/dust.png) }
+
+
 
 .navbar-fixed-top > header {
  background-color: red;
@@ -17,14 +21,28 @@ font-weight: normal;
 font-style: normal;
 }
 
-header { padding: 18px 0 17px 0; margin: 18px 0; border-bottom: 1px solid #eee; }
+header { 
+
+  padding: 18px 0 17px 0;
+
+  
+  background: #fff;
+
+  margin:0 0 30px 0;
+
+}
 
 header h1 {
   margin: 0;
 }
 
 header h1 a {
-  color: #474747;
+  color: black;
+}
+
+header h1 a:hover {
+  color: black;
+  text-decoration: none;
 }
 
 header p.lead {
@@ -193,13 +211,12 @@ line-height:                     0;
   margin-bottom: 8px;
 }
 
-.divider.brainstorming {
-  border-color: red;
-}
 
-.divider.prototyping {
-  border-color: green;
-}
+.divider.prototyping { border-color:#ff5f8c;}
+.divider.releasing { border-color:#77db45;}
+.divider.wireframing { border-color:#55c5ff;}
+.divider.researching { border-color:red;}
+.divider.brainstorming { border-color:#ff5a00;}
 
 .info {
   padding-left: 10px;
@@ -502,14 +519,14 @@ border-bottom-right-radius: 50px;
 }
 
 .project.prototyping .well { border-top-color:#ff5f8c;}
-.project.releasing .well { border-top-color:#77db45;}
+.project.building .well { border-top-color:#77db45;}
 .project.wireframing .well { border-top-color:#55c5ff;}
-.project.reasearching .well { border-top-color:#fffd58;}
+.project.researching .well { border-top-color:red;}
 .project.brainstorming .well { border-top-color:#ff5a00;}
 
 
 h1,h2,h3,h4,h5,h6,p {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .activity {
@@ -547,14 +564,6 @@ h1,h2,h3,h4,h5,h6,p {
   font-size: 12px
 }
 
-header {
-  background: #FFF;
-  margin:0 0 30px 0;
-  border-bottom: 1px solid #CCC;
-   -webkit-box-shadow:     0 2px 2px rgba(0, 0, 0, 0.05);
-  -moz-box-shadow:        0 2px 2px rgba(0, 0, 0, 0.05);
-  box-shadow:             0 2px 2px rgba(0, 0, 0, 0.05);
-}
 
 .formSearch {
   text-align: center;
@@ -591,6 +600,10 @@ header {
 }
 
 .modal form {margin:0;}
+
+#page {
+  min-height: 600px;
+}
 
 #newProject {
   font-family: 'Lato', sans-serif;
@@ -684,4 +697,17 @@ Click on project effect
 
 .zoomed {
   visibility: hidden;
+}
+
+
+footer { 
+  
+  padding: 18px 0 17px 0;
+
+  
+  background: #000;
+
+  margin: 100px 0 0 0;
+
+
 }
