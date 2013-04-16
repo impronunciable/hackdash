@@ -31,7 +31,11 @@ var saveSubdomain = function(req, res, next) {
 };
 
 var redirectSubdomain = function(req, res) {
-  res.redirect('http://' + req.session.subdomain + '.' + app.get('config').host + ':' + app.get('config').port);
+  var domain = app.get('config').host;
+  if (req.session.subdomain !== '') {
+    domain = req.session.subdomain + '.' + domain;
+  }
+  res.redirect('http://' + domain + ':' + app.get('config').port);
 };
 
 
