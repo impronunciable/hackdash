@@ -5,7 +5,10 @@ module.exports = function(app) {
   app.locals.md = require('markdown').markdown.toHTML;
 
   app.locals.isLeader = function(user, project) {
-    return (user.admin_in || user.id === project.leader.id);
+    return (
+      (project.domain && user.admin_in.indexOf(project.domain) >= 0)
+       || user.id === project.leader.id
+      );
   };
 
   require('./site')(app);

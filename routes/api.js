@@ -115,9 +115,14 @@ var isAuth = function(req, res, next){
 var isProjectLeader = function(req, res, next){
   Project.findById(req.params.project_id, function(err, project) {
     if (err || !project) return res.send(404);
-    if (!req.user.is_admin && req.user.id != project.leader) return res.send(401);
-    req.project = project;
-    next();
+
+    if ((project.domain && user.admin_in.indexOf(project.domain) >= 0)
+       || user.id === project.leader.id ){
+      
+      req.project = project;
+      next();
+    }
+    else return res.send(401);
   });
 };
 
