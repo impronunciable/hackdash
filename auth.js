@@ -20,8 +20,6 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-module.exports = initStrategies;
-
 var initStrategies = function(app) {
 
   app.set('providers', Object.keys(keys));
@@ -38,8 +36,7 @@ var initStrategy = function(app, keys, provider) {
     function(req, res){ res.redirect('/'); });
 
   var Strategy = require('passport-' + provider).Strategy;
-  passport.use(new Strategy(keys[provider], findOrCreateUser);
-  }));
+  passport.use(new Strategy(keys[provider], findOrCreateUser));
 };
 
 var findOrCreateUser = function(token, tokenSecret, profile, done) {
@@ -81,3 +78,6 @@ var getProfilePicture = function(profile, email) {
   
   return picture;
 };
+
+
+module.exports = initStrategies;
