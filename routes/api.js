@@ -253,6 +253,10 @@ var removeProject = function(req, res, next) {
 var updateProject = function(req, res, next) {
   var project = req.project;
 
+  if(req.body.link && req.body.link.indexOf('http') != 0) {
+    req.body.link = 'http://' + req.body.link;
+  }
+
   project.title = req.body.title || project.title;
   project.description = req.body.description || project.description;
   project.link = req.body.link || project.link;
