@@ -20,74 +20,64 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-module.exports = function(app) {
+module.exports = initStrategies;
 
-app.set('providers', Object.keys(keys));
+var initStrategies = function(app) {
 
-for(var strategy in keys) {
+  app.set('providers', Object.keys(keys));
 
-  (function(provider){
-
-    app.get('/auth/' + provider, passport.authenticate(provider));
-    app.get('/auth/' + provider + '/callback', passport.authenticate(provider, { failureRedirect: '/' }), function(req, res){ res.redirect('/'); });
-
-    var Strategy = require('passport-' + provider).Strategy;
-    passport.use(new Strategy(keys[provider],
-    function(token, tokenSecret, profile, done) {
-      User.findOne({provider_id: profile.id, provider: provider}, function(err, user){
-        if(!user) {
-          var user = new User();
-          user.provider = provider;
-          user.provider_id = profile.id;
-
-          if(profile.emails && profile.emails.length && profile.emails[0].value)
-            user.email = profile.emails[0].value;
-
-          if(profile.photos && profile.photos.length && profile.photos[0].value) {
-            user.picture =  profile.photos[0].value.replace('_normal', '_bigger');
-          } else if(profile.provider == 'facebook') {
-            user.picture = "https://graph.facebook.com/" + profile.id + "/picture";
-            user.picture += "?width=73&height=73";
-          } else {
-            user.picture = gravatar.url(user.email || '', {s: '73'});
-          }
-
-					user.picture = user.picture || '/images/default_avatar.png';
-          user.name = profile.displayName;
-          user.username = profile.username || profile.displayName;
-          user.save(function(err, user){  
-            done(null, user);
-          });
-        } else {  
-          done(null, user);
-        }
-      });
-    }));
-
-  })(strategy);
-
-}
-
-// Anonymous auth for test porpouses 
-
-if(process.env.NODE_ENV == "test") {
-
-  var BasicStrategy = require('passport-http').BasicStrategy;
-
-  var u;
-  var user = new User({provider: 'basic', provider_id: 1, username: 'test'});
-  user.save(function(err, usr){ u = usr; });
-
-  passport.use(new BasicStrategy({}, function(username, password, done) {
-    process.nextTick(function () {
-      return done(null, u);
-    });
-  }));
-
-  app.all('*', passport.authenticate('basic'));
-
-}
-
+  for(var provider in keys) {
+    initStrategy(app, keys, provider);
+  }
 };
 
+var initStrategy = function(app, keys, provider) {
+  app.get('/auth/' + provider, passport.authenticate(provider));
+  app.get('/auth/' + provider + '/callback',
+    passport.authenticate(provider, { failureRedirect: '/' }), 
+    function(req, res){ res.redirect('/'); });
 
+  var Strategy = require('passport-' + provider).Strategy;
+  passport.use(new Strategy(keys[provider], findOrCreateUser);
+  }));
+};
+
+var findOrCreateUser = function(token, tokenSecret, profile, done) {
+  User.findOne({provider_id: profile.id, provider: provider}, 
+    function(err, user){
+      if(err) return res.send(500);
+      if(!user) {
+        createUser(provider, profile);
+      } else {  
+        done(null, user);
+      }
+    });;
+};
+
+var createUser = function(provider, profile) {
+  var user = new User();
+  user.provider = provider;
+  user.provider_id = profile.id;
+
+  if(profile.emails && profile.emails.length && profile.emails[0].value)
+    user.email = profile.emails[0].value;
+    
+  user.picture = getProfilePicture(profile, user.email);
+  user.name = profile.displayName;
+  user.username = profile.username || profile.displayName;
+  user.save(done);
+};
+
+var getProfilePicture = function(profile, email) {
+  var picture = '/images/default_avatar.png';
+  if(profile.photos && profile.photos.length && profile.photos[0].value) {
+    picture =  profile.photos[0].value.replace('_normal', '_bigger');
+  } else if(profile.provider == 'facebook') {
+    picture = "https://graph.facebook.com/" + profile.id + "/picture";
+    picture += "?width=73&height=73";
+  } else {
+    picture = gravatar.url(user.email || '', {s: '73'});
+  }
+  
+  return picture;
+};
