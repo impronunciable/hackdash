@@ -209,6 +209,10 @@ var validateProject = function(req, res, next) {
  */
 
 var saveProject = function(req, res, next) {
+  if(req.body.link && req.body.link.indexOf('http') != 0) {
+    req.body.link = 'http://' + req.body.link;
+  }
+    
   var project = new Project({
       title: req.body.title
     , description: req.body.description
