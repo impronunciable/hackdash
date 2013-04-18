@@ -35,7 +35,8 @@ module.exports = function(app) {
   mongoose.model('Project', Project);
 
   var Dashboard = new Schema({
-    "admin": { type: ObjectId, ref: 'User' }
+      "admin": { type: ObjectId, ref: 'User' }
+    , "created_at": { type: Date, default: Date.now }
   });
 
   mongoose.model('Dashboard', Dashboard);
