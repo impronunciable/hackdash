@@ -1,7 +1,8 @@
 var passport = require('passport')
   , mongoose = require('mongoose')
   , _ = require('underscore')
-  , fs = require('fs');
+  , fs = require('fs')
+  , request = require('superagent');
 
 var User = mongoose.model('User')
   , Project = mongoose.model('Project');
@@ -10,7 +11,7 @@ module.exports = function(app) {
 
   app.get('/api/projects', loadProjects, render('projects'));
 
-  app.post('/api/projects/create', isAuth, validateProject, saveProject, gracefulRes);
+  app.post('/api/projects/create', isAuth, isGithubRepo, validateProject, saveProject, gracefulRes);
 
   app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject, gracefulRes);
 
@@ -187,6 +188,28 @@ var loadSearchProjects = function(req, res, next) {
     next();
   });
 };
+
+/*
+ * If a github repo is provided, fetch the data
+ */
+
+var isGithubRepo = function(req, res, next) {
+  if(req.body.repo_user && req.body.repo_name) {
+    request.get('https://api.github.com/repos/' + req.body.repo_user + '/' + req.body.repo_name)
+    .end(function(resp){
+      if(resp.error) return res.send(500);
+  
+      req.body.title = resp.body.name;
+      req.body.description = resp.body.description;
+      req.body.link = resp.body.html_url;
+      req.body.status = 'building';
+      req.body.tags = resp.body.language;
+      next();
+    });  
+  } else {
+    next();
+  }
+}; 
 
 /*
  * Check project fields
