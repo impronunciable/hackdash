@@ -22,12 +22,11 @@ html
                 p Upload your project. Add colaborators. Inform status. Share your app.
                 if(user)
                   form#create-dashboard(action="/dashboard/create", method="post")
-                    p
+                    p.control-group
                       input.input-xlarge(type="text", id="domain", name="domain",
-placeholder="Hackathon domain Name (5+ chars)")
+placeholder="Hackathon domain Name (5-10 chars)")
                     p
-                      input(type="submit", value="Create my Hackathon").btn.btn-large.btn-custom
-                    p.error
+                      input(type="submit", value="Create a Dashboard").btn.btn-large.btn-custom.disabled
                 
                 else
                   p
@@ -85,5 +84,4 @@ placeholder="Hackathon domain Name (5+ chars)")
     script(src="/js/libs/jquery.min.js")
     script(src="/js/libs/bootstrap.min.js")
     script(src="/js/libs/plugins.js")
-    script(src="/js/app.js")
     script(src="/js/homepage.js")
