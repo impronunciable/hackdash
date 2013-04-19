@@ -119,7 +119,7 @@ var isProjectLeader = function(req, res, next){
     if (err || !project) return res.send(404);
 
     if ((project.domain && req.user.admin_in.indexOf(project.domain) >= 0)
-       || req.user.id === project.leader ){
+       || req.user.id === project.leader.id ){
       
       req.project = project;
       next();
