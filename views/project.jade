@@ -27,7 +27,7 @@
         if(user && isLeader(user, project))
           a.btn.btn-link(href='/projects/edit/'+project._id) Edit
 
-      if(user && !isLeader(user, project))
+      if(user && user.id !== project.leader.id)
         if(userExists(user, project.contributors))
           .pull-right.contributor
             a.btn.btn-link(href='/projects/leave/'+project._id) Leave
