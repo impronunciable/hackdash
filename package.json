@@ -26,8 +26,7 @@
   "devDependencies": {
     "mocha": "~1.7.4",
     "should": "~1.2.1",
-    "passport-http": "~0.2.1",
-    "superagent": "~0.10.0"
+    "passport-http": "~0.2.1"
   },
   "engines": {
     "node": "0.8.x",
