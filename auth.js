@@ -36,22 +36,24 @@ var initStrategy = function(app, keys, provider) {
     function(req, res){ res.redirect('/'); });
 
   var Strategy = require('passport-' + provider).Strategy;
-  passport.use(new Strategy(keys[provider], findOrCreateUser));
+  passport.use(new Strategy(keys[provider], findOrCreateUser(provider)));
 };
 
-var findOrCreateUser = function(token, tokenSecret, profile, done) {
-  User.findOne({provider_id: profile.id, provider: provider}, 
-    function(err, user){
-      if(err) return res.send(500);
-      if(!user) {
-        createUser(provider, profile);
-      } else {  
-        done(null, user);
-      }
-    });;
+var findOrCreateUser = function (provider) {
+  return function(token, tokenSecret, profile, done) {
+    User.findOne({provider_id: profile.id, provider: provider}, 
+      function(err, user){
+        if(err) return res.send(500);
+        if(!user) {
+          createUser(provider, profile, done);
+        } else {  
+          done(null, user);
+        }
+      });
+  };
 };
 
-var createUser = function(provider, profile) {
+var createUser = function(provider, profile, done) {
   var user = new User();
   user.provider = provider;
   user.provider_id = profile.id;
