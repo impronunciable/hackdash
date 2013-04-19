@@ -152,3 +152,6 @@ header h3 {
   background-image: url('/images/landing/nxtp.png'); 
 }
 
+.error {
+  display: none;
+}
