@@ -23,8 +23,7 @@ html
                 if(user)
                   form#create-dashboard(action="/dashboard/create", method="post")
                     p.control-group
-                      input.input-xlarge(type="text", id="domain", name="domain",
-placeholder="Hackathon domain Name (5-10 chars)")
+                      input.input-xlarge(type="text", id="domain", name="domain", placeholder="Hackathon domain Name (5-10 chars)", maxlength="10")
                     p
                       input(type="submit", value="Create a Dashboard").btn.btn-large.btn-custom.disabled
                 
