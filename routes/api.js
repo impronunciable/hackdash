@@ -113,11 +113,13 @@ var isAuth = function(req, res, next){
  */
 
 var isProjectLeader = function(req, res, next){
-  Project.findById(req.params.project_id, function(err, project) {
+  Project.findById(req.params.project_id)
+  .populate('leader')
+  .exec(function(err, project) {
     if (err || !project) return res.send(404);
 
     if ((project.domain && req.user.admin_in.indexOf(project.domain) >= 0)
-       || req.user.id === project.leader.id ){
+       || req.user.id === project.leader ){
       
       req.project = project;
       next();
