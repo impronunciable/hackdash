@@ -23,7 +23,8 @@ html
                 if(user)
                   form(action="/dashboard/create", method="post")
                     p
-                      input(type="text", id="domain", name="domain", placeholder="Hackathon Name")
+                      input.input-xlarge(type="text", id="domain", name="domain",
+placeholder="Hackathon Name (5+ chars)")
                     p
                       input(type="submit", value="Create my Hackathon").btn.btn-large.btn-custom
                 else
