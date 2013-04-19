@@ -188,7 +188,7 @@ var isHomepage = function(req, res, next) {
 };
 
 var validateSubdomain = function(req, res, next) {
-  if(!/\w{5,10}/.test(req.body.domain)) return res.send(500);
+  if(!/^\w{5,10}$/.test(req.body.domain)) return res.send(500);
   
   next();
 };
