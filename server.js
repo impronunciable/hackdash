@@ -43,7 +43,16 @@ app.configure(function(){
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
-  app.set('statuses',['brainstorming','wireframing','building','researching','prototyping','releasing']);
+  app.use(function(req, res) {
+     res.send('404: Page not Found', 404);
+  });
+  app.use(function(error, req, res, next) {
+     res.send('500: Internal Server Error', 500);
+  });
+  app.set('statuses',
+    ['brainstorming','wireframing','building'
+    ,'researching','prototyping','releasing']
+  );
 });
 
 app.configure('development', function(){
