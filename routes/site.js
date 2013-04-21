@@ -40,8 +40,8 @@ module.exports = function(app) {
   
   app.get('/about', loadUser, render('about'));
 
-  app.get('/users/profile', isAuth, loadUser, render('edit_profile'));
-  app.get('/users/:user_id', findUser, render('profile'));
+  app.get('/users/profile', isAuth, loadUser, userIsProfile, render('edit_profile'));
+  app.get('/users/:user_id', loadUser, findUser, render('profile'));
   app.post('/users/:user_id', isAuth, updateUser, redirect('/'));
 
   app.post('/dashboard/create', isAuth, validateSubdomain, createDashboard(app));
@@ -78,10 +78,15 @@ var checkProfile = function(req, res, next){
 var findUser = function(req, res, next){
   User.findById(req.params.user_id, function(err, user){
     if(err) return res.send(404);
-    res.locals.user = user;
+    res.locals.user_profile = user;
     next();
   });
 };
+
+var userIsProfile = function(req, res, next) {
+  res.locals.user_profile = req.locals.user;
+  next();
+};  
 
 /*
  * Add current user template variable
