@@ -2,7 +2,7 @@
 
 body {
   margin: 0; font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px;
-  line-height: 18px; color: #333333; background: #eeedee; }
+  line-height: 18px; color: #333333; background: #eeedee; padding-top:160px;}
 
 
 
@@ -23,9 +23,10 @@ font-style: normal;
 
 header { 
   padding: 18px 0 17px 0; 
-  background: #1C1C1C;
+  background: #212529;
   margin:0 0 80px 0;
 height: 50px;
+position: fixed;width:100%; z-index: 10;top:0;
 }
 
 header h1 {
@@ -412,13 +413,14 @@ a.signup-github:hover {
 }
 
 .btn-custom {
-  background:#4bcf0a;
-  border:#4bcf0a 2px solid;
+    border-radius: 0!important;
+
+  background:#04d27d;
   border-radius: 50px;
   color: #fff !important;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
   box-shadow: none;
-  font-weight: bolder;
+  font-weight: normal;
       /* Firefox */
   -moz-transition: all 0.2s ease-in-out;
   /* WebKit */
@@ -427,8 +429,11 @@ a.signup-github:hover {
   -o-transition: all 0.2s ease-in-out;
   /* Standard */
   transition: all 0.2s ease-in-out;
+  padding: 10px 20px;
 }
-
+.btn-custom:hover {
+    background:#0ee68d;
+}
 .btn-group>.btn+.btn {
  margin-left: 0px;
 }
@@ -456,10 +461,7 @@ border-bottom-right-radius: 50px;
 -moz-border-radius-bottomright: 50px;
 }
 
-.btn-custom:hover {
-    background:#4bcf0a;
-    border:#3d9c0d 2px solid;
-}
+
 
 
 .btn-profile {
@@ -713,9 +715,16 @@ header form {
   margin:0;
 }
 
+header .btn-link {
+  color:#FFF;
+  font-weight: normal;
+  text-shadow:none;
+  opacity: 0.5
+}
 #searchInput {
-  background: #0c0c0c;
+  background: #FFF;
   border: 1px solid #000; width:100%;
   padding:20px;
-  color:#FFF;
+  color:#000;
+  border-radius: 0;
 }
