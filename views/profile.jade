@@ -3,16 +3,16 @@ extends layout
 block content
 
   .row-fluid
-    .span12.profile
-  
-      h3 Profile
-      
-      form.form-horizontal
-        .control-group
-          img(class="avatar", src=user_profile.picture)
-        .control-group
-          span #{user_profile.name}
-        .control-group
-          span #{user_profile.email}
-        .control-group
-          span #{user_profile.bio}
+    .span3.profile.well.offset4
+      .well-content
+        h3 Profile
+        
+        form.form-horizontal
+          .control-group
+            img(class="avatar", src=user_profile.picture)
+          .control-group
+            span #{user_profile.name}
+          .control-group
+            span #{user_profile.email}
+          .control-group
+            span #{user_profile.bio}
