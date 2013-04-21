@@ -17,6 +17,7 @@
     , $formSearch = $('.formSearch')
     , $sort = $('.sort')
     , $tooltips = $('.tooltips')
+    , $logo = $('h1 a')
     , $cancel = $('.cancel')
     , $slogan = $('#slogan')
     , $dragdrop = $('#dragdrop') 
@@ -317,6 +318,10 @@ text:project.language}]);
     }
   });
 
+  $logo.click(function(){
+    page.stop();
+  });
+  
   var cover_path = null;
 
   function initImageDrop(){
