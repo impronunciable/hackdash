@@ -71,7 +71,7 @@ var findUser = function(req, res, next){
 };
 
 var userIsProfile = function(req, res, next) {
-  res.locals.user_profile = req.locals.user;
+  res.locals.user_profile = req.user;
   next();
 };  
 
