@@ -269,7 +269,8 @@
     $form.find('input[name=title]').val(project.name);
     $form.find('textarea[name=description]').text(project.description);
     $form.find('input[name=link]').val(project.html_url);
-    $form.find('#tags').select2("val", project.language);
+    $form.find('#tags').select2("data", [{id: project.language,
+text:project.language}]);
     $form.find('#status').select2("val", "building");
   };
 
