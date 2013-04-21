@@ -2,14 +2,13 @@ header
   .container
     .row-fluid
       .span3
+       form.formSearch
+        input.search-query.input-large.span8#searchInput(type='text',placeholder='Search a project')
+      .span5
         h1
           a(href="/") HackDash
-        .description 
-          p.lead
-            span A Hackaton Dashboard 
-            span#slogan for geeks
-      .span5
       .span4
+        
         .createProject
          .btn-group
           if(user)
@@ -18,4 +17,4 @@ header
              img.avatar(src=user.picture + '?s=50').tooltips(rel='tooltip', data-placement='bottom', data-original-title='Edit profile')
             a.btn.btn-large.btn-cancel(href="/logout").tooltips(rel='tooltip', data-placement='bottom', data-original-title='Log out from Hackdash') Logout
           else
-            a.btn.btn-large.btn-custom(href="/login") Log in to create a project
+            a.btn.btn-medium.btn-custom(href="/login") Log in to create a project

@@ -1,8 +1,8 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
 
 body {
-  margin: 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px;
-  line-height: 18px; color: #333333; background: #e1e1e1 url(../images/dust.png) }
+  margin: 0; font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px;
+  line-height: 18px; color: #333333; background: #eeedee; }
 
 
 
@@ -22,14 +22,10 @@ font-style: normal;
 }
 
 header { 
-
-  padding: 18px 0 17px 0;
-
-  
-  background: #fff;
-
-  margin:0 0 30px 0;
-
+  padding: 18px 0 17px 0; 
+  background: #1C1C1C;
+  margin:0 0 80px 0;
+height: 50px;
 }
 
 header h1 {
@@ -37,11 +33,15 @@ header h1 {
 }
 
 header h1 a {
-  color: black;
+  color: white;
+  width: 113px; height: 126px;
+      background: url('../images/logohack.png') 0 0 no-repeat;
+      text-indent: -9999px;
+  display: block; margin:0 auto;
 }
 
 header h1 a:hover {
-  color: black;
+  color: gray;
   text-decoration: none;
 }
 
@@ -55,7 +55,6 @@ header p.lead {
 
 
 header .createProject {
-            margin: 5px 0 0 0!important;
             display: inline-block;          
   }
 
@@ -708,4 +707,15 @@ footer {
 
 .hidden {
   display: none;
+}
+
+header form {
+  margin:0;
+}
+
+#searchInput {
+  background: #0c0c0c;
+  border: 1px solid #000; width:100%;
+  padding:20px;
+  color:#FFF;
 }
