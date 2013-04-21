@@ -240,7 +240,7 @@
 
     if (field){
       fields[field].parents('.control-group').addClass('error');
-      fields[field].after('<span class="help-inline">Requerido</span>');
+      fields[field].after('<span class="help-inline">Required</span>');
     }
   };
 
