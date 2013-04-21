@@ -1,0 +1,23 @@
+{
+    "twitter": {
+        "consumerKey" :   ""
+      , "consumerSecret" : ""
+      , "callbackURL":  "http://localhost/auth/twitter/callback"
+    } 
+  , "meetup": {
+        "consumerKey": ""
+      , "consumerSecret": ""
+      , "callbackURL": "http://local.host:3000/auth/meetup/callback"
+    }
+  , "facebook": {
+        "clientID": ""
+      , "clientSecret": ""
+      , "callbackURL": "http://local.host:3000/auth/facebook/callback"
+    }
+  , "github": {
+        "clientID": ""
+      , "clientSecret": ""
+      , "callbackURL": "http://local.host:3000/auth/github/callback"
+    }
+
+}
