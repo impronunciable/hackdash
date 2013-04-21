@@ -33,7 +33,7 @@ module.exports = function(app) {
 
   app.get('/api/p/:project_id', loadProject, render('project_full'));
 
-  app.get('/api/search', loadSearchProjects, render('projects'));
+  app.get('/api/search', prepareSearchQuery, loadProjects, render('projects'));
 
 };
 
@@ -127,7 +127,7 @@ var isProjectLeader = function(req, res, next){
  */
 
 var loadProjects = function(req, res, next) {
-  Project.find({})
+  Project.find(req.query || {})
   .populate('contributors')
   .populate('followers')
   .populate('leader')
@@ -169,24 +169,18 @@ var userExistsInArray = function(user, arr){
  * TODO: use mongoose plugin for keywords
  */
 
-var loadSearchProjects = function(req, res, next) {
+var prepareSearchQuery = function(req, res, next) {
   var regex = new RegExp(req.query.q, 'i');
   var query = {};
 
   if(!req.query.q.length) return res.redirect('/api/projects');
-
   if(req.query.type === "title") query['title'] = regex;
   else if(req.query.type === "tag") query['tags'] = regex;
   else return res.send(500);
 
-  Project
-  .find(query, function(err, projects) {
-    if(err) return res.send(500);
-    res.locals.projects = projects;
-    res.locals.user = req.user;
-    res.locals.userExists = userExistsInArray;
-    next();
-  });
+  req.query = query;
+
+  next();
 };
 
 /*
