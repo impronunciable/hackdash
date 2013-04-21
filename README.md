@@ -3,6 +3,8 @@ HackDash
 
 Organize hackaton ideas into a dashboard
 
+![HackDash Logo](http://i.imgur.com/XLQGF3y.png)
+
 Install
 ===========
 
