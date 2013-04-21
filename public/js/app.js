@@ -267,8 +267,8 @@
 
   var fillGhProjectForm = function(project, $form) {
     $form.find('input[name=title]').val(project.name);
-    $form.find('input[name=description]').val(project.description);
-    $form.find('input[name=link]').val(project.description);
+    $form.find('textarea[name=description]').text(project.description);
+    $form.find('input[name=link]').val(project.html_url);
     $form.find('#tags').select2("val", project.language);
     $form.find('#status').select2("val", "building");
   };
