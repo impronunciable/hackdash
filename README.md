@@ -3,24 +3,16 @@ HackDash
 
 Organize hackaton ideas into a dashboard
 
-Instalación
+Install
 ===========
 
-* Install [Node.js](http://nodejs.org)
+I wrote a [blog post](http://zajdband.com.ar/installing-hackdash) explaining the installation process.
 
-* Install [MongoDB](http://mongodb.org)
+Running instances
+=================
 
-* Create a [Twitter app](https://dev.twitter.com/)
+* [HackDash platform](http://hackdash.org): Create your own Dashboard for free. Maintained by the HackDash Creators.
+* [Auth0 HackDash platform](http://safe-tor-9833.herokuapp.com/): Create a Dashboard for your company using Auth0 service.
+* [GovLab](http://govlab.herokuapp.com): #GovLab hackaton ideas.
 
-* Run MongoDB: $ mongod
-
-* Install dependencies: $ npm install
-
-* Fill config.json with your configuration
-
-* Run the application: $ node server.js
-
-
-Changelog
-===========
-
+Add your own Dashboard!

@@ -20,6 +20,8 @@
     , $cancel = $('.cancel')
     , $slogan = $('#slogan')
     , $dragdrop = $('#dragdrop') 
+    , $ghImportBtn = $('#ghImportBtn')
+    , $searchGh = $('#searchGh')
     , masonryIsotope = {
         columnWidth:  
           ($projects.width() >= 1200) ?
@@ -216,17 +218,6 @@
     e.preventDefault();
   });
 
-  var forwho = ['for people','for geeks','for mutants','for your wife'];
-
-  var i = 0;
-
-  setInterval(function(){
-    var rand = forwho[++i % forwho.length];
-    $slogan.fadeOut('fast', function(){
-      $(this).text(rand).fadeIn();
-    });
-  }, 5000);
-
   var getRequiredFields = function(){
     return {
       title: $('[name=title]'),
@@ -274,6 +265,14 @@
       arr.push({name: 'cover', 'value': cover_path});
   };
 
+  var fillGhProjectForm = function(project, $form) {
+    $form.find('input[name=title]').val(project.name);
+    $form.find('input[name=description]').val(project.description);
+    $form.find('input[name=link]').val(project.description);
+    $form.find('#tags').select2("val", project.language);
+    $form.find('#status').select2("val", "building");
+  };
+
   $ajaxForm.ajaxForm({
     error: formError,
     success: formSuccess,
@@ -297,6 +296,23 @@
   $project.live('click', function(e){
     if(e.target.tagName !== 'A' && $(this).data('id')) {
       page('/p/' + $(this).data('id'));
+    }
+  });
+
+  $ghImportBtn.click(function(e){
+    $(this).next().removeClass('hidden');
+    e.preventDefault();
+  });
+
+  $searchGh.click(function(e){
+    var self = this;
+    var repo = $(this).prev().val();
+    if(repo.length) {
+      request
+      .get('https://api.github.com/repos/' + repo)
+      .end(function(res){
+        fillGhProjectForm(res.body, $(self).parents('.modal').find('form'));
+      });
     }
   });
 

@@ -38,6 +38,7 @@ module.exports = function(app) {
   var Dashboard = new Schema({
       "domain": String
     , "created_at": { type:Date, default: Date.now }
+    , "created_at": { type: Date, default: Date.now }
   });
 
   mongoose.model('Dashboard', Dashboard);

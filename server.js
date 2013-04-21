@@ -14,7 +14,7 @@ var express = require('express')
  * DB
  */
 
-mongoose.connect('mongodb://' + config.db.host + '/'+ config.db.name);
+mongoose.connect(config.db.url || ('mongodb://' + config.db.host + '/'+ config.db.name));
 
 var app = exports.app = express();
 
@@ -36,7 +36,8 @@ app.configure(function(){
   app.use(express.cookieParser(app.get('config').session));
   app.use(express.session({
       secret: app.get('config').session
-    , store: new MongoStore({db: app.get('config').db.name}) 
+    , store: new MongoStore({db: app.get('config').db.name, url:
+app.get('config').db.url}) 
     , cookie: { maxAge: 365 * 24 * 60 * 60 * 1000, path: '/', domain: '.' + app.get('config').host }
   }));
   app.use(passport.initialize());

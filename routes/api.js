@@ -1,7 +1,8 @@
 var passport = require('passport')
   , mongoose = require('mongoose')
   , _ = require('underscore')
-  , fs = require('fs');
+  , fs = require('fs')
+  , request = require('superagent');
 
 var User = mongoose.model('User')
   , Project = mongoose.model('Project');

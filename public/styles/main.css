@@ -701,13 +701,11 @@ Click on project effect
 
 
 footer { 
-  
   padding: 18px 0 17px 0;
-
-  
   background: #000;
-
   margin: 100px 0 0 0;
+}
 
-
+.hidden {
+  display: none;
 }

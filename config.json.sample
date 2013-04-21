@@ -1,7 +1,8 @@
 {
   "db": {
     "name": "hackdash",
-    "host": "localhost"
+    "host": "localhost",
+    "url": null
   },  
   "host": "local.host",
   "port": 3000,
