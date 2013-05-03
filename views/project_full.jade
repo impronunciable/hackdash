@@ -38,3 +38,7 @@
       each follower in project.followers
         a(href="/users/" + follower.id)
           img.tooltips(src=follower.picture, title=follower.name)
+
+    #disqus_thread.well-header
+    script(src="/js/disqus.js")
+      
