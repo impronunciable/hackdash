@@ -1,5 +1,7 @@
 /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-  var disqus_shortname = 'bahackatonhackdash'; // required: replace example with your forum shortname
+  var scripts = document.getElementsByTagName( 'script' );
+  var thisScriptTag = scripts[ scripts.length - 1 ];
+  var disqus_shortname = thisScriptTag.getAttribute('disqus_shortname') ; // required: replace example with your forum shortname
   var disqus_config = function () { 
     this.language = "es_ES";
   };

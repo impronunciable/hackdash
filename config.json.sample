@@ -6,5 +6,6 @@
   },  
   "host": "local.host",
   "port": 3000,
-  "session": "wefewfef"
+  "session": "wefewfef",
+  "disqus_shortname": "lalal"
 }

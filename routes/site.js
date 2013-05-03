@@ -1,5 +1,6 @@
 
 var passport = require('passport')
+  , config = require('../config.json')
   , mongoose = require('mongoose');
 
 var User = mongoose.model('User')
@@ -15,6 +16,7 @@ module.exports = function(app) {
     loadUser, 
     loadProviders,
     setViewVar('statuses', app.get('statuses')),
+    setViewVar('disqus_shortname', config.disqus_shortname),
     render('dashboard')
   ];
 
