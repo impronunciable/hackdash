@@ -631,7 +631,8 @@ h1,h2,h3,h4,h5,h6,p {
 #fullProject.modal {
   width:670px;
   margin:-250px 0 0 -320px!important;
-  height: 500px;
+  overflow-y:auto;
+  max-height:70%;
   overflow: auto;
 }
 
