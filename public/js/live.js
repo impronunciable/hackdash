@@ -13,7 +13,7 @@
 				html += "<strong>"+data.project.title+"</strong></a> was created by <em>" + data.user.name + "</em>.";
 				break;
 			case 'project_removed':
-				html = "Project <strong>"+data.project.title+"</strong> was removed.";
+				html = "Project <strong>"+data.project.title+"</strong> was removed by <em>" + data.user.name + "</em>.";
 				break;
 			case 'project_edited':
 				html = "Project <a href='/p/"+data.project._id+"'><strong>"+data.project.title+"</strong></a> was edited";
@@ -31,7 +31,9 @@
 				html = data.user.name + " unfollowed the project <a href='/p/"+data.project._id+"'><strong>"+data.project.title+"</strong></a>";
 				break;
 		}
-		$('#timeline').prepend('<li>'+html+'</li>');
+		var $el = $('<div class="row"><div class="span12 well"><img src="'+data.user.picture+'"><p>'+html+'</p></div></div>').hide();
+		$('#timeline').prepend($el);
+		$el.slideDown();
 	});
 	
 })();
