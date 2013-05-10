@@ -20,7 +20,18 @@ module.exports = function(app) {
     render('dashboard')
   ];
 
+	var liveStack = [
+		isLive(app),
+    loadUser, 
+    loadProviders,
+    setViewVar('statuses', app.get('statuses')),
+    setViewVar('disqus_shortname', config.disqus_shortname),
+    setViewVar('live', true),
+    render('live')
+	];
+
   app.get('/', checkProfile, dashboardStack);
+  app.get('/live', liveStack);
   app.get('/login', dashboardStack);
   app.get('/projects/create', dashboardStack);
   app.get('/projects/edit/:project_id', dashboardStack);
@@ -63,6 +74,15 @@ var checkProfile = function(req, res, next){
   next();
 };
 
+var isLive = function(app) {
+	return function(req, res, next) {
+		if(app.get('config').live) {
+			next();
+		} else {
+			res.send(404);
+		}
+	}
+};
 
 var findUser = function(req, res, next){
   User.findById(req.params.user_id, function(err, user){
