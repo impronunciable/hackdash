@@ -7,5 +7,6 @@
   "host": "local.host",
   "port": 3000,
   "session": "wefewfef",
-  "disqus_shortname": null
+  "disqus_shortname": null,
+	"title": "hackdash"
 }

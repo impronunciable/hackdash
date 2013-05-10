@@ -44,6 +44,7 @@ app.get('config').db.url})
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
   app.set('statuses',['brainstorming','wireframing','building','researching','prototyping','releasing']);
+	app.locals.title = config.title;
 });
 
 app.configure('development', function(){
