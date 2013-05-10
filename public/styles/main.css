@@ -629,8 +629,11 @@ h1,h2,h3,h4,h5,h6,p {
 }
 
 #fullProject.modal {
-  width:640px;
+  width:670px;
   margin:-250px 0 0 -320px!important;
+  overflow-y:auto;
+  max-height:70%;
+  overflow: auto;
 }
 
 .well-sidebar {

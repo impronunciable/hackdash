@@ -1,5 +1,6 @@
 var passport = require('passport')
   , mongoose = require('mongoose')
+  , config = require('../config.json')
   , _ = require('underscore')
   , fs = require('fs')
   , request = require('superagent');
@@ -153,6 +154,7 @@ var loadProject = function(req, res, next) {
     if(err || !project) return res.send(500);
     res.locals.project = project;
     res.locals.user = req.user;
+    res.locals.disqus_shortname = config.disqus_shortname;
     res.locals.userExists = userExistsInArray;
     next();
   });
