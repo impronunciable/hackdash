@@ -7,5 +7,5 @@
   "host": "local.host",
   "port": 3000,
   "session": "wefewfef",
-  "disqus_shortname": "lalal"
+  "disqus_shortname": null
 }
