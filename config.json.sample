@@ -8,5 +8,6 @@
   "port": 3000,
   "session": "wefewfef",
   "disqus_shortname": null,
-	"title": "hackdash"
+	"title": "hackdash",
+	"live": true
 }
