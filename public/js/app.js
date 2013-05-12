@@ -296,7 +296,7 @@ text:project.language}]);
   });
 
   $project.live('click', function(e){
-    if(e.target.tagName !== 'A' && $(this).data('id')) {
+    if(e.target.tagName !== 'A' && e.target.tagName !== 'SPAN' && $(this).data('id')) {
       page('/p/' + $(this).data('id'));
     }
   });
