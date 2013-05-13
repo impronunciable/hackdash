@@ -69,7 +69,17 @@ require('./auth')(app);
 
 require('./routes')(app);
 
-module.exports = http.createServer(app).listen(app.get('port'), function() {
+var server = module.exports = http.Server(app);
+
+/*
+ * Live dashboard
+ */
+
+if(config.live) {
+	require('./live')(app, server);
+}
+
+server.listen(app.get('port'), function() {
   console.log("Express server listening on port " + app.get('port'));
 });
 

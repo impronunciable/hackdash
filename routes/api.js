@@ -12,9 +12,9 @@ module.exports = function(app) {
 
   app.get('/api/projects', loadProjects, render('projects'));
 
-  app.post('/api/projects/create', isAuth, validateProject, saveProject, gracefulRes);
+  app.post('/api/projects/create', isAuth, validateProject, saveProject, notify(app, 'project_created'), gracefulRes);
 
-  app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject, gracefulRes);
+  app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject, notify(app, 'project_removed'), gracefulRes);
 
   app.get('/api/projects/create', isAuth, setViewVar('statuses', app.get('statuses')), render('new_project'));
 
@@ -22,15 +22,15 @@ module.exports = function(app) {
 
   app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), isProjectLeader, loadProject, render('edit'));
 
-  app.post('/api/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, gracefulRes);
+  app.post('/api/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes);
 
-  app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, gracefulRes); 
+  app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), gracefulRes); 
 
-  app.get('/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, gracefulRes); 
+  app.get('/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, notify(app, 'project_leave'), gracefulRes); 
 
-  app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, gracefulRes); 
+  app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes); 
 
-  app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, gracefulRes); 
+  app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, notify(app, 'project_unfollow'), gracefulRes); 
 
   app.get('/api/p/:project_id', loadProject, render('project_full'));
 
@@ -70,6 +70,19 @@ var redirect = function(route) {
   return function(req, res) {
     res.redirect(route);
   };
+};
+
+/*
+ * Emit a notification
+ */
+
+var notify = function(app, type) {
+	return function(req, res, next) {
+		app.emit('post', 
+			{type: type, project: res.locals.project, user: req.user
+		});
+		next();
+	}
 };
 
 /*
@@ -189,7 +202,7 @@ var prepareSearchQuery = function(req, res, next) {
  * Check project fields
  */
 
-var validateProject = function(req, res, next) {console.log(req.body);
+var validateProject = function(req, res, next) {
   if(req.body.title && req.body.description) next();
   else res.send(500, "Project Title and Description fields must be complete.");
 };
@@ -224,7 +237,7 @@ var saveProject = function(req, res, next) {
  */
 
 var removeProject = function(req, res, next) {
-  res.locals.project = {id: req.project.id};
+  res.locals.project = {id: req.project.id, title: req.project.title};
   req.project.remove(function(err){
     if(err) res.send(500);
     else next();

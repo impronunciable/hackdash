@@ -731,3 +731,21 @@ header .btn-link {
   color:#000;
   border-radius: 0;
 }
+
+/*
+ * Timeline
+ */
+
+#timeline {
+	text-align: center;
+	margin-top: 20px;
+}
+
+#timeline img {
+	float: left;
+}
+
+#timeline p {
+	padding-top: 25px;
+}
+
