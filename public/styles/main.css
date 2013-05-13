@@ -246,6 +246,16 @@ line-height:                     0;
 }
 
 @media (max-width: 768px) {
+	body {
+		padding-top: 0;
+	}
+
+	header {
+		position: static;
+		height: 50px;
+		margin-bottom: 160px;
+	}
+
   header h1 small {
     display: block;
   }
@@ -255,6 +265,21 @@ line-height:                     0;
     padding-bottom: 4px;
   }
 
+	header div.createProject {
+		display: block;
+		margin: 0 auto;
+		float: none;
+		width: 288px;
+	}
+
+	header div.createProject .logout {
+		color: #999;
+		width: 91px;
+		text-align: left;
+		background: #212529;
+		opacity: 1;
+	}
+	
   .isotope .project {
     position: static ! important;
     -webkit-transform: translate(0px, 0px) ! important;
