@@ -782,6 +782,6 @@ body.homepage {
 	padding-top: 0;
 }
 
-body.homepage .block header {
+body.homepage header {
 	position: static;
 }
