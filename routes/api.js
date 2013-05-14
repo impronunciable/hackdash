@@ -34,7 +34,7 @@ module.exports = function(app) {
 
   app.get('/api/p/:project_id', loadProject, render('project_full'));
 
-  app.get('/api/search', prepareSearchQuery, loadProjects, render('projects'));
+  app.get('/api/search', prepareSearchQuery, render('projects'));
 
 };
 
