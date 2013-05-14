@@ -1,6 +1,6 @@
 {
   "name": "hackdash",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "start": "node server",
@@ -21,7 +21,8 @@
     "commander": "~1.1.1",
     "gravatar": "~1.0.6",
     "underscore": "~1.4.4",
-    "superagent": "~0.14.1"
+    "superagent": "~0.14.1",
+    "socket.io": "~0.9.14"
   },
   "devDependencies": {
     "mocha": "~1.7.4",

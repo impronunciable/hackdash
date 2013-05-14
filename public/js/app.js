@@ -17,6 +17,7 @@
     , $formSearch = $('.formSearch')
     , $sort = $('.sort')
     , $tooltips = $('.tooltips')
+    , $logo = $('h1 a')
     , $cancel = $('.cancel')
     , $slogan = $('#slogan')
     , $dragdrop = $('#dragdrop') 
@@ -295,7 +296,7 @@ text:project.language}]);
   });
 
   $project.live('click', function(e){
-    if(e.target.tagName !== 'A' && $(this).data('id')) {
+    if(e.target.tagName !== 'A' && e.target.tagName !== 'SPAN' && $(this).data('id')) {
       page('/p/' + $(this).data('id'));
     }
   });
@@ -317,6 +318,10 @@ text:project.language}]);
     }
   });
 
+  $logo.click(function(){
+    page.stop();
+  });
+  
   var cover_path = null;
 
   function initImageDrop(){

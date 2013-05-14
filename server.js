@@ -27,7 +27,7 @@ app.configure(function(){
   app.set('port', process.env.PORT || app.get('config').port);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-  app.use(express.favicon());
+  app.use(express.favicon(__dirname + '/public/favicon.ico'));
   app.use(express.logger('dev'));
   app.use(express.compress());
   app.use(express.bodyParser());
@@ -44,16 +44,8 @@ app.get('config').db.url})
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
-  app.use(function(req, res) {
-     res.send('404: Page not Found', 404);
-  });
-  app.use(function(error, req, res, next) {
-     res.send('500: Internal Server Error', 500);
-  });
-  app.set('statuses',
-    ['brainstorming','wireframing','building'
-    ,'researching','prototyping','releasing']
-  );
+  app.set('statuses',['brainstorming','wireframing','building','researching','prototyping','releasing']);
+	app.locals.title = config.title;
 });
 
 app.configure('development', function(){
@@ -78,7 +70,17 @@ require('./auth')(app);
 
 require('./routes')(app);
 
-module.exports = http.createServer(app).listen(app.get('port'), function() {
+var server = module.exports = http.Server(app);
+
+/*
+ * Live dashboard
+ */
+
+if(config.live) {
+	require('./live')(app, server);
+}
+
+server.listen(app.get('port'), function() {
   console.log("Express server listening on port " + app.get('port'));
 });
 

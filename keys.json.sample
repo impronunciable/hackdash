@@ -1,8 +1,8 @@
 {
     "twitter": {
-	      "consumerKey" : 	""
-	    , "consumerSecret" : ""
-	    , "callbackURL": 	"http://localhost/auth/twitter/callback"
+        "consumerKey" :   ""
+      , "consumerSecret" : ""
+      , "callbackURL":  "http://localhost/auth/twitter/callback"
     } 
   , "meetup": {
         "consumerKey": ""

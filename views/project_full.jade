@@ -29,7 +29,7 @@
       a(href="/users/" + project.leader.id)
         img.tooltips(src=project.leader.picture, title=project.leader.name)
 
-      h5 Contributors
+      h5 Contributors 
       each contributor in project.contributors
         a(href="/users/" + contributor.id)
           img.tooltips(src=contributor.picture, title=contributor.name)
@@ -38,3 +38,9 @@
       each follower in project.followers
         a(href="/users/" + follower.id)
           img.tooltips(src=follower.picture, title=follower.name)
+
+    if disqus_shortname
+      #disqus_thread.well-header
+      script(src="/js/disqus.js", disqus_shortname=disqus_shortname)
+    
+      

@@ -3,3 +3,8 @@ script(src="/js/libs/jquery.min.js")
 script(src="/js/libs/bootstrap.min.js")
 script(src="/js/libs/plugins.js")
 script(src="/js/app.js")
+if typeof disqus_shortname != "undefined" 
+  script(src="/js/disqus.js", disqus_shortname=disqus_shortname)
+if typeof live != "undefined" 
+  script(src="/socket.io/socket.io.js")
+  script(src="/js/live.js")
