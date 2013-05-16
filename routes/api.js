@@ -79,7 +79,8 @@ var redirect = function(route) {
 var notify = function(app, type) {
 	return function(req, res, next) {
 		app.emit('post', 
-			{type: type, project: res.locals.project, user: req.user
+			{type: type, project: res.locals.project, user: req.user,
+			domain: req.subdomains[0]
 		});
 		next();
 	}
