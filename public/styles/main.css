@@ -752,8 +752,8 @@ header .btn-link {
 #searchInput {
   background: #FFF;
   border: 1px solid #000; width:100%;
-  padding:20px;
   color:#000;
+	height: 40px;
   border-radius: 0;
 }
 
