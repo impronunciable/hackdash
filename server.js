@@ -43,6 +43,14 @@ app.get('config').db.url})
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
+  app.use(function(req, res) {
+     res.status(400);
+     res.render('404');
+  });
+  app.use(function(error, req, res, next) {
+     res.status(500);
+     res.render('500');
+  });
   app.set('statuses',['brainstorming','wireframing','building','researching','prototyping','releasing']);
 	app.locals.title = config.title;
 });
