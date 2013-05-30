@@ -20,8 +20,8 @@ module.exports = function(app) {
     render('dashboard')
   ];
 
-	var liveStack = [
-		isLive(app),
+  var liveStack = [
+    isLive(app),
     loadUser, 
     loadProviders,
     setViewVar('statuses', app.get('statuses')),
@@ -41,10 +41,8 @@ module.exports = function(app) {
   
   app.get('/about', loadUser, render('about'));
 
-  app.get('/users/profile', isAuth, loadUser, userIsProfile, render('edit_profile'));
-  app.get('/users/:user_id', loadUser, findUser, render('profile'));
-  app.post('/users/:user_id', isAuth, updateUser, redirect('/'));
-  
+  app.get('/users/profile', dashboardStack);
+  app.get('/users/:user_id', dashboardStack);
 };
 
 /*
@@ -84,19 +82,6 @@ var isLive = function(app) {
 	}
 };
 
-var findUser = function(req, res, next){
-  User.findById(req.params.user_id, function(err, user){
-    if(err) return res.send(404);
-    res.locals.user_profile = user;
-    next();
-  });
-};
-
-var userIsProfile = function(req, res, next) {
-  res.locals.user_profile = req.user;
-  next();
-};  
-
 /*
  * Add current user template variable
  */
@@ -107,36 +92,6 @@ var loadUser = function(req, res, next) {
   next();
 };
 
-
-/*
- * Update existing User
- */
-
-var updateUser = function(req, res, next) {
-  var user = req.user;
-  
-  user.name = req.body.name;
-  user.email = req.body.email;
-  user.bio = req.body.bio;
-
-  user.save(function(err, user){
-    if(err) {
-
-      res.locals.errors = [];
-      if (err.errors.hasOwnProperty('email')){
-        res.locals.errors.push('Invalid Email');  
-      }
-
-      res.locals.user = req.user;
-
-      res.render('edit_profile');
-    }
-    else {
-      res.locals.user = user;
-      next();
-    }
-  });
-};
 
 /*
  * Check if current user is authenticated

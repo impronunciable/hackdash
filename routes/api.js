@@ -9,33 +9,22 @@ var User = mongoose.model('User')
   , Project = mongoose.model('Project');
 
 module.exports = function(app) {
-
   app.get('/api/projects', loadProjects, render('projects'));
-
-  app.post('/api/projects/create', isAuth, validateProject, saveProject, notify(app, 'project_created'), gracefulRes);
-
-  app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject, notify(app, 'project_removed'), gracefulRes);
-
+  app.post('/api/projects/create', isAuth, validateProject, saveProject, notify(app, 'project_created'), gracefulRes());
+  app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject, notify(app, 'project_removed'), gracefulRes());
   app.get('/api/projects/create', isAuth, setViewVar('statuses', app.get('statuses')), render('new_project'));
-
   app.post('/api/cover', isAuth, uploadCover);
-
   app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), isProjectLeader, loadProject, render('edit'));
-
-  app.post('/api/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes);
-
-  app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), gracefulRes); 
-
-  app.get('/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, notify(app, 'project_leave'), gracefulRes); 
-
-  app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes); 
-
-  app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, notify(app, 'project_unfollow'), gracefulRes); 
-
+  app.post('/api/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes());
+  app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), gracefulRes()); 
+  app.get('/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, notify(app, 'project_leave'), gracefulRes()); 
+  app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes()); 
+  app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, notify(app, 'project_unfollow'), gracefulRes()); 
   app.get('/api/p/:project_id', loadProject, render('project_full'));
-
   app.get('/api/search', prepareSearchQuery, loadProjects, render('projects'));
-
+  app.get('/api/users/profile', isAuth, loadUser, userIsProfile, render('edit_profile'));
+  app.get('/api/users/:user_id', loadUser, findUser, render('profile'));
+  app.post('/api/users/:user_id', isAuth, updateUser, gracefulRes('ok!'));
 };
 
 
@@ -93,6 +82,54 @@ var loadUser = function(req, res, next) {
   res.locals.user = req.user;
   next();
 };
+
+/**
+ * Add a user info to the response
+ */
+
+var findUser = function(req, res, next){
+  User.findById(req.params.user_id, function(err, user){
+    if(err) return res.send(404);
+    res.locals.user_profile = user;
+    next();
+  });
+};
+
+/*
+ * Update existing User
+ */
+
+var updateUser = function(req, res, next) {
+  var user = req.user;
+  
+  user.name = req.body.name;
+  user.email = req.body.email;
+  user.bio = req.body.bio;
+
+  user.save(function(err, user){
+    if(err) {
+
+      res.locals.errors = [];
+      if (err.errors.hasOwnProperty('email')){
+        res.locals.errors.push('Invalid Email');  
+      }
+
+      res.locals.user = req.user;
+
+      res.render('edit_profile');
+    }
+    else {
+      res.locals.user = user;
+      next();
+    }
+  });
+};
+
+var userIsProfile = function(req, res, next) {
+  res.locals.user_profile = req.user;
+  next();
+};  
+
 
 /*
  * Makes vars available to views
@@ -359,6 +396,8 @@ var unfollowProject = function(req, res, next) {
  * Return something good
  */
 
-var gracefulRes = function(req, res) {
-  res.json({err: null, id: res.locals.project.id});
+var gracefulRes = function(msg) {
+  return function(req, res) {
+    res.json(msg && {msg: msg} ||{err: null, id: res.locals.project.id});
+  };
 };
