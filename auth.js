@@ -75,7 +75,7 @@ var getProfilePicture = function(profile, email) {
     picture = "https://graph.facebook.com/" + profile.id + "/picture";
     picture += "?width=73&height=73";
   } else {
-    picture = gravatar.url(user.email || '', {s: '73'});
+    picture = gravatar.url(email || '', {s: '73'});
   }
   
   return picture;
