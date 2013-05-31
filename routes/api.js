@@ -84,6 +84,7 @@ var sendMail = function(app, type) {
 			to: res.locals.project.leader,
 			project: res.locals.project
 		});
+		next();
 	};
 };
 
