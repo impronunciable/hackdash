@@ -77,6 +77,14 @@ require('./auth')(app);
 
 require('./routes')(app);
 
+/*
+ * Mailer
+ */
+
+if(app.get('config').mailer) {
+	require('./mailer')(app);
+}
+
 var server = module.exports = http.Server(app);
 
 /*

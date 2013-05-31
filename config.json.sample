@@ -9,5 +9,6 @@
   "session": "wefewfef",
   "disqus_shortname": null,
 	"title": "hackdash",
-	"live": true
+	"live": true,
+	"mailer": null
 }

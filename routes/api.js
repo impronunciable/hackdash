@@ -16,7 +16,7 @@ module.exports = function(app) {
   app.post('/api/cover', isAuth, uploadCover);
   app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), isProjectLeader, loadProject, render('edit'));
   app.post('/api/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes());
-  app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), gracefulRes()); 
+  app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), sendMail(app, 'join'), gracefulRes()); 
   app.get('/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, notify(app, 'project_leave'), gracefulRes()); 
   app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes()); 
   app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, notify(app, 'project_unfollow'), gracefulRes()); 
@@ -26,7 +26,6 @@ module.exports = function(app) {
   app.get('/api/users/:user_id', loadUser, findUser, render('profile'));
   app.post('/api/users/:user_id', isAuth, updateUser, gracefulRes('ok!'));
 };
-
 
 /*
  * Render templates
@@ -67,11 +66,25 @@ var redirect = function(route) {
 
 var notify = function(app, type) {
 	return function(req, res, next) {
-		app.emit('post', 
-			{type: type, project: res.locals.project, user: req.user
-		});
+		app.emit('post', {type: type, project: res.locals.project, user: req.user});
 		next();
-	}
+	};
+};
+
+/**
+ * Send email
+ */
+
+var sendMail = function(app, type) {
+	return function(req, res, next) {
+		if(!app.get('config').mailer) return next();
+		app.emit('mail', {
+			type: type,
+			from: req.user,
+			to: res.locals.project.leader,
+			project: res.locals.project
+		});
+	};
 };
 
 /*
