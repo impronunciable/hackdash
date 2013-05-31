@@ -119,8 +119,6 @@
     superagent
     .get('/api/projects/edit/' + ctx.params.project_id)
     .end(function(res){
-      //fix me
-
       $editProject.html(res.body.html);
       $editProject.modal('show');
       initSelect2();
@@ -190,6 +188,32 @@
     });
   };
 
+  var getMyProfile = function() {
+    request
+    .get('/api/users/profile')
+    .end(function(res){
+      $editProject.html(res.body.html);
+      $editProject.modal('show');
+      $('.ajaxForm').ajaxForm({
+        error: formError,
+        success: formSuccess,
+        resetForm: true,
+        beforeSubmit: formValidate
+      });
+    });
+  };
+
+  var getUserProfile = function(ctx) {
+    $modals.modal('hide');
+    request
+    .get('/api/users/' + ctx.params.user_id)
+    .end(function(res){
+      $editProject.html(res.body.html);
+      $editProject.modal('show');
+    });
+  };
+
+
   page('/', loadProjects, cleanSearch, isotopeDashboard);
   page('/login', logIn);
   page('/search', loadSearchProjects, isotopeDashboard);
@@ -200,6 +224,8 @@
   page('/projects/unfollow/:project_id', unfollowProject);
   page('/projects/join/:project_id', joinProject);
   page('/projects/leave/:project_id', leaveProject);
+  page('/users/profile', getMyProfile);
+  page('/users/:user_id', getUserProfile);
   page('/p/:project_id', projectInfo);
 
   page();
@@ -296,7 +322,9 @@ text:project.language}]);
   });
 
   $project.live('click', function(e){
-    if(e.target.tagName !== 'A' && e.target.tagName !== 'SPAN' && $(this).data('id')) {
+    if($(e.target).hasClass('avatar')) {
+      page('/users/' + $(e.target).data('id'));
+    } else if(e.target.tagName !== 'A' && e.target.tagName !== 'SPAN'  && $(this).data('id')) {
       page('/p/' + $(this).data('id'));
     }
   });

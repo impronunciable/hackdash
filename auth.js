@@ -89,6 +89,19 @@ user){
 
   })(strategy);
 
+var getProfilePicture = function(profile, email) {
+  var picture = '/images/default_avatar.png';
+  if(profile.photos && profile.photos.length && profile.photos[0].value) {
+    picture =  profile.photos[0].value.replace('_normal', '_bigger');
+  } else if(profile.provider == 'facebook') {
+    picture = "https://graph.facebook.com/" + profile.id + "/picture";
+    picture += "?width=73&height=73";
+  } else {
+    picture = gravatar.url(email || '', {s: '73'});
+  }
+  
+  return picture;
+};
 
 }
 

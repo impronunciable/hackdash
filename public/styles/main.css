@@ -4,7 +4,9 @@ body {
   margin: 0; font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px;
   line-height: 18px; color: #333333; background: #eeedee; padding-top:160px;}
 
-
+.tooltip {
+    z-index: 2000 !important;
+}
 
 .navbar-fixed-top > header {
  background-color: red;

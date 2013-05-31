@@ -1,18 +1,12 @@
-extends layout
-
-block content
-
-  .row-fluid
-    .span3.profile.well.offset4
-      .well-content
-        h3 Profile
-        
-        form.form-horizontal
-          .control-group
-            img(class="avatar", src=user_profile.picture)
-          .control-group
-            span #{user_profile.name}
-          .control-group
-            span #{user_profile.email}
-          .control-group
-            span #{user_profile.bio}
+.profile(style="text-align: center")
+  .well-content
+    h3 
+      img(class="avatar", src=user_profile.picture, style="margin-right: 10px;")
+      | #{user_profile.name}
+    
+    p
+      strong Email: 
+      | #{user_profile.email}
+    p
+      strong Bio: 
+      | #{user_profile.bio}
