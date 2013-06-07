@@ -1,4 +1,4 @@
-.project.span4(data-id=project.id, data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id, class=project.status)
+.project.tooltips.span4(title=project.status, data-id=project.id, data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id, class=project.status)
   
   .well
     .cover.shadow 
@@ -27,7 +27,7 @@
         if(user && isLeader(user, project))
           a.btn.btn-link(href='/projects/edit/'+project._id) Edit
 
-      if(user && user.id !== project.leader.id)
+      if(user && !isLeader(user, project))
         if(userExists(user, project.contributors))
           .pull-right.contributor
             a.btn.btn-link(href='/projects/leave/'+project._id) Leave
