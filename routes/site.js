@@ -29,6 +29,7 @@ module.exports = function(app) {
     dashExists,
     checkProfile,
     setViewVar('statuses', app.get('statuses')),
+    setViewVar('disqus_shortname', config.disqus_shortname),
     render('dashboard')
   ];
 
