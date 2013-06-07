@@ -124,6 +124,8 @@ header .createProject {
   -o-transition: all 0.2s ease-in-out;
   /* Standard */
   transition: all 0.2s ease-in-out;
+
+	width: 100%;
 }
 
 
