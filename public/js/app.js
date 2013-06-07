@@ -207,8 +207,11 @@
     request
     .get('/api/users/' + ctx.params.user_id)
     .end(function(res){
-      $editProject.html(res.body.html);
-      $editProject.modal('show');
+			$fullProject.modal('hide');
+			setTimeout(function(){
+      	$editProject.html(res.body.html);
+      	$editProject.modal('show');
+			}, 50);
     });
   };
 
