@@ -204,7 +204,6 @@
   };
 
   var getUserProfile = function(ctx) {
-    $modals.modal('hide');
     request
     .get('/api/users/' + ctx.params.user_id)
     .end(function(res){
