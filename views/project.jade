@@ -20,11 +20,11 @@
           span(data-icon="6", aria-hidden="true")
 
       .pull-right.remove
-        if(user && isLeader(user, project))
+        if(user && (isLeader(user, project) || isAdmin(user, project)))
           a.btn.btn-link(href='/projects/remove/'+project._id) Remove
 
       .pull-right.edit
-        if(user && isLeader(user, project))
+        if(user && (isLeader(user, project) || isAdmin(user, project)))
           a.btn.btn-link(href='/projects/edit/'+project._id) Edit
 
       if(user && !isLeader(user, project))

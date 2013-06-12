@@ -5,11 +5,13 @@ module.exports = function(app) {
   app.locals.md = require('markdown').markdown.toHTML;
 
   app.locals.isLeader = function(user, project) {
-    return (
-      (project.domain && user.admin_in.indexOf(project.domain) >= 0)
-       || user.id === project.leader.id
-      );
+    return user.id === project.leader.id;
   };
+
+  app.locals.isAdmin = function(user, project) {
+    return (project.domain && user.admin_in.indexOf(project.domain) >= 0);
+  };
+
 
   require('./site')(app);
   require('./api')(app);
