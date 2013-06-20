@@ -10,6 +10,7 @@
     , $ajaxForm = $('.ajaxForm')
     , $newProject = $('#newProject')
     , $editProject = $('#editProject')
+    , $page = $('#page')
     , $fullProject = $('#fullProject')
     , $logIn = $('#logIn')
     , $modals = $('.modal')
@@ -45,7 +46,7 @@
     request
     .get('/api/projects')
     .end(function(res){
-      $projects.html(res.body.html);
+      $page.html(res.body.html);
       next();
     }); 
   };
@@ -55,7 +56,7 @@
     request
     .get('/api/search?' + ctx.querystring)
     .end(function(res){ 
-      $projects.html(res.body.html);
+      $page.html(res.body.html);
       next();
     }); 
   };
@@ -119,8 +120,7 @@
     superagent
     .get('/api/projects/edit/' + ctx.params.project_id)
     .end(function(res){
-      $editProject.html(res.body.html);
-      $editProject.modal('show');
+      $page.html(res.body.html);
       initSelect2();
       initImageDrop();
 
@@ -166,8 +166,7 @@
     request
     .get('/api/p/' + ctx.params.project_id)
     .end(function(res){
-      $fullProject.html(res.body.html)
-                  .modal('show');
+      $page.html(res.body.html);
       $('.tooltips').tooltip({});
     });
   };
@@ -242,7 +241,7 @@
     });
   });
 
-  $cancel.on('click', function(e){
+  $page.on('click','.cancel', function(e){
     page('/');
     e.preventDefault();
   });
@@ -274,9 +273,9 @@
   };
 
   var formSuccess = function(){
-    $modals.modal('hide');
     cleanErrors();
     $dragdrop.css('background', 'none').children('input').show(); 
+    page('/');
   };
   
   var formValidate = function(arr, $form, options){
@@ -355,7 +354,6 @@ text:project.language}]);
   var cover_path = null;
 
   function initImageDrop(){
-
     var $dragdrop = $('#dragdrop');
     var input = $('#cover_fall', $dragdrop);
 

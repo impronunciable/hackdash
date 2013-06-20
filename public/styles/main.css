@@ -656,10 +656,6 @@ h1,h2,h3,h4,h5,h6,p {
   border: none;
 }
 
-.form-horizontal .controls {
-  margin-left: 120px;
-}
-
 .well-header {
   padding: 15px;
   background:#F8F8F8;
@@ -786,3 +782,22 @@ header .btn-link {
 	padding-top: 25px;
 }
 
+/**
+ * Homepage
+ */
+
+.homepage {
+  padding-top: 0;
+}
+
+.homepage header {
+  position: static;
+}
+
+/*
+ * Select2 input
+ */
+
+.select2-container {
+  width:285px;
+}

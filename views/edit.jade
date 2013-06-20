@@ -1,43 +1,43 @@
-form.ajaxForm.form-horizontal(action="/api/projects/edit/" + project.id, method="POST")
-  .modal-header
-    a(class="close", data-dismiss="modal", aria-hidde"true")&times;
-    h3 Edit project
+.row
+  form.span8.offset2.ajaxForm.form-horizontal(action="/api/projects/edit/" + project.id, method="POST")
+    div
+      h3 Edit project
 
-  .modal-body
-    
-    .control-group
-     .controls
-      input(type="text", class="input-xlarge", placeholder="Title", name="title", value=project.title)
+    div
+      
+      .control-group
+       .controls
+        input(type="text", class="input-xlarge", placeholder="Title", name="title", value=project.title)
 
-    .control-group
-     .controls
-      textarea(class="input-xlarge", id="description", name="description", rows="4", maxlength="400", placeholder="Description") #{project.description}
+      .control-group
+       .controls
+        textarea(class="input-xlarge", id="description", name="description", rows="4", maxlength="400", placeholder="Description") #{project.description}
 
-    .control-group
-      .controls
-        #dragdrop 
-          p Drag Photo Here
-          input(type="file", name="cover_fall", id="cover_fall")        
+      .control-group
+        .controls
+          #dragdrop 
+            p Drag Photo Here
+            input(class="input-xlarge",type="file", name="cover_fall", id="cover_fall")        
 
-    .control-group
-     .controls
-      input(class="input-xlarge", type="text", name="link", id="link", placeholder="Link", value=project.link)
+      .control-group
+       .controls
+        input(class="input-xlarge", type="text", name="link", id="link", placeholder="Link", value=project.link)
 
-    .control-group
-     .controls
-      input(class="input-xlarge", type="text", name="tags", id="tags", placeholder="Tags", value=project.tags.join(','))
-    
-    .control-group
-     .controls
-      select(class="input-xlarge", name="status", id="status", value=project.status)
-       each status in statuses
-        if(status === project.status)
-          option(value=status, selected)= status
-        else
-          option(value=status)= status
-    
-  .modal-footer
+      .control-group
+       .controls
+        input(class="input-xlarge", type="text", name="tags", id="tags", placeholder="Tags", value=project.tags.join(','))
+      
+      .control-group
+       .controls
+        select(class="input-xlarge", name="status", id="status", value=project.status)
+         each status in statuses
+          if(status === project.status)
+            option(value=status, selected)= status
+          else
+            option(value=status)= status
+      
+    .modal-footer.span6
 
-    a.cancel.btn.btn-cancel(data-dismiss="modal") Cancel
-    button.btn.btn-custom(type="submit") Save changes
+      a.cancel.btn.btn-cancel(data-dismiss="modal") Cancel
+      button.btn.btn-custom(type="submit") Save changes
 
