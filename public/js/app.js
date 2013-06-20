@@ -130,6 +130,7 @@
     superagent
     .get('/api/projects/edit/' + ctx.params.project_id)
     .end(function(res){
+    $('.tooltip').remove();
       $main.html(res.body.html);
       initSelect2();
       initImageDrop();
@@ -201,8 +202,7 @@
     request
     .get('/api/users/profile')
     .end(function(res){
-      $editProject.html(res.body.html);
-      $editProject.modal('show');
+      $main.html(res.body.html);
       $('.ajaxForm').ajaxForm({
         error: formError,
         success: formSuccess,
@@ -216,10 +216,8 @@
     request
     .get('/api/users/' + ctx.params.user_id)
     .end(function(res){
-			$fullProject.modal('hide');
 			setTimeout(function(){
-      	$editProject.html(res.body.html);
-      	$editProject.modal('show');
+      	$main.html(res.body.html);
 			}, 50);
     });
   };
@@ -326,6 +324,7 @@ text:project.language}]);
   });
 
   $project.live('click', function(e){
+    $('.tooltip').remove();
     if($(e.target).hasClass('avatar')) {
       page('/users/' + $(e.target).data('id'));
     } else if(e.target.tagName !== 'A' && e.target.tagName !== 'SPAN'  && $(this).data('id')) {
