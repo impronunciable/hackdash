@@ -222,6 +222,21 @@
     });
   };
 
+  var personaLogin = function() {
+    navigator.id.get(function(assertion) {
+      if (assertion) {
+        request
+        .post('/auth/persona')
+        .send({'assertion':assertion})
+        .end(function(res){
+          location.href = location.href.replace('auth/persona', '');
+        });
+      } else {
+        location.reload();
+      }
+    });
+  };
+
 
   page('/', loadProjects, cleanSearch, isotopeDashboard);
   page('/login', logIn);
@@ -236,6 +251,7 @@
   page('/users/profile', getMyProfile);
   page('/users/:user_id', getUserProfile);
   page('/p/:project_id', projectInfo);
+  page('/auth/persona', personaLogin);
 
   page();
 
