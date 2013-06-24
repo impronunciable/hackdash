@@ -19,5 +19,7 @@
       , "clientSecret": ""
       , "callbackURL": "http://local.host:3000/auth/github/callback"
     }
-
+  , "persona": {
+      "audience": "http://local.host:3000"
+    }
 }

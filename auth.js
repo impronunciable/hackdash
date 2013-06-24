@@ -41,6 +41,7 @@ var initStrategy = function(app, keys, provider) {
 
 var findOrCreateUser = function (provider) {
   return function(token, tokenSecret, profile, done) {
+    if(provider === "persona") profile = {id: token, emails: [token]};
     User.findOne({provider_id: profile.id, provider: provider}, 
       function(err, user){
         if(err) return res.send(500);
