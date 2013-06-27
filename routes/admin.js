@@ -19,8 +19,8 @@ module.exports = function(app) {
     render('dashboard')
   ];
 
-  app.get('/install', isAuth, notInstalled, render('installed'));
-  app.get('/admin', isAuth, isAdmin, render('admin'));
+  app.get('/admin', isAuth, isAdmin, loadDashboard, render('admin'));
+  app.post('/admin', isAuth, isAdmin, saveDashboard, render('admin'));
 };
 
 /*
@@ -70,33 +70,48 @@ var loadProviders = function(req, res, next) {
   next();
 };
 
-/*
- * Check if not installed
- */
-
-var notInstalled = function(req, res, next) {
-  Dashboard.findOne({ 'admin': { $exists: true } }, function(err, dash){
-    if(!dash || (dash.admin == req.user.id && !req.user.is_admin)) {
-      if (!dash) {
-        dash = new Dashboard({ admin: req.user.id });
-        dash.save(function(){});
-      }
-      res.locals.user = req.user;
-      req.user.is_admin = true;
-      req.user.save(function(){
-        if(err) return res.send(500);
-        next();
-      });
-    }
-    else res.redirect('/');
-  });   
-};
-
 /**
  * User is dashboard admin
  */
 
 var isAdmin = function(req, res, next) {
-	if(req.user.is_admin) next();
-	else res.send(403);
+  var domain = req.subdomains[0];
+	if(req.user.admin_in.indexOf(domain) != -1) next();
+	else res.send(401);
+};
+
+/*
+ * Load dashboard data in res.locals.dashboard
+ */ 
+
+var loadDashboard = function(req, res, next) {
+  Dashboard.findOne({domain: req.subdomains[0]}, function(err, dash){
+    if(err) next(err);
+    else if(!dash) res.send(401);
+    else {
+      res.locals.dashboard = dash;
+      next();
+    }
+  });
+};
+
+/*
+ * Save the dashboard settings
+ */
+
+var saveDashboard = function(req, res, next) {
+  var opts = req.body;
+  Dashboard.findOne({domain: req.subdomains[0]}, function(err, dash){
+    if(err) next(err);
+    else if(!dash) res.send(401);
+    else {
+      dash.title = opts.title || dash.title;
+      dash.description = opts.description || dash.description;
+      dash.background = opts.background || dash.background;
+      dash.save(function(err, doc){
+        res.locals.dashboard = doc;
+        next();
+      });
+    }
+  });
 };
