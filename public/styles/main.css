@@ -828,3 +828,7 @@ h3.header {
   margin:0;
   border-bottom: 1px solid #EEE
 }
+
+.span-center {
+  margin:0 auto; float:none;
+}
