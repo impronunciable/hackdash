@@ -23,7 +23,7 @@ font-style: normal;
 
 header { 
   padding: 18px 0 17px 0; 
-  background: #212529;
+  background: #253655;
   margin:0 0 80px 0;
 height: 50px;
 position: fixed;width:100%; z-index: 10;top:0;
@@ -722,9 +722,9 @@ header .btn-link {
   opacity: 0.5
 }
 #searchInput {
-  background: #FFF;
-  border: 1px solid #000; width:100%;
+  background: #1b2b48;
+  border: 0; width:100%;
   padding:20px;
-  color:#000;
+  color:#87acd6;
   border-radius: 0;
 }
