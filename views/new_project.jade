@@ -1,47 +1,47 @@
-.span8.offset2
-  div
-    h3 Create project
+.span4.offset4
+  div.boxxy
+    h3.header Create project
 
-  div
-   
-    a#ghImportBtn(href="#") Import from Github
-    .control-group.hidden.form-horizontal
-      .controls
-        input(type="text", class="input-large", placeholder="repo user/name",
-  name="repo")
-        button#searchGh.btn() Import
-
-    form.ajaxForm.form-horizontal(action="/api/projects/create", method="POST")
-       
-      .control-group
+    div
+     
+      a#ghImportBtn(href="#") Import from Github
+      .control-group.hidden
         .controls
-          input(type="text", class="input-xlarge", placeholder="Title", name="title")
+          input(type="text", class="input-large", placeholder="repo user/name",
+    name="repo")
+          button#searchGh.btn() Import
 
-      .control-group
-        .controls
-          textarea(class="input-xlarge", id="description", name="description", rows="4", maxlength="400", placeholder="Description")
+      form.ajaxForm(action="/api/projects/create", method="POST")
+        .form-content
+          .control-group
+            .controls
+              input(type="text", class="input-block-level", placeholder="Title", name="title")
 
-      .control-group
-        .controls
-          #dragdrop 
-            p Drag Photo Here
-            input(type="file", name="cover_fall", id="cover_fall")        
+          .control-group
+            .controls
+              textarea(class="input-block-level", id="description", name="description", rows="4", maxlength="400", placeholder="Description")
 
-      .control-group
-        .controls
-          input(class="input-xlarge", type="text", name="link", id="link", placeholder="Link")
+          .control-group
+            .controls
+              #dragdrop 
+                p Drag Photo Here
+                input(type="file", name="cover_fall", id="cover_fall")        
 
-      .control-group
-        .controls
-          input(class="input-xlarge", type="text", name="tags", id="tags", placeholder="Tags")
-      
-      .control-group
-        .controls
-          select(class="input-xlarge", name="status", id="status")
-            each status in statuses
-              option(value=status)= status
-      
-      .modal-footer.span6
+          .control-group
+            .controls
+              input(class="input-block-level", type="text", name="link", id="link", placeholder="Link")
 
-        a.cancel.btn.btn-cancel(data-dismiss="modal") Cancel
-        input.btn.primary.btn-custom(type="submit", value="Create project")
+          .control-group
+            .controls
+              input(class="input-block-level", type="text", name="tags", id="tags", placeholder="Tags")
+          
+          .control-group
+            .controls
+              select(class="input-block-level", name="status", id="status")
+                each status in statuses
+                  option(value=status)= status
+        
+        .form-actions
+
+          a.cancel.btn.btn-cancel(data-dismiss="modal") Cancel
+          input.btn.primary.btn-custom(type="submit", value="Create project")
