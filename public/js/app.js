@@ -216,9 +216,7 @@
     request
     .get('/api/users/' + ctx.params.user_id)
     .end(function(res){
-			setTimeout(function(){
-      	$main.html(res.body.html);
-			}, 50);
+      $main.html(res.body.html);
     });
   };
 
