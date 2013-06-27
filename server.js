@@ -43,7 +43,16 @@ app.get('config').db.url})
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
+  app.use(function(req, res) {
+     res.status(400);
+     res.render('404');
+  });
+  app.use(function(error, req, res, next) {
+     res.status(500);
+     res.render('500');
+  });
   app.set('statuses',['brainstorming','wireframing','building','researching','prototyping','releasing']);
+	app.locals.title = config.title;
 });
 
 app.configure('development', function(){
@@ -68,7 +77,25 @@ require('./auth')(app);
 
 require('./routes')(app);
 
-module.exports = http.createServer(app).listen(app.get('port'), function() {
+/*
+ * Mailer
+ */
+
+if(app.get('config').mailer) {
+	require('./mailer')(app);
+}
+
+var server = module.exports = http.Server(app);
+
+/*
+ * Live dashboard
+ */
+
+if(config.live) {
+	require('./live')(app, server);
+}
+
+server.listen(app.get('port'), function() {
   console.log("Express server listening on port " + app.get('port'));
 });
 

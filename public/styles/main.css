@@ -4,7 +4,9 @@ body {
   margin: 0; font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px;
   line-height: 18px; color: #333333; background: #eeedee; padding-top:160px;}
 
-
+.tooltip {
+    z-index: 2000 !important;
+}
 
 .navbar-fixed-top > header {
  background-color: red;
@@ -122,6 +124,8 @@ header .createProject {
   -o-transition: all 0.2s ease-in-out;
   /* Standard */
   transition: all 0.2s ease-in-out;
+
+	width: 100%;
 }
 
 
@@ -185,6 +189,14 @@ header .createProject {
 .well p {
   color:#777;
   margin:0 0 10px 0; 
+
+-ms-word-break: break-all;
+     word-break: break-all;
+     word-break: break-word;
+
+-webkit-hyphens: auto;
+   -moz-hyphens: auto;
+        hyphens: auto;
 }
 
 
@@ -246,6 +258,16 @@ line-height:                     0;
 }
 
 @media (max-width: 768px) {
+	body {
+		padding-top: 0;
+	}
+
+	header {
+		position: static;
+		height: 50px;
+		margin-bottom: 160px;
+	}
+
   header h1 small {
     display: block;
   }
@@ -255,6 +277,21 @@ line-height:                     0;
     padding-bottom: 4px;
   }
 
+	header div.createProject {
+		display: block;
+		margin: 0 auto;
+		float: none;
+		width: 288px;
+	}
+
+	header div.createProject .logout {
+		color: #999;
+		width: 91px;
+		text-align: left;
+		background: #212529;
+		opacity: 1;
+	}
+	
   .isotope .project {
     position: static ! important;
     -webkit-transform: translate(0px, 0px) ! important;
@@ -619,18 +656,17 @@ h1,h2,h3,h4,h5,h6,p {
   border: none;
 }
 
-.form-horizontal .controls {
-  margin-left: 120px;
-}
-
 .well-header {
   padding: 15px;
   background:#F8F8F8;
 }
 
 #fullProject.modal {
-  width:640px;
+  width:670px;
   margin:-250px 0 0 -320px!important;
+  overflow-y:auto;
+  max-height:70%;
+  overflow: auto;
 }
 
 .well-sidebar {
@@ -722,9 +758,47 @@ header .btn-link {
   opacity: 0.5
 }
 #searchInput {
-  background: #1b2b48;
-  border: 0; width:100%;
-  padding:20px;
-  color:#87acd6;
+
+  background: #FFF;
+  border: 1px solid #000; width:100%;
+  color:#000;
+	height: 40px;
   border-radius: 0;
+}
+
+/*
+ * Timeline
+ */
+
+#timeline {
+	text-align: center;
+	margin-top: 20px;
+}
+
+#timeline img {
+	float: left;
+}
+
+#timeline p {
+	padding-top: 25px;
+}
+
+/**
+ * Homepage
+ */
+
+.homepage {
+  padding-top: 0;
+}
+
+.homepage header {
+  position: static;
+}
+
+/*
+ * Select2 input
+ */
+
+.select2-container {
+  width:285px;
 }

@@ -27,6 +27,14 @@ var initStrategies = function(app) {
   for(var provider in keys) {
     initStrategy(app, keys, provider);
   }
+
+  if(keys['persona']) {
+    app.post('/auth/persona', 
+      passport.authenticate('persona', { failureRedirect: '/login' }),
+      function(req, res) {
+        res.redirect('/');
+      });
+  }
 };
 
 var initStrategy = function(app, keys, provider) {
@@ -40,7 +48,8 @@ var initStrategy = function(app, keys, provider) {
 };
 
 var findOrCreateUser = function (provider) {
-  return function(token, tokenSecret, profile, done) {
+  if(provider === "persona") return findOrCreatePersona;
+  else return function(token, tokenSecret, profile, done) {
     User.findOne({provider_id: profile.id, provider: provider}, 
       function(err, user){
         if(err) return res.send(500);
@@ -53,6 +62,19 @@ var findOrCreateUser = function (provider) {
   };
 };
 
+var findOrCreatePersona = function(email, done) {
+  User.findOne({email: email, provider: 'persona'}, 
+    function(err, user){
+      if(err) return res.send(500);
+      if(!user) {
+        createUser('persona', {emails: [{value: email}], id: 1, username: email, displayName: email}, 
+        done);
+      } else {  
+        done(null, user);
+      }
+    });
+};
+  
 var createUser = function(provider, profile, done) {
   var user = new User();
   user.provider = provider;
@@ -75,7 +97,7 @@ var getProfilePicture = function(profile, email) {
     picture = "https://graph.facebook.com/" + profile.id + "/picture";
     picture += "?width=73&height=73";
   } else {
-    picture = gravatar.url(user.email || '', {s: '73'});
+    picture = gravatar.url(email || '', {s: '73'});
   }
   
   return picture;

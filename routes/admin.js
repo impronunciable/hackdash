@@ -20,6 +20,7 @@ module.exports = function(app) {
   ];
 
   app.get('/install', isAuth, notInstalled, render('installed'));
+  app.get('/admin', isAuth, isAdmin, render('admin'));
 };
 
 /*
@@ -75,14 +76,27 @@ var loadProviders = function(req, res, next) {
 
 var notInstalled = function(req, res, next) {
   Dashboard.findOne({ 'admin': { $exists: true } }, function(err, dash){
-    if(!dash) {
-      dash = new Dashboard({ admin: req.user.id });
+    if(!dash || (dash.admin == req.user.id && !req.user.is_admin)) {
+      if (!dash) {
+        dash = new Dashboard({ admin: req.user.id });
+        dash.save(function(){});
+      }
       res.locals.user = req.user;
-      dash.save(function(){
+      req.user.is_admin = true;
+      req.user.save(function(){
         if(err) return res.send(500);
         next();
       });
     }
-    else res.redirect('/'); 
+    else res.redirect('/');
   });   
+};
+
+/**
+ * User is dashboard admin
+ */
+
+var isAdmin = function(req, res, next) {
+	if(req.user.is_admin) next();
+	else res.send(403);
 };

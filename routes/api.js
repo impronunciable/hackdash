@@ -1,5 +1,6 @@
 var passport = require('passport')
   , mongoose = require('mongoose')
+  , config = require('../config.json')
   , _ = require('underscore')
   , fs = require('fs')
   , request = require('superagent');
@@ -8,35 +9,23 @@ var User = mongoose.model('User')
   , Project = mongoose.model('Project');
 
 module.exports = function(app) {
-
   app.get('/api/projects', loadProjects, render('projects'));
-
-  app.post('/api/projects/create', isAuth, validateProject, saveProject, gracefulRes);
-
-  app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject, gracefulRes);
-
+  app.post('/api/projects/create', isAuth, validateProject, saveProject, notify(app, 'project_created'), gracefulRes());
+  app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject, notify(app, 'project_removed'), gracefulRes());
   app.get('/api/projects/create', isAuth, setViewVar('statuses', app.get('statuses')), render('new_project'));
-
   app.post('/api/cover', isAuth, uploadCover);
-
   app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), isProjectLeader, loadProject, render('edit'));
-
-  app.post('/api/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, gracefulRes);
-
-  app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, gracefulRes); 
-
-  app.get('/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, gracefulRes); 
-
-  app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, gracefulRes); 
-
-  app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, gracefulRes); 
-
+  app.post('/api/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes());
+  app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), sendMail(app, 'join'), gracefulRes()); 
+  app.get('/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, notify(app, 'project_leave'), gracefulRes()); 
+  app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes()); 
+  app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, notify(app, 'project_unfollow'), gracefulRes()); 
   app.get('/api/p/:project_id', loadProject, render('project_full'));
-
-  app.get('/api/search', loadSearchProjects, render('projects'));
-
+  app.get('/api/search', prepareSearchQuery, loadProjects, render('projects'));
+  app.get('/api/users/profile', isAuth, loadUser, userIsProfile, render('edit_profile'));
+  app.get('/api/users/:user_id', loadUser, findUser, render('profile'));
+  app.post('/api/users/:user_id', isAuth, updateUser, gracefulRes('ok!'));
 };
-
 
 /*
  * Render templates
@@ -72,6 +61,34 @@ var redirect = function(route) {
 };
 
 /*
+ * Emit a notification
+ */
+
+var notify = function(app, type) {
+	return function(req, res, next) {
+		app.emit('post', {type: type, project: res.locals.project, user: req.user});
+		next();
+	};
+};
+
+/**
+ * Send email
+ */
+
+var sendMail = function(app, type) {
+	return function(req, res, next) {
+		if(!app.get('config').mailer) return next();
+		app.emit('mail', {
+			type: type,
+			from: req.user,
+			to: res.locals.project.leader,
+			project: res.locals.project
+		});
+		next();
+	};
+};
+
+/*
  * Add current user template variable
  */
 
@@ -79,6 +96,54 @@ var loadUser = function(req, res, next) {
   res.locals.user = req.user;
   next();
 };
+
+/**
+ * Add a user info to the response
+ */
+
+var findUser = function(req, res, next){
+  User.findById(req.params.user_id, function(err, user){
+    if(err) return res.send(404);
+    res.locals.user_profile = user;
+    next();
+  });
+};
+
+/*
+ * Update existing User
+ */
+
+var updateUser = function(req, res, next) {
+  var user = req.user;
+  
+  user.name = req.body.name;
+  user.email = req.body.email;
+  user.bio = req.body.bio;
+
+  user.save(function(err, user){
+    if(err) {
+
+      res.locals.errors = [];
+      if (err.errors.hasOwnProperty('email')){
+        res.locals.errors.push('Invalid Email');  
+      }
+
+      res.locals.user = req.user;
+
+      res.render('edit_profile');
+    }
+    else {
+      res.locals.user = user;
+      next();
+    }
+  });
+};
+
+var userIsProfile = function(req, res, next) {
+  res.locals.user_profile = req.user;
+  next();
+};  
+
 
 /*
  * Makes vars available to views
@@ -127,7 +192,7 @@ var isProjectLeader = function(req, res, next){
  */
 
 var loadProjects = function(req, res, next) {
-  Project.find({})
+  Project.find(req.query || {})
   .populate('contributors')
   .populate('followers')
   .populate('leader')
@@ -153,6 +218,7 @@ var loadProject = function(req, res, next) {
     if(err || !project) return res.send(500);
     res.locals.project = project;
     res.locals.user = req.user;
+    res.locals.disqus_shortname = config.disqus_shortname;
     res.locals.userExists = userExistsInArray;
     next();
   });
@@ -169,31 +235,25 @@ var userExistsInArray = function(user, arr){
  * TODO: use mongoose plugin for keywords
  */
 
-var loadSearchProjects = function(req, res, next) {
+var prepareSearchQuery = function(req, res, next) {
   var regex = new RegExp(req.query.q, 'i');
   var query = {};
 
   if(!req.query.q.length) return res.redirect('/api/projects');
-
   if(req.query.type === "title") query['title'] = regex;
   else if(req.query.type === "tag") query['tags'] = regex;
   else return res.send(500);
 
-  Project
-  .find(query, function(err, projects) {
-    if(err) return res.send(500);
-    res.locals.projects = projects;
-    res.locals.user = req.user;
-    res.locals.userExists = userExistsInArray;
-    next();
-  });
+  req.query = query;
+
+  next();
 };
 
 /*
  * Check project fields
  */
 
-var validateProject = function(req, res, next) {console.log(req.body);
+var validateProject = function(req, res, next) {
   if(req.body.title && req.body.description) next();
   else res.send(500, "Project Title and Description fields must be complete.");
 };
@@ -228,7 +288,7 @@ var saveProject = function(req, res, next) {
  */
 
 var removeProject = function(req, res, next) {
-  res.locals.project = {id: req.project.id};
+  res.locals.project = {id: req.project.id, title: req.project.title};
   req.project.remove(function(err){
     if(err) res.send(500);
     else next();
@@ -350,6 +410,8 @@ var unfollowProject = function(req, res, next) {
  * Return something good
  */
 
-var gracefulRes = function(req, res) {
-  res.json({err: null, id: res.locals.project.id});
+var gracefulRes = function(msg) {
+  return function(req, res) {
+    res.json(msg && {msg: msg} ||{err: null, id: res.locals.project.id});
+  };
 };
