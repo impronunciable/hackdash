@@ -7,39 +7,39 @@
         a(href="/p/" + project.id, target="_blank") #{project.title}
       p #{project.description}
       a(href=project.link) #{project.link}
-    
-    .well-sidebar
+    .row-fluid
+      .well-sidebar.span4
 
-      h6 Created
-      strong= moment(project.created_at).fromNow()
+        h6 Created
+        strong= moment(project.created_at).fromNow()
 
-      h6 State
-      strong= project.status
+        h6 State
+        strong= project.status
 
-      h6 Tags
-      ul
-        each tag in project.tags
-          li= tag
+        h6 Tags
+        ul
+          each tag in project.tags
+            li= tag
 
 
-    .well-content
-     
-      h5 Managed by
-      a(href="/users/" + project.leader.id)
-        img.tooltips(src=project.leader.picture, title=project.leader.name, rel="tooltip")
-
-      h5 Contributors 
-      each contributor in project.contributors
-        a(href="/users/" + contributor.id)
-          img.tooltips(src=contributor.picture, title=contributor.name, rel="tooltip")
-      
-      h5 #{project.followers.length} Likes
-      each follower in project.followers
-        a(href="/users/" + follower.id)
-          img.tooltips(src=follower.picture, title=follower.name, rel="tooltip")
+      .well-content.span8
+        .span4
+          h5 Managed by
+          a(href="/users/" + project.leader.id)
+            img.tooltips(src=project.leader.picture, title=project.leader.name, rel="tooltip")
+        .span4
+          h5 Contributors 
+          each contributor in project.contributors
+            a(href="/users/" + contributor.id)
+              img.tooltips(src=contributor.picture, title=contributor.name, rel="tooltip")
+        .span4
+          h5 #{project.followers.length} Likes
+          each follower in project.followers
+            a(href="/users/" + follower.id)
+              img.tooltips(src=follower.picture, title=follower.name, rel="tooltip")
 
     if disqus_shortname
       #disqus_thread.well-header
       script(src="/js/disqus.js", disqus_shortname=disqus_shortname)
-    
       
+        
