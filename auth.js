@@ -1,4 +1,3 @@
-
 /*
  * Module dependencies
  */
@@ -20,7 +19,20 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-module.exports = function(app) {
+var initStrategies = function(app) {
+
+  app.set('providers', Object.keys(keys));
+
+  for(var provider in keys) {
+    initStrategy(app, keys, provider);
+  }
+
+  if(keys['persona']) {
+    app.post('/auth/persona', 
+      passport.authenticate('persona', { failureRedirect: '/login' }),
+      function(){res.send('1')});
+  }
+};
 
 // Helpers
 
@@ -38,56 +50,44 @@ var redirectSubdomain = function(req, res) {
   res.redirect('http://' + domain + ':' + app.get('config').port);
 };
 
+var initStrategy = function(app, keys, provider) {
+  app.get('/auth/' + provider, saveSubdomain, passport.authenticate(provider));
+  app.get('/auth/' + provider + '/callback',
+    passport.authenticate(provider, { failureRedirect: '/' }), 
+    redirectSubdomain);
 
-app.set('providers', Object.keys(keys));
+  var Strategy = require('passport-' + provider).Strategy;
+  passport.use(new Strategy(keys[provider], findOrCreateUser(provider)));
+};
 
-for(var strategy in keys) {
-
-  (function(provider){
-
-    app.get('/auth/' + provider, saveSubdomain,
-passport.authenticate(provider));
-    app.get('/auth/' + provider + '/callback', passport.authenticate(provider, {
-failureRedirect: '/' }), redirectSubdomain);
-
-    var Strategy = require('passport-' + provider).Strategy;
-    passport.use(new Strategy(keys[provider],
-    function(token, tokenSecret, profile, done) {
-      User.findOne({provider_id: profile.id, provider: provider}, function(err,
-user){
+var findOrCreateUser = function (provider) {
+  if(provider === "persona") return findOrCreatePersona;
+  else return function(token, tokenSecret, profile, done) {
+    User.findOne({provider_id: profile.id, provider: provider}, 
+      function(err, user){
+        if(err) return res.send(500);
         if(!user) {
-          var user = new User();
-          user.provider = provider;
-          user.provider_id = profile.id;
-
-          if(profile.emails && profile.emails.length && profile.emails[0].value)
-            user.email = profile.emails[0].value;
-
-          if(profile.photos && profile.photos.length && profile.photos[0].value)
-{
-            user.picture =  profile.photos[0].value.replace('_normal',
-'_bigger');
-          } else if(profile.provider == 'facebook') {
-            user.picture = "https://graph.facebook.com/" + profile.id +
-"/picture";
-            user.picture += "?width=73&height=73";
-          } else {
-            user.picture = gravatar.url(user.email || '', {s: '73'});
-          }
-
-          user.picture = user.picture || '/default_avatar.png';
-          user.name = profile.displayName;
-          user.username = profile.username || profile.displayName;
-          user.save(function(err, user){  
-            done(null, user);
-          });
+          createUser(provider, profile, done);
         } else {  
           done(null, user);
         }
       });
-    }));
+  };
+};
 
-  })(strategy);
+var createUser = function(provider, profile, done) {
+  var user = new User();
+  user.provider = provider;
+  user.provider_id = profile.id;
+
+  if(profile.emails && profile.emails.length && profile.emails[0].value)
+    user.email = profile.emails[0].value;
+    
+  user.picture = getProfilePicture(profile, user.email);
+  user.name = profile.displayName;
+  user.username = profile.username || profile.displayName;
+  user.save(done);
+};
 
 var getProfilePicture = function(profile, email) {
   var picture = '/images/default_avatar.png';
@@ -103,27 +103,18 @@ var getProfilePicture = function(profile, email) {
   return picture;
 };
 
-}
-
-// Anonymous auth for test porpouses 
-
-if(process.env.NODE_ENV == "test") {
-
-  var BasicStrategy = require('passport-http').BasicStrategy;
-
-  var u;
-  var user = new User({provider: 'basic', provider_id: 1, username: 'test'});
-  user.save(function(err, usr){ u = usr; });
-
-  passport.use(new BasicStrategy({}, function(username, password, done) {
-    process.nextTick(function () {
-      return done(null, u);
+var findOrCreatePersona = function(email, done) {
+  User.findOne({email: email, provider: 'persona'}, 
+    function(err, user){
+      if(err) return res.send(500);
+      if(!user) {
+        createUser('persona', {emails: [{value: email}], id: 1, username: email,
+displayName: email}, 
+        done);
+      } else {  
+        done(null, user);
+      }
     });
-  }));
-
-  app.all('*', passport.authenticate('basic'));
-
-}
-
 };
 
+module.exports = initStrategies;

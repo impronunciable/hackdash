@@ -20,6 +20,7 @@ module.exports = function(app) {
   ];
 
   app.get('/install', isAuth, notInstalled, render('installed'));
+  app.get('/admin', isAuth, isAdmin, render('admin'));
 };
 
 /*
@@ -78,9 +79,7 @@ var notInstalled = function(req, res, next) {
     if(!dash || (dash.admin == req.user.id && !req.user.is_admin)) {
       if (!dash) {
         dash = new Dashboard({ admin: req.user.id });
-        dash.save(function(){
-          if(err) return res.send(500);
-        });
+        dash.save(function(){});
       }
       res.locals.user = req.user;
       req.user.is_admin = true;
@@ -89,6 +88,15 @@ var notInstalled = function(req, res, next) {
         next();
       });
     }
-    else res.redirect('/'); 
+    else res.redirect('/');
   });   
+};
+
+/**
+ * User is dashboard admin
+ */
+
+var isAdmin = function(req, res, next) {
+	if(req.user.is_admin) next();
+	else res.send(403);
 };

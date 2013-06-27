@@ -10,6 +10,7 @@
     , $ajaxForm = $('.ajaxForm')
     , $newProject = $('#newProject')
     , $editProject = $('#editProject')
+    , $main = $('#main')
     , $fullProject = $('#fullProject')
     , $logIn = $('#logIn')
     , $modals = $('.modal')
@@ -45,7 +46,7 @@
     request
     .get('/api/projects')
     .end(function(res){
-      $projects.html(res.body.html);
+      $main.html(res.body.html);
       next();
     }); 
   };
@@ -55,7 +56,7 @@
     request
     .get('/api/search?' + ctx.querystring)
     .end(function(res){ 
-      $projects.html(res.body.html);
+      $main.html(res.body.html);
       next();
     }); 
   };
@@ -71,15 +72,17 @@
 
   var isotopeDashboard = function() {
     $('.tooltips').tooltip({});
+    var $projects = $('#projects');
 
     $modals.modal('hide');
-    if($projects.hasClass('isotope')) $projects.isotope('destroy');
+    if($projects.hasClass('isotope')) 
+      $projects.isotope('destroy');
 
     $projects.imagesLoaded(function() {
-      $projects.isotope({
+      $('#projects').isotope({
           itemSelector: '.project'
         , animationEngine: 'jquery'
-        , resizable: false
+        , resizable: true
         , masonry: masonryIsotope
         , getSortData : {
               date : function ( $elem ) {
@@ -110,17 +113,25 @@
   };
 
   var createProject = function(ctx) {
-    $newProject.modal('show');
+    $main.html($newProject.html());
     initSelect2();
     initImageDrop();
+
+    $('.ajaxForm').ajaxForm({
+      error: formError,
+      success: formSuccess,
+      resetForm: true,
+      beforeSubmit: formValidate
+    });
+
   };
 
   var editProject = function(ctx) {
     superagent
     .get('/api/projects/edit/' + ctx.params.project_id)
     .end(function(res){
-      $editProject.html(res.body.html);
-      $editProject.modal('show');
+    $('.tooltip').remove();
+      $main.html(res.body.html);
       initSelect2();
       initImageDrop();
 
@@ -166,8 +177,7 @@
     request
     .get('/api/p/' + ctx.params.project_id)
     .end(function(res){
-      $fullProject.html(res.body.html)
-                  .modal('show');
+      $main.html(res.body.html);
       $('.tooltips').tooltip({});
     });
   };
@@ -192,8 +202,7 @@
     request
     .get('/api/users/profile')
     .end(function(res){
-      $editProject.html(res.body.html);
-      $editProject.modal('show');
+      $main.html(res.body.html);
       $('.ajaxForm').ajaxForm({
         error: formError,
         success: formSuccess,
@@ -215,6 +224,21 @@
     });
   };
 
+  var personaLogin = function() {
+    navigator.id.get(function(assertion) {
+      if (assertion) {
+        request
+        .post('/auth/persona')
+        .send({'assertion':assertion})
+        .end(function(res){
+          location.href = location.href.replace('auth/persona', '');
+        });
+      } else {
+        location.reload();
+      }
+    });
+  };
+
 
   page('/', loadProjects, cleanSearch, isotopeDashboard);
   page('/login', logIn);
@@ -229,6 +253,7 @@
   page('/users/profile', getMyProfile);
   page('/users/:user_id', getUserProfile);
   page('/p/:project_id', projectInfo);
+  page('/auth/persona', personaLogin);
 
   page();
 
@@ -242,7 +267,7 @@
     });
   });
 
-  $cancel.on('click', function(e){
+  $main.on('click','.cancel', function(e){
     page('/');
     e.preventDefault();
   });
@@ -274,9 +299,9 @@
   };
 
   var formSuccess = function(){
-    $modals.modal('hide');
     cleanErrors();
     $dragdrop.css('background', 'none').children('input').show(); 
+    page('/');
   };
   
   var formValidate = function(arr, $form, options){
@@ -303,13 +328,6 @@ text:project.language}]);
     $form.find('#status').select2("val", "building");
   };
 
-  $ajaxForm.ajaxForm({
-    error: formError,
-    success: formSuccess,
-    resetForm: true,
-    beforeSubmit: formValidate
-  });
-
   $modals.live('hidden', function(){
     page('/');
   });
@@ -324,6 +342,7 @@ text:project.language}]);
   });
 
   $project.live('click', function(e){
+    $('.tooltip').remove();
     if($(e.target).hasClass('avatar')) {
       page('/users/' + $(e.target).data('id'));
     } else if(e.target.tagName !== 'A' && e.target.tagName !== 'SPAN'  && $(this).data('id')) {
@@ -331,19 +350,19 @@ text:project.language}]);
     }
   });
 
-  $ghImportBtn.click(function(e){
+  $ghImportBtn.live('click', function(e){
     $(this).next().removeClass('hidden');
     e.preventDefault();
   });
 
-  $searchGh.click(function(e){
+  $searchGh.live('click', function(e){
     var self = this;
     var repo = $(this).prev().val();
     if(repo.length) {
       request
       .get('https://api.github.com/repos/' + repo)
       .end(function(res){
-        fillGhProjectForm(res.body, $(self).parents('.modal').find('form'));
+        fillGhProjectForm(res.body, $(self).parents('#page').find('form'));
       });
     }
   });
@@ -355,7 +374,6 @@ text:project.language}]);
   var cover_path = null;
 
   function initImageDrop(){
-
     var $dragdrop = $('#dragdrop');
     var input = $('#cover_fall', $dragdrop);
 
