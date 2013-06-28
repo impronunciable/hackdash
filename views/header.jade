@@ -3,7 +3,10 @@ header
       a(href="/")= title
       h1 Ideas for a hackathon
       p.lead Upload your project. Add colaborators. Inform status. Share your app.
-      button.btn.btn-large New project
+      if(user)
+        a.btn.btn-large(href="/projects/create") New project
+      else
+        a.btn.btn-large(href="/login") Login to create a project
       .span4.none
         form.formSearch
         input.search-query.input-large.span8#searchInput(type='text',placeholder='Search a project')
