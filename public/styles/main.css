@@ -610,11 +610,22 @@ h1,h2,h3,h4,h5,h6,p {
   color:#999;
   font-size: 12px
 }
-
-
-.formSearch {
-  text-align: center;
+.formSearch  {
+  position: absolute;
+  top:0; left: 0
 }
+
+
+.formSearch i {
+  color:#FFF;
+  position: absolute;
+  top: 15px ; left: 16px
+}
+
+.formSearch:hover i {
+  color:#000;
+}
+
 
 .formSearch input {
   height: 30px;
@@ -772,15 +783,13 @@ header .btn-link {
   border-radius: 5px;
   transition: all 0.3s;
   -webkit-transition: all 0.3s; /* Safari */
-  position: absolute;
-  top: 0; left: 0;
+
 }
-
-
 #searchInput:hover {
-  background: #FFF; width: 300px;
-  padding: 10px 15px;
+  background: #FFF; width: 200px;
+  padding: 10px 15px 10px 45px;
 }
+
 
 /*
  * Timeline
