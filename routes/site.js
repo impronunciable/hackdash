@@ -147,9 +147,18 @@ var loadProject = function(req, res, next) {
 
 var loadDashboard = function(req, res, next) {
   Dashboard.findOne({}, function(err, dash) {
-    if (err || !dash) return res.send(404);
-    res.locals.dashboard = dash;
-    next();
+    if (err) return res.send(404);
+    else if(!dash) {
+      var dash = new Dashboard({});
+      dash.save(function(err, doc){
+        res.locals.dashboard = dash;
+        next();
+      });
+    }
+    else {
+      res.locals.dashboard = dash;
+      next();
+    } 
   });
 };
 

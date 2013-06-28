@@ -48,6 +48,7 @@ app.get('config').db.url})
      res.render('404');
   });
   app.use(function(error, req, res, next) {
+    console.log(error);
      res.status(500);
      res.render('500');
   });
