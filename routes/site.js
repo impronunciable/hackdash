@@ -4,7 +4,8 @@ var passport = require('passport')
   , mongoose = require('mongoose');
 
 var User = mongoose.model('User')
-  , Project = mongoose.model('Project');
+  , Project = mongoose.model('Project')
+  , Dashboard = mongoose.model('Dashboard');
 
 module.exports = function(app) {
 
@@ -15,6 +16,7 @@ module.exports = function(app) {
   var dashboardStack = [
     loadUser, 
     loadProviders,
+    loadDashboard,
     setViewVar('statuses', app.get('statuses')),
     setViewVar('disqus_shortname', config.disqus_shortname),
     render('dashboard')
@@ -24,6 +26,7 @@ module.exports = function(app) {
     isLive(app),
     loadUser, 
     loadProviders,
+    loadDashboard,
     setViewVar('statuses', app.get('statuses')),
     setViewVar('disqus_shortname', config.disqus_shortname),
     setViewVar('live', true),
@@ -138,6 +141,17 @@ var loadProject = function(req, res, next) {
   });
 };
 
+/*
+ * Load dashboard
+ */
+
+var loadDashboard = function(req, res, next) {
+  Dashboard.findOne({}, function(err, dash) {
+    if (err || !dash) return res.send(404);
+    res.locals.dashboard = dash;
+    next();
+  });
+};
 
 /*
  * Log out current user

@@ -20,7 +20,7 @@ module.exports = function(app) {
   ];
 
   app.get('/install', isAuth, notInstalled, render('installed'));
-  app.get('/admin', isAuth, isAdmin, render('admin'));
+  app.get('/admin', isAuth, isAdmin, loadDashboard, render('admin'));
   app.post('/admin', isAuth, isAdmin, saveDashboard, render('admin'));
 };
 
@@ -29,6 +29,7 @@ module.exports = function(app) {
  */
 var render = function(path) {
   return function(req, res) {
+console.log(res.locals.dashboard);
     res.render(path);
   };
 };
