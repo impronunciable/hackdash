@@ -19,8 +19,8 @@ module.exports = function(app) {
     render('dashboard')
   ];
 
-  app.get('/install', isAuth, notInstalled, render('installed'));
-  app.get('/admin', isAuth, isAdmin, loadDashboard, render('admin'));
+  app.get('/install', isAuth, loadUser, notInstalled, render('installed'));
+  app.get('/admin', isAuth, isAdmin, loadUser, loadDashboard, render('admin'));
   app.post('/admin', isAuth, isAdmin, saveDashboard, render('admin'));
 };
 
