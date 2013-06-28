@@ -206,6 +206,7 @@ return function(req, res) {
 var dashExists = function(req, res, next) {
   Dashboard.findOne({ domain: req.subdomains[0] }, function(err, dash) {
     if (err || !dash) return res.send(404);
+    res.locals.dashboard = dash;
     next();
   });
 };
