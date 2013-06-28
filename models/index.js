@@ -38,7 +38,7 @@ module.exports = function(app) {
       "admin": { type: ObjectId, ref: 'User' }
     , "title": { type: String, default: "HackDash" }
     , "description": { type: String, default: "A dashboard for Hackatons" }
-    , "background": { type: String, default: "#333" }
+    , "background": { type: String, default: "#1e1d22" }
     , "created_at": { type: Date, default: Date.now }
   });
 

@@ -1,8 +1,8 @@
-header    
+header(style="background: #{dashboard.background}")
   .container
       a.logo(href="/")= title
-      h1 Ideas for a hackathon
-      p.lead Upload your project. Add colaborators. Inform status. Share your app.
+      h1 #{dashboard.title}
+      p.lead #{dashboard.description}
       if(user)
         a.btn.btn-large(href="/projects/create") New project
       else
