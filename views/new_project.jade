@@ -4,15 +4,15 @@
 
     div
      
-      a#ghImportBtn(href="#") Import from Github
-      .control-group.hidden
-        .controls
-          input(type="text", class="input-large", placeholder="repo user/name",
-    name="repo")
-          button#searchGh.btn() Import
+     
 
       form.ajaxForm(action="/api/projects/create", method="POST")
         .form-content
+          a#ghImportBtn(href="#") Import from Github
+          .control-group.hidden
+            .controls
+             input(type="text", class="input-large", placeholder="repo user/name", name="repo")
+             button#searchGh.btn() Import
           .control-group
             .controls
               input(type="text", class="input-block-level", placeholder="Title", name="title")
@@ -43,5 +43,5 @@
         
         .form-actions
 
-          a.cancel.btn.btn-cancel(data-dismiss="modal") Cancel
-          input.btn.primary.btn-custom(type="submit", value="Create project")
+          input.btn.primary.btn-success.pull-left(type="submit", value="Create project")
+          a.cancel.btn.btn-cancel.pull-right(data-dismiss="modal") Cancel

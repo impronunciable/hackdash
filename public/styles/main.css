@@ -458,28 +458,7 @@ a.signup-github:hover {
 
 }
 
-.btn-custom {
-    border-radius: 0!important;
 
-  background:#04d27d;
-  border-radius: 50px;
-  color: #fff !important;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
-  box-shadow: none;
-  font-weight: normal;
-      /* Firefox */
-  -moz-transition: all 0.2s ease-in-out;
-  /* WebKit */
-  -webkit-transition: all 0.2s ease-in-out;
-  /* Opera */
-  -o-transition: all 0.2s ease-in-out;
-  /* Standard */
-  transition: all 0.2s ease-in-out;
-  padding: 10px 20px;
-}
-.btn-custom:hover {
-    background:#0ee68d;
-}
 .btn-group>.btn+.btn {
  margin-left: 0px;
 }
@@ -536,30 +515,6 @@ border-bottom-right-radius: 50px;
 }
 
 
-.btn-cancel {
-  background:#E6E6E6;
-  border: #E6E6E6 2px solid;
-  border-radius: 50px;
-  color: #999 !important;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
-  box-shadow: none;
-  font-weight: bolder;
-  margin-left: 5px;
-      /* Firefox */
-  -moz-transition: all 0.2s ease-in-out;
-  /* WebKit */
-  -webkit-transition: all 0.2s ease-in-out;
-  /* Opera */
-  -o-transition: all 0.2s ease-in-out;
-  /* Standard */
-  transition: all 0.2s ease-in-out;
-}
-
-.btn-cancel:hover {
-    background: #E6E6E6;
-    border: #999 2px solid;
-    color:#999!important;
-}
 
 .project .well {
   border-top:10px solid #000;
@@ -809,7 +764,6 @@ header .btn-link {
 }
 #ghImportBtn {
  text-align:center;
- margin:10px 15px 0 15px;
  display: block;
  padding: 15px;
  background: #EEE;
@@ -845,10 +799,11 @@ header .container {
   border: 1px solid #CCC;
   border-radius: 5px;
   box-shadow: 0 1px 2px #EEE;
+  margin-bottom: 40px
 }
 
 .form-content {
-  padding: 15px
+  padding: 15px 15px 0 15px
 }
 
 h3.header {
@@ -859,4 +814,47 @@ h3.header {
 
 .span-center {
   margin:0 auto; float:none;
+}
+
+.footer-box i {
+  font-size: 14px;
+  color:grey;
+}
+
+.btn {
+  background: transparent;
+  border-width:2px;
+  border-style: solid;
+  box-shadow: none;
+  text-shadow:none;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-color: #CCC;
+  color:#CCC;
+}
+
+.btn-link {
+  border:none;
+  padding:5px 12px;
+}
+
+
+.btn-success {
+  border-color:#26afa0;
+  color:#26afa0;
+}
+.btn:hover {
+    box-shadow: none!important;
+    background-color: #CCC;
+  color:#FFF;
+}
+.btn-success:hover {
+  background-color:#26afa0;
+  color:#FFF;
+}
+
+.btn-link:hover {
+  background: transparent!important;
+  color:#CCC;
 }
