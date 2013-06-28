@@ -2,15 +2,18 @@
 
 body {
   margin: 0; font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px;
-  line-height: 18px; color: #333333; background: #eeedee; padding-top:160px;}
+  line-height: 18px; color: #333333; background: #eeedee;}
 
 .tooltip {
     z-index: 2000 !important;
 }
-
+.none {
+  display: none!important
+}
 .navbar-fixed-top > header {
  background-color: red;
 }
+
 
 @font-face {
 font-family: 'Entypo';
@@ -24,36 +27,33 @@ font-style: normal;
 }
 
 header { 
-  padding: 18px 0 17px 0; 
-  background: #253655;
+  padding: 40px 0 60px 0; 
+  background: #1e1d22;
   margin:0 0 80px 0;
-height: 50px;
-position: fixed;width:100%; z-index: 10;top:0;
+  text-align: center;
 }
 
 header h1 {
   margin: 0;
+  color: #FFF;
+  font-size: 70px;
+  line-height: 1.3em;
 }
 
-header h1 a {
+header  a {
   color: white;
   width: 113px; height: 126px;
       background: url('../images/logohack.png') 0 0 no-repeat;
       text-indent: -9999px;
-  display: block; margin:0 auto;
-}
-
-header h1 a:hover {
-  color: gray;
-  text-decoration: none;
+  display: block; margin:0 auto 10px auto;
 }
 
 header p.lead {
           margin-bottom: 0;
-           font-size: 14px;
+           font-size: 20px;
          font-weight: regular;
-            color: #999;
-            margin-top:-5px;
+            color: rgba(255,255,255,0.4);
+            margin-top:-5px; margin-bottom: 30px
 }
 
 
@@ -61,7 +61,16 @@ header .createProject {
             display: inline-block;          
   }
 
+header button.btn {
+  border: 2px solid #FFF;
+  background: transparent; color:#FFF; text-shadow: none;
+  padding: 0.8em 1.2em;font-weight: bold;font-size: 26px;
+  font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 
+header button.btn:hover {
+  background: #FFF; color:#000; 
+}
 
 .kindafixed-top {
   top: 90px;

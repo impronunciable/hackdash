@@ -1,14 +1,12 @@
 header    
   .container
-    .row-fluid
-      .span3
-       form.formSearch
+      a(href="/")= title
+      h1 Ideas for a hackathon
+      p.lead Upload your project. Add colaborators. Inform status. Share your app.
+      button.btn.btn-large New project
+      .span4.none
+        form.formSearch
         input.search-query.input-large.span8#searchInput(type='text',placeholder='Search a project')
-      .span5
-        h1
-          a(href="/")= title
-      .span4
-        
         .createProject.pull-right
          .btn-group
           if(user)
