@@ -766,12 +766,20 @@ header .btn-link {
   opacity: 0.5
 }
 #searchInput {
+  background: #000;
+  border:none 0; width:30px; height: 30px;
+  color:#000; padding: 10px;
+  border-radius: 5px;
+  transition: all 0.3s;
+  -webkit-transition: all 0.3s; /* Safari */
+  position: absolute;
+  top: 0; left: 0;
+}
 
-  background: #FFF;
-  border: 1px solid #000; width:100%;
-  color:#000;
-	height: 40px;
-  border-radius: 0;
+
+#searchInput:hover {
+  background: #FFF; width: 300px;
+  padding: 10px 15px;
 }
 
 /*
@@ -808,7 +816,9 @@ header .btn-link {
 .homepage header {
   position: static;
 }
-
+header .container {
+  position: relative;
+}
 /*
  * Select2 input
  */
