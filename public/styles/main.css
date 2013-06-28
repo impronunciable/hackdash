@@ -29,7 +29,7 @@ font-style: normal;
 header { 
   padding: 40px 0 60px 0; 
   background: #1e1d22;
-  margin:0 0 80px 0;
+  margin:0 0 50px 0;
   text-align: center;
 }
 
@@ -40,7 +40,7 @@ header h1 {
   line-height: 1.3em;
 }
 
-header  a {
+header  a.logo {
   color: white;
   width: 113px; height: 126px;
       background: url('../images/logohack.png') 0 0 no-repeat;
@@ -61,14 +61,14 @@ header .createProject {
             display: inline-block;          
   }
 
-header button.btn {
+header .btn {
   border: 2px solid #FFF;
   background: transparent; color:#FFF; text-shadow: none;
   padding: 0.8em 1.2em;font-weight: bold;font-size: 26px;
   font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-header button.btn:hover {
+header .btn:hover {
   background: #FFF; color:#000; 
 }
 
