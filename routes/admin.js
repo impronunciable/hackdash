@@ -19,8 +19,9 @@ module.exports = function(app) {
     render('dashboard')
   ];
 
-  app.get('/install', isAuth, notInstalled, render('installed'));
-  app.get('/admin', isAuth, isAdmin, render('admin'));
+  app.get('/install', isAuth, loadUser, notInstalled, render('installed'));
+  app.get('/admin', isAuth, isAdmin, loadUser, loadDashboard, render('admin'));
+  app.post('/admin', isAuth, isAdmin, saveDashboard, render('admin'));
 };
 
 /*
@@ -28,6 +29,7 @@ module.exports = function(app) {
  */
 var render = function(path) {
   return function(req, res) {
+console.log(res.locals.dashboard);
     res.render(path);
   };
 };
@@ -92,6 +94,7 @@ var notInstalled = function(req, res, next) {
   });   
 };
 
+
 /**
  * User is dashboard admin
  */
@@ -99,4 +102,40 @@ var notInstalled = function(req, res, next) {
 var isAdmin = function(req, res, next) {
 	if(req.user.is_admin) next();
 	else res.send(403);
+};
+
+/*
+ * Load dashboard data in res.locals.dashboard
+ */ 
+
+var loadDashboard = function(req, res, next) {
+  Dashboard.findOne({}, function(err, dash){
+    if(err) next(err);
+    else if(!dash) res.send(401);
+    else {
+      res.locals.dashboard = dash;
+      next();
+    }
+  });
+};
+
+/*
+ * Save the dashboard settings
+ */
+
+var saveDashboard = function(req, res, next) {
+  var opts = req.body;
+  Dashboard.findOne({}, function(err, dash){
+    if(err) next(err);
+    else if(!dash) res.send(401);
+    else {
+      dash.title = opts.title || dash.title;
+      dash.description = opts.description || dash.description;
+      dash.background = opts.background || dash.background;
+      dash.save(function(err, doc){
+        res.locals.dashboard = doc;
+        next();
+      });
+    }
+  });
 };

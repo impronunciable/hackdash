@@ -1,4 +1,4 @@
-header    
+header(style="background: #{dashboard.background}")
   .container
     form.formSearch
       input.search-query.input-large.span8#searchInput(type='text')
@@ -7,8 +7,8 @@ header
           img.avatar(src=user.picture + '?s=50').tooltips(rel='tooltip', data-placement='bottom', data-original-title='Edit profile')
   
       a.logo(href="/")= title
-      h1 Ideas for a hackathon
-      p.lead Upload your project. Add colaborators. Inform status. Share your app.
+      h1 #{dashboard.title}
+      p.lead #{dashboard.description}
       if(user)
         a.btn.btn-large(href="/projects/create") New project
       else

@@ -36,7 +36,14 @@ module.exports = function(app) {
 
   var Dashboard = new Schema({
       "admin": { type: ObjectId, ref: 'User' }
+    , "title": { type: String, default: "HackDash" }
+    , "description": { type: String, default: "A dashboard for Hackatons" }
+    , "background": { type: String, default: "#1e1d22" }
     , "created_at": { type: Date, default: Date.now }
+  });
+
+  Dashboard.path('description').validate(function(value) {
+    value.length <= 140;
   });
 
   mongoose.model('Dashboard', Dashboard);
