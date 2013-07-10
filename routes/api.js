@@ -1,5 +1,6 @@
 var passport = require('passport')
   , mongoose = require('mongoose')
+  , moment = require('moment')
   , config = require('../config.json')
   , _ = require('underscore')
   , fs = require('fs')
@@ -9,18 +10,21 @@ var User = mongoose.model('User')
   , Project = mongoose.model('Project');
 
 module.exports = function(app) {
+  app.locals.canCreate = userCanCreate
+  app.locals.stageCanCreate = stageCanCreate
+
   app.get('/api/projects', loadProjects, render('projects'));
-  app.post('/api/projects/create', isAuth, validateProject, saveProject, notify(app, 'project_created'), gracefulRes());
-  app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject, notify(app, 'project_removed'), gracefulRes());
-  app.get('/api/projects/create', isAuth, setViewVar('statuses', app.get('statuses')), render('new_project'));
-  app.post('/api/cover', isAuth, uploadCover);
-  app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), isProjectLeader, loadProject, render('edit'));
-  app.post('/api/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes());
+  app.post('/api/projects/create', isAuth, canCreate, validateProject, saveProject, notify(app, 'project_created'), gracefulRes());
+  app.get('/api/projects/remove/:project_id', isAuth, canRemove, removeProject, notify(app, 'project_removed'), gracefulRes());
+  app.get('/api/projects/create', isAuth, canCreate, setViewVar('statuses', app.get('statuses')), render('new_project'));
+  app.post('/api/cover', isAuth, canEdit, uploadCover);
+  app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), canEdit, loadProject, render('edit'));
+  app.post('/api/projects/edit/:project_id', isAuth, canEdit, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes());
   app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), sendMail(app, 'join'), gracefulRes()); 
   app.get('/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, notify(app, 'project_leave'), gracefulRes()); 
   app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes()); 
   app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, notify(app, 'project_unfollow'), gracefulRes()); 
-  app.get('/api/p/:project_id', loadProject, render('project_full'));
+  app.get('/api/p/:project_id', loadProject, canView, render('project_full'));
   app.get('/api/search', prepareSearchQuery, loadProjects, render('projects'));
   app.get('/api/users/profile', isAuth, loadUser, userIsProfile, render('edit_profile'));
   app.get('/api/users/:user_id', loadUser, findUser, render('profile'));
@@ -175,17 +179,69 @@ var isAuth = function(req, res, next){
 };
 
 /*
- * Check if current user is project leader
+ * Check if current user can create Projects
  */
 
-var isProjectLeader = function(req, res, next){
+var canCreate = function(req, res, next) {
+  if (!userCanCreate(req.user))
+    return res.send(401)
+  next();
+}
+
+/*
+ * Check if current user can remove this project.
+ */
+
+var canRemove = function(req, res, next) {
+  return canPermission(req, res, next, 'remove')
+}
+
+/*
+ * Check if current user can edit this project.
+ */
+
+var canEdit = function(req, res, next) { 
+  return canPermission(req, res, next, 'edit')
+}
+
+/*
+ * Check if current user can view this project.
+ */
+
+var canView = function(req, res, next) {
+  return canPermission(req, res, next, 'view')
+}
+
+/*
+ * Check if current user can do the selected action. 
+ * Being posible values ['edit', 'remove', 'view']
+ */
+
+var canPermission = function(req, res, next, action){
   Project.findOne({ _id: req.params.project_id }, function(err, project) {
     if (err || !project) return res.send(404);
-    if (!req.user.is_admin && req.user.id != project.leader) return res.send(401);
+    switch ( action ) {
+      case 'edit':
+        if (!userCanEdit(req.user, project))
+          return res.send(401);
+        break;
+      case 'remove':
+        if (!userCanRemove(req.user, project))
+          return res.send(401);
+        break;
+      case 'view':
+        if (!userCanView(req.user, project))
+          return res.send(401);
+        break;
+      default:
+        return res.send(401);
+        break;
+    }
     req.project = project;
     next();
   });
 };
+
 
 /*
  * Load all projects
@@ -200,6 +256,9 @@ var loadProjects = function(req, res, next) {
     if(err) return res.send(500);
     res.locals.projects = projects;
     res.locals.user = req.user;
+    res.locals.canView = userCanView;
+    res.locals.canEdit = userCanEdit;
+    res.locals.canRemove = userCanRemove;
     res.locals.userExists = userExistsInArray;
     next();
   });
@@ -218,6 +277,8 @@ var loadProject = function(req, res, next) {
     if(err || !project) return res.send(500);
     res.locals.project = project;
     res.locals.user = req.user;
+    res.locals.canEdit = userCanEdit;
+    res.locals.canRemove = userCanRemove;
     res.locals.disqus_shortname = config.disqus_shortname;
     res.locals.userExists = userExistsInArray;
     next();
@@ -289,6 +350,7 @@ var saveProject = function(req, res, next) {
 
 var removeProject = function(req, res, next) {
   res.locals.project = {id: req.project.id, title: req.project.title};
+
   req.project.remove(function(err){
     if(err) res.send(500);
     else next();
@@ -415,3 +477,153 @@ var gracefulRes = function(msg) {
     res.json(msg && {msg: msg} ||{err: null, id: res.locals.project.id});
   };
 };
+
+
+/*
+ *  Returns the first stage that wraps the actual time
+ */
+
+var actualStage = function() {
+  if (config['stages']) {
+    momentNow = moment(Date())
+    for ( var i = 0; i < config['stages'].length; i++ ) {
+      var stageStart = config['stages'][i]['start'];
+      var stageEnd = config['stages'][i]['end'];
+      var isBeforeEnd = !stageEnd || momentNow.isBefore(stageEnd);
+      var isAfterStart = !stageStart || momentNow.isAfter(stageStart);
+      if (isBeforeEnd && isAfterStart)
+        return config['stages'][i]
+    }
+  }
+}
+
+/*
+ * Check an stage for permissions
+ */
+
+var stageHasPermission = function(stage, permission) {
+  if (!stage) 
+    return false;
+
+  return _.find(stage['permissions'], function(u){
+    return (u == permission);
+  });
+}
+
+/*
+ * Tells if the actual stage has permissions to create
+ */
+
+var stageCanCreate = function() {
+  return stageHasPermission(actualStage(), 'create');
+}
+
+/*
+ * Tells if the user can create projects
+ */
+
+var userCanCreate = function(user) {
+  // Anonymous can't create
+  if ( !user )
+    return false;
+
+  // Admin, always can create
+  if (user.is_admin) 
+    return true;
+
+  // If we are on no stage (and not admin) user can't create
+  var stage = actualStage();
+  if (!stage)
+    return false;
+
+  // Otherwise, it dependes on the stage
+  return stageHasPermission(stage, 'create')
+};
+
+/*
+ * Tells if the user can remove a project
+ */
+
+var userCanRemove = function(user, project) {
+  // Anonymous can't remove
+  if (!user)
+    return false;
+
+  // Admin, always can remove
+  if (user.is_admin)
+    return true;
+
+  // If we are on no stage (and not admin) user can't remove
+  var stage = actualStage();
+  if (!stage)
+    return false;
+
+  // If stage has no permission to create, then no permission to remove
+  if ( !stageHasPermission(stage, 'create') )
+    return false;
+
+  // If stage has permission but the user is not leader, then user can't remove
+  if (user.id !== project.leader.id )
+    return false;
+
+  // Otherwise (not admin, stage with permission, and leader), user can remove!! :D
+  return true;
+}
+
+/*
+ * Tells if the user can edit a project
+ */
+
+var userCanEdit = function(user, project) {
+  // Anonymous can't edit
+  if ( !user )
+    return false;
+
+  // Admin, always can edit
+  if (user.is_admin)
+    return true;
+
+  // If we are on no stage (and not admin) user can't edit
+  var stage = actualStage();
+  if ( !stage )
+    return false;
+
+  // If the stage has no permission to edit or create user can't edit
+  if ( !stageHasPermission(stage, 'edit') && !stageHasPermission(stage, 'create'))
+    return false;
+
+  // If the stage has permission but the user is not the leader, user can't edit
+  if (user.id !== project.leader.id )
+    return false;
+
+  // Otherwise (not admin, stage with permission, and leader) user can edit!! :D
+  return true;
+  
+};
+
+/*
+ * Tells if the user can view a project
+ */
+
+var userCanView = function(user, project) {
+  var stage = actualStage()
+
+  // Anonymous user search for permission on stage
+  if ( !user ) 
+    return stage && stageHasPermission(stage, 'view-anonymous')
+
+  // Admin, always can view
+  if (user.is_admin)
+    return true;
+
+  // If the user is the leader or a contributor they can always see the project.
+  if ( user.id === project.leader.id || userExistsInArray(user, project.contributors ) )
+    return true;
+
+  // If we are on no stage (and not admin, and not contributor) user can't view
+  if ( !stage )
+    return false;
+
+  // Otherwise, it depends on the stage
+  return  stageHasPermission(stage, 'view')
+}
