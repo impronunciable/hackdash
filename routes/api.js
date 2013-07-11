@@ -218,7 +218,9 @@ var canView = function(req, res, next) {
  */
 
 var canPermission = function(req, res, next, action){
-  Project.findOne({ _id: req.params.project_id }, function(err, project) {
+  Project.findById(req.params.project_id)
+  .populate('leader')
+  .exec(function(err, project) {
     if (err || !project) return res.send(404);
     switch ( action ) {
       case 'edit':
