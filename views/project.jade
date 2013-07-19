@@ -20,22 +20,22 @@
           i.icon-heart
 
       .pull-right.remove
-        if(user && isLeader(user, project))
+        if (canRemove(user, project))
           a.btn.btn-link(href='/projects/remove/'+project._id) Remove
 
       .pull-right.edit
-        if(user && isLeader(user, project))
+        if (canEdit(user, project))
           a.btn.btn-link(href='/projects/edit/'+project._id) Edit
 
-      if(user && !isLeader(user, project))
-        if(userExists(user, project.contributors))
+      if (user && !isLeader(user, project))
+        if (userExists(user, project.contributors))
           .pull-right.contributor
             a.btn.btn-link(href='/projects/leave/'+project._id) Leave
         else 
           .pull-right.contributor
             a.btn.btn-link(href='/projects/join/'+project._id) Join
 
-        if(userExists(user, project.followers))
+        if (userExists(user, project.followers))
           .pull-right.follower
             a.btn.btn-link(href='/projects/unfollow/'+project._id) Unfollow
         else 

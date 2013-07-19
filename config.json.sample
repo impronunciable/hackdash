@@ -10,5 +10,18 @@
   "disqus_shortname": null,
 	"title": "hackdash",
 	"live": true,
-	"mailer": null
+	"mailer": null,
+  "stages" : [
+    {
+      "name": "submission",
+      "start": "2013-07-01",
+      "end": "2013-08-01",
+      "permissions": ["view", "edit", "create"]
+    },
+    {
+      "name": "gallery",
+      "start": "2013-09-01 00:00",
+      "permissions": ["view", "view-anonymous"]
+    }
+  ]
 }
