@@ -17,7 +17,7 @@ module.exports = function(app) {
   app.post('/api/projects/create', isAuth, canCreate, validateProject, saveProject, notify(app, 'project_created'), gracefulRes());
   app.get('/api/projects/remove/:project_id', isAuth, canRemove, removeProject, notify(app, 'project_removed'), gracefulRes());
   app.get('/api/projects/create', isAuth, canCreate, setViewVar('statuses', app.get('statuses')), render('new_project'));
-  app.post('/api/cover', isAuth, canEdit, uploadCover);
+  app.post('/api/cover', isAuth,  uploadCover);
   app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), canEdit, loadProject, render('edit'));
   app.post('/api/projects/edit/:project_id', isAuth, canEdit, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes());
   app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), sendMail(app, 'join'), gracefulRes()); 
