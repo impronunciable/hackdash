@@ -361,6 +361,7 @@ text:project.language}]);
         fillGhProjectForm(res.body, $(self).parents('#page').find('form'));
       });
     }
+    e.preventDefault();
   });
 
   $logo.click(function(){
