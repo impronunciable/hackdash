@@ -21,7 +21,7 @@ module.exports = function(app) {
   app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), canEdit, loadProject, render('edit'));
   app.post('/api/projects/edit/:project_id', isAuth, canEdit, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes());
   app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), sendMail(app, 'join'), gracefulRes()); 
-  app.get('/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, notify(app, 'project_leave'), gracefulRes()); 
+  app.get('/api/projects/leave/:project_id', isAuth, isProjectMemberOrApplicant, leaveProject, loadProject, gracefulRes()); 
   app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes()); 
   app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, notify(app, 'project_unfollow'), gracefulRes()); 
   app.get('/api/p/:project_id', loadProject, canView, render('project_full'));
@@ -29,6 +29,8 @@ module.exports = function(app) {
   app.get('/api/users/profile', isAuth, loadUser, userIsProfile, render('edit_profile'));
   app.get('/api/users/:user_id', loadUser, findUser, render('profile'));
   app.post('/api/users/:user_id', isAuth, updateUser, gracefulRes('ok!'));
+  app.get('/api/projects/approve/:project_id/:user_id', joinApprove, loadProject, gracefulRes()); 
+
 };
 
 /*
@@ -252,6 +254,7 @@ var canPermission = function(req, res, next, action){
 var loadProjects = function(req, res, next) {
   Project.find(req.query || {})
   .populate('contributors')
+  .populate('applicants')  
   .populate('followers')
   .populate('leader')
   .exec(function(err, projects) {
@@ -273,6 +276,7 @@ var loadProjects = function(req, res, next) {
 var loadProject = function(req, res, next) {
   Project.findById(req.params.project_id)
   .populate('contributors')
+  .populate('applicants')
   .populate('followers')
   .populate('leader')
   .exec(function(err, project) {
@@ -415,6 +419,19 @@ var isProjectMember = function(req, res, next) {
 };
 
 /*
+ * Check if current user is member of a project or applicant
+ */
+
+var isProjectMemberOrApplicant = function(req, res, next) {
+  Project.findOne({_id: req.params.project_id, $or: [ {contributors: req.user.id}, {applicants: req.user.id}]}, function(err, project){
+    if(err || !project) return res.send(500);
+    req.project = project;
+    next(); 
+  });
+};
+
+
+/*
  * Check if current user is follower of a project
  */
 
@@ -431,9 +448,23 @@ var isProjectFollower = function(req, res, next) {
  */
 
 var joinProject = function(req, res, next) {
-  Project.update({_id: req.params.project_id}, { $addToSet : { 'contributors': req.user.id }}, function(err){
+  Project.update({_id: req.params.project_id}, { $addToSet : { 'applicants': req.user.id }}, function(err){
     if(err) return res.send(500);
     next();
+  });
+};
+
+ /*
+ * Approve user join as a group
+ */
+
+var joinApprove = function(req, res, next) {
+  Project.update({_id: req.params.project_id}, { $pull : { 'applicants': req.params.user_id }}, function(err, count, raw){
+    if(err) return res.send(500);
+    Project.update({_id: req.params.project_id}, { $addToSet : { 'contributors': req.params.user_id }}, function(err, count, raw){
+      if(err) return res.send(500);
+      next();
+    });
   });
 };
 
@@ -443,8 +474,11 @@ var joinProject = function(req, res, next) {
 
 var leaveProject = function(req, res, next) {
   Project.update({_id: req.params.project_id}, { $pull: {'contributors': req.user._id }}, function(err){
-    if(err) return res.send(500);
-    next();
+      if(err) return res.send(500);
+      Project.update({_id: req.params.project_id}, { $pull: {'applicants': req.user._id }}, function(err){
+        if(err) return res.send(500);
+        next()
+      });     
   });
 };
 

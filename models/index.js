@@ -25,6 +25,7 @@ module.exports = function(app) {
     , "leader": { type: ObjectId, required: true, ref: 'User' }
     , "status": { type: String, enum: app.get('statuses'), default: app.get('statuses')[0] }
     , "contributors": [{ type: ObjectId, ref: 'User'}]
+    , "applicants":[{ type: ObjectId, ref: 'User'}]
     , "followers": [{ type: ObjectId, ref: 'User'}]
     , "cover": String
     , "link": String 

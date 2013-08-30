@@ -31,9 +31,12 @@
         if (userExists(user, project.contributors))
           .pull-right.contributor
             a.btn.btn-link(href='/projects/leave/'+project._id) Leave
-        else 
+        else if(userExists(user, project.applicants))
           .pull-right.contributor
-            a.btn.btn-link(href='/projects/join/'+project._id) Join
+            a.btn.btn-link(href='/projects/leave/'+project._id) Leave (Pending)
+        else
+          .pull-right.contributor
+            a.btn.btn-link(href='/projects/join/'+project._id) Join                    
 
         if (userExists(user, project.followers))
           .pull-right.follower
