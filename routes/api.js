@@ -12,7 +12,7 @@ var User = mongoose.model('User')
 module.exports = function(app) {
   app.locals.canCreate = userCanCreate
   app.locals.stageCanCreate = stageCanCreate
-
+  app.get('/api/users/applicants', isAuth, loadApplicants, render('applicants'));
   app.get('/api/projects', loadProjects, render('projects'));
   app.post('/api/projects/create', isAuth, canCreate, validateProject, saveProject, notify(app, 'project_created'), gracefulRes());
   app.get('/api/projects/remove/:project_id', isAuth, canRemove, removeProject, notify(app, 'project_removed'), gracefulRes());
@@ -29,7 +29,7 @@ module.exports = function(app) {
   app.get('/api/users/profile', isAuth, loadUser, userIsProfile, render('edit_profile'));
   app.get('/api/users/:user_id', loadUser, findUser, render('profile'));
   app.post('/api/users/:user_id', isAuth, updateUser, gracefulRes('ok!'));
-  app.get('/api/projects/approve/:project_id/:user_id', joinApprove, loadProject, gracefulRes()); 
+  app.get('/api/projects/approve/:project_id/:user_id', isAuth, canApprove, joinApprove, loadProject, gracefulRes()); 
 
 };
 
@@ -215,6 +215,14 @@ var canView = function(req, res, next) {
 }
 
 /*
+ * Check if current user can remove this project.
+ */
+
+var canApprove = function(req, res, next) {
+  return canPermission(req, res, next, 'approve')
+}
+
+/*
  * Check if current user can do the selected action. 
  * Being posible values ['edit', 'remove', 'view']
  */
@@ -235,6 +243,10 @@ var canPermission = function(req, res, next, action){
         break;
       case 'view':
         if (!userCanView(req.user, project))
+          return res.send(401);
+        break;
+      case 'approve':
+        if (!userCanApprove(req.user, project))
           return res.send(401);
         break;
       default:
@@ -282,6 +294,28 @@ var loadProject = function(req, res, next) {
   .exec(function(err, project) {
     if(err || !project) return res.send(500);
     res.locals.project = project;
+    res.locals.user = req.user;
+    res.locals.canEdit = userCanEdit;
+    res.locals.canRemove = userCanRemove;
+    res.locals.disqus_shortname = config.disqus_shortname;
+    res.locals.userExists = userExistsInArray;
+    next();
+  });
+};
+
+/*
+ * Load applicants
+ */
+
+var loadApplicants = function(req, res, next) {
+  Project.find({leader:req.user._id})
+  .populate('contributors')
+  .populate('applicants')
+  .populate('followers')
+  .populate('leader')
+  .exec(function(err, projects) {
+    if(err || !projects) return res.send(500);
+    res.locals.projects = projects;
     res.locals.user = req.user;
     res.locals.canEdit = userCanEdit;
     res.locals.canRemove = userCanRemove;
@@ -662,4 +696,35 @@ var userCanView = function(user, project) {
 
   // Otherwise, it depends on the stage
   return  stageHasPermission(stage, 'view')
+}
+/*
+ * Tells if the user can approve a new project member
+ */
+
+var userCanApprove = function(user, project) {
+
+  // Anonymous can't approve
+  if ( !user )
+    return false;
+
+  // Admin, always can approve
+  if (user.is_admin)
+    return true;
+
+  // If we are on no stage (and not admin) user can't approve
+  var stage = actualStage();
+  if ( !stage )
+    return false;
+
+  // If the stage has no permission to edit or create user can't approve
+  if ( !stageHasPermission(stage, 'edit') && !stageHasPermission(stage, 'create'))
+    return false;
+
+  // If the stage has permission but the user is not the leader, user can't approve
+  if (user.id !== project.leader.id )
+    return false;
+
+  // Otherwise (not admin, stage with permission, and leader) user can approve!! :D
+  return true;
+  
 }

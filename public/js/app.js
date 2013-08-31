@@ -13,6 +13,7 @@
     , $main = $('#main')
     , $fullProject = $('#fullProject')
     , $logIn = $('#logIn')
+    , $applicants = $('#applicants')
     , $modals = $('.modal')
     , $searchInput = $('#searchInput')
     , $formSearch = $('.formSearch')
@@ -64,6 +65,15 @@
   var logIn = function(ctx, next) {
     $logIn.modal('show');
   };
+
+  var loadApplicants = function(ctx, next) {
+    request
+    .get('/api/users/applicants')
+    .end(function(res){
+      $applicants.html(res.body.html).modal('show');
+      next();
+    }); 
+  };  
 
   var cleanSearch = function(ctx, next){
     $searchInput.val('');
@@ -253,6 +263,7 @@
   page('/projects/join/:project_id', joinProject);
   page('/projects/approve/:project_id/:user_id', joinApprove);
   page('/projects/leave/:project_id', leaveProject);
+  page('/users/applicants', loadApplicants);  
   page('/users/profile', getMyProfile);
   page('/users/:user_id', getUserProfile);
   page('/p/:project_id', projectInfo);

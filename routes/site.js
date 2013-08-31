@@ -40,10 +40,9 @@ module.exports = function(app) {
   app.get('/projects/edit/:project_id', dashboardStack);
   app.get('/p/:project_id', dashboardStack);
   app.get('/search', dashboardStack);
-  app.get('/logout', logout, redirect('/'));
-  
+  app.get('/logout', logout, redirect('/'));  
   app.get('/about', loadUser, render('about'));
-
+  app.get('/users/applicants', dashboardStack);
   app.get('/users/profile', dashboardStack);
   app.get('/users/:user_id', dashboardStack);
 };
