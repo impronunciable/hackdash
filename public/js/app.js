@@ -173,6 +173,7 @@
       page('/');
     });
   };
+
   var joinApprove = function(ctx) {
     request
     .get('/api/projects/approve/' + ctx.params.project_id + '/'+ ctx.params.user_id)
@@ -180,6 +181,15 @@
       page('/');
     });
   };
+
+  var joinReject = function(ctx) {
+    request
+    .get('/api/projects/reject/' + ctx.params.project_id + '/'+ ctx.params.user_id)
+    .end(function(res){
+      page('/');
+    });
+  };
+
   var leaveProject = function(ctx) {
     request
     .get('/api/projects/leave/' + ctx.params.project_id)
@@ -261,6 +271,7 @@
   page('/projects/unfollow/:project_id', unfollowProject);
   page('/projects/join/:project_id', joinProject);
   page('/projects/approve/:project_id/:user_id', joinApprove);
+  page('/projects/reject/:project_id/:user_id', joinReject);
   page('/projects/leave/:project_id', leaveProject);
   page('/users/applicants', loadApplicants);  
   page('/users/profile', getMyProfile);

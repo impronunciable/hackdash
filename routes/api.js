@@ -30,6 +30,7 @@ module.exports = function(app) {
   app.get('/api/users/:user_id', loadUser, findUser, render('profile'));
   app.post('/api/users/:user_id', isAuth, updateUser, gracefulRes('ok!'));
   app.get('/api/projects/approve/:project_id/:user_id', isAuth, canApprove, joinApprove, loadProject, gracefulRes()); 
+  app.get('/api/projects/reject/:project_id/:user_id', isAuth, canApprove, joinReject, loadProject, gracefulRes()); 
 
 };
 
@@ -478,7 +479,7 @@ var isProjectFollower = function(req, res, next) {
 };
 
  /*
- * Add current user as a group contributor
+ * Add current user to applicants
  */
 
 var joinProject = function(req, res, next) {
@@ -489,7 +490,7 @@ var joinProject = function(req, res, next) {
 };
 
  /*
- * Approve user join as a group
+ * Add applicant to contributors
  */
 
 var joinApprove = function(req, res, next) {
@@ -499,6 +500,17 @@ var joinApprove = function(req, res, next) {
       if(err) return res.send(500);
       next();
     });
+  });
+};
+
+ /*
+ * Remove from applicant group
+ */
+
+var joinReject = function(req, res, next) {
+  Project.update({_id: req.params.project_id}, { $pull : { 'applicants': req.params.user_id }}, function(err, count, raw){
+    if(err) return res.send(500);
+    next();
   });
 };
 
