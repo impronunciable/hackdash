@@ -71,7 +71,6 @@
     .get('/api/users/applicants')
     .end(function(res){
       $applicants.html(res.body.html).modal('show');
-      next();
     }); 
   };  
 
@@ -341,10 +340,6 @@
 text:project.language}]);
     $form.find('#status').select2("val", "building");
   };
-
-  $modals.live('hidden', function(){
-    page('/');
-  });
 
   $searchInput.on('keyup', function(e){
     $(this).parents('form').submit();
