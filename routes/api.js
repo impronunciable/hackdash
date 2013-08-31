@@ -494,13 +494,10 @@ var joinProject = function(req, res, next) {
  */
 
 var joinApprove = function(req, res, next) {
-  Project.update({_id: req.params.project_id}, { $pull : { 'applicants': req.params.user_id }}, function(err, count, raw){
-    if(err) return res.send(500);
-    Project.update({_id: req.params.project_id}, { $addToSet : { 'contributors': req.params.user_id }}, function(err, count, raw){
+    Project.update({_id: req.params.project_id}, { $addToSet : { 'contributors': req.params.user_id }, $pull : { 'applicants': req.params.user_id }}, function(err, count, raw){
       if(err) return res.send(500);
       next();
     });
-  });
 };
 
  /*
@@ -519,12 +516,9 @@ var joinReject = function(req, res, next) {
  */
 
 var leaveProject = function(req, res, next) {
-  Project.update({_id: req.params.project_id}, { $pull: {'contributors': req.user._id }}, function(err){
+  Project.update({_id: req.params.project_id}, { $pull: {'contributors': req.user._id, 'applicants': req.user._id }}, function(err){
       if(err) return res.send(500);
-      Project.update({_id: req.params.project_id}, { $pull: {'applicants': req.user._id }}, function(err){
-        if(err) return res.send(500);
-        next()
-      });     
+      next()
   });
 };
 
