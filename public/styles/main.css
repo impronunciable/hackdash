@@ -2,10 +2,10 @@
 
 body {
   margin: 0; font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px;
-  line-height: 18px; color: #333333; background: #eeedee;}
-
+  line-height: 18px; color: #333333; background: #eeedee;
+}
 .tooltip {
-    z-index: 2000 !important;
+  z-index: 2000 !important;
 }
 .none {
   display: none!important
@@ -14,16 +14,15 @@ body {
  background-color: red;
 }
 
-
 @font-face {
-font-family: 'Entypo';
-src: url('font-face/entypo-webfont.eot');
-src: url('font-face/entypo-webfont.eot?#iefix') format('embedded-opentype'),
-url('font-face/entypo-webfont.woff') format('woff'),
-url('font-face/entypo-webfont.ttf') format('truetype'),
-url('font-face/entypo-webfont.svg#EntypoRegular') format('svg');
-font-weight: normal;
-font-style: normal;
+  font-family: 'Entypo';
+  src: url('font-face/entypo-webfont.eot');
+  src: url('font-face/entypo-webfont.eot?#iefix') format('embedded-opentype'),
+  url('font-face/entypo-webfont.woff') format('woff'),
+  url('font-face/entypo-webfont.ttf') format('truetype'),
+  url('font-face/entypo-webfont.svg#EntypoRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
 
 header { 
@@ -43,23 +42,22 @@ header h1 {
 header  a.logo {
   color: white;
   width: 113px; height: 126px;
-      background: url('../images/logohack.png') 0 0 no-repeat;
-      text-indent: -9999px;
+  background: url('../images/logohack.png') 0 0 no-repeat;
+  text-indent: -9999px;
   display: block; margin:0 auto 10px auto;
 }
 
 header p.lead {
-          margin-bottom: 0;
-           font-size: 20px;
-         font-weight: regular;
-            color: rgba(255,255,255,0.4);
-            margin-top:-5px; margin-bottom: 30px
+  margin-bottom: 0;
+  font-size: 20px;
+  font-weight: regular;
+  color: rgba(255,255,255,0.4);
+  margin-top:-5px; margin-bottom: 30px
 }
 
-
 header .createProject {
-            display: inline-block;          
-  }
+  display: inline-block;          
+}
 
 header .btn {
   border: 2px solid #FFF;
@@ -133,37 +131,32 @@ header .btn:hover {
   -o-transition: all 0.2s ease-in-out;
   /* Standard */
   transition: all 0.2s ease-in-out;
-
 	width: 100%;
 }
-
 
 .well:hover .cover img {
   opacity: 1
 }
 
-
 #projects .well:hover {
   box-shadow: 0 2px 3px rgba(0,0,0,0.3);
   cursor: pointer;
-    top:-2px;
-
+  top:-2px;
 }
 
 .well .avatar {
   width:32px;
   height: 32px;
-
 }
-
-
 
 .modal .well {
   margin: 0
 }
+
 .well-content {
   padding:15px;
 }
+
 .well-content img {
   border-radius: 50px;
   width: 48px;
@@ -174,8 +167,6 @@ header .btn:hover {
 .well-content img:last-child {
   margin-right: 0px;
 }
-
-
 
 .well-content img:hover {
   box-shadow: 0 0 5px #999;
@@ -194,44 +185,37 @@ header .btn:hover {
   text-decoration: none;
 }
 
-
 .well p {
   color:#777;
   margin:0 0 10px 0; 
-
--ms-word-break: break-all;
-     word-break: break-all;
-     word-break: break-word;
-
--webkit-hyphens: auto;
-   -moz-hyphens: auto;
-        hyphens: auto;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
 }
-
-
-
 
 .well .row-fluid {
   border-top:#EEE 1px solid;
 }
 
 [data-icon]::before {
-font-family:              'Entypo';
-color:                        #000;
-font-weight:        400 !important;
-content:           attr(data-icon);
-text-transform:               none;
-position:                 relative;
-top:                           3px;
-font-size:                    30px;
-line-height:                     0;
+  font-family:              'Entypo';
+  color:                        #000;
+  font-weight:        400 !important;
+  content:           attr(data-icon);
+  text-transform:               none;
+  position:                 relative;
+  top:                           3px;
+  font-size:                    30px;
+  line-height:                     0;
 }
 
 .divider {
   border-top: 3px solid;
   margin-bottom: 8px;
 }
-
 
 .divider.prototyping { border-color:#ff5f8c;}
 .divider.releasing { border-color:#77db45;}
@@ -260,7 +244,6 @@ line-height:                     0;
 .actions {
   margin-top:5px;
 }
-
 
 @media (max-width: 480px) {
 
@@ -319,7 +302,6 @@ line-height:                     0;
 
 }
 
-
 @media (min-width: 768px) and (max-width: 980px) {
   .project.span4 {
     width: 352px;
@@ -337,15 +319,14 @@ line-height:                     0;
 }
 
 .signup-btn  {
-
-  background:#26afa0!important;
+  background:#4bcf0a;
   border:#4bcf0a 2px solid;
   border-radius: 50px;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
   box-shadow: none;
   color:#FFF!important;
   font-weight: bolder;
-      /* Firefox */
+  /* Firefox */
   -moz-transition: all 0.2s ease-in-out;
   /* WebKit */
   -webkit-transition: all 0.2s ease-in-out;
@@ -353,36 +334,29 @@ line-height:                     0;
   -o-transition: all 0.2s ease-in-out;
   /* Standard */
   transition: all 0.2s ease-in-out;
-
-
-
-
-
-
   display: block;
-    font-weight: bold;
-    font-size: 18px;
-    padding: 12px 30px 12px 0;
-    margin: 10px 0 25px;
-    cursor: pointer;
-    text-align: left;
-    margin: 20px 0;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 12px 30px 12px 0;
+  margin: 10px 0 25px;
+  cursor: pointer;
+  text-align: left;
+  margin: 20px 0;
 }
 
 .signup-btn i {
-      height: 24px;
-      width: 20px;
-      background-size: 24px;
-      display: inline-block;
-      vertical-align: text-top;
-      color:#000;
-      margin-right: 15px;
-      border-right: 1px solid rgba(0, 0, 0, 0.1);
-      padding-right: 30px;
-      box-shadow: 1px 0 0px rgba(255, 255, 255, 0.2); }
+  height: 24px;
+  width: 20px;
+  background-size: 24px;
+  display: inline-block;
+  vertical-align: text-top;
+  margin-right: 15px;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  padding-right: 30px;
+  box-shadow: 1px 0 0px rgba(255, 255, 255, 0.2); 
+}
 
 .signup-btn:hover {
-
   color: #ffffff;
   box-shadow: 0 0 2px #CCC;
   text-decoration: none;
@@ -390,19 +364,25 @@ line-height:                     0;
 }
 
 .signup-twitter {
-    background-color: #0ba8d6;
-    border-color: #0ba8d6;
-    background-image: -moz-linear-gradient(#35bfe7, #0ba8d6);
-    background-image: -o-linear-gradient(#35bfe7, #0ba8d6);
-    background-image: -ms-linear-gradient(#35bfe7, #0ba8d6);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #35bfe7), color-stop(1, #0ba8d6));
-    background-image: -webkit-linear-gradient(#35bfe7, #0ba8d6); }
+  background-color: #0ba8d6;
+  border-color: #0ba8d6;
+  background-image: -moz-linear-gradient(#35bfe7, #0ba8d6);
+  background-image: -o-linear-gradient(#35bfe7, #0ba8d6);
+  background-image: -ms-linear-gradient(#35bfe7, #0ba8d6);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #35bfe7), color-stop(1, #0ba8d6));
+  background-image: -webkit-linear-gradient(#35bfe7, #0ba8d6); 
+}
 
+.signup-twitter:hover {
+  background-color: #0ba8d6;
+  border-color: #35bfe7;  
+}
 
 
 .signup-twitter i {
-      background: url('../images/icon-twitter.svg') 14px center no-repeat;
-      background-size: 30px auto; }
+  background: url('../images/icon-twitter.svg') 14px center no-repeat;
+  background-size: 30px auto; 
+}
 
 .signup-facebook {
     background-color: #4264b3;
@@ -445,8 +425,8 @@ line-height:                     0;
     text-shadow: 0 1px 0 #CBCBCB; }
 
 .signup-github i {
-      background: url('../images/icon-github.svg') 14px center no-repeat;
-      background-size: 30px auto;
+  background: url('../images/icon-github.svg') 14px center no-repeat;
+  background-size: 30px auto;
 }
 
 a.signup-github:hover {
@@ -455,7 +435,6 @@ a.signup-github:hover {
 
 }
 
-
 .btn-group>.btn+.btn {
  margin-left: 0px;
 }
@@ -463,7 +442,6 @@ a.signup-github:hover {
 .btn-large {
   padding: 13px;
 }
-
 
 .btn-group>.btn:first-child {
   -webkit-border-bottom-left-radius: 50px;
@@ -475,16 +453,13 @@ a.signup-github:hover {
 }
 
 .btn-group>.btn:last-child {
--webkit-border-top-right-radius: 50px;
-border-top-right-radius: 50px;
--webkit-border-bottom-right-radius: 50px;
-border-bottom-right-radius: 50px;
--moz-border-radius-topright: 50px;
--moz-border-radius-bottomright: 50px;
+  -webkit-border-top-right-radius: 50px;
+  border-top-right-radius: 50px;
+  -webkit-border-bottom-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  -moz-border-radius-topright: 50px;
+  -moz-border-radius-bottomright: 50px;
 }
-
-
-
 
 .btn-profile {
   padding: 0;
@@ -505,13 +480,10 @@ border-bottom-right-radius: 50px;
   transition: all 0.2s ease-in-out;
 }
 
-
 .btn-profile img {
   width: 50px;
   height: 50px;
 }
-
-
 
 .project .well {
   border-top:10px solid #000;
@@ -522,7 +494,6 @@ border-bottom-right-radius: 50px;
 .project.wireframing .well { border-top-color:#55c5ff;}
 .project.researching .well { border-top-color:red;}
 .project.brainstorming .well { border-top-color:#ff5a00;}
-
 
 h1,h2,h3,h4,h5,h6,p {
   font-family: 'Open Sans', sans-serif;
@@ -567,7 +538,6 @@ h1,h2,h3,h4,h5,h6,p {
   top:0; left: 0
 }
 
-
 .formSearch i {
   color:#FFF;
   position: absolute;
@@ -577,7 +547,6 @@ h1,h2,h3,h4,h5,h6,p {
 .formSearch:hover i {
   color:#000;
 }
-
 
 .formSearch input {
   height: 30px;
@@ -609,7 +578,9 @@ h1,h2,h3,h4,h5,h6,p {
   color: #FF0000;
 }
 
-.modal form {margin:0;}
+.modal form {
+  margin:0;
+}
 
 #page {
   min-height: 600px;
@@ -655,7 +626,6 @@ h1,h2,h3,h4,h5,h6,p {
   font-size:14px;
   color:#999999;
   font-weight: normal;
-
 }
 
 .well-sidebar p, .well-sidebar li, .well-sidebar strong{
@@ -663,14 +633,16 @@ h1,h2,h3,h4,h5,h6,p {
   color:#000;
 }
 
- .well-sidebar ul {
+.well-sidebar ul {
   margin:0;
   padding: 0;
   list-style: none;
- }
+}
 
 .modal .well-content {
-vertical-align: top;
+  width:430px;
+  display: inline-block;
+  vertical-align: top;
 }
 
 #dragdrop {
@@ -704,7 +676,6 @@ Click on project effect
 .zoomed {
   visibility: hidden;
 }
-
 
 footer { 
   padding: 18px 0 17px 0;
@@ -740,7 +711,6 @@ header .btn-link {
   padding: 10px 15px 10px 45px;
 }
 
-
 /*
  * Timeline
  */
@@ -757,12 +727,14 @@ header .btn-link {
 #timeline p {
 	padding-top: 25px;
 }
+
 #ghImportBtn {
- text-align:center;
- display: block;
- padding: 15px;
- background: #EEE;
+  text-align:center;
+  display: block;
+  padding: 15px;
+  background: #EEE;
 }
+
 /**
  * Homepage
  */
@@ -774,9 +746,11 @@ header .btn-link {
 .homepage header {
   position: static;
 }
+
 header .container {
   position: relative;
 }
+
 /*
  * Select2 input
  */
@@ -785,10 +759,10 @@ header .container {
   width:285px;
 }
 
-
 .form-actions,.ajaxForm {
   margin-bottom: 0
 }
+
 .boxxy {
   background: #FFF;
   border: 1px solid #CCC;
@@ -846,7 +820,6 @@ h3.header {
   border:none;
   padding:5px 12px;
 }
-
 
 .btn-success {
   border-color:#26afa0;
