@@ -1,7 +1,8 @@
 
 var passport = require('passport')
   , config = require('../config.json')
-  , mongoose = require('mongoose');
+  , mongoose = require('mongoose')
+  , _ = require('underscore');
 
 var User = mongoose.model('User')
   , Project = mongoose.model('Project')
@@ -17,6 +18,7 @@ module.exports = function(app) {
     loadUser, 
     loadProviders,
     loadDashboard,
+    loadApplicants,
     setViewVar('statuses', app.get('statuses')),
     setViewVar('disqus_shortname', config.disqus_shortname),
     render('dashboard')
@@ -94,6 +96,24 @@ var loadUser = function(req, res, next) {
   next();
 };
 
+/*
+ * Add applicants template variable
+ */
+
+var loadApplicants = function(req, res, next) {
+  if(typeof req.user !== 'undefined'){
+    Project.find({leader:req.user._id}, 'applicants')
+    .populate('applicants')
+    .exec(function(err, projects) {
+      if(err || !projects) return res.send(500);
+      var applicants = _.reduceRight(_.pluck(projects,'applicants'), function(a, b) { return a.concat(b); }, []);      
+      res.locals.applicants = applicants;      
+      next();
+    });
+  }else{
+    next();
+  }
+};
 
 /*
  * Check if current user is authenticated

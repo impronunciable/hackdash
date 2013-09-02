@@ -178,7 +178,7 @@
     request
     .get('/api/projects/approve/' + ctx.params.project_id + '/'+ ctx.params.user_id)
     .end(function(res){
-      page('/');
+      page('/users/applicants');
     });
   };
 

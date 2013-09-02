@@ -1,3 +1,6 @@
+p 
+  a.btn-profile(href="/users/" + _applicant._id)
+    img.avatar(src=_applicant.picture)
 p #{_applicant.name}
 p #{project.title}
 a.btn(href='/projects/approve/' + project._id + '/' + _applicant._id ) Approve

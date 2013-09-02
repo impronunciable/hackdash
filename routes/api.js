@@ -12,7 +12,6 @@ var User = mongoose.model('User')
 module.exports = function(app) {
   app.locals.canCreate = userCanCreate
   app.locals.stageCanCreate = stageCanCreate
-  app.get('/api/users/applicants', isAuth, loadApplicants, render('applicants'));
   app.get('/api/projects', loadProjects, render('projects'));
   app.post('/api/projects/create', isAuth, canCreate, validateProject, saveProject, notify(app, 'project_created'), gracefulRes());
   app.get('/api/projects/remove/:project_id', isAuth, canRemove, removeProject, notify(app, 'project_removed'), gracefulRes());
@@ -26,12 +25,12 @@ module.exports = function(app) {
   app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, notify(app, 'project_unfollow'), gracefulRes()); 
   app.get('/api/p/:project_id', loadProject, canView, render('project_full'));
   app.get('/api/search', prepareSearchQuery, loadProjects, render('projects'));
+  app.get('/api/users/applicants', isAuth, loadApplicants, render('applicants'));
   app.get('/api/users/profile', isAuth, loadUser, userIsProfile, render('edit_profile'));
   app.get('/api/users/:user_id', loadUser, findUser, render('profile'));
   app.post('/api/users/:user_id', isAuth, updateUser, gracefulRes('ok!'));
   app.get('/api/projects/approve/:project_id/:user_id', isAuth, canApprove, joinApprove, loadProject, gracefulRes()); 
   app.get('/api/projects/reject/:project_id/:user_id', isAuth, canApprove, joinReject, loadProject, gracefulRes()); 
-
 };
 
 /*
@@ -216,7 +215,7 @@ var canView = function(req, res, next) {
 }
 
 /*
- * Check if current user can remove this project.
+ * Check if current user can approve this applicant.
  */
 
 var canApprove = function(req, res, next) {
