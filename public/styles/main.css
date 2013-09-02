@@ -27,8 +27,8 @@ body {
 
 header { 
   padding: 40px 0 60px 0; 
-  background: #1e1d22;
-  margin:0 0 50px 0;
+  background: #371c6d;
+  margin:40px 0 50px 0;
   text-align: center;
 }
 
@@ -37,12 +37,13 @@ header h1 {
   color: #FFF;
   font-size: 70px;
   line-height: 1.3em;
+  display: none;
 }
 
 header  a.logo {
   color: white;
-  width: 113px; height: 126px;
-  background: url('../images/logohack.png') 0 0 no-repeat;
+  width: 229px; height: 144px;
+  background: url('../images/logo-apps.png') 0 0 no-repeat;
   text-indent: -9999px;
   display: block; margin:0 auto 10px auto;
 }
@@ -834,6 +835,65 @@ Makini!
 BA Apps Styles
 
 ********************/
+
+.head {
+  display: block;
+}
+.head .header-gcba {
+  padding: 10px 0;
+  overflow: visible;
+  background-color: #f9dd00;
+  *background-color: #ffbd04;
+  background-image: -o-linear-gradient(top, #ffe603, #ffbd04);
+  background-image: linear-gradient(top, #ffe603, #ffbd04);
+  background-image: -ms-linear-gradient(top, #ffe603, #ffbd04);
+  background-image: -webkit-linear-gradient(top, #ffe603, #ffbd04);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffe603), to(#ffbd04));
+  background-image: -moz-linear-gradient(top, #ffe603, #ffbd04);
+  background-repeat: repeat-x;
+  border-top: 1px solid #fdfd00;
+  border-bottom: 1px solid #ffc702;
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffe603', endColorstr='#ffbd04', GradientType=0);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+.head .header-gcba .header-inner {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.head .header-gcba:hover,
+.head .header-gcba:active,
+.head .header-gcba.active,
+.head .header-gcba.disabled,
+.head .header-gcba[disabled] {
+  background-color: #ffbd04;
+  *background-color: #d6be00;
+}
+.head .header-gcba:active,
+.head .header-gcba.active {
+  background-color: #bda700;
+}
+.head .header-gcba .container {
+  -webkit-opacity:.7;-moz-opacity:.7;opacity:.7;
+}
+.head .header-gcba .logo {
+  float: left;
+  width: 172px;
+  height: 33px;
+  background: url(../images/logo-normal.png);
+}
+.head .header-gcba h2.slogan {
+  font-family: "Gotham", "Helvetica Neue", "Helvetica", sans-serif;
+  float: right;
+  font-size: 13px;
+  margin-top: 12px;
+  letter-spacing: -1px;
+  color: #000;
+  font-weight: bold;
+  line-height: 12px;
+  text-transform: uppercase;
+}
+
 
 .colores {
   background: #ffffff;
