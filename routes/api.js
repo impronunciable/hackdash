@@ -482,7 +482,8 @@ var isProjectFollower = function(req, res, next) {
  */
 
 var joinProject = function(req, res, next) {
-  Project.update({_id: req.params.project_id}, { $addToSet : { 'applicants': req.user.id }}, function(err){
+  var g = (config['join_approval'])? {'applicants': req.user.id} : {'contributors': req.user.id };
+  Project.update({_id: req.params.project_id}, { $addToSet : g }, function(err){
     if(err) return res.send(500);
     next();
   });
