@@ -338,12 +338,12 @@ line-height:                     0;
 
 .signup-btn  {
 
-  background:#4bcf0a;
+  background:#26afa0!important;
   border:#4bcf0a 2px solid;
   border-radius: 50px;
-  color: #fff !important;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
   box-shadow: none;
+  color:#FFF!important;
   font-weight: bolder;
       /* Firefox */
   -moz-transition: all 0.2s ease-in-out;
@@ -375,6 +375,7 @@ line-height:                     0;
       background-size: 24px;
       display: inline-block;
       vertical-align: text-top;
+      color:#000;
       margin-right: 15px;
       border-right: 1px solid rgba(0, 0, 0, 0.1);
       padding-right: 30px;
@@ -397,10 +398,7 @@ line-height:                     0;
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #35bfe7), color-stop(1, #0ba8d6));
     background-image: -webkit-linear-gradient(#35bfe7, #0ba8d6); }
 
-.signup-twitter:hover {
-    background-color: #0ba8d6;
-    border-color: #35bfe7;  
-}
+
 
 .signup-twitter i {
       background: url('../images/icon-twitter.svg') 14px center no-repeat;
@@ -437,7 +435,6 @@ line-height:                     0;
 }
 
 .signup-github {
-    color: #4C4C4C !important;
     background-color: #EAEAEA;
     background-image: -moz-linear-gradient(#FAFAFA, #EAEAEA);
     background-image: -o-linear-gradient(#FAFAFA, #EAEAEA);
@@ -673,8 +670,6 @@ h1,h2,h3,h4,h5,h6,p {
  }
 
 .modal .well-content {
-  width:430px;
-display: inline-block;
 vertical-align: top;
 }
 
@@ -821,6 +816,19 @@ h3.header {
   color:grey;
 }
 
+.notification {
+  position: absolute;
+  right: -15px;
+  top: -12px;
+}
+.notification span {
+  font-size: 16px;
+  border-radius: 20px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  line-height: 30px
+}
 .btn {
   background: transparent;
   border-width:2px;
@@ -857,4 +865,18 @@ h3.header {
 .btn-link:hover {
   background: transparent!important;
   color:#CCC;
+}
+
+.userBox {
+  position: relative;
+}
+.applicant {
+  border: 0!important
+}
+.applicant h3 {
+  margin:0;
+}
+
+.applicant .rejectaccept .btn-success {
+  margin:0 5px 0 0;
 }
