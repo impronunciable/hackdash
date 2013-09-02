@@ -241,6 +241,7 @@
     request
     .get('/api/users/' + ctx.params.user_id)
     .end(function(res){
+      $modals.modal('hide');
       $main.html(res.body.html);
     });
   };
@@ -391,7 +392,7 @@ text:project.language}]);
   $logo.click(function(){
     page.stop();
   });
-  
+
   var cover_path = null;
 
   function initImageDrop(){
