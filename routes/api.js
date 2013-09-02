@@ -315,6 +315,9 @@ var loadApplicants = function(req, res, next) {
   .populate('leader')
   .exec(function(err, projects) {
     if(err || !projects) return res.send(500);
+    var applicants = [];
+    applicants = _.reduceRight(_.pluck(projects,'applicants'), function(a, b) { return a.concat(b); }, []);
+    res.locals.applicants = applicants;          
     res.locals.projects = projects;
     res.locals.user = req.user;
     res.locals.canEdit = userCanEdit;
