@@ -3,5 +3,5 @@ p
     img.avatar(src=_applicant.picture)
 p #{_applicant.name}
 p #{project.title}
-a.btn(href='/projects/approve/' + project._id + '/' + _applicant._id ) Approve
-a.btn(href='/projects/reject/' + project._id + '/' + _applicant._id ) Reject
+a.btn(href='/users/applicants/approve/' + project._id + '/' + _applicant._id ) Approve
+a.btn(href='/users/applicants/reject/' + project._id + '/' + _applicant._id ) Reject

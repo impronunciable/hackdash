@@ -29,8 +29,8 @@ module.exports = function(app) {
   app.get('/api/users/profile', isAuth, loadUser, userIsProfile, render('edit_profile'));
   app.get('/api/users/:user_id', loadUser, findUser, render('profile'));
   app.post('/api/users/:user_id', isAuth, updateUser, gracefulRes('ok!'));
-  app.get('/api/projects/approve/:project_id/:user_id', isAuth, canApprove, joinApprove, loadProject, gracefulRes()); 
-  app.get('/api/projects/reject/:project_id/:user_id', isAuth, canApprove, joinReject, loadProject, gracefulRes()); 
+  app.put('/api/users/applicants/:project_id/:user_id', isAuth, canApprove, joinApprove, loadProject, gracefulRes()); 
+  app.del('/api/users/applicants/:project_id/:user_id', isAuth, canApprove, joinReject, loadProject, gracefulRes()); 
 };
 
 /*
