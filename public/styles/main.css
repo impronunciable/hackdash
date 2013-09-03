@@ -640,8 +640,6 @@ h1,h2,h3,h4,h5,h6,p {
 }
 
 .modal .well-content {
-  width:430px;
-  display: inline-block;
   vertical-align: top;
 }
 
@@ -706,7 +704,7 @@ header .btn-link {
   -webkit-transition: all 0.3s; /* Safari */
 
 }
-#searchInput:hover {
+#searchInput:hover, #searchInput:focus {
   background: #FFF; width: 200px;
   padding: 10px 15px 10px 45px;
 }
