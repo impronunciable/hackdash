@@ -704,7 +704,7 @@ header .btn-link {
   -webkit-transition: all 0.3s; /* Safari */
 
 }
-#searchInput:hover {
+#searchInput:hover, #searchInput:focus{
   background: #FFF; width: 200px;
   padding: 10px 15px 10px 45px;
 }
