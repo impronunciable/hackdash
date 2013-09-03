@@ -23,18 +23,24 @@
              .controls
               input(class="input-block-level", type="text", name="link", id="link", placeholder="Link", value=project.link)
 
+              .control-group
+                .controls
+                  div.input-prepend.input-block-level
+                    span.add-on #                
+                    input(class="input-block-level", type="text", name="hashtag", id="hashtag", placeholder="Hashtag",value=project.hashtag) 
+
             .control-group
              .controls
               input(class="input-block-level", type="text", name="tags", id="tags", placeholder="Tags", value=project.tags.join(','))
             
-            .control-group
-             .controls
-              select(class="input-xlarge", name="status", id="status", value=project.status)
-               each status in statuses
-                if(status === project.status)
-                  option(value=status, selected)= status
-                else
-                  option(value=status)= status
+            //- .control-group
+            //-  .controls
+            //-  select(class="input-xlarge", name="status", id="status", value=project.status)
+            //-    each status in statuses
+            //-     if(status === project.status)
+            //-       option(value=status, selected)= status
+            //-     else
+            //-      option(value=status)= status
             
           .form-actions
             button.btn.primary.btn-success.pull-left(type="submit") Save changes
