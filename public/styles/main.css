@@ -973,3 +973,26 @@ Edits by @abad
   margin:0 5px 0 0;
 }
 
+/*******************
+
+Fix Bootstrap Append Level block
+
+********************/
+.input-prepend.input-block-level {
+  display: table;
+  width: 100%;  margin-bottom: 20px;
+}
+
+.input-prepend.input-block-level .add-on {
+  display: table-cell;
+  width:30px;
+}
+
+.input-prepend.input-block-level > input {
+  box-sizing: border-box;
+  height: 30px;
+  display: table-cell;
+  width: 100%;
+  border-left-style: none;
+}
+

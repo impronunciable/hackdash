@@ -373,6 +373,7 @@ var saveProject = function(req, res, next) {
     , link: req.body.link
     , status: req.body.status
     , tags: req.body.tags && req.body.tags.length ? req.body.tags.split(',') : []
+    , hashtag: req.body.hashtag
     , created_at: Date.now()
     , leader: req.user._id
     , followers: [req.user._id]

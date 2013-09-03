@@ -27,6 +27,7 @@ module.exports = function(app) {
     , "contributors": [{ type: ObjectId, ref: 'User'}]
     , "applicants":[{ type: ObjectId, ref: 'User'}]
     , "followers": [{ type: ObjectId, ref: 'User'}]
+    , "hashtag": { type: String}
     , "cover": String
     , "link": String 
     , "tags": [String]

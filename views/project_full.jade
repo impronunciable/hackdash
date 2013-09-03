@@ -21,6 +21,10 @@
           each tag in project.tags
             li= tag
 
+        if(project.hashtag)
+          h6 Hashtag
+          strong 
+            a(href="https://twitter.com/search?q=" + project.hashtag, target='_blank') ##{project.hashtag}
 
       .well-content.span8
         .span4
