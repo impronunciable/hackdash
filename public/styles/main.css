@@ -322,11 +322,14 @@ header .createProject {
   }
 }
 
+#logIn p {
+  padding-top: 30px;
+}
+
 .signup-btn  {
-  background:#4bcf0a;
-  border:#4bcf0a 2px solid;
-  border-radius: 50px;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
+  text-shadow: none !important;
+  border: 0px;
+  border-radius: 8px;
   box-shadow: none;
   font-weight: bolder;
   /* Firefox */
@@ -341,10 +344,14 @@ header .createProject {
   font-weight: bold;
   font-size: 18px;
   padding: 12px 30px 12px 0;
-  margin: 10px 0 25px;
   cursor: pointer;
   text-align: left;
-  margin: 20px 0;
+  margin: 10px 0;
+  color: #ffffff;
+}
+
+.signup-btn:last-child {
+  margin-bottom: 20px;
 }
 
 .signup-btn i {
@@ -360,15 +367,15 @@ header .createProject {
 }
 
 .signup-btn:hover {
-  color: #ffffff;
-  box-shadow: 0 0 2px #CCC;
+  box-shadow: none !important;
   text-decoration: none;
   background-position: 0 0 !important;
+  margin-left: 5px;
 }
 
 .signup-twitter {
   background-color: #0ba8d6;
-  border-color: #0ba8d6;
+
   background-image: -moz-linear-gradient(#35bfe7, #0ba8d6);
   background-image: -o-linear-gradient(#35bfe7, #0ba8d6);
   background-image: -ms-linear-gradient(#35bfe7, #0ba8d6);
@@ -378,7 +385,7 @@ header .createProject {
 
 .signup-twitter:hover {
   background-color: #0ba8d6;
-  border-color: #35bfe7;  
+  
 }
 
 
@@ -394,8 +401,8 @@ header .createProject {
     background-image: -ms-linear-gradient(#679ace, #4264b3);
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #679ace), color-stop(1, #4264b3));
     background-image: -webkit-linear-gradient(#679ace, #4264b3);
-    border-color: #679ace;
-    text-shadow: 0 1px 0 #2d449e; }
+  
+     }
 
 .signup-facebook i {
       background: url('../images/icon-facebook.svg') 14px center no-repeat;
@@ -409,36 +416,60 @@ header .createProject {
     background-image: -ms-linear-gradient(#E11B36, #C61E2F);
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #E11B36), color-stop(1, #C61E2F));
     background-image: -webkit-linear-gradient(#E11B36, #C61E2F);
-    border-color: #C61E2F;
-    text-shadow: 0 1px 0 #D12038; }
+  
+     }
 
 .signup-meetup i {
       background: url('../images/icon-meetup.png') 14px center no-repeat;
       background-size: 30px auto;
 }
 
+a.signup-github {
+  color: #000;
+}
+a.signup-persona {
+  color: #fff; 
+}
+
 .signup-github {
     background-color: #EAEAEA;
-    background-image: -moz-linear-gradient(#FAFAFA, #EAEAEA);
-    background-image: -o-linear-gradient(#FAFAFA, #EAEAEA);
-    background-image: -ms-linear-gradient(#FAFAFA, #EAEAEA);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FAFAFA), color-stop(1, #EAEAEA));
-    background-image: -webkit-linear-gradient(#FAFAFA, #EAEAEA);
-    border-color: #CACACA;
-    text-shadow: 0 1px 0 #CBCBCB; }
+    background-image: -moz-linear-gradient(#FAFAFA, #d9d9d9);
+    background-image: -o-linear-gradient(#FAFAFA, #d9d9d9);
+    background-image: -ms-linear-gradient(#FAFAFA, #d9d9d9);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FAFAFA), color-stop(1, #d9d9d9));
+    background-image: -webkit-linear-gradient(#FAFAFA, #d9d9d9);
+  
+     }
 
 .signup-github i {
   background: url('../images/icon-github.svg') 14px center no-repeat;
   background-size: 30px auto;
 }
 
+.signup-persona {
+    background-color: #3f4853;
+    background-image: -moz-linear-gradient(#5e6770, #3f4853);
+    background-image: -o-linear-gradient(#5e6770, #3f4853);
+    background-image: -ms-linear-gradient(#5e6770, #3f4853);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #5e6770), color-stop(1, #3f4853));
+    background-image: -webkit-linear-gradient(#5e6770, #3f4853);
+  
+}
+
+.signup-persona i {
+  background: url('../images/icon-persona.png') 14px center no-repeat;
+  background-size: 26px 21px;
+}
+
 a.signup-github:hover {
+  color: #000;
   background-color:#EAEAEA;
-  border:#CACACA 2px solid; 
+}
+a.signup-persona:hover {
 
 }
 
-.btn {
+/*.btn {
   background: transparent;
   border-width:2px;
   border-style: solid;
@@ -446,9 +477,9 @@ a.signup-github:hover {
   text-shadow:none;
   font-weight: bold;
   font-size: 14px;
-  border-color: #CCC;
+
   color:#CCC;
-}
+}*/
 
 .btn-link {
   border:none;

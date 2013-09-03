@@ -14,9 +14,10 @@
 
     h3 
 .row
- .span4.offset1
-    p Ingresa usando
+  .span4.offset1
+    p Podés ingresar usando estos servicios
+  .span3.offset1
    each provider in providers
-    a(class="btn btn-success signup-btn signup-" + provider, href="/auth/" + provider)
+    a(class="btn signup-btn signup-" + provider, href="/auth/" + provider)
       i
       | #{provider.charAt(0).toUpperCase() + provider.slice(1)}
