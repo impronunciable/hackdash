@@ -2,7 +2,7 @@
 
 body {
   margin: 0; font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px;
-  line-height: 18px; color: #333333; background: #eeedee;
+  line-height: 18px; color: #333333; background: #cecece;
 }
 .tooltip {
   z-index: 2000 !important;
@@ -941,6 +941,12 @@ BA Apps Styles
   background: #000097;
   background: #000000;
 }
+
+.site-footer{position:relative;*zoom:1;color:#fff;padding:50px 10px;height:inherit;background-color:#333;background-image:none;filter:none;font-size:12px}
+.site-footer a{color:#ffbd04}
+.footer-gcba .logo-invertido{float:left;width:172px;height:33px;background:url(../images/logo-invertido.png)}
+.footer-gcba h2.slogan{float:right;margin-top:-4px;margin-bottom:0;font-size:15px;letter-spacing:-1px;color:#fff}
+.footer-info{display:block;margin-top:30px}
 
 /*******************
 
