@@ -944,7 +944,12 @@ BA Apps Styles
   background: #000097;
   background: #000000;
 }
-
+.white{
+  color: white;
+}
+.notification .icon-bell-alt{
+  font-size: 27px;
+}
 .site-footer{position:relative;*zoom:1;color:#fff;padding:50px 10px;height:inherit;background-color:#333;background-image:none;filter:none;font-size:12px}
 .site-footer a{color:#ffbd04}
 .footer-gcba .logo-invertido{float:left;width:172px;height:33px;background:url(../images/logo-invertido.png)}
