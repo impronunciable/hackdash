@@ -14,7 +14,7 @@ header
       input.search-query.input-large#searchInput(type='text')
     .userBox.pull-right
         if(user)
-          a.btn-profile(href="/users/applicants") 
+          a.notification(href="/users/applicants") 
             span.label.label-important #{applicants.length}
           a.btn-profile(href="/users/profile")
             img.avatar(src=user.picture).tooltips(rel='tooltip', data-placement='bottom', data-original-title='Edit profile')
