@@ -9,6 +9,7 @@
   "session": "wefewfef",
   "disqus_shortname": null,
 	"title": "hackdash",
+  "join_approval": true,
 	"live": true,
 	"mailer": null,
   "stages" : [
