@@ -324,9 +324,9 @@ header .btn:hover {
   background:#4bcf0a;
   border:#4bcf0a 2px solid;
   border-radius: 50px;
-  color: #fff !important;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
   box-shadow: none;
+  color:#FFF!important;
   font-weight: bolder;
   /* Firefox */
   -moz-transition: all 0.2s ease-in-out;
@@ -380,6 +380,7 @@ header .btn:hover {
   border-color: #35bfe7;  
 }
 
+
 .signup-twitter i {
   background: url('../images/icon-twitter.svg') 14px center no-repeat;
   background-size: 30px auto; 
@@ -416,7 +417,6 @@ header .btn:hover {
 }
 
 .signup-github {
-    color: #4C4C4C !important;
     background-color: #EAEAEA;
     background-image: -moz-linear-gradient(#FAFAFA, #EAEAEA);
     background-image: -o-linear-gradient(#FAFAFA, #EAEAEA);
@@ -642,8 +642,6 @@ h1,h2,h3,h4,h5,h6,p {
 }
 
 .modal .well-content {
-  width:430px;
-  display: inline-block;
   vertical-align: top;
 }
 
@@ -708,7 +706,7 @@ header .btn-link {
   -webkit-transition: all 0.3s; /* Safari */
 
 }
-#searchInput:hover {
+#searchInput:hover, #searchInput:focus {
   background: #FFF; width: 200px;
   padding: 10px 15px 10px 45px;
 }
@@ -792,6 +790,19 @@ h3.header {
   color:grey;
 }
 
+.notification {
+  position: absolute;
+  right: -15px;
+  top: -12px;
+}
+.notification span {
+  font-size: 16px;
+  border-radius: 20px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  line-height: 30px
+}
 .btn {
   background: transparent;
   border-width:2px;
@@ -828,6 +839,7 @@ h3.header {
   background: transparent!important;
   color:#CCC;
 }
+
 
 
 /*******************
@@ -896,7 +908,7 @@ BA Apps Styles
 }
 
 
-.colores {
+.colores-referencia {
   background: #ffffff;
   background: #fffd;
   background: #fffbac;
@@ -927,4 +939,25 @@ BA Apps Styles
   background: #000000;
 }
 
+/*******************
+
+Soigneux!
+Edits by @abad
+
+********************/
+
+
+.userBox {
+  position: relative;
+}
+.applicant {
+  border: 0!important
+}
+.applicant h3 {
+  margin:0;
+}
+
+.applicant .rejectaccept .btn-success {
+  margin:0 5px 0 0;
+}
 
