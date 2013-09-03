@@ -326,7 +326,6 @@ header .btn:hover {
   border-radius: 50px;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
   box-shadow: none;
-  color:#FFF!important;
   font-weight: bolder;
   /* Firefox */
   -moz-transition: all 0.2s ease-in-out;
@@ -706,7 +705,7 @@ header .btn-link {
   -webkit-transition: all 0.3s; /* Safari */
 
 }
-#searchInput:hover, #searchInput:focus {
+#searchInput:hover, #searchInput:focus{
   background: #FFF; width: 200px;
   padding: 10px 15px 10px 45px;
 }
@@ -840,8 +839,6 @@ h3.header {
   color:#CCC;
 }
 
-
-
 /*******************
 
 Makini!
@@ -852,6 +849,7 @@ BA Apps Styles
 .head {
   display: block;
 }
+
 .head .header-gcba {
   padding: 10px 0;
   overflow: visible;
@@ -870,10 +868,12 @@ BA Apps Styles
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffe603', endColorstr='#ffbd04', GradientType=0);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
 }
+
 .head .header-gcba .header-inner {
   padding-right: 20px;
   padding-left: 20px;
 }
+
 .head .header-gcba:hover,
 .head .header-gcba:active,
 .head .header-gcba.active,
@@ -882,13 +882,16 @@ BA Apps Styles
   background-color: #ffbd04;
   *background-color: #d6be00;
 }
+
 .head .header-gcba:active,
 .head .header-gcba.active {
   background-color: #bda700;
 }
+
 .head .header-gcba .container {
   -webkit-opacity:.7;-moz-opacity:.7;opacity:.7;
 }
+
 .head .header-gcba .logo {
   float: left;
   width: 172px;
@@ -907,8 +910,8 @@ BA Apps Styles
   text-transform: uppercase;
 }
 
-
 .colores-referencia {
+
   background: #ffffff;
   background: #fffd;
   background: #fffbac;
