@@ -7,11 +7,11 @@
 
           form.ajaxForm(action="/api/projects/create", method="POST")
             .form-content
-              //- a#ghImportBtn(href="#") Import from Github
-              //- .control-group.hidden
-              //-   .controls
-              //-    input(type="text", class="input-large", placeholder="repo user/name", name="repo")
-              //-    button#searchGh.btn() Import
+              a#ghImportBtn(href="#") Import from Github
+              .control-group.hidden
+                .controls
+                  input(type="text", class="input-large", placeholder="repo user/name", name="repo")
+                  button#searchGh.btn() Import
 
               .control-group
                 .controls
@@ -32,6 +32,12 @@
               .control-group
                 .controls
                   input(class="input-block-level", type="text", name="link", id="link", placeholder="Link")
+
+              .control-group
+                .controls
+                  div.input-prepend.input-block-level
+                    span.add-on #                
+                    input(class="input-block-level", type="text", name="hashtag", id="hashtag", placeholder="Hashtag") 
 
               .control-group
                 .controls
