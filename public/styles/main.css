@@ -494,7 +494,7 @@ a.signup-persona:hover {
 
 }
 
-header .btn {
+header .btn, .boxxy .btn {
   background: transparent;
   border-width:2px;
   border-style: solid;
@@ -502,7 +502,6 @@ header .btn {
   text-shadow:none;
   font-weight: bold;
   font-size: 14px;
-
   color:#CCC;
 }
 
@@ -513,13 +512,19 @@ header .btn {
 
 .btn-success {
   border-color:#26afa0;
-  color:#26afa0;
+  color:#26afa0 !important;
 }
 .btn:hover {
     box-shadow: none!important;
     background-color: #CCC;
   color:#FFF;
 }
+
+.boxxy .btn:hover {
+    color:#FFF !important;
+}
+
+
 .btn-success:hover {
   background-color:#26afa0;
   color:#FFF;
