@@ -8,11 +8,11 @@
 
 		form.ajaxForm.form-horizontal(method="POST", action="/api/users/" + user.id)
 			.control-group
-				input(name="name", type='text', placeholder='Name', value=user.name)
+				input(name="name", type='text', placeholder='Nombre', value=user.name)
 			.control-group
 				input(name="email", type='text', placeholder='Email', value=user.email)
 			.control-group
-				textarea(name="bio", placeholder='Some about you') #{user.bio}
+				textarea(name="bio", placeholder='Algo sobre vos') #{user.bio}
 			.control-group
-				button.btn.btn-success(type="submit") Save changes
-				a.cancel.btn(data-dismiss="modal") Cancel
+				button.btn.btn-success(type="submit") Guardar cambios
+				a.cancel.btn(data-dismiss="modal") Cancelar

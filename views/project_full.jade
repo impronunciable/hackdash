@@ -10,11 +10,8 @@
     .row-fluid
       .well-sidebar.span4
 
-        h6 Created
+        h6 Creado
         strong= moment(project.created_at).fromNow()
-
-        h6 State
-        strong= project.status
 
         h6 Tags
         ul
@@ -28,11 +25,11 @@
 
       .well-content.span8
         .span4
-          h5 Managed by
+          h5 Creado por
           a(href="/users/" + project.leader.id)
             img.tooltips(src=project.leader.picture, title=project.leader.name, rel="tooltip")
         .span4
-          h5 Contributors 
+          h5 Colaboradores 
           each contributor in project.contributors
             a(href="/users/" + contributor.id)
               img.tooltips(src=contributor.picture, title=contributor.name, rel="tooltip")

@@ -14,7 +14,7 @@ block content
       p
         a(href="/p/" + project.id, target="_blank") #{project.summary}
       .info
-        span.status Status:  #{project.status}
+        span.status Estado:  #{project.status}
         if(project.tags.length)
           span.tags Tags: #{project.tags.join(', ')}
 
