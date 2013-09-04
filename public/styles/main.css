@@ -494,7 +494,7 @@ a.signup-persona:hover {
 
 }
 
-/*.btn {
+header .btn {
   background: transparent;
   border-width:2px;
   border-style: solid;
@@ -504,7 +504,7 @@ a.signup-persona:hover {
   font-size: 14px;
 
   color:#CCC;
-}*/
+}
 
 .btn-link {
   border:none;
@@ -558,7 +558,7 @@ a.signup-persona:hover {
 
 .btn-profile {
   padding: 0;
-  border: none;
+  border: none !important;
   background:#E6E6E6;
   color: #999 !important;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.00);
