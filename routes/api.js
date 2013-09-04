@@ -6,6 +6,7 @@ var passport = require('passport')
   , fs = require('fs')
   , request = require('superagent');
 
+moment.lang('es');
 var User = mongoose.model('User')
   , Project = mongoose.model('Project');
 

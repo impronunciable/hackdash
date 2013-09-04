@@ -5,10 +5,10 @@ block content
     form.span4.offset4(method="post", action="/admin")
       fieldset
         legend Admin
-        label(for="title") Title
+        label(for="title") Titulo
         input#title(name="title", type="text", value=dashboard.title)
-        label(for="description") Description
+        label(for="description") Descripcion
         textarea#description(maxlength="140", name="description")= dashboard.description
-        label(for="background") Background color
+        label(for="background") Color de fondo
         input#background(name="background", type="text", value=dashboard.background)
-        button.btn(type="submit") Save
+        button.btn(type="submit") Guardar
