@@ -17,6 +17,12 @@ body {
  background-color: red;
 }
 
+.btn, .btn:hover, .btn:focus {
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
 @font-face {
   font-family: 'Entypo';
   src: url('font-face/entypo-webfont.eot');
@@ -71,7 +77,8 @@ header .createProject {
 }
 
 .join .btn:hover {
-  background: #FFF; color:#000; 
+  background: #FFF; color:rgb(3,46,167);
+  padding: 0.8em 1.5em;
 }
 
 .kindafixed-top {
@@ -494,7 +501,7 @@ a.signup-persona:hover {
 
 }
 
-header .btn, .boxxy .btn {
+header .btn, .boxxy .btn, form .btn {
   background: transparent;
   border-width:2px;
   border-style: solid;
@@ -503,6 +510,17 @@ header .btn, .boxxy .btn {
   font-weight: bold;
   font-size: 14px;
   color:#CCC;
+}
+
+form .cancel {
+  color: #444 !important;
+  border-color: #444 !important;
+}
+
+form .cancel:hover {
+  color: #fff !important;
+  border-color: #444 !important;
+  background-color: #444 !important;
 }
 
 .btn-link {
