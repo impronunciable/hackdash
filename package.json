@@ -24,7 +24,8 @@
     "passport-meetup": "~0.1.2",
     "passport-github": "~0.1.5",
     "passport-facebook": "~0.1.5",
-    "passport-twitter": "~0.1.5"
+    "passport-twitter": "~0.1.5",
+    "forever": "~0.10.8"
   },
   "devDependencies": {
     "mocha": "~1.7.4",
