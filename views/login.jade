@@ -11,11 +11,13 @@
         h3 Ingresá para participar
       - }
     - }
-
-    h3 
-.row
-  .span4.offset1
-    p Podés ingresar usando estos servicios
+.row.credentials
+  .span5
+    h5 Podés ingresar usando estos servicios.
+    p
+      | Al completar este registro, estás expresamente aceptando las 
+      a(href='http://concursos.buenosaires.gob.ar/2013/bases.html', target='_blank') bases y condiciones del concurso
+      | .
   .span3.offset1
    each provider in providers
     a(class="btn signup-btn signup-" + provider, href="/auth/" + provider)

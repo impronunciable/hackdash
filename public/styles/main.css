@@ -322,8 +322,33 @@ header .createProject {
   }
 }
 
-#logIn p {
-  padding-top: 30px;
+.credentials {
+  display: block;
+  padding-left: 18px;
+  padding-right: 45px;
+}
+
+.credentials p {
+  padding: 0;
+  font-size: 12px;
+  line-height: 15px;
+  color: #A4A4A4;
+}
+
+.credentials p a {
+  text-decoration: underline;
+}
+
+.credentials p a:hover {
+  text-decoration: none;
+}
+
+.credentials h5 {
+  padding: 0;
+}
+
+.credentials .offset1 {
+  margin-left: 150px;
 }
 
 .signup-btn  {
