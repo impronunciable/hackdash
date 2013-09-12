@@ -186,9 +186,18 @@ var isAuth = function(req, res, next){
  */
 
 var canCreate = function(req, res, next) {
-  if (!userCanCreate(req.user))
+  if (!userCanCreate(req.user)){
     return res.send(401)
-  next();
+  }else{
+    Project.find({leader:req.user._id})
+    .exec(function(err, project) {
+      if(project.length){
+        return res.send(401)
+      }else{
+        next();
+      }
+    })
+  }
 }
 
 /*
@@ -598,6 +607,7 @@ var stageHasPermission = function(stage, permission) {
 var stageCanCreate = function() {
   return stageHasPermission(actualStage(), 'create');
 }
+
 
 /*
  * Tells if the user can create projects

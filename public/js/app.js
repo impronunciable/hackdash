@@ -125,7 +125,6 @@
     $main.html($newProject.html());
     initSelect2();
     initImageDrop();
-
     $('.ajaxForm').ajaxForm({
       error: formError,
       success: formSuccess,
@@ -314,22 +313,28 @@
   };
 
   var formError = function(field) {
-    cleanErrors();
-    var fields = getRequiredFields();
+    if(field && field.responseText && field.responseText === 'Unauthorized'){
+      alert('No se puede crear más de un proyecto por usuario.')
+    }else{
+      cleanErrors();
+      var fields = getRequiredFields();
 
-    if (field){
-      fields[field].parents('.control-group').addClass('error');
-      fields[field].after('<span class="help-inline">Required</span>');
+      if (field){
+        fields[field].parents('.control-group').addClass('error');
+        fields[field].after('<span class="help-inline">Required</span>');
+      }
     }
   };
 
   var formSuccess = function(){
+    console.log('formSuccess');
     cleanErrors();
     $dragdrop.css('background', 'none').children('input').show(); 
     page('/');
   };
   
   var formValidate = function(arr, $form, options){
+    console.log('formValidate');
     for(var i = 0; i < arr.length; i++) {
       if(arr[i]['name'] === "title" && !arr[i].value.length) {
         formError("title");
