@@ -21,26 +21,26 @@
 
       .pull-right.remove
         if (canRemove(user, project))
-          a.btn.btn-link(href='/projects/remove/'+project._id) Borrar
+          a.btn.btn-link(href='/2013/apps/projects/remove/'+project._id) Borrar
 
       .pull-right.edit
         if (canEdit(user, project))
-          a.btn.btn-link(href='/projects/edit/'+project._id) Editar
+          a.btn.btn-link(href='/2013/apps/projects/edit/'+project._id) Editar
 
       if (user && !isLeader(user, project))
         if (userExists(user, project.contributors))
           .pull-right.contributor
-            a.btn.btn-link(href='/projects/leave/'+project._id) Abandonar
+            a.btn.btn-link(href='/2013/apps/projects/leave/'+project._id) Abandonar
         else if(userExists(user, project.applicants))
           .pull-right.contributor
-            a.btn.btn-link(href='/projects/leave/'+project._id) Abandonar (Pendiente)
+            a.btn.btn-link(href='/2013/apps/projects/leave/'+project._id) Abandonar (Pendiente)
         else
           .pull-right.contributor
-            a.btn.btn-link(href='/projects/join/'+project._id) Participá                    
+            a.btn.btn-link(href='/2013/apps/projects/join/'+project._id) Participá                    
 
         //- if (userExists(user, project.followers))
         //-   .pull-right.follower
-        //-     a.btn.btn-link(href='/projects/unfollow/'+project._id) Unfollow
+        //-     a.btn.btn-link(href='/2013/apps/projects/unfollow/'+project._id) Unfollow
         //- else 
         //-   .pull-right.follower
-        //-     a.btn.btn-link(href='/projects/follow/'+project._id) Seguir
+        //-     a.btn.btn-link(href='/2013/apps/projects/follow/'+project._id) Seguir

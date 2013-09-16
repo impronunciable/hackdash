@@ -45,7 +45,7 @@
 
   var loadProjects = function(ctx, next) {
     request
-    .get('/api/projects')
+    .get('/2013/apps/api/projects')
     .end(function(res){
       $main.html(res.body.html);
       next();
@@ -55,7 +55,7 @@
   var loadSearchProjects = function(ctx, next) { 
     $searchInput.val(ctx.querystring.split('&')[0].replace('q=',''));
     request
-    .get('/api/search?' + ctx.querystring)
+    .get('/2013/apps/api/search?' + ctx.querystring)
     .end(function(res){ 
       $main.html(res.body.html);
       next();
@@ -68,7 +68,7 @@
 
   var loadApplicants = function(ctx, next) {
     request
-    .get('/api/users/applicants')
+    .get('/2013/apps/api/users/applicants')
     .end(function(res){
       $applicants.html(res.body.html).modal('show');
     }); 
@@ -136,7 +136,7 @@
 
   var editProject = function(ctx) {
     superagent
-    .get('/api/projects/edit/' + ctx.params.project_id)
+    .get('/2013/apps/api/projects/edit/' + ctx.params.project_id)
     .end(function(res){
     $('.tooltip').remove();
       $main.html(res.body.html);
@@ -156,18 +156,18 @@
   var removeProject = function(ctx) {
     if (window.confirm("This action will remove the project. Are you sure?")){
       superagent
-        .get('/api/projects/remove/' + ctx.params.project_id)
+        .get('/2013/apps/api/projects/remove/' + ctx.params.project_id)
         .end(function(res){
-          page('/');
+          page('/2013/apps/');
         });
     }
     else 
-      page('/');
+      page('/2013/apps/');
   };
 
   var joinProject = function(ctx) {
     request
-    .get('/api/projects/join/' + ctx.params.project_id)
+    .get('/2013/apps/api/projects/join/' + ctx.params.project_id)
     .end(function(res){
       page('/');
     });
@@ -175,31 +175,31 @@
 
   var joinApprove = function(ctx) {
     request
-    .put('/api/users/applicants/' + ctx.params.project_id + '/'+ ctx.params.user_id)
+    .put('/2013/apps/api/users/applicants/' + ctx.params.project_id + '/'+ ctx.params.user_id)
     .end(function(res){
-      page('/users/applicants');
+      page('/2013/apps/users/applicants');
     });
   };
 
   var joinReject = function(ctx) {
     request
-    .del('/api/users/applicants/' + ctx.params.project_id + '/'+ ctx.params.user_id)
+    .del('/2013/apps/api/users/applicants/' + ctx.params.project_id + '/'+ ctx.params.user_id)
     .end(function(res){
-      page('/');
+      page('/2013/apps/');
     });
   };
 
   var leaveProject = function(ctx) {
     request
-    .get('/api/projects/leave/' + ctx.params.project_id)
+    .get('/2013/apps/api/projects/leave/' + ctx.params.project_id)
     .end(function(res){
-      page('/');
+      page('/2013/apps/');
     });
   };
 
   var projectInfo = function(ctx) {
     request
-    .get('/api/p/' + ctx.params.project_id)
+    .get('/2013/apps/api/p/' + ctx.params.project_id)
     .end(function(res){
       $main.html(res.body.html);
       $('.tooltips').tooltip({});
@@ -208,23 +208,23 @@
 
   var followProject = function(ctx) {
     request
-    .get('/api/projects/follow/' + ctx.params.project_id)
+    .get('/2013/apps/api/projects/follow/' + ctx.params.project_id)
     .end(function(res){
-      page('/');
+      page('/2013/apps/');
     });
   };
 
   var unfollowProject = function(ctx) {
     request
-    .get('/api/projects/unfollow/' + ctx.params.project_id)
+    .get('/2013/apps/api/projects/unfollow/' + ctx.params.project_id)
     .end(function(res){
-      page('/');
+      page('/2013/apps/');
     });
   };
 
   var getMyProfile = function() {
     request
-    .get('/api/users/profile')
+    .get('/2013/apps/api/users/profile')
     .end(function(res){
       $main.html(res.body.html);
       $('.ajaxForm').ajaxForm({
@@ -238,7 +238,7 @@
 
   var getUserProfile = function(ctx) {
     request
-    .get('/api/users/' + ctx.params.user_id)
+    .get('/2013/apps/api/users/' + ctx.params.user_id)
     .end(function(res){
       $modals.modal('hide');
       $main.html(res.body.html);
@@ -249,7 +249,7 @@
     navigator.id.get(function(assertion) {
       if (assertion) {
         request
-        .post('/auth/persona')
+        .post('/2013/apps/auth/persona')
         .send({'assertion':assertion})
         .end(function(res){
           location.href = location.href.replace('auth/persona', '');
@@ -261,23 +261,23 @@
   };
 
 
-  page('/', loadProjects, cleanSearch, isotopeDashboard);
-  page('/login', logIn);
-  page('/search', loadSearchProjects, isotopeDashboard);
-  page('/projects/create', createProject);
-  page('/projects/edit/:project_id', editProject);
-  page('/projects/remove/:project_id', removeProject);
-  page('/projects/follow/:project_id', followProject);
-  page('/projects/unfollow/:project_id', unfollowProject);
-  page('/projects/join/:project_id', joinProject);
-  page('/projects/leave/:project_id', leaveProject);
-  page('/users/applicants/approve/:project_id/:user_id', joinApprove);
-  page('/users/applicants/reject/:project_id/:user_id', joinReject);
-  page('/users/applicants', loadApplicants);  
-  page('/users/profile', getMyProfile);
-  page('/users/:user_id', getUserProfile);
-  page('/p/:project_id', projectInfo);
-  page('/auth/persona', personaLogin);
+  page('/2013/apps/', loadProjects, cleanSearch, isotopeDashboard);
+  page('/2013/apps/login', logIn);
+  page('/2013/apps/search', loadSearchProjects, isotopeDashboard);
+  page('/2013/apps/projects/create', createProject);
+  page('/2013/apps/projects/edit/:project_id', editProject);
+  page('/2013/apps/projects/remove/:project_id', removeProject);
+  page('/2013/apps/projects/follow/:project_id', followProject);
+  page('/2013/apps/projects/unfollow/:project_id', unfollowProject);
+  page('/2013/apps/projects/join/:project_id', joinProject);
+  page('/2013/apps/projects/leave/:project_id', leaveProject);
+  page('/2013/apps/users/applicants/approve/:project_id/:user_id', joinApprove);
+  page('/2013/apps/users/applicants/reject/:project_id/:user_id', joinReject);
+  page('/2013/apps/users/applicants', loadApplicants);  
+  page('/2013/apps/users/profile', getMyProfile);
+  page('/2013/apps/users/:user_id', getUserProfile);
+  page('/2013/apps/p/:project_id', projectInfo);
+  page('/2013/apps/auth/persona', personaLogin);
 
   page();
 
@@ -292,7 +292,7 @@
   });
 
   $main.on('click','.cancel', function(e){
-    page('/');
+    page('/2013/apps/');
     e.preventDefault();
   });
 
@@ -330,7 +330,7 @@
     console.log('formSuccess');
     cleanErrors();
     $dragdrop.css('background', 'none').children('input').show(); 
-    page('/');
+    page('/2013/apps/');
   };
   
   var formValidate = function(arr, $form, options){
@@ -363,16 +363,16 @@ text:project.language}]);
   });
 
   $formSearch.submit(function(e){
-    page('/search?q=' + $searchInput.val() + '&type=title');
+    page('/2013/apps/search?q=' + $searchInput.val() + '&type=title');
     e.preventDefault();
   });
 
   $project.live('click', function(e){
     $('.tooltip').remove();
     if($(e.target).hasClass('avatar')) {
-      page('/users/' + $(e.target).data('id'));
+      page('/2013/apps/users/' + $(e.target).data('id'));
     } else if(e.target.tagName !== 'A' && e.target.tagName !== 'SPAN'  && $(this).data('id')) {
-      page('/p/' + $(this).data('id'));
+      page('/2013/apps/p/' + $(this).data('id'));
     }
   });
 
@@ -416,7 +416,7 @@ text:project.language}]);
 
     $dragdrop.filedrop({
       fallback_id: 'cover_fall',
-      url: '/api/cover',
+      url: '/2013/apps/api/cover',
       paramname: 'cover',
       allowedfiletypes: ['image/jpeg','image/png','image/gif'],
       maxfiles: 1,

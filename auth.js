@@ -29,19 +29,19 @@ var initStrategies = function(app) {
   }
 
   if(keys['persona']) {
-    app.post('/auth/persona', 
-      passport.authenticate('persona', { failureRedirect: '/login' }),
+    app.post('/2013/apps/auth/persona', 
+      passport.authenticate('persona', { failureRedirect: '/2013/apps/login' }),
       function(req, res) {
-        res.redirect('/');
+        res.redirect('/2013/apps/');
       });
   }
 };
 
 var initStrategy = function(app, keys, provider) {
-  app.get('/auth/' + provider, passport.authenticate(provider));
-  app.get('/auth/' + provider + '/callback',
-    passport.authenticate(provider, { failureRedirect: '/' }), 
-    function(req, res){ res.redirect('/'); });
+  app.get('/2013/apps/auth/' + provider, passport.authenticate(provider));
+  app.get('/2013/apps/auth/' + provider + '/callback',
+    passport.authenticate(provider, { failureRedirect: '/2013/apps/' }), 
+    function(req, res){ res.redirect('/2013/apps/'); });
 
   var Strategy = require('passport-' + provider).Strategy;
   passport.use(new Strategy(keys[provider], findOrCreateUser(provider)));
@@ -90,7 +90,7 @@ var createUser = function(provider, profile, done) {
 };
 
 var getProfilePicture = function(profile, email) {
-  var picture = '/images/default_avatar.png';
+  var picture = '/2013/apps/images/default_avatar.png';
   if(profile.photos && profile.photos.length && profile.photos[0].value) {
     picture =  profile.photos[0].value.replace('_normal', '_bigger');
   } else if(profile.provider == 'facebook') {

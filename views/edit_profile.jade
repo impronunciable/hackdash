@@ -9,7 +9,7 @@
 						each err in errors
 							p(style="margin-left:20px") #{err}
 
-					form.ajaxForm.form-horizontal(method="POST", action="/api/users/" + user.id)
+					form.ajaxForm.form-horizontal(method="POST", action="/2013/apps/api/users/" + user.id)
 						.control-group
 							input(name="name", type='text', placeholder='Nombre', value=user.name)
 						.control-group
