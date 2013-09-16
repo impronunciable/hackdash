@@ -29,17 +29,17 @@ var initStrategies = function(app) {
   }
 
   if(keys['persona']) {
-    app.post('/2013/apps/auth/persona', 
+    app.post('/auth/persona', 
       passport.authenticate('persona', { failureRedirect: '/2013/apps/login' }),
       function(req, res) {
-        res.redirect('/2013/apps/');
+        res.redirect('/');
       });
   }
 };
 
 var initStrategy = function(app, keys, provider) {
-  app.get('/2013/apps/auth/' + provider, passport.authenticate(provider));
-  app.get('/2013/apps/auth/' + provider + '/callback',
+  app.get('/auth/' + provider, passport.authenticate(provider));
+  app.get('/auth/' + provider + '/callback',
     passport.authenticate(provider, { failureRedirect: '/2013/apps/' }), 
     function(req, res){ res.redirect('/2013/apps/'); });
 
