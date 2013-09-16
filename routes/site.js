@@ -35,18 +35,18 @@ module.exports = function(app) {
     render('live')
 	];
 
-  app.get('/2013/apps/', checkProfile, dashboardStack);
-  app.get('/2013/apps/live', liveStack);
-  app.get('/2013/apps/login', dashboardStack);
-  app.get('/2013/apps/projects/create', dashboardStack);
-  app.get('/2013/apps/projects/edit/:project_id', dashboardStack);
-  app.get('/2013/apps/p/:project_id', dashboardStack);
-  app.get('/2013/apps/search', dashboardStack);
-  app.get('/2013/apps/logout', logout, redirect('/'));  
-  app.get('/2013/apps/about', loadUser, render('about'));
-  app.get('/2013/apps/users/applicants', dashboardStack);
-  app.get('/2013/apps/users/profile', dashboardStack);
-  app.get('/2013/apps/users/:user_id', dashboardStack);
+  app.get('/', checkProfile, dashboardStack);
+  app.get('/live', liveStack);
+  app.get('/login', dashboardStack);
+  app.get('/create', dashboardStack);
+  app.get('/projects/edit/:project_id', dashboardStack);
+  app.get('/p/:project_id', dashboardStack);
+  app.get('/search', dashboardStack);
+  app.get('/logout', logout, redirect('/'));  
+  app.get('/about', loadUser, render('about'));
+  app.get('/users/applicants', dashboardStack);
+  app.get('/users/profile', dashboardStack);
+  app.get('/users/:user_id', dashboardStack);
 };
 
 /*
