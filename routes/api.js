@@ -13,25 +13,25 @@ var User = mongoose.model('User')
 module.exports = function(app) {
   app.locals.canCreate = userCanCreate
   app.locals.stageCanCreate = stageCanCreate
-  app.get('/2013/apps/api/projects', loadProjects, render('projects'));
-  app.post('/2013/apps/api/projects/create', isAuth, canCreate, validateProject, saveProject, notify(app, 'project_created'), gracefulRes());
-  app.get('/2013/apps/api/projects/remove/:project_id', isAuth, canRemove, removeProject, notify(app, 'project_removed'), gracefulRes());
-  app.get('/2013/apps/api/projects/create', isAuth, canCreate, setViewVar('statuses', app.get('statuses')), render('new_project'));
-  app.post('/2013/apps/api/cover', isAuth,  uploadCover);
-  app.get('/2013/apps/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), canEdit, loadProject, render('edit'));
-  app.post('/2013/apps/api/projects/edit/:project_id', isAuth, canEdit, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes());
-  app.get('/2013/apps/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), sendMail(app, 'join'), gracefulRes()); 
-  app.get('/2013/apps/api/projects/leave/:project_id', isAuth, isProjectMemberOrApplicant, leaveProject, loadProject, gracefulRes()); 
-  app.get('/2013/apps/api/projects/follow/:project_id', isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes()); 
-  app.get('/2013/apps/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, notify(app, 'project_unfollow'), gracefulRes()); 
-  app.get('/2013/apps/api/p/:project_id', loadProject, canView, render('project_full'));
-  app.get('/2013/apps/api/search', prepareSearchQuery, loadProjects, render('projects'));
-  app.get('/2013/apps/api/users/applicants', isAuth, loadApplicants, render('applicants'));
-  app.get('/2013/apps/api/users/profile', isAuth, loadUser, userIsProfile, render('edit_profile'));
-  app.get('/2013/apps/api/users/:user_id', loadUser, findUser, render('profile'));
-  app.post('/2013/apps/api/users/:user_id', isAuth, updateUser, gracefulRes('ok!'));
-  app.put('/2013/apps/api/users/applicants/:project_id/:user_id', isAuth, canApprove, joinApprove, loadProject, gracefulRes()); 
-  app.del('/2013/apps/api/users/applicants/:project_id/:user_id', isAuth, canApprove, joinReject, loadProject, gracefulRes()); 
+  app.get('/api/projects', loadProjects, render('projects'));
+  app.post('/api/projects/create', isAuth, canCreate, validateProject, saveProject, notify(app, 'project_created'), gracefulRes());
+  app.get('/api/projects/remove/:project_id', isAuth, canRemove, removeProject, notify(app, 'project_removed'), gracefulRes());
+  app.get('/api/projects/create', isAuth, canCreate, setViewVar('statuses', app.get('statuses')), render('new_project'));
+  app.post('/api/cover', isAuth,  uploadCover);
+  app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), canEdit, loadProject, render('edit'));
+  app.post('/api/projects/edit/:project_id', isAuth, canEdit, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes());
+  app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), sendMail(app, 'join'), gracefulRes()); 
+  app.get('/api/projects/leave/:project_id', isAuth, isProjectMemberOrApplicant, leaveProject, loadProject, gracefulRes()); 
+  app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes()); 
+  app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, notify(app, 'project_unfollow'), gracefulRes()); 
+  app.get('/api/p/:project_id', loadProject, canView, render('project_full'));
+  app.get('/api/search', prepareSearchQuery, loadProjects, render('projects'));
+  app.get('/api/users/applicants', isAuth, loadApplicants, render('applicants'));
+  app.get('/api/users/profile', isAuth, loadUser, userIsProfile, render('edit_profile'));
+  app.get('/api/users/:user_id', loadUser, findUser, render('profile'));
+  app.post('/api/users/:user_id', isAuth, updateUser, gracefulRes('ok!'));
+  app.put('/api/users/applicants/:project_id/:user_id', isAuth, canApprove, joinApprove, loadProject, gracefulRes()); 
+  app.del('/api/users/applicants/:project_id/:user_id', isAuth, canApprove, joinReject, loadProject, gracefulRes()); 
 };
 
 /*
