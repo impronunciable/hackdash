@@ -158,11 +158,11 @@
       superagent
         .get('/2013/apps/api/projects/remove/' + ctx.params.project_id)
         .end(function(res){
-          page('/2013/apps/');
+          page('/2013/apps');
         });
     }
     else 
-      page('/2013/apps/');
+      page('/2013/apps');
   };
 
   var joinProject = function(ctx) {
@@ -185,7 +185,7 @@
     request
     .del('/2013/apps/api/users/applicants/' + ctx.params.project_id + '/'+ ctx.params.user_id)
     .end(function(res){
-      page('/2013/apps/');
+      page('/2013/apps');
     });
   };
 
@@ -193,7 +193,7 @@
     request
     .get('/2013/apps/api/projects/leave/' + ctx.params.project_id)
     .end(function(res){
-      page('/2013/apps/');
+      page('/2013/apps');
     });
   };
 
@@ -210,7 +210,7 @@
     request
     .get('/2013/apps/api/projects/follow/' + ctx.params.project_id)
     .end(function(res){
-      page('/2013/apps/');
+      page('/2013/apps');
     });
   };
 
@@ -218,7 +218,7 @@
     request
     .get('/2013/apps/api/projects/unfollow/' + ctx.params.project_id)
     .end(function(res){
-      page('/2013/apps/');
+      page('/2013/apps');
     });
   };
 
@@ -292,7 +292,7 @@
   });
 
   $main.on('click','.cancel', function(e){
-    page('/2013/apps/');
+    page('/2013/apps');
     e.preventDefault();
   });
 
@@ -330,7 +330,7 @@
     console.log('formSuccess');
     cleanErrors();
     $dragdrop.css('background', 'none').children('input').show(); 
-    page('/2013/apps/');
+    page('/2013/apps');
   };
   
   var formValidate = function(arr, $form, options){

@@ -1,27 +1,27 @@
 .row
   .span8.span-center
     div.boxxy
-      form.span8.offset2.ajaxForm.form-horizontal(action="/2013/apps/api/projects/edit/" + project.id, method="POST")
       h3.header Edita tu app
       .row-fluid
         .span12
-          .form-content     
-            .control-group
-             .controls
-              input(type="text", class="input-block-level", placeholder="Titulo", name="title", value=project.title)
+          form.ajaxForm(action="/api/projects/edit/" + project.id, method="POST")
+            .form-content     
+              .control-group
+                .controls
+                  input(type="text", class="input-block-level", placeholder="Titulo", name="title", value=project.title)
 
-            .control-group
-             .controls
-              textarea(class="input-block-level", id="description", name="description", rows="6", maxlength="1200", placeholder="Descripción") #{project.description}
-            .control-group
-              .controls
-                #dragdrop 
-                  p Drag Photo Here
-                  input(class="input-block-level",type="file", name="cover_fall", id="cover_fall")        
+              .control-group
+                .controls
+                  textarea(class="input-block-level", id="description", name="description", rows="6", maxlength="1200", placeholder="Descripción") #{project.description}
+              .control-group
+                .controls
+                  #dragdrop 
+                    p Drag Photo Here
+                    input(class="input-block-level",type="file", name="cover_fall", id="cover_fall")        
 
-            .control-group
-             .controls
-              input(class="input-block-level", type="text", name="link", id="link", placeholder="Link", value=project.link)
+              .control-group
+                .controls
+                  input(class="input-block-level", type="text", name="link", id="link", placeholder="Link", value=project.link)
 
               .control-group
                 .controls
@@ -29,21 +29,19 @@
                     span.add-on #                
                     input(class="input-block-level", type="text", name="hashtag", id="hashtag", placeholder="Hashtag",value=project.hashtag) 
 
-            .control-group
-             .controls
-              input(class="input-block-level", type="text", name="tags", id="tags", placeholder="Tags", value=project.tags.join(','))
-            
-            //- .control-group
-            //-  .controls
-            //-  select(class="input-xlarge", name="status", id="status", value=project.status)
-            //-    each status in statuses
-            //-     if(status === project.status)
-            //-       option(value=status, selected)= status
-            //-     else
-            //-      option(value=status)= status
-            
-          .form-actions
-            button.btn.primary.btn-success.pull-left(type="submit") Guardar cambios
-            a.cancel.btn.btn-cancel.pull-right(data-dismiss="modal") Cancelar
-
-
+              .control-group
+                .controls
+                  input(class="input-block-level", type="text", name="tags", id="tags", placeholder="Tags", value=project.tags.join(','))
+              
+              //- .control-group
+              //-  .controls
+              //-  select(class="input-xlarge", name="status", id="status", value=project.status)
+              //-    each status in statuses
+              //-     if(status === project.status)
+              //-       option(value=status, selected)= status
+              //-     else
+              //-      option(value=status)= status
+              
+            .form-actions
+              button.btn.primary.btn-success.pull-left(type="submit") Guardar cambios
+              a.cancel.btn.btn-cancel.pull-right(data-dismiss="modal") Cancelar
