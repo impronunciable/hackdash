@@ -261,7 +261,7 @@
   };
 
 
-  page('/2013/apps/', loadProjects, cleanSearch, isotopeDashboard);
+  page('/2013/apps', loadProjects, cleanSearch, isotopeDashboard);
   page('/2013/apps/login', logIn);
   page('/2013/apps/search', loadSearchProjects, isotopeDashboard);
   page('/2013/apps/projects/create', createProject);
