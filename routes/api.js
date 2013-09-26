@@ -380,7 +380,7 @@ var saveProject = function(req, res, next) {
   var project = new Project({
       title: req.body.title
     , description: req.body.description
-    , link: req.body.link
+    , link: (/^http[s]?\:\/\//.test(req.body.link))? req.body.link : "http://" + req.body.link
     , status: req.body.status
     , tags: req.body.tags && req.body.tags.length ? req.body.tags.split(',') : []
     , hashtag: req.body.hashtag
@@ -389,6 +389,7 @@ var saveProject = function(req, res, next) {
     , followers: [req.user._id]
     , contributors: [req.user._id]
     , cover: req.body.cover
+    , video: req.body.video
   });
 
   project.save(function(err, project){
@@ -424,6 +425,7 @@ var updateProject = function(req, res, next) {
   project.status = req.body.status || project.status;
   project.cover = req.body.cover || project.cover;
   project.tags = (req.body.tags && req.body.tags.split(',')) || project.tags;
+  project.video = req.body.video || project.video;
 
   project.save(function(err, project){
     if(err) return res.send(500);

@@ -32,6 +32,8 @@ module.exports = function(app) {
     , "link": String 
     , "tags": [String]
     , "created_at": { type: Date, default: Date.now }
+    , "video": { type: String }
+
   });
 
   mongoose.model('Project', Project);
