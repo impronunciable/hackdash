@@ -47,7 +47,9 @@ module.exports = function(app) {
   app.get('/', homeStack);
   app.get('/live', liveStack);
   app.get('/login', dashboardStack);
+  app.get('/sort', dashboardStack);
   app.get('/projects/create', dashboardStack);
+  app.get('/sort/:type', dashboardStack);
   app.get('/projects/edit/:project_id', dashboardStack);
   app.get('/p/:project_id', dashboardStack);
   app.get('/search', dashboardStack);
@@ -166,7 +168,9 @@ var logout = function(req, res, next) {
 
 var isHomepage = function(req, res, next) {
   if(!req.subdomains.length) {
-    res.render('homepage');
+    Dashboard.find({}).sort('domain').exec(function(err, dashboards){
+       res.render('homepage', {dashboards: dashboards});
+    });
   } else {
     next();
   }

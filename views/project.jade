@@ -11,31 +11,31 @@
       each contributor in project.contributors
         img.avatar.tooltips(src=contributor.picture, data-id=contributor.id, title=contributor.name, rel="tooltip")
 
-    .row-fluid
+    .row-fluid.footer-box
       .aging.activity.created_at
-        span.tooltips(data-icon="N", aria-hidden="true", rel="tooltip", title= moment(project.created_at).fromNow())
+        i.tooltips.icon-time.icon-1(rel="tooltip", title= moment(project.created_at).fromNow())
       
-      .activity.people #{project.followers.length}
-        a.btn.btn-link(href='#')
-          span(data-icon="6", aria-hidden="true")
+      .activity.people #{project.followers.length} 
+        a(href='#')
+          i.icon-heart
 
       .pull-right.remove
-        if(user && (isLeader(user, project) || isAdmin(user, project)))
+        if (user && (isLeader(user, project) || isAdmin(user, project)))
           a.btn.btn-link(href='/projects/remove/'+project._id) Remove
 
       .pull-right.edit
-        if(user && (isLeader(user, project) || isAdmin(user, project)))
+        if (user && (isLeader(user, project) || isAdmin(user, project)))
           a.btn.btn-link(href='/projects/edit/'+project._id) Edit
 
-      if(user && !isLeader(user, project))
-        if(userExists(user, project.contributors))
+      if (user && !isLeader(user, project))
+        if (userExists(user, project.contributors))
           .pull-right.contributor
             a.btn.btn-link(href='/projects/leave/'+project._id) Leave
         else 
           .pull-right.contributor
             a.btn.btn-link(href='/projects/join/'+project._id) Join
 
-        if(userExists(user, project.followers))
+        if (userExists(user, project.followers))
           .pull-right.follower
             a.btn.btn-link(href='/projects/unfollow/'+project._id) Unfollow
         else 

@@ -41,13 +41,7 @@ module.exports = function(app) {
     , "description": { type: String, default: "A dashboard for Hackatons" }
     , "background": { type: String, default: "#333" }
     , "created_at": { type:Date, default: Date.now }
-    , "created_at": { type: Date, default: Date.now }
   });
-
-  Dashboard.path('description').validate(function(value) {
-    value.length <= 140;
-  });
-
 
   mongoose.model('Dashboard', Dashboard);
 };

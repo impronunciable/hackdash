@@ -1,12 +1,12 @@
-.profile(style="text-align: center")
-  .well-content
-    h3 
+.span4.span-center()
+  .boxxy
+    h3.header
       img(class="avatar", src=user_profile.picture, style="margin-right: 10px;")
       | #{user_profile.name}
-    
-    p
-      strong Email: 
-      | #{user_profile.email}
-    p
-      strong Bio: 
-      | #{user_profile.bio}
+    div.profileInfo
+      p
+        strong Email: 
+        | #{user_profile.email}
+      p
+        strong Bio: 
+        | #{user_profile.bio}
