@@ -34,7 +34,7 @@ module.exports = function(app) {
     setViewVar('live', true),
     render('live')
 	];
-
+  app.locals.site_root = config.host;
   app.get('/', checkProfile, dashboardStack);
   app.get('/live', liveStack);
   app.get('/login', dashboardStack);

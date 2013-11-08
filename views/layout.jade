@@ -37,15 +37,14 @@ html
     meta(name='apple-mobile-web-app-capable', content='yes')
     meta(name='apple-mobile-web-app-status-bar-style', content='black')
     link(rel='shortcut icon', href='favicon.ico', type='image/vnd.microsoft.icon')
-    link(rel='stylesheet', href='/2013/apps/styles/bootstrap.min.css')
-    link(rel='stylesheet', href='/2013/apps/styles/bootstrap-responsive.min.css')
-    link(rel='stylesheet', href='/2013/apps/styles/select2.css')
-    link(rel='stylesheet', href='/2013/apps/styles/main.css')
+    link(rel='stylesheet', href=site_root + '/styles/bootstrap.min.css')
+    link(rel='stylesheet', href=site_root + '/styles/bootstrap-responsive.min.css')
+    link(rel='stylesheet', href=site_root + '/styles/select2.css')
+    link(rel='stylesheet', href=site_root + '/styles/main.css')
     link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css')
 
   body
-
-  
+    =site_root
     include header
     .container#page
       block content

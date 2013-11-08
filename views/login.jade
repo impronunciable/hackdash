@@ -20,6 +20,6 @@
       | .
   .span3.offset1
    each provider in providers
-    a(class="btn signup-btn signup-" + provider, href="/2013/apps/auth/" + provider)
+    a(class="btn signup-btn signup-" + provider, href=site_root + '/auth/' + provider)
       i
       | #{provider.charAt(0).toUpperCase() + provider.slice(1)}

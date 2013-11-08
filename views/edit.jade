@@ -4,7 +4,7 @@
       h3.header Edita tu app
       .row-fluid
         .span12
-          form.ajaxForm(action="/2013/apps/api/projects/edit/" + project.id, method="POST")
+          form.ajaxForm(action=site_root + '/api/projects/edit/' + project.id, method="POST")
             .form-content     
               .control-group
                 .controls

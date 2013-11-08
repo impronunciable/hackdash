@@ -4,7 +4,7 @@
     .well-header
 
       h3
-        a(href="/2013/apps/p/" + project.id, target="_blank") #{project.title}
+        a(href=site_root + '/p/' + project.id, target="_blank") #{project.title}
       p #{project.description}
       a(href=project.link, target='_blank') #{project.link}
       if(project.video)
@@ -30,21 +30,21 @@
       .well-content.span8
         .span4
           h5 Creado por
-          a(href="/2013/apps/users/" + project.leader.id)
+          a(href=site_root + '/users/' + project.leader.id)
             img.tooltips(src=project.leader.picture, title=project.leader.name, rel="tooltip")
         .span4
           h5 Colaboradores 
           each contributor in project.contributors
-            a(href="/2013/apps/users/" + contributor.id)
+            a(href=site_root + '/users/' + contributor.id)
               img.tooltips(src=contributor.picture, title=contributor.name, rel="tooltip")
         .span4
           h5 #{project.followers.length} Likes
           each follower in project.followers
-            a(href="/2013/apps/users/" + follower.id)
+            a(href=site_root + '/users/' + follower.id)
               img.tooltips(src=follower.picture, title=follower.name, rel="tooltip")
 
     if disqus_shortname
       #disqus_thread.well-header
-      script(src="/2013/apps/js/disqus.js", disqus_shortname=disqus_shortname)
+      script(src=site_root + '/js/disqus.js', disqus_shortname=disqus_shortname)
       
         

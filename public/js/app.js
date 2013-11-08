@@ -1,7 +1,7 @@
 ;(function(){
 
   var hd = window.hd = {};
-
+  var path_prefix = '';
   var routes = {}
     , request = superagent;
 
@@ -45,7 +45,7 @@
 
   var loadProjects = function(ctx, next) {
     request
-    .get('/2013/apps/api/projects')
+    .get(path_prefix + '/api/projects')
     .end(function(res){
       $main.html(res.body.html);
       next();
@@ -55,7 +55,7 @@
   var loadSearchProjects = function(ctx, next) { 
     $searchInput.val(ctx.querystring.split('&')[0].replace('q=',''));
     request
-    .get('/2013/apps/api/search?' + ctx.querystring)
+    .get(path_prefix + '/api/search?' + ctx.querystring)
     .end(function(res){ 
       $main.html(res.body.html);
       next();
@@ -68,7 +68,7 @@
 
   var loadApplicants = function(ctx, next) {
     request
-    .get('/2013/apps/api/users/applicants')
+    .get(path_prefix + '/api/users/applicants')
     .end(function(res){
       $applicants.html(res.body.html).modal('show');
     }); 
@@ -136,7 +136,7 @@
 
   var editProject = function(ctx) {
     superagent
-    .get('/2013/apps/api/projects/edit/' + ctx.params.project_id)
+    .get(path_prefix + '/api/projects/edit/' + ctx.params.project_id)
     .end(function(res){
     $('.tooltip').remove();
       $main.html(res.body.html);
@@ -156,18 +156,18 @@
   var removeProject = function(ctx) {
     if (window.confirm("This action will remove the project. Are you sure?")){
       superagent
-        .get('/2013/apps/api/projects/remove/' + ctx.params.project_id)
+        .get(path_prefix + '/api/projects/remove/' + ctx.params.project_id)
         .end(function(res){
-          page('/2013/apps');
+          page(path_prefix);
         });
     }
     else 
-      page('/2013/apps');
+      page(path_prefix);
   };
 
   var joinProject = function(ctx) {
     request
-    .get('/2013/apps/api/projects/join/' + ctx.params.project_id)
+    .get(path_prefix + '/api/projects/join/' + ctx.params.project_id)
     .end(function(res){
       page('/');
     });
@@ -175,31 +175,31 @@
 
   var joinApprove = function(ctx) {
     request
-    .put('/2013/apps/api/users/applicants/' + ctx.params.project_id + '/'+ ctx.params.user_id)
+    .put(path_prefix + '/api/users/applicants/' + ctx.params.project_id + '/'+ ctx.params.user_id)
     .end(function(res){
-      page('/2013/apps/users/applicants');
+      page(path_prefix + '/users/applicants');
     });
   };
 
   var joinReject = function(ctx) {
     request
-    .del('/2013/apps/api/users/applicants/' + ctx.params.project_id + '/'+ ctx.params.user_id)
+    .del(path_prefix + '/api/users/applicants/' + ctx.params.project_id + '/'+ ctx.params.user_id)
     .end(function(res){
-      page('/2013/apps');
+      page(path_prefix);
     });
   };
 
   var leaveProject = function(ctx) {
     request
-    .get('/2013/apps/api/projects/leave/' + ctx.params.project_id)
+    .get(path_prefix + '/api/projects/leave/' + ctx.params.project_id)
     .end(function(res){
-      page('/2013/apps');
+      page(path_prefix);
     });
   };
 
   var projectInfo = function(ctx) {
     request
-    .get('/2013/apps/api/p/' + ctx.params.project_id)
+    .get(path_prefix + '/api/p/' + ctx.params.project_id)
     .end(function(res){
       $main.html(res.body.html);
       $('.tooltips').tooltip({});
@@ -208,23 +208,23 @@
 
   var followProject = function(ctx) {
     request
-    .get('/2013/apps/api/projects/follow/' + ctx.params.project_id)
+    .get(path_prefix + '/api/projects/follow/' + ctx.params.project_id)
     .end(function(res){
-      page('/2013/apps');
+      page(path_prefix);
     });
   };
 
   var unfollowProject = function(ctx) {
     request
-    .get('/2013/apps/api/projects/unfollow/' + ctx.params.project_id)
+    .get(path_prefix + '/api/projects/unfollow/' + ctx.params.project_id)
     .end(function(res){
-      page('/2013/apps');
+      page(path_prefix);
     });
   };
 
   var getMyProfile = function() {
     request
-    .get('/2013/apps/api/users/profile')
+    .get(path_prefix + '/api/users/profile')
     .end(function(res){
       $main.html(res.body.html);
       $('.ajaxForm').ajaxForm({
@@ -238,7 +238,7 @@
 
   var getUserProfile = function(ctx) {
     request
-    .get('/2013/apps/api/users/' + ctx.params.user_id)
+    .get(path_prefix + '/api/users/' + ctx.params.user_id)
     .end(function(res){
       $modals.modal('hide');
       $main.html(res.body.html);
@@ -249,7 +249,7 @@
     navigator.id.get(function(assertion) {
       if (assertion) {
         request
-        .post('/2013/apps/auth/persona')
+        .post(path_prefix + '/auth/persona')
         .send({'assertion':assertion})
         .end(function(res){
           location.href = location.href.replace('auth/persona', '');
@@ -261,23 +261,23 @@
   };
 
 
-  page('/2013/apps', loadProjects, cleanSearch, isotopeDashboard);
-  page('/2013/apps/login', logIn);
-  page('/2013/apps/search', loadSearchProjects, isotopeDashboard);
-  page('/2013/apps/projects/create', createProject);
-  page('/2013/apps/projects/edit/:project_id', editProject);
-  page('/2013/apps/projects/remove/:project_id', removeProject);
-  page('/2013/apps/projects/follow/:project_id', followProject);
-  page('/2013/apps/projects/unfollow/:project_id', unfollowProject);
-  page('/2013/apps/projects/join/:project_id', joinProject);
-  page('/2013/apps/projects/leave/:project_id', leaveProject);
-  page('/2013/apps/users/applicants/approve/:project_id/:user_id', joinApprove);
-  page('/2013/apps/users/applicants/reject/:project_id/:user_id', joinReject);
-  page('/2013/apps/users/applicants', loadApplicants);  
-  page('/2013/apps/users/profile', getMyProfile);
-  page('/2013/apps/users/:user_id', getUserProfile);
-  page('/2013/apps/p/:project_id', projectInfo);
-  page('/2013/apps/auth/persona', personaLogin);
+  page('/', loadProjects, cleanSearch, isotopeDashboard);
+  page(path_prefix + '/login', logIn);
+  page(path_prefix + '/search', loadSearchProjects, isotopeDashboard);
+  page(path_prefix + '/projects/create', createProject);
+  page(path_prefix + '/projects/edit/:project_id', editProject);
+  page(path_prefix + '/projects/remove/:project_id', removeProject);
+  page(path_prefix + '/projects/follow/:project_id', followProject);
+  page(path_prefix + '/projects/unfollow/:project_id', unfollowProject);
+  page(path_prefix + '/projects/join/:project_id', joinProject);
+  page(path_prefix + '/projects/leave/:project_id', leaveProject);
+  page(path_prefix + '/users/applicants/approve/:project_id/:user_id', joinApprove);
+  page(path_prefix + '/users/applicants/reject/:project_id/:user_id', joinReject);
+  page(path_prefix + '/users/applicants', loadApplicants);  
+  page(path_prefix + '/users/profile', getMyProfile);
+  page(path_prefix + '/users/:user_id', getUserProfile);
+  page(path_prefix + '/p/:project_id', projectInfo);
+  page(path_prefix + '/auth/persona', personaLogin);
 
   page();
 
@@ -292,7 +292,7 @@
   });
 
   $main.on('click','.cancel', function(e){
-    page('/2013/apps');
+    page(path_prefix);
     e.preventDefault();
   });
 
@@ -330,7 +330,7 @@
     console.log('formSuccess');
     cleanErrors();
     $dragdrop.css('background', 'none').children('input').show(); 
-    page('/2013/apps');
+    page(path_prefix);
   };
   
   var formValidate = function(arr, $form, options){
@@ -363,16 +363,16 @@ text:project.language}]);
   });
 
   $formSearch.submit(function(e){
-    page('/2013/apps/search?q=' + $searchInput.val() + '&type=title');
+    page(path_prefix + '/search?q=' + $searchInput.val() + '&type=title');
     e.preventDefault();
   });
 
   $project.live('click', function(e){
     $('.tooltip').remove();
     if($(e.target).hasClass('avatar')) {
-      page('/2013/apps/users/' + $(e.target).data('id'));
+      page(path_prefix + '/users/' + $(e.target).data('id'));
     } else if(e.target.tagName !== 'A' && e.target.tagName !== 'SPAN'  && $(this).data('id')) {
-      page('/2013/apps/p/' + $(this).data('id'));
+      page(path_prefix + '/p/' + $(this).data('id'));
     }
   });
 
@@ -416,7 +416,7 @@ text:project.language}]);
 
     $dragdrop.filedrop({
       fallback_id: 'cover_fall',
-      url: '/2013/apps/api/cover',
+      url: path_prefix + '/api/cover',
       paramname: 'cover',
       allowedfiletypes: ['image/jpeg','image/png','image/gif'],
       maxfiles: 1,

@@ -14,26 +14,26 @@ header
       input.search-query.input-large#searchInput(type='text')
     .btn-group.userBox.pull-right
         if(user)
-          a.btn.btn-notification(href="/2013/apps/users/applicants") 
+          a.btn.btn-notification(href=site_root + '/users/applicants') 
             i.icon-bell-alt.white
             span.label.label-important #{applicants.length}
-          a.btn.btn-profile(href="/2013/apps/users/profile")
+          a.btn.btn-profile(href=site_root + '/users/profile')
             img.avatar(src=user.picture).tooltips(rel='tooltip', data-placement='bottom', data-original-title='Editar perfil')
-          a.btn.btn-logout(href="/2013/apps/logout") Salir
+          a.btn.btn-logout(href=site_root + '/logout') Salir
   
-    a.logo(href="/2013/apps/")= title
+    a.logo(href=site_root)= title
     h1 #{dashboard.title}
     p.lead #{dashboard.description}
     .join
       - if (user) {
         - if (canCreate(user)) {
-          a.btn.btn-large(href="/2013/apps/projects/create") Postulá tu app
+          a.btn.btn-large(href=site_root + '/projects/create') Postulá tu app
         - }
       - } else { 
         - if (stageCanCreate()) {
-          a.btn.btn-large(href="/2013/apps/login") Participá ahora
+          a.btn.btn-large(href=site_root + '/login') Participá ahora
         - } else {
-          a.btn.btn-large(href="/2013/apps/login") Registrate para participar
+          a.btn.btn-large(href=site_root + '/login') Registrate para participar
         - }
       - }
     
