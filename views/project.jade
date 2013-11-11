@@ -1,6 +1,6 @@
 .project.span4(title=project.status, data-id=project.id, data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id, class=project.status)
   
-  .well
+  div(class="well " + project._id)
     .cover.shadow 
       if(project.cover)
         img(src=project.cover, alt='#{project.title}')

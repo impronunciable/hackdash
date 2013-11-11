@@ -390,6 +390,7 @@ var saveProject = function(req, res, next) {
     , hashtag: req.body.hashtag
     , created_at: Date.now()
     , leader: req.user._id
+    , dataset: req.body.dataset
     , followers: [req.user._id]
     , contributors: [req.user._id]
     , cover: req.body.cover
@@ -427,6 +428,7 @@ var updateProject = function(req, res, next) {
   project.description = req.body.description || project.description;
   project.link = req.body.link || project.link;
   project.status = req.body.status || project.status;
+  project.dataset = req.body.dataset || project.dataset;
   project.cover = req.body.cover || project.cover;
   project.tags = (req.body.tags && req.body.tags.split(',')) || project.tags;
   project.video = req.body.video || project.video;
