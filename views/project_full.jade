@@ -6,11 +6,14 @@
       h3
         a(href=site_root + '/p/' + project.id, target="_blank") #{project.title}
       p #{project.description}
-      a(href=project.link, target='_blank') #{project.link}
+      p
+        strong Link: 
+        a(href=project.link, target='_blank') #{project.link}
+
       if(project.video)
-      br
-        | Video:
-        a(href=project.video, target='_blank') #{project.video}
+        p
+          strong Video: 
+          a(href=project.video, target='_blank') #{project.video}
     .row-fluid
       .well-sidebar.span4
 

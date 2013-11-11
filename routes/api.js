@@ -9,8 +9,9 @@ var passport = require('passport')
 moment.lang('es');
 var User = mongoose.model('User')
   , Project = mongoose.model('Project');
-
+var site_root = '';
 module.exports = function(app) {
+  site_root = app.get('config').host;
   app.locals.canCreate = userCanCreate
   app.locals.stageCanCreate = stageCanCreate
   app.get('/api/projects', loadProjects, render('projects'));
@@ -440,7 +441,7 @@ var updateProject = function(req, res, next) {
 
 var uploadCover = function(req, res, next) {
   var cover = (req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1 
-    && '/2013/apps/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop());
+    && '/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop());
 
   if(req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1) {
     var tmp_path = req.files.cover.path

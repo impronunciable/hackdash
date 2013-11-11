@@ -8,8 +8,9 @@ var User = mongoose.model('User')
   , Project = mongoose.model('Project')
   , Dashboard = mongoose.model('Dashboard');
 
+var site_root = '';
 module.exports = function(app) {
-
+  site_root = app.get('config').host;
   /*
    * Dashboard middleware stack
    */
@@ -67,10 +68,10 @@ var redirect = function(route) {
     res.redirect(route);
   };
 };
-
+console.log(site_root);
 var checkProfile = function(req, res, next){
   if (req.user && !req.user.email){
-    res.redirect('/2013/apps/users/profile');
+    res.redirect(site_root + '/users/profile');
   }
 
   next();
