@@ -21,11 +21,17 @@
 
               .control-group
                 .controls
-                  input(class="input-block-level", type="text", name="link", id="link", placeholder="Link", value=project.link)
+                  input(class="input-block-level", type="text", name="link", id="link", placeholder="Link a la aplicación", value=project.link)
 
               .control-group
                 .controls
-                  input(class="input-block-level", type="text", name="video", id="video", placeholder="Código de video de Youtube", value=project.video)
+                  div.input-prepend.input-block-level
+                    span.add-on http://www.youtube.com/watch?v=              
+                    input(class="input-block-level", type="text", name="video", id="video", placeholder="Hashtag",value=project.video) 
+
+              .control-group
+                .controls
+                  input(class="input-block-level", type="text", name="dataset", id="dataset", placeholder="¿Qué datasets de data.buenosaires.gob.ar usaste?", value=project.dataset) 
 
               .control-group
                 .controls
