@@ -31,11 +31,19 @@
 
               .control-group
                 .controls
-                  input(class="input-block-level", type="text", name="link", id="link", placeholder="Link")
+                  input(class="input-block-level", type="text", name="link", id="link", placeholder="Link a la aplicación")
 
               .control-group
                 .controls
-                  input(type="text", class="input-block-level", placeholder="Código de video de Youtube", name="video")
+                  div.input-prepend.input-block-level
+                    span.add-on http://www.youtube.com/watch?v=              
+                    input(class="input-block-level", type="text", name="video", id="video", placeholder="Código de video de Youtube")
+                  span.help-block Tip: Ingresá el código de tu video. 
+                    a(href="https://support.google.com/youtube/answer/171780?hl=es") Necesitás más ayuda?
+
+              .control-group
+                .controls
+                  input(class="input-block-level", type="text", name="dataset", id="dataset", placeholder="¿Qué datasets de data.buenosaires.gob.ar usaste?")
 
               .control-group
                 .controls
