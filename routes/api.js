@@ -547,6 +547,7 @@ var leaveProject = function(req, res, next) {
  */
 
 var followProject = function(req, res, next) {
+  console.log('follow');
   Project.update({_id: req.params.project_id}, { $addToSet : { 'followers': req.user.id }}, function(err){
     if(err) return res.send(500);
     next();
