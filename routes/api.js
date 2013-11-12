@@ -456,7 +456,7 @@ var uploadCover = function(req, res, next) {
       if (err) throw err;
       fs.unlink(tmp_path, function() {
         if (err) throw err;
-        res.json({href: cover});
+        res.json({href: '/2013/apps'cover});
       });
     });
   }
