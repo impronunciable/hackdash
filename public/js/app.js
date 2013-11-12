@@ -261,22 +261,22 @@
   };
 
 
-  page('/', loadProjects, cleanSearch, isotopeDashboard);
-  page(path_prefix + '/login', logIn);
-  page(path_prefix + '/search', loadSearchProjects, isotopeDashboard);
-  page(path_prefix + '/projects/create', createProject);
-  page(path_prefix + '/projects/edit/:project_id', editProject);
-  page(path_prefix + '/projects/remove/:project_id', removeProject);
-  page(path_prefix + '/projects/unfollow/:project_id', unfollowProject);
-  page(path_prefix + '/projects/join/:project_id', joinProject);
-  page(path_prefix + '/projects/leave/:project_id', leaveProject);
-  page(path_prefix + '/users/applicants/approve/:project_id/:user_id', joinApprove);
-  page(path_prefix + '/users/applicants/reject/:project_id/:user_id', joinReject);
-  page(path_prefix + '/users/applicants', loadApplicants);  
-  page(path_prefix + '/users/profile', getMyProfile);
-  page(path_prefix + '/users/:user_id', getUserProfile);
-  page(path_prefix + '/p/:project_id', projectInfo);
-  page(path_prefix + '/auth/persona', personaLogin);
+  page('/2013/apps/', loadProjects, cleanSearch, isotopeDashboard);
+  page('/2013/apps/login', logIn);
+  page('/2013/apps/search', loadSearchProjects, isotopeDashboard);
+  page('/2013/apps/projects/create', createProject);
+  page('/2013/apps/projects/edit/:project_id', editProject);
+  page('/2013/apps/projects/remove/:project_id', removeProject);
+  page('/2013/apps/projects/unfollow/:project_id', unfollowProject);
+  page('/2013/apps/projects/join/:project_id', joinProject);
+  page('/2013/apps/projects/leave/:project_id', leaveProject);
+  page('/2013/apps/users/applicants/approve/:project_id/:user_id', joinApprove);
+  page('/2013/apps/users/applicants/reject/:project_id/:user_id', joinReject);
+  page('/2013/apps/users/applicants', loadApplicants);  
+  page('/2013/apps/users/profile', getMyProfile);
+  page('/2013/apps/users/:user_id', getUserProfile);
+  page('/2013/apps/p/:project_id', projectInfo);
+  page('/2013/apps/auth/persona', personaLogin);
 
   page();
 
