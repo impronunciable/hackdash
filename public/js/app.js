@@ -1,7 +1,7 @@
 ;(function(){
 
   var hd = window.hd = {};
-  var path_prefix = '';
+  var path_prefix = '/2013/apps';
   var routes = {}
     , request = superagent;
 
