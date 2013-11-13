@@ -42,7 +42,7 @@ var initStrategy = function(app, keys, provider) {
   app.get('/auth/' + provider + '/callback',
     passport.authenticate(provider, { failureRedirect: app.get('config').host + '/' }), 
     function(req, res){ 
-      console.log(app);
+      console.log('antes del redirect');
       res.redirect('http://concurso.buenosaires.gob.ar/2013/apps'); 
     });
 
