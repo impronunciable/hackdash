@@ -105,6 +105,7 @@
               }
           }
       });
+      $('#projects').isotope( 'shuffle', function(){});
     });
   };
 
