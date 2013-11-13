@@ -38,6 +38,7 @@ var initStrategies = function(app) {
 };
 
 var initStrategy = function(app, keys, provider) {
+  console.log(app);
   app.get('/auth/' + provider, passport.authenticate(provider));
   app.get('/auth/' + provider + '/callback',
     passport.authenticate(provider, { failureRedirect: app.get('config').host + '/' }), 
