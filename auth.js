@@ -43,7 +43,7 @@ var initStrategy = function(app, keys, provider) {
     passport.authenticate(provider, { failureRedirect: app.get('config').host + '/' }), 
     function(req, res){ 
       console.log(app);
-      res.redirect(app.get('config').host + '/'); 
+      res.redirect('http://concurso.buenosaires.gob.ar/2013/apps'); 
     });
 
   var Strategy = require('passport-' + provider).Strategy;
