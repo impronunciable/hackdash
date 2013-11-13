@@ -40,7 +40,7 @@ var initStrategies = function(app) {
 var initStrategy = function(app, keys, provider) {
   app.get('/auth/' + provider, passport.authenticate(provider));
   app.get('/auth/' + provider + '/callback',
-    passport.authenticate(provider, { failureRedirect: app.get('config').host + '/' }), 
+    passport.authenticate(provider, { failureRedirect: 'http://concurso.buenosaires.gob.ar/2013/apps' }), 
     function(req, res){ 
       console.log('antes del redirect');
       res.redirect('http://concurso.buenosaires.gob.ar/2013/apps'); 
