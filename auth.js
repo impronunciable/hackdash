@@ -38,11 +38,13 @@ var initStrategies = function(app) {
 };
 
 var initStrategy = function(app, keys, provider) {
-  console.log(app);
   app.get('/auth/' + provider, passport.authenticate(provider));
   app.get('/auth/' + provider + '/callback',
     passport.authenticate(provider, { failureRedirect: app.get('config').host + '/' }), 
-    function(req, res){ res.redirect(app.get('config').host + '/'); });
+    function(req, res){ 
+      console.log(app);
+      res.redirect(app.get('config').host + '/'); 
+    });
 
   var Strategy = require('passport-' + provider).Strategy;
   passport.use(new Strategy(keys[provider], findOrCreateUser(provider)));
