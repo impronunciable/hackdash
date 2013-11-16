@@ -286,6 +286,7 @@ var loadProjects = function(req, res, next) {
     res.locals.user = req.user;
     res.locals.canView = userCanView;
     res.locals.canEdit = userCanEdit;
+    res.locals.canVote = stageCanVote;
     res.locals.canRemove = userCanRemove;
     res.locals.userExists = userExistsInArray;
     next();
@@ -307,6 +308,7 @@ var loadProject = function(req, res, next) {
     res.locals.project = project;
     res.locals.user = req.user;
     res.locals.canEdit = userCanEdit;
+    res.locals.canVote = stageCanVote;
     res.locals.canRemove = userCanRemove;
     res.locals.disqus_shortname = config.disqus_shortname;
     res.locals.userExists = userExistsInArray;
@@ -332,6 +334,7 @@ var loadApplicants = function(req, res, next) {
     res.locals.projects = projects;
     res.locals.user = req.user;
     res.locals.canEdit = userCanEdit;
+    res.locals.canVote = stageCanVote;
     res.locals.canRemove = userCanRemove;
     res.locals.disqus_shortname = config.disqus_shortname;
     res.locals.userExists = userExistsInArray;
@@ -609,6 +612,15 @@ var stageHasPermission = function(stage, permission) {
 
 var stageCanCreate = function() {
   return stageHasPermission(actualStage(), 'create');
+}
+
+
+/*
+ * Tells if the actual stage has permissions to vote
+ */
+
+var stageCanVote = function() {
+  return stageHasPermission(actualStage(), 'vote');
 }
 
 

@@ -68,7 +68,7 @@ var redirect = function(route) {
     res.redirect(route);
   };
 };
-console.log(site_root);
+
 var checkProfile = function(req, res, next){
   if (req.user && !req.user.email){
     res.redirect(site_root + '/users/profile');

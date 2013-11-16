@@ -14,10 +14,10 @@
     .row-fluid.footer-box
       .aging.activity.created_at
         i.tooltips.icon-time.icon-1(rel="tooltip", title= moment(project.created_at).fromNow())
-      
-      .activity.people #{project.followers.length} 
-        a(href='#')
-          i.icon-heart
+      if(canVote())
+        .activity.people #{project.followers.length} 
+          a(href='/projects/follow/' + project._id)
+            i.icon-thumbs-up
 
       .pull-right.remove
         if (canRemove(user, project))
@@ -37,10 +37,3 @@
         else
           .pull-right.contributor
             a.btn.btn-link(href=site_root + '/projects/join/'+project._id) Participá                    
-
-        //- if (userExists(user, project.followers))
-        //-   .pull-right.follower
-        //-     a.btn.btn-link(href=site_root + '/projects/unfollow/'+project._id) Unfollow
-        //- else 
-        //-   .pull-right.follower
-        //-     a.btn.btn-link(href=site_root + '/projects/follow/'+project._id) Seguir

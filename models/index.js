@@ -31,6 +31,7 @@ module.exports = function(app) {
     , "cover": String
     , "link": String 
     , "tags": [String]
+    , "dataset": String
     , "created_at": { type: Date, default: Date.now }
     , "video": { type: String }
 
