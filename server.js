@@ -37,7 +37,7 @@ app.configure(function(){
       secret: app.get('config').session
     , store: new MongoStore({db: app.get('config').db.name, url:
 app.get('config').db.url}) 
-    , cookie: { maxAge: 365 * 24 * 60 * 60 * 1000, path: '/', domain: '.' + app.get('config').host }
+    , cookie: { maxAge: 365 * 24 * 60 * 60 * 1000, path: '/', domain: app.get('config').domain }
   }));
   app.use(passport.initialize());
   app.use(passport.session());

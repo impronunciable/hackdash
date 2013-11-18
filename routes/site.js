@@ -1,14 +1,16 @@
 
 var passport = require('passport')
   , config = require('../config.json')
-  , mongoose = require('mongoose');
+  , mongoose = require('mongoose')
+  , _ = require('underscore');
 
 var User = mongoose.model('User')
   , Project = mongoose.model('Project')
   , Dashboard = mongoose.model('Dashboard');
 
+var site_root = '';
 module.exports = function(app) {
-
+  site_root = app.get('config').host;
   /*
    * Dashboard middleware stack
    */
@@ -17,6 +19,7 @@ module.exports = function(app) {
     loadUser, 
     loadProviders,
     loadDashboard,
+    loadApplicants,
     setViewVar('statuses', app.get('statuses')),
     setViewVar('disqus_shortname', config.disqus_shortname),
     render('dashboard')
@@ -32,18 +35,17 @@ module.exports = function(app) {
     setViewVar('live', true),
     render('live')
 	];
-
+  app.locals.site_root = config.host;
   app.get('/', checkProfile, dashboardStack);
   app.get('/live', liveStack);
   app.get('/login', dashboardStack);
-  app.get('/projects/create', dashboardStack);
+  app.get('/create', dashboardStack);
   app.get('/projects/edit/:project_id', dashboardStack);
   app.get('/p/:project_id', dashboardStack);
   app.get('/search', dashboardStack);
-  app.get('/logout', logout, redirect('/'));
-  
+  app.get('/logout', logout, redirect('/'));  
   app.get('/about', loadUser, render('about'));
-
+  app.get('/users/applicants', dashboardStack);
   app.get('/users/profile', dashboardStack);
   app.get('/users/:user_id', dashboardStack);
 };
@@ -69,7 +71,7 @@ var redirect = function(route) {
 
 var checkProfile = function(req, res, next){
   if (req.user && !req.user.email){
-    res.redirect('/users/profile');
+    res.redirect(site_root + '/users/profile');
   }
 
   next();
@@ -95,6 +97,24 @@ var loadUser = function(req, res, next) {
   next();
 };
 
+/*
+ * Add applicants template variable
+ */
+
+var loadApplicants = function(req, res, next) {
+  if(typeof req.user !== 'undefined'){
+    Project.find({leader:req.user._id}, 'applicants')
+    .populate('applicants')
+    .exec(function(err, projects) {
+      if(err || !projects) return res.send(500);
+      var applicants = _.reduceRight(_.pluck(projects,'applicants'), function(a, b) { return a.concat(b); }, []);      
+      res.locals.applicants = applicants;      
+      next();
+    });
+  }else{
+    next();
+  }
+};
 
 /*
  * Check if current user is authenticated

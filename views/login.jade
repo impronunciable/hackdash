@@ -1,9 +1,25 @@
 .modal-header
     button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-    h3 Log in to create a project
-.row
- .span4.offset1
+    - if (user) {
+      - if (canCreate(user)) {
+        h3 Ingresá para postular tu app
+      - }
+    - } else { 
+      - if (stageCanCreate()) {
+        h3 Ingresá para postular tu app
+      - } else {
+        h3 Ingresá para participar
+      - }
+    - }
+.row.credentials
+  .span5
+    h5 Podés ingresar usando estos servicios.
+    p
+      | Al completar este registro, estás expresamente aceptando las 
+      a(href='http://concursos.buenosaires.gob.ar/2013/bases.html', target='_blank') bases y condiciones del concurso
+      | .
+  .span3.offset1
    each provider in providers
-    a(class="btn btn-large signup-btn signup-" + provider, href="/auth/" + provider)
+    a(class="btn signup-btn signup-" + provider, href=site_root + '/auth/' + provider)
       i
-      | Access with #{provider.charAt(0).toUpperCase() + provider.slice(1)}
+      | #{provider.charAt(0).toUpperCase() + provider.slice(1)}

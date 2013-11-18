@@ -1,0 +1,11 @@
+.row-fluid.applicant
+  .span2
+    p 
+      a.btn-profile(href=site_root + '/users/' + _applicant._id)
+        img.avatar(src=_applicant.picture)
+  .span5
+    h3 #{_applicant.name}
+    p #{project.title}
+  .span5.rejectaccept
+    a.btn.btn-success(href=site_root + '/users/applicants/approve/' + project._id + '/' + _applicant._id ) Aprobar
+    a.btn(href=site_root + '/users/applicants/reject/' + project._id + '/' + _applicant._id ) Rechazar

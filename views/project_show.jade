@@ -12,9 +12,9 @@ block content
           span(data-icon="P", aria-hidden="true")
       .divider(class=project.status)
       p
-        a(href="/p/" + project.id, target="_blank") #{project.summary}
+        a(href=site_root + '/apps/p/' + project.id, target="_blank") #{project.summary}
       .info
-        span.status Status:  #{project.status}
+        span.status Estado:  #{project.status}
         if(project.tags.length)
           span.tags Tags: #{project.tags.join(', ')}
 
@@ -22,9 +22,9 @@ block content
           .btn-group
             if(user)
               if(user && project.followers.indexOf(user._id) == -1)
-                a.follow.btn(href='/api/projects/'+ project._id +'/follow') follow
+                a.follow.btn(href=site_root + '/api/projects/'+ project._id +'/follow') follow
               else
-                a.unfollow.btn(href='/api/projects/'+ project._id +'/unfollow') unfollow
+                a.unfollow.btn(href=site_root + '/api/projects/'+ project._id +'/unfollow') unfollow
 
             if(user && project.leader.id == user.id)
-              a.btn(href='/projects/edit/'+project._id) Edit
+              a.btn(href=site_root + '/projects/edit/'+project._id) Edit

@@ -1,47 +1,67 @@
-.span4.span-center
-  div.boxxy
-    h3.header Create project
+.row
+  .span8.span-center
+    div.boxxy
+      h3.header Postulá tu app
+      .row-fluid
+        .span12     
 
-    div
-     
-     
+          form.ajaxForm(action=site_root + '/api/projects/create', method="POST")
+            .form-content
+              a#ghImportBtn(href="#") Import from Github
+              .control-group.hidden
+                .controls
+                  input(type="text", class="input-large", placeholder="repo user/name", name="repo")
+                  button#searchGh.btn() Importar
 
-      form.ajaxForm(action="/api/projects/create", method="POST")
-        .form-content
-          a#ghImportBtn(href="#") Import from Github
-          .control-group.hidden
-            .controls
-             input(type="text", class="input-large", placeholder="repo user/name", name="repo")
-             button#searchGh.btn() Import
-          .control-group
-            .controls
-              input(type="text", class="input-block-level", placeholder="Title", name="title")
+              .control-group
+                .controls
+                  input(type="text", class="input-block-level", placeholder="Titulo", name="title")
 
-          .control-group
-            .controls
-              textarea(class="input-block-level", id="description", name="description", rows="4", maxlength="400", placeholder="Description")
+              .control-group
+                .controls
+                  textarea(class="input-block-level", id="description", name="description", rows="6", maxlength="1200", placeholder="Descripción")
+                  span.help-block Tip: Describí qué hace y para qué sirve.
 
-          .control-group
-            .controls
-              #dragdrop 
-                p Drag Photo Here
-                input(type="file", name="cover_fall", id="cover_fall")        
+              .control-group
+                .controls
+                  #dragdrop 
+                    p Arrastrar o importar imagen
+                    input(type="file", name="cover_fall", id="cover_fall")
+                
 
-          .control-group
-            .controls
-              input(class="input-block-level", type="text", name="link", id="link", placeholder="Link")
+              .control-group
+                .controls
+                  input(class="input-block-level", type="text", name="link", id="link", placeholder="Link a la aplicación")
 
-          .control-group
-            .controls
-              input(class="input-block-level", type="text", name="tags", id="tags", placeholder="Tags")
-          
-          .control-group
-            .controls
-              select(class="input-block-level", name="status", id="status")
-                each status in statuses
-                  option(value=status)= status
-        
-        .form-actions
+              .control-group
+                .controls
+                  div.input-prepend.input-block-level
+                    span.add-on http://www.youtube.com/watch?v=              
+                    input(class="input-block-level", type="text", name="video", id="video", placeholder="Código de video de Youtube")
+                  span.help-block Tip: Ingresá el código de tu video. 
+                    a(href="https://support.google.com/youtube/answer/171780?hl=es") Necesitás más ayuda?
 
-          input.btn.primary.btn-success.pull-left(type="submit", value="Create project")
-          a.cancel.btn.btn-cancel.pull-right(data-dismiss="modal") Cancel
+              .control-group
+                .controls
+                  input(class="input-block-level", type="text", name="dataset", id="dataset", placeholder="¿Qué datasets de data.buenosaires.gob.ar usaste?")
+
+              .control-group
+                .controls
+                  div.input-prepend.input-block-level
+                    span.add-on #                
+                    input(class="input-block-level", type="text", name="hashtag", id="hashtag", placeholder="Hashtag") 
+
+              .control-group
+                .controls
+                  input(class="input-block-level", type="text", name="tags", id="tags", placeholder="Tags")
+              
+              //- .control-group
+              //-   .controls
+              //-     select(class="input-block-level", name="status", id="status")
+              //-       each status in statuses
+              //-         option(value=status)= status
+            
+            .form-actions
+
+              input.btn.primary.btn-success.pull-left(type="submit", value="Creá tu proyecto")
+              a.cancel.btn.btn-cancel.pull-right(data-dismiss="modal") Cancelar

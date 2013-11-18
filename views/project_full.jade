@@ -4,42 +4,60 @@
     .well-header
 
       h3
-        a(href="/p/" + project.id, target="_blank") #{project.title}
+        a(href=site_root + '/p/' + project.id, target="_blank") #{project.title}
       p #{project.description}
-      a(href=project.link) #{project.link}
+      if(project.dataset)
+        p
+          strong Link: 
+          a(href=project.link, target='_blank') #{project.link}
+      
+      if(project.dataset)
+        p 
+          strong Dataset: 
+          span #{project.dataset}
+          
+      if(project.video)
+        p
+          iframe(width="420", height="315", src="//www.youtube.com/embed/" + project.video frameborder="0", allowfullscreen="")
     .row-fluid
       .well-sidebar.span4
 
-        h6 Created
+        h6 Creado
         strong= moment(project.created_at).fromNow()
+        if(project.tags)
+          h6 Tags
+          ul
+            each tag in project.tags
+              li= tag
 
-        h6 State
-        strong= project.status
+        if(project.hashtag)
+          h6 Hashtag
+          strong 
+            a(href="https://twitter.com/search?q=" + project.hashtag, target='_blank') ##{project.hashtag}
 
-        h6 Tags
-        ul
-          each tag in project.tags
-            li= tag
-
+      if(canVote(user, project))
+        .activity.people
+          a(class='vote full', data-id=project.id, href='/api/projects/follow/' + project._id)
+            i.icon-thumbs-up
 
       .well-content.span8
         .span4
-          h5 Managed by
-          a(href="/users/" + project.leader.id)
+          h5 Creado por
+          a(href=site_root + '/users/' + project.leader.id)
             img.tooltips(src=project.leader.picture, title=project.leader.name, rel="tooltip")
         .span4
-          h5 Contributors 
+          h5 Colaboradores 
           each contributor in project.contributors
-            a(href="/users/" + contributor.id)
+            a(href=site_root + '/users/' + contributor.id)
               img.tooltips(src=contributor.picture, title=contributor.name, rel="tooltip")
         .span4
           h5 #{project.followers.length} Likes
           each follower in project.followers
-            a(href="/users/" + follower.id)
+            a(href=site_root + '/users/' + follower.id)
               img.tooltips(src=follower.picture, title=follower.name, rel="tooltip")
 
     if disqus_shortname
       #disqus_thread.well-header
-      script(src="/js/disqus.js", disqus_shortname=disqus_shortname)
+      script(src=site_root + '/js/disqus.js', disqus_shortname=disqus_shortname)
       
         

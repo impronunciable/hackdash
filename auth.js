@@ -30,7 +30,7 @@ var initStrategies = function(app) {
 
   if(keys['persona']) {
     app.post('/auth/persona', 
-      passport.authenticate('persona', { failureRedirect: '/login' }),
+      passport.authenticate('persona', { failureRedirect: app.get('config').host + '/login' }),
       function(req, res) {
         res.redirect('/');
       });
@@ -40,8 +40,8 @@ var initStrategies = function(app) {
 var initStrategy = function(app, keys, provider) {
   app.get('/auth/' + provider, passport.authenticate(provider));
   app.get('/auth/' + provider + '/callback',
-    passport.authenticate(provider, { failureRedirect: '/' }), 
-    function(req, res){ res.redirect('/'); });
+    passport.authenticate(provider, { failureRedirect: app.get('config').host + '/' }), 
+    function(req, res){ res.redirect(app.get('config').host + '/'); });
 
   var Strategy = require('passport-' + provider).Strategy;
   passport.use(new Strategy(keys[provider], findOrCreateUser(provider)));
@@ -90,7 +90,7 @@ var createUser = function(provider, profile, done) {
 };
 
 var getProfilePicture = function(profile, email) {
-  var picture = '/images/default_avatar.png';
+  var picture = 'http://concurso.buenosaires.gob.ar/2013/apps/images/default_avatar.png';
   if(profile.photos && profile.photos.length && profile.photos[0].value) {
     picture =  profile.photos[0].value.replace('_normal', '_bigger');
   } else if(profile.provider == 'facebook') {

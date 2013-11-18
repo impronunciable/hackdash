@@ -6,13 +6,14 @@ var passport = require('passport')
   , fs = require('fs')
   , request = require('superagent');
 
+moment.lang('es');
 var User = mongoose.model('User')
   , Project = mongoose.model('Project');
-
+var site_root = '';
 module.exports = function(app) {
+  site_root = app.get('config').host;
   app.locals.canCreate = userCanCreate
   app.locals.stageCanCreate = stageCanCreate
-
   app.get('/api/projects', loadProjects, render('projects'));
   app.post('/api/projects/create', isAuth, canCreate, validateProject, saveProject, notify(app, 'project_created'), gracefulRes());
   app.get('/api/projects/remove/:project_id', isAuth, canRemove, removeProject, notify(app, 'project_removed'), gracefulRes());
@@ -21,14 +22,17 @@ module.exports = function(app) {
   app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), canEdit, loadProject, render('edit'));
   app.post('/api/projects/edit/:project_id', isAuth, canEdit, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes());
   app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), sendMail(app, 'join'), gracefulRes()); 
-  app.get('/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, notify(app, 'project_leave'), gracefulRes()); 
-  app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes()); 
+  app.get('/api/projects/leave/:project_id', isAuth, isProjectMemberOrApplicant, leaveProject, loadProject, gracefulRes()); 
+  app.get('/api/projects/follow/:project_id', canVote, isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes()); 
   app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, notify(app, 'project_unfollow'), gracefulRes()); 
   app.get('/api/p/:project_id', loadProject, canView, render('project_full'));
   app.get('/api/search', prepareSearchQuery, loadProjects, render('projects'));
+  app.get('/api/users/applicants', isAuth, loadApplicants, render('applicants'));
   app.get('/api/users/profile', isAuth, loadUser, userIsProfile, render('edit_profile'));
   app.get('/api/users/:user_id', loadUser, findUser, render('profile'));
   app.post('/api/users/:user_id', isAuth, updateUser, gracefulRes('ok!'));
+  app.put('/api/users/applicants/:project_id/:user_id', isAuth, canApprove, joinApprove, loadProject, gracefulRes()); 
+  app.del('/api/users/applicants/:project_id/:user_id', isAuth, canApprove, joinReject, loadProject, gracefulRes()); 
 };
 
 /*
@@ -37,6 +41,7 @@ module.exports = function(app) {
 var render = function(path) {
   return function(req, res) { 
     res.render(path, function(err, html){
+      console.log(err);
       if(err) return res.send(500);
       res.json({html: html});
     });
@@ -183,9 +188,18 @@ var isAuth = function(req, res, next){
  */
 
 var canCreate = function(req, res, next) {
-  if (!userCanCreate(req.user))
+  if (!userCanCreate(req.user)){
     return res.send(401)
-  next();
+  }else{
+    Project.find({leader:req.user._id})
+    .exec(function(err, project) {
+      if(project.length){
+        return res.send(401)
+      }else{
+        next();
+      }
+    })
+  }
 }
 
 /*
@@ -213,6 +227,17 @@ var canView = function(req, res, next) {
 }
 
 /*
+ * Check if current user can approve this applicant.
+ */
+
+var canApprove = function(req, res, next) {
+  return canPermission(req, res, next, 'approve')
+}
+
+var canVote = function(req, res, next) {
+  return canPermission(req, res, next, 'vote');
+}
+/*
  * Check if current user can do the selected action. 
  * Being posible values ['edit', 'remove', 'view']
  */
@@ -235,6 +260,14 @@ var canPermission = function(req, res, next, action){
         if (!userCanView(req.user, project))
           return res.send(401);
         break;
+      case 'approve':
+        if (!userCanApprove(req.user, project))
+          return res.send(401);
+        break;
+      case 'vote':
+        if (!userCanVote(req.user, project))
+          return res.send(401);
+        break;        
       default:
         return res.send(401);
         break;
@@ -252,6 +285,7 @@ var canPermission = function(req, res, next, action){
 var loadProjects = function(req, res, next) {
   Project.find(req.query || {})
   .populate('contributors')
+  .populate('applicants')  
   .populate('followers')
   .populate('leader')
   .exec(function(err, projects) {
@@ -260,6 +294,7 @@ var loadProjects = function(req, res, next) {
     res.locals.user = req.user;
     res.locals.canView = userCanView;
     res.locals.canEdit = userCanEdit;
+    res.locals.canVote = userCanVote;
     res.locals.canRemove = userCanRemove;
     res.locals.userExists = userExistsInArray;
     next();
@@ -273,6 +308,7 @@ var loadProjects = function(req, res, next) {
 var loadProject = function(req, res, next) {
   Project.findById(req.params.project_id)
   .populate('contributors')
+  .populate('applicants')
   .populate('followers')
   .populate('leader')
   .exec(function(err, project) {
@@ -280,6 +316,33 @@ var loadProject = function(req, res, next) {
     res.locals.project = project;
     res.locals.user = req.user;
     res.locals.canEdit = userCanEdit;
+    res.locals.canVote = userCanVote;
+    res.locals.canRemove = userCanRemove;
+    res.locals.disqus_shortname = config.disqus_shortname;
+    res.locals.userExists = userExistsInArray;
+    next();
+  });
+};
+
+/*
+ * Load applicants
+ */
+
+var loadApplicants = function(req, res, next) {
+  Project.find({leader:req.user._id})
+  .populate('contributors')
+  .populate('applicants')
+  .populate('followers')
+  .populate('leader')
+  .exec(function(err, projects) {
+    if(err || !projects) return res.send(500);
+    var applicants = [];
+    applicants = _.reduceRight(_.pluck(projects,'applicants'), function(a, b) { return a.concat(b); }, []);
+    res.locals.applicants = applicants;          
+    res.locals.projects = projects;
+    res.locals.user = req.user;
+    res.locals.canEdit = userCanEdit;
+    res.locals.canVote = userCanVote;
     res.locals.canRemove = userCanRemove;
     res.locals.disqus_shortname = config.disqus_shortname;
     res.locals.userExists = userExistsInArray;
@@ -302,7 +365,7 @@ var prepareSearchQuery = function(req, res, next) {
   var regex = new RegExp(req.query.q, 'i');
   var query = {};
 
-  if(!req.query.q.length) return res.redirect('/api/projects');
+  if(!req.query.q.length) return res.redirect('/2013/apps/api/projects');
   if(req.query.type === "title") query['title'] = regex;
   else if(req.query.type === "tag") query['tags'] = regex;
   else return res.send(500);
@@ -329,14 +392,17 @@ var saveProject = function(req, res, next) {
   var project = new Project({
       title: req.body.title
     , description: req.body.description
-    , link: req.body.link
+    , link: (/^http[s]?\:\/\//.test(req.body.link))? req.body.link : "http://" + req.body.link
     , status: req.body.status
     , tags: req.body.tags && req.body.tags.length ? req.body.tags.split(',') : []
+    , hashtag: req.body.hashtag
     , created_at: Date.now()
     , leader: req.user._id
+    , dataset: req.body.dataset
     , followers: [req.user._id]
     , contributors: [req.user._id]
     , cover: req.body.cover
+    , video: req.body.video
   });
 
   project.save(function(err, project){
@@ -370,8 +436,10 @@ var updateProject = function(req, res, next) {
   project.description = req.body.description || project.description;
   project.link = req.body.link || project.link;
   project.status = req.body.status || project.status;
+  project.dataset = req.body.dataset || project.dataset;
   project.cover = req.body.cover || project.cover;
   project.tags = (req.body.tags && req.body.tags.split(',')) || project.tags;
+  project.video = req.body.video || project.video;
 
   project.save(function(err, project){
     if(err) return res.send(500);
@@ -396,7 +464,7 @@ var uploadCover = function(req, res, next) {
       if (err) throw err;
       fs.unlink(tmp_path, function() {
         if (err) throw err;
-        res.json({href: cover});
+        res.json({href: '/2013/apps' + cover});
       });
     });
   }
@@ -415,6 +483,19 @@ var isProjectMember = function(req, res, next) {
 };
 
 /*
+ * Check if current user is member of a project or applicant
+ */
+
+var isProjectMemberOrApplicant = function(req, res, next) {
+  Project.findOne({_id: req.params.project_id, $or: [ {contributors: req.user.id}, {applicants: req.user.id}]}, function(err, project){
+    if(err || !project) return res.send(500);
+    req.project = project;
+    next(); 
+  });
+};
+
+
+/*
  * Check if current user is follower of a project
  */
 
@@ -427,11 +508,34 @@ var isProjectFollower = function(req, res, next) {
 };
 
  /*
- * Add current user as a group contributor
+ * Add current user to applicants
  */
 
 var joinProject = function(req, res, next) {
-  Project.update({_id: req.params.project_id}, { $addToSet : { 'contributors': req.user.id }}, function(err){
+  var g = (config['join_approval'])? {'applicants': req.user.id} : {'contributors': req.user.id };
+  Project.update({_id: req.params.project_id}, { $addToSet : g }, function(err){
+    if(err) return res.send(500);
+    next();
+  });
+};
+
+ /*
+ * Add applicant to contributors
+ */
+
+var joinApprove = function(req, res, next) {
+    Project.update({_id: req.params.project_id}, { $addToSet : { 'contributors': req.params.user_id }, $pull : { 'applicants': req.params.user_id }}, function(err, count, raw){
+      if(err) return res.send(500);
+      next();
+    });
+};
+
+ /*
+ * Remove from applicant group
+ */
+
+var joinReject = function(req, res, next) {
+  Project.update({_id: req.params.project_id}, { $pull : { 'applicants': req.params.user_id }}, function(err, count, raw){
     if(err) return res.send(500);
     next();
   });
@@ -442,9 +546,9 @@ var joinProject = function(req, res, next) {
  */
 
 var leaveProject = function(req, res, next) {
-  Project.update({_id: req.params.project_id}, { $pull: {'contributors': req.user._id }}, function(err){
-    if(err) return res.send(500);
-    next();
+  Project.update({_id: req.params.project_id}, { $pull: {'contributors': req.user._id, 'applicants': req.user._id }}, function(err){
+      if(err) return res.send(500);
+      next()
   });
 };
 
@@ -453,6 +557,7 @@ var leaveProject = function(req, res, next) {
  */
 
 var followProject = function(req, res, next) {
+  console.log('follow');
   Project.update({_id: req.params.project_id}, { $addToSet : { 'followers': req.user.id }}, function(err){
     if(err) return res.send(500);
     next();
@@ -518,6 +623,22 @@ var stageHasPermission = function(stage, permission) {
 
 var stageCanCreate = function() {
   return stageHasPermission(actualStage(), 'create');
+}
+
+
+/*
+ * Tells if the user can vote projects
+ */
+
+var userCanVote = function(user, project) {
+    // Anonymous can't vote
+    if ( !user )
+      return false;
+    console.log('hay user');
+    if(userExistsInArray(user, project.followers ))
+      return false;
+    
+    return stageHasPermission(actualStage(), 'vote');
 }
 
 /*
@@ -628,4 +749,35 @@ var userCanView = function(user, project) {
 
   // Otherwise, it depends on the stage
   return  stageHasPermission(stage, 'view')
+}
+/*
+ * Tells if the user can approve a new project member
+ */
+
+var userCanApprove = function(user, project) {
+
+  // Anonymous can't approve
+  if ( !user )
+    return false;
+
+  // Admin, always can approve
+  if (user.is_admin)
+    return true;
+
+  // If we are on no stage (and not admin) user can't approve
+  var stage = actualStage();
+  if ( !stage )
+    return false;
+
+  // If the stage has no permission to edit or create user can't approve
+  if ( !stageHasPermission(stage, 'edit') && !stageHasPermission(stage, 'create'))
+    return false;
+
+  // If the stage has permission but the user is not the leader, user can't approve
+  if (user.id !== project.leader.id )
+    return false;
+
+  // Otherwise (not admin, stage with permission, and leader) user can approve!! :D
+  return true;
+  
 }

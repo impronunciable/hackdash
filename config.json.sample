@@ -1,27 +1,38 @@
 {
-  "db": {
-    "name": "hackdash",
-    "host": "localhost",
-    "url": null
-  },  
-  "host": "local.host",
-  "port": 3000,
-  "session": "wefewfef",
-  "disqus_shortname": null,
-	"title": "hackdash",
-	"live": true,
-	"mailer": null,
-  "stages" : [
-    {
-      "name": "submission",
-      "start": "2013-07-01",
-      "end": "2013-08-01",
-      "permissions": ["view", "edit", "create"]
-    },
-    {
-      "name": "gallery",
-      "start": "2013-09-01 00:00",
-      "permissions": ["view", "view-anonymous"]
-    }
-  ]
+ "db": {
+   "name": "hackdash",
+   "host": "localhost",
+   "url": null
+ },  
+ "host": "http://hackdash.com:3000",
+ "domain": ".hackdash.com",
+ "port": 3000,
+ "session": "daslk;jadsj;adk",
+ "disqus_shortname": "hackdashgcba",
+ "title": "hackdash",
+ "live": true,
+ "mailer": {
+    "host": "10.20.1.103"
+ },
+ "join_approval": true,
+ "stages" : [
+   {
+     "name": "submission",
+     "start": "2013-07-01",
+     "end": "2013-11-16 00:00",
+     "permissions": ["view", "edit", "create", "view-anonymous"]
+   },
+   {
+     "name": "gallery",
+     "start": "2013-11-16 00:05",
+     "end": "2013-11-19 00:00",
+     "permissions": ["view", "view-anonymous"]
+   },
+   {
+     "name": "voting",
+     "start": "2013-11-19 00:05",
+     "end": "2013-11-28 00:05",
+     "permissions": ["view", "view-anonymous", "vote"]
+   }   
+ ]
 }

@@ -1,7 +1,7 @@
 ;(function(){
 
   var hd = window.hd = {};
-
+  var path_prefix = '';
   var routes = {}
     , request = superagent;
 
@@ -13,6 +13,7 @@
     , $main = $('#main')
     , $fullProject = $('#fullProject')
     , $logIn = $('#logIn')
+    , $applicants = $('#applicants')
     , $modals = $('.modal')
     , $searchInput = $('#searchInput')
     , $formSearch = $('.formSearch')
@@ -44,7 +45,7 @@
 
   var loadProjects = function(ctx, next) {
     request
-    .get('/api/projects')
+    .get(path_prefix + '/api/projects')
     .end(function(res){
       $main.html(res.body.html);
       next();
@@ -54,7 +55,7 @@
   var loadSearchProjects = function(ctx, next) { 
     $searchInput.val(ctx.querystring.split('&')[0].replace('q=',''));
     request
-    .get('/api/search?' + ctx.querystring)
+    .get(path_prefix + '/api/search?' + ctx.querystring)
     .end(function(res){ 
       $main.html(res.body.html);
       next();
@@ -64,6 +65,14 @@
   var logIn = function(ctx, next) {
     $logIn.modal('show');
   };
+
+  var loadApplicants = function(ctx, next) {
+    request
+    .get(path_prefix + '/api/users/applicants')
+    .end(function(res){
+      $applicants.html(res.body.html).modal('show');
+    }); 
+  };  
 
   var cleanSearch = function(ctx, next){
     $searchInput.val('');
@@ -96,6 +105,7 @@
               }
           }
       });
+      $('#projects').isotope( 'shuffle', function(){});
     });
   };
 
@@ -116,7 +126,6 @@
     $main.html($newProject.html());
     initSelect2();
     initImageDrop();
-
     $('.ajaxForm').ajaxForm({
       error: formError,
       success: formSuccess,
@@ -128,7 +137,7 @@
 
   var editProject = function(ctx) {
     superagent
-    .get('/api/projects/edit/' + ctx.params.project_id)
+    .get(path_prefix + '/api/projects/edit/' + ctx.params.project_id)
     .end(function(res){
     $('.tooltip').remove();
       $main.html(res.body.html);
@@ -148,34 +157,50 @@
   var removeProject = function(ctx) {
     if (window.confirm("This action will remove the project. Are you sure?")){
       superagent
-        .get('/api/projects/remove/' + ctx.params.project_id)
+        .get(path_prefix + '/api/projects/remove/' + ctx.params.project_id)
         .end(function(res){
-          page('/');
+          page(path_prefix);
         });
     }
     else 
-      page('/');
+      page(path_prefix);
   };
 
   var joinProject = function(ctx) {
     request
-    .get('/api/projects/join/' + ctx.params.project_id)
+    .get(path_prefix + '/api/projects/join/' + ctx.params.project_id)
     .end(function(res){
       page('/');
+    });
+  };
+
+  var joinApprove = function(ctx) {
+    request
+    .put(path_prefix + '/api/users/applicants/' + ctx.params.project_id + '/'+ ctx.params.user_id)
+    .end(function(res){
+      page(path_prefix + '/users/applicants');
+    });
+  };
+
+  var joinReject = function(ctx) {
+    request
+    .del(path_prefix + '/api/users/applicants/' + ctx.params.project_id + '/'+ ctx.params.user_id)
+    .end(function(res){
+      page(path_prefix);
     });
   };
 
   var leaveProject = function(ctx) {
     request
-    .get('/api/projects/leave/' + ctx.params.project_id)
+    .get(path_prefix + '/api/projects/leave/' + ctx.params.project_id)
     .end(function(res){
-      page('/');
+      page(path_prefix);
     });
   };
 
   var projectInfo = function(ctx) {
     request
-    .get('/api/p/' + ctx.params.project_id)
+    .get(path_prefix + '/api/p/' + ctx.params.project_id)
     .end(function(res){
       $main.html(res.body.html);
       $('.tooltips').tooltip({});
@@ -184,7 +209,7 @@
 
   var followProject = function(ctx) {
     request
-    .get('/api/projects/follow/' + ctx.params.project_id)
+    .get(path_prefix + '/api/projects/follow/' + ctx.params.project_id)
     .end(function(res){
       page('/');
     });
@@ -192,15 +217,15 @@
 
   var unfollowProject = function(ctx) {
     request
-    .get('/api/projects/unfollow/' + ctx.params.project_id)
+    .get(path_prefix + '/api/projects/unfollow/' + ctx.params.project_id)
     .end(function(res){
-      page('/');
+      page(path_prefix);
     });
   };
 
   var getMyProfile = function() {
     request
-    .get('/api/users/profile')
+    .get(path_prefix + '/api/users/profile')
     .end(function(res){
       $main.html(res.body.html);
       $('.ajaxForm').ajaxForm({
@@ -214,8 +239,9 @@
 
   var getUserProfile = function(ctx) {
     request
-    .get('/api/users/' + ctx.params.user_id)
+    .get(path_prefix + '/api/users/' + ctx.params.user_id)
     .end(function(res){
+      $modals.modal('hide');
       $main.html(res.body.html);
     });
   };
@@ -224,7 +250,7 @@
     navigator.id.get(function(assertion) {
       if (assertion) {
         request
-        .post('/auth/persona')
+        .post(path_prefix + '/auth/persona')
         .send({'assertion':assertion})
         .end(function(res){
           location.href = location.href.replace('auth/persona', '');
@@ -236,21 +262,22 @@
   };
 
 
-  page('/', loadProjects, cleanSearch, isotopeDashboard);
-  page('/login', logIn);
-  page('/search', loadSearchProjects, isotopeDashboard);
-  page('/projects/create', createProject);
-  page('/projects/edit/:project_id', editProject);
-  page('/projects/remove/:project_id', removeProject);
-  page('/projects/follow/:project_id', followProject);
-  page('/projects/unfollow/:project_id', unfollowProject);
-  page('/projects/join/:project_id', joinProject);
-  page('/projects/leave/:project_id', leaveProject);
-  page('/users/profile', getMyProfile);
-  page('/users/:user_id', getUserProfile);
-  page('/p/:project_id', projectInfo);
-  page('/auth/persona', personaLogin);
-
+  page(path_prefix + '', loadProjects, cleanSearch, isotopeDashboard);
+  page(path_prefix + '/login', logIn);
+  page(path_prefix + '/search', loadSearchProjects, isotopeDashboard);
+  page(path_prefix + '/projects/create', createProject);
+  page(path_prefix + '/projects/edit/:project_id', editProject);
+  page(path_prefix + '/projects/remove/:project_id', removeProject);
+  page(path_prefix + '/projects/unfollow/:project_id', unfollowProject);
+  page(path_prefix + '/projects/join/:project_id', joinProject);
+  page(path_prefix + '/projects/leave/:project_id', leaveProject);
+  page(path_prefix + '/users/applicants/approve/:project_id/:user_id', joinApprove);
+  page(path_prefix + '/users/applicants/reject/:project_id/:user_id', joinReject);
+  page(path_prefix + '/users/applicants', loadApplicants);  
+  page(path_prefix + '/users/profile', getMyProfile);
+  page(path_prefix + '/users/:user_id', getUserProfile);
+  page(path_prefix + '/p/:project_id', projectInfo);
+  page(path_prefix + '/auth/persona', personaLogin);
   page();
 
   /*
@@ -264,8 +291,22 @@
   });
 
   $main.on('click','.cancel', function(e){
-    page('/');
+    page(path_prefix);
     e.preventDefault();
+  });
+
+  $main.on('click','.vote', function(e){
+    var fromFull = $(e.currentTarget).hasClass('full');
+    e.preventDefault();
+    e.stopPropagation();
+    request
+    .get($(this).prop('href'))
+    .end(function(res){
+      if(fromFull)
+        page(path_prefix + '/p/' + $(e.currentTarget).data('id'))
+      else
+        page('/')
+    });    
   });
 
   var getRequiredFields = function(){
@@ -285,22 +326,28 @@
   };
 
   var formError = function(field) {
-    cleanErrors();
-    var fields = getRequiredFields();
+    if(field && field.responseText && field.responseText === 'Unauthorized'){
+      alert('No se puede crear más de un proyecto por usuario.')
+    }else{
+      cleanErrors();
+      var fields = getRequiredFields();
 
-    if (field){
-      fields[field].parents('.control-group').addClass('error');
-      fields[field].after('<span class="help-inline">Required</span>');
+      if (field){
+        fields[field].parents('.control-group').addClass('error');
+        fields[field].after('<span class="help-inline">Required</span>');
+      }
     }
   };
 
   var formSuccess = function(){
+    console.log('formSuccess');
     cleanErrors();
     $dragdrop.css('background', 'none').children('input').show(); 
-    page('/');
+    page(path_prefix);
   };
   
   var formValidate = function(arr, $form, options){
+    console.log('formValidate');
     for(var i = 0; i < arr.length; i++) {
       if(arr[i]['name'] === "title" && !arr[i].value.length) {
         formError("title");
@@ -324,25 +371,21 @@ text:project.language}]);
     $form.find('#status').select2("val", "building");
   };
 
-  $modals.live('hidden', function(){
-    page('/');
-  });
-
   $searchInput.on('keyup', function(e){
     $(this).parents('form').submit();
   });
 
   $formSearch.submit(function(e){
-    page('/search?q=' + $searchInput.val() + '&type=title');
+    page(path_prefix + '/search?q=' + $searchInput.val() + '&type=title');
     e.preventDefault();
   });
 
   $project.live('click', function(e){
     $('.tooltip').remove();
     if($(e.target).hasClass('avatar')) {
-      page('/users/' + $(e.target).data('id'));
+      page(path_prefix + '/users/' + $(e.target).data('id'));
     } else if(e.target.tagName !== 'A' && e.target.tagName !== 'SPAN'  && $(this).data('id')) {
-      page('/p/' + $(this).data('id'));
+      page(path_prefix + '/p/' + $(this).data('id'));
     }
   });
 
@@ -367,7 +410,7 @@ text:project.language}]);
   $logo.click(function(){
     page.stop();
   });
-  
+
   var cover_path = null;
 
   function initImageDrop(){
@@ -386,7 +429,7 @@ text:project.language}]);
 
     $dragdrop.filedrop({
       fallback_id: 'cover_fall',
-      url: '/api/cover',
+      url: path_prefix + '/api/cover',
       paramname: 'cover',
       allowedfiletypes: ['image/jpeg','image/png','image/gif'],
       maxfiles: 1,

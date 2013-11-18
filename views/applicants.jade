@@ -1,0 +1,11 @@
+.well
+  .well-header
+    h5 Colaboradores
+  .well-content
+    div
+      if(projects)
+        each project, index in projects
+          each _applicant, index in project.applicants
+            include applicant
+      if(!applicants.length)
+        p.lead Actualmente, no hay colaboradores. Convocá a tu equipo!

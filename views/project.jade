@@ -1,6 +1,6 @@
-.project.tooltips.span4(title=project.status, data-id=project.id, data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id, class=project.status)
+.project.span4(title=project.title, data-id=project.id, data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id, class=project.status)
   
-  .well
+  div(class="well " + project._id)
     .cover.shadow 
       if(project.cover)
         img(src=project.cover, alt='#{project.title}')
@@ -14,30 +14,26 @@
     .row-fluid.footer-box
       .aging.activity.created_at
         i.tooltips.icon-time.icon-1(rel="tooltip", title= moment(project.created_at).fromNow())
-      
-      .activity.people #{project.followers.length} 
-        a(href='#')
-          i.icon-heart
+      if(canVote(user, project))
+        .activity.people
+          a(class='vote', href='/api/projects/follow/' + project._id)
+            i.icon-thumbs-up
 
       .pull-right.remove
         if (canRemove(user, project))
-          a.btn.btn-link(href='/projects/remove/'+project._id) Remove
+          a.btn.btn-link(href=site_root + '/projects/remove/'+project._id) Borrar
 
       .pull-right.edit
         if (canEdit(user, project))
-          a.btn.btn-link(href='/projects/edit/'+project._id) Edit
+          a.btn.btn-link(href=site_root + '/projects/edit/'+project._id) Editar
 
       if (user && !isLeader(user, project))
         if (userExists(user, project.contributors))
           .pull-right.contributor
-            a.btn.btn-link(href='/projects/leave/'+project._id) Leave
-        else 
+            a.btn.btn-link(href=site_root + '/projects/leave/'+project._id) Abandonar
+        else if(userExists(user, project.applicants))
           .pull-right.contributor
-            a.btn.btn-link(href='/projects/join/'+project._id) Join
-
-        if (userExists(user, project.followers))
-          .pull-right.follower
-            a.btn.btn-link(href='/projects/unfollow/'+project._id) Unfollow
-        else 
-          .pull-right.follower
-            a.btn.btn-link(href='/projects/follow/'+project._id) Follow
+            a.btn.btn-link(href=site_root + '/projects/leave/'+project._id) Abandonar (Pendiente)
+        else
+          .pull-right.contributor
+            a.btn.btn-link(href=site_root + '/projects/join/'+project._id) Participá                    
