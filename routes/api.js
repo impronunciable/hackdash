@@ -23,7 +23,7 @@ module.exports = function(app) {
   app.post('/api/projects/edit/:project_id', isAuth, canEdit, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes());
   app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), sendMail(app, 'join'), gracefulRes()); 
   app.get('/api/projects/leave/:project_id', isAuth, isProjectMemberOrApplicant, leaveProject, loadProject, gracefulRes()); 
-  app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes()); 
+  app.get('/api/projects/follow/:project_id', canVote, isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes()); 
   app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, notify(app, 'project_unfollow'), gracefulRes()); 
   app.get('/api/p/:project_id', loadProject, canView, render('project_full'));
   app.get('/api/search', prepareSearchQuery, loadProjects, render('projects'));
@@ -41,6 +41,7 @@ module.exports = function(app) {
 var render = function(path) {
   return function(req, res) { 
     res.render(path, function(err, html){
+      console.log(err);
       if(err) return res.send(500);
       res.json({html: html});
     });
@@ -233,6 +234,9 @@ var canApprove = function(req, res, next) {
   return canPermission(req, res, next, 'approve')
 }
 
+var canVote = function(req, res, next) {
+  return canPermission(req, res, next, 'vote');
+}
 /*
  * Check if current user can do the selected action. 
  * Being posible values ['edit', 'remove', 'view']
@@ -260,6 +264,10 @@ var canPermission = function(req, res, next, action){
         if (!userCanApprove(req.user, project))
           return res.send(401);
         break;
+      case 'vote':
+        if (!userCanVote(req.user, project))
+          return res.send(401);
+        break;        
       default:
         return res.send(401);
         break;
@@ -286,7 +294,7 @@ var loadProjects = function(req, res, next) {
     res.locals.user = req.user;
     res.locals.canView = userCanView;
     res.locals.canEdit = userCanEdit;
-    res.locals.canVote = stageCanVote;
+    res.locals.canVote = userCanVote;
     res.locals.canRemove = userCanRemove;
     res.locals.userExists = userExistsInArray;
     next();
@@ -308,7 +316,7 @@ var loadProject = function(req, res, next) {
     res.locals.project = project;
     res.locals.user = req.user;
     res.locals.canEdit = userCanEdit;
-    res.locals.canVote = stageCanVote;
+    res.locals.canVote = userCanVote;
     res.locals.canRemove = userCanRemove;
     res.locals.disqus_shortname = config.disqus_shortname;
     res.locals.userExists = userExistsInArray;
@@ -334,7 +342,7 @@ var loadApplicants = function(req, res, next) {
     res.locals.projects = projects;
     res.locals.user = req.user;
     res.locals.canEdit = userCanEdit;
-    res.locals.canVote = stageCanVote;
+    res.locals.canVote = userCanVote;
     res.locals.canRemove = userCanRemove;
     res.locals.disqus_shortname = config.disqus_shortname;
     res.locals.userExists = userExistsInArray;
@@ -619,13 +627,19 @@ var stageCanCreate = function() {
 
 
 /*
- * Tells if the actual stage has permissions to vote
+ * Tells if the user can vote projects
  */
 
-var stageCanVote = function() {
-  return stageHasPermission(actualStage(), 'vote');
+var userCanVote = function(user, project) {
+    // Anonymous can't vote
+    if ( !user )
+      return false;
+    console.log('hay user');
+    if(userExistsInArray(user, project.followers ))
+      return false;
+    
+    return stageHasPermission(actualStage(), 'vote');
 }
-
 
 /*
  * Tells if the user can create projects

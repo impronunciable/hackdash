@@ -14,7 +14,7 @@
     .row-fluid.footer-box
       .aging.activity.created_at
         i.tooltips.icon-time.icon-1(rel="tooltip", title= moment(project.created_at).fromNow())
-      if(canVote())
+      if(canVote(user, project))
         .activity.people
           a(class='vote', href='/api/projects/follow/' + project._id)
             i.icon-thumbs-up

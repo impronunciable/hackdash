@@ -6,13 +6,15 @@
       h3
         a(href=site_root + '/p/' + project.id, target="_blank") #{project.title}
       p #{project.description}
-
-      p
-        strong Link: 
-        a(href=project.link, target='_blank') #{project.link}
-      p 
-        strong Dataset: 
-        span #{project.dataset}
+      if(project.dataset)
+        p
+          strong Link: 
+          a(href=project.link, target='_blank') #{project.link}
+      
+      if(project.dataset)
+        p 
+          strong Dataset: 
+          span #{project.dataset}
           
       if(project.video)
         p
@@ -22,16 +24,21 @@
 
         h6 Creado
         strong= moment(project.created_at).fromNow()
-
-        h6 Tags
-        ul
-          each tag in project.tags
-            li= tag
+        if(project.tags)
+          h6 Tags
+          ul
+            each tag in project.tags
+              li= tag
 
         if(project.hashtag)
           h6 Hashtag
           strong 
             a(href="https://twitter.com/search?q=" + project.hashtag, target='_blank') ##{project.hashtag}
+
+      if(canVote(user, project))
+        .activity.people
+          a(class='vote full', data-id=project.id, href='/api/projects/follow/' + project._id)
+            i.icon-thumbs-up
 
       .well-content.span8
         .span4
