@@ -210,7 +210,7 @@
     request
     .get(path_prefix + '/api/projects/follow/' + ctx.params.project_id)
     .end(function(res){
-      page(path_prefix);
+      page('/');
     });
   };
 
@@ -267,7 +267,6 @@
   page(path_prefix + '/projects/create', createProject);
   page(path_prefix + '/projects/edit/:project_id', editProject);
   page(path_prefix + '/projects/remove/:project_id', removeProject);
-  page(path_prefix + '/projects/follow/:project_id', followProject);
   page(path_prefix + '/projects/unfollow/:project_id', unfollowProject);
   page(path_prefix + '/projects/join/:project_id', joinProject);
   page(path_prefix + '/projects/leave/:project_id', leaveProject);
@@ -294,6 +293,17 @@
   $main.on('click','.cancel', function(e){
     page(path_prefix);
     e.preventDefault();
+  });
+
+  $main.on('click','.vote', function(e){
+    console.log('vote');
+    e.preventDefault();
+    e.stopPropagation();
+    request
+    .get($(this).prop('href'))
+    .end(function(res){
+      page('/')
+    });    
   });
 
   var getRequiredFields = function(){

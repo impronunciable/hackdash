@@ -1,4 +1,4 @@
-.project.span4(title=project.status, data-id=project.id, data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id, class=project.status)
+.project.span4(title=project.title, data-id=project.id, data-contribs=project.contributors.length, data-name=project.title, data-date=("undefined" == typeof project.created_at) ? 0 : project.created_at, id="project-" + project.id, class=project.status)
   
   div(class="well " + project._id)
     .cover.shadow 
@@ -16,7 +16,7 @@
         i.tooltips.icon-time.icon-1(rel="tooltip", title= moment(project.created_at).fromNow())
       if(canVote())
         .activity.people #{project.followers.length} 
-          a(href='/projects/follow/' + project._id)
+          a(class='vote', href='/api/projects/follow/' + project._id)
             i.icon-thumbs-up
 
       .pull-right.remove
