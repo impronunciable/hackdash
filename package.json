@@ -14,7 +14,6 @@
     "passport-meetup": "~0.1.2",
     "passport-facebook": "0.1.x",
     "passport-github": "~0.1.5",
-    "passport-persona": "~0.1.7",
     "connect-mongo": "0.1.x",
     "moment": "~1.7.2",
     "markdown": "~0.4.0",

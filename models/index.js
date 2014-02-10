@@ -37,10 +37,8 @@ module.exports = function(app) {
 
   var Dashboard = new Schema({
       "domain": String
-    , "title": { type: String, default: "HackDash" }
-    , "description": { type: String, default: "A dashboard for Hackatons" }
-    , "background": { type: String, default: "#333" }
     , "created_at": { type:Date, default: Date.now }
+    , "created_at": { type: Date, default: Date.now }
   });
 
   mongoose.model('Dashboard', Dashboard);
