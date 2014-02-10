@@ -43,7 +43,7 @@ html
                   for dash in dashboards
                     if dash.domain && dash.domain.length
                       li
-                        a(href= "http://" +dash.domain + ".hackdash.org") #{dash.domain}
+                        a(href= "http://" +dash.domain + "." + baseHost) #{dash.domain}
                   
           .span8
             section.block

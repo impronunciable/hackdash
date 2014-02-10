@@ -167,9 +167,11 @@ var logout = function(req, res, next) {
 };
 
 var isHomepage = function(req, res, next) {
+  var url = config.host + (config.port === 80 ? "" : ":" + config.port);
+
   if(!req.subdomains.length) {
     Dashboard.find({}).sort('domain').exec(function(err, dashboards){
-       res.render('homepage', {dashboards: dashboards});
+       res.render('homepage', {dashboards: dashboards, baseHost: url });
     });
   } else {
     next();
