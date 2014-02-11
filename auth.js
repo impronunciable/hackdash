@@ -16,6 +16,11 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(id, done) {
   User.findById(id, function(err, user){
+
+    if (!err && user && user.provider === "twitter"){
+      user.picture = "http://avatars.io/twitter/" + user.username;
+    }
+
     done(err, user);
   });
 });
