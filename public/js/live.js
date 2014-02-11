@@ -31,7 +31,7 @@
 				html = data.user.name + " unfollowed the project <a href='/p/"+data.project._id+"'><strong>"+data.project.title+"</strong></a>";
 				break;
 		}
-		var $el = $('<div class="row"><div class="span12 well"><img src="'+data.user.picture+'"><p>'+html+'</p></div></div>').hide();
+		var $el = $('<div class="row"><div class="span12 well"><img src="'+data.user.profilePic+'"><p>'+html+'</p></div></div>').hide();
 		$('#timeline').prepend($el);
 		$el.slideDown();
 	});
