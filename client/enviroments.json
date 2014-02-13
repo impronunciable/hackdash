@@ -1,0 +1,5 @@
+{
+  "local": {
+    "root": "http://local.host:3000"
+  }
+}

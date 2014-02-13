@@ -12,6 +12,7 @@ module.exports = function(app) {
     return (project.domain && user.admin_in.indexOf(project.domain) >= 0);
   };
 
+  require('./api.v2')(app);
 
   require('./site')(app);
   require('./api')(app);

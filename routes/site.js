@@ -44,6 +44,12 @@ module.exports = function(app) {
     render('live')
 	];
 
+  var landingStack = [
+    loadUser, 
+    loadProviders,
+    render('landing')
+  ];
+
   app.get('/', homeStack);
   app.get('/live', liveStack);
   app.get('/login', dashboardStack);
@@ -61,6 +67,8 @@ module.exports = function(app) {
   app.get('/users/:user_id', dashboardStack);
 
   app.post('/dashboard/create', isAuth, validateSubdomain, createDashboard(app));
+
+  app.get('/landing', landingStack);
 };
 
 /*
