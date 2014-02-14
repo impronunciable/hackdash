@@ -142,6 +142,7 @@ module.exports = function(grunt) {
             ,Handlebars: true
             ,console: true
             ,moment: true
+            ,markdown: true
 
             ,hackdash: true
           }

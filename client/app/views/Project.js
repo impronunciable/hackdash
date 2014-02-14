@@ -17,10 +17,32 @@ module.exports = Backbone.Marionette.ItemView.extend({
   className: "project tooltips span4",
   template: template,
 
+  events: {
+    "click .contributor a": "onContribute",
+    "click .follower a": "onFollow"
+  },
+
   templateHelpers: {
-    projectURL: function(){
-      return "http://" + this.domain + "." + hackdash.baseURL + "/p/" + this._id;
+    instanceURL: function(){
+      return "http://" + this.domain + "." + hackdash.baseURL;
+    },
+    showActions: function(){
+      var show = false;
+
+      if (hackdash.user){
+        show = true;
+
+        if (hackdash.user._id === this.leader){
+          show = false;
+        }
+      }
+
+      return show;
     }
+  },
+
+  modelEvents: {
+    "change": "render"
   },
 
   //--------------------------------------
@@ -28,19 +50,29 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   onRender: function(){
-    this.$el.addClass(this.model.get("status"));
+    this.$el
+      .addClass(this.model.get("status"))
+      .attr({
+        "title": this.model.get("status")
+      })
+      .tooltip({});
 
-    this.$el.attr({
-      /*
-      "data-id": this.model.get("_id"),
-      "data-contribs": this.model.get("contributors").length,
-      "data-name": this.model.get("name"),
-      "data-date": this.model.get("created_at"),
-      */
-      "title": this.model.get("status")
+    $('.tooltips', this.$el).tooltip({});
+
+    var url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
+      "/p/" + this.model.get("_id");
+
+    this.$el.on("click", function(){
+      window.location = url;
     });
+  },
 
-  }
+  serializeData: function(){
+    return _.extend({
+      contributing: this.isContributor(),
+      following: this.isFollower()
+    }, this.model.toJSON());
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -50,8 +82,50 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
+  onContribute: function(e){
+    if (this.isContributor()){
+      this.model.leave();
+    }
+    else {
+      this.model.join();
+    }
+
+    e.stopPropagation();
+  },
+
+  onFollow: function(e){
+    if (this.isFollower()){
+      this.model.unfollow();
+    }
+    else {
+      this.model.follow();
+    }
+
+    e.stopPropagation();
+  },
+
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
+
+  isContributor: function(){
+    return this.userExist(this.model.get("contributors"));
+  },
+
+  isFollower: function(){
+    return this.userExist(this.model.get("followers"));
+  },
+
+  userExist: function(arr){
+
+    if (!hackdash.user){
+      return false;
+    }
+
+    var uid = hackdash.user._id;
+    return _.find(arr, function(id){
+      return (id === uid);
+    }) ? true : false;
+  }
 
 });

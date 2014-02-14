@@ -59,6 +59,12 @@ var x=function(){throw Error('A "url" property or function must be specified');}
 
 Backbone.ChildViewContainer=function(e,t){var n=function(e){this._views={},this._indexByModel={},this._indexByCollection={},this._indexByCustom={},this._updateLength(),this._addInitialViews(e)};t.extend(n.prototype,{add:function(e,t){var n=e.cid;this._views[n]=e,e.model&&(this._indexByModel[e.model.cid]=n),e.collection&&(this._indexByCollection[e.collection.cid]=n),t&&(this._indexByCustom[t]=n),this._updateLength()},findByModel:function(e){var t=this._indexByModel[e.cid];return this.findByCid(t)},findByCollection:function(e){var t=this._indexByCollection[e.cid];return this.findByCid(t)},findByCustom:function(e){var t=this._indexByCustom[e];return this.findByCid(t)},findByIndex:function(e){return t.values(this._views)[e]},findByCid:function(e){return this._views[e]},remove:function(e){var t=e.cid;e.model&&delete this._indexByModel[e.model.cid],e.collection&&delete this._indexByCollection[e.collection.cid];var n;for(var r in this._indexByCustom)if(this._indexByCustom.hasOwnProperty(r)&&this._indexByCustom[r]===t){n=r;break}n&&delete this._indexByCustom[n],delete this._views[t],this._updateLength()},call:function(e,t){t=Array.prototype.slice.call(arguments,1),this.apply(e,t)},apply:function(e,n){var r;n=n||[],t.each(this._views,function(r,i){t.isFunction(r[e])&&r[e].apply(r,n)})},_updateLength:function(){this.length=t.size(this._views)},_addInitialViews:function(e){if(!e)return;var t,n,r=e.length;for(n=0;n<r;n++)t=e[n],this.add(t)}});var r=["forEach","each","map","find","detect","filter","select","reject","every","all","some","any","include","contains","invoke","toArray","first","initial","rest","last","without","isEmpty","pluck"];return t.each(r,function(e){n.prototype[e]=function(){var n=t.values(this._views),r=[n].concat(t.toArray(arguments));return t[e].apply(t,r)}}),n}(Backbone,_),Backbone.Wreqr=function(e,t,n){"use strict";var r={};return r.Handlers=function(e,t){var n=function(){this._handlers={}};return n.extend=e.Model.extend,t.extend(n.prototype,{addHandler:function(e,t,n){var r={callback:t,context:n};this._handlers[e]=r},getHandler:function(e){var t=this._handlers[e];if(!t)throw new Error("Handler not found for '"+e+"'");return function(){var e=Array.prototype.slice.apply(arguments);return t.callback.apply(t.context,e)}},removeHandler:function(e){delete this._handlers[e]},removeAllHandlers:function(){this._handlers={}}}),n}(e,n),r.Commands=function(e){return e.Handlers.extend({execute:function(){var e=arguments[0],t=Array.prototype.slice.call(arguments,1);this.getHandler(e).apply(this,t)}})}(r),r.RequestResponse=function(e){return e.Handlers.extend({request:function(){var e=arguments[0],t=Array.prototype.slice.call(arguments,1);return this.getHandler(e).apply(this,t)}})}(r),r.EventAggregator=function(e,t){var n=function(){};return n.extend=e.Model.extend,t.extend(n.prototype,e.Events),n}(e,n),r}(Backbone,Backbone.Marionette,_);var Marionette=function(e,t,n){"use strict";var r={};e.Marionette=r;var i=Array.prototype.slice;return r.extend=e.Model.extend,r.getOption=function(e,t){if(!e||!t)return;var n;return e.options&&t in e.options&&e.options[t]!==undefined?n=e.options[t]:n=e[t],n},r.createObject=function(){function t(){}var e;return typeof Object.create=="function"?e=Object.create:e=function(e){t.prototype=e;var n=new t;return t.prototype=null,n},e}(),r.triggerMethod=function(){var e=Array.prototype.slice.apply(arguments),n=e[0],r=n.split(":"),i,s,o="on";for(var u=0;u<r.length;u++)i=r[u],s=i.charAt(0).toUpperCase(),o+=s+i.slice(1);this.trigger.apply(this,e);if(t.isFunction(this[o]))return e.shift(),this[o].apply(this,e)},r.MonitorDOMRefresh=function(){function e(e){e._isShown=!0,r(e)}function n(e){e._isRendered=!0,r(e)}function r(e){e._isShown&&e._isRendered&&t.isFunction(e.triggerMethod)&&e.triggerMethod("dom:refresh")}return function(t){t.listenTo(t,"show",function(){e(t)}),t.listenTo(t,"render",function(){n(t)})}}(),function(e){function n(e,n,r,i){var s=i.split(/\s+/);t.each(s,function(t){var i=e[t];if(!i)throw new Error("Method '"+t+"' was configured as an event handler, but does not exist.");e.listenTo(n,r,i,e)})}function r(e,t,n,r){e.listenTo(t,n,r,e)}function i(e,n,r,i){var s=i.split(/\s+/);t.each(s,function(t){var i=e[i];e.stopListening(n,r,i,e)})}function s(e,t,n,r){e.stopListening(t,n,r,e)}function o(e,n,r,i,s){if(!n||!r)return;t.isFunction(r)&&(r=r.call(e)),t.each(r,function(r,o){t.isFunction(r)?i(e,n,o,r):s(e,n,o,r)})}e.bindEntityEvents=function(e,t,i){o(e,t,i,r,n)},e.unbindEntityEvents=function(e,t,n){o(e,t,n,s,i)}}(r),r.Callbacks=function(){this._deferred=n.Deferred(),this._callbacks=[]},t.extend(r.Callbacks.prototype,{add:function(e,t){this._callbacks.push({cb:e,ctx:t}),this._deferred.done(function(n,r){t&&(n=t),e.call(n,r)})},run:function(e,t){this._deferred.resolve(t,e)},reset:function(){var e=this,r=this._callbacks;this._deferred=n.Deferred(),this._callbacks=[],t.each(r,function(t){e.add(t.cb,t.ctx)})}}),r.Controller=function(e){this.triggerMethod=r.triggerMethod,this.options=e||{},t.isFunction(this.initialize)&&this.initialize(this.options)},r.Controller.extend=r.extend,t.extend(r.Controller.prototype,e.Events,{close:function(){this.stopListening(),this.triggerMethod("close"),this.unbind()}}),r.Region=function(e){this.options=e||{},this.el=r.getOption(this,"el");if(!this.el){var t=new Error("An 'el' must be specified for a region.");throw t.name="NoElError",t}if(this.initialize){var n=Array.prototype.slice.apply(arguments);this.initialize.apply(this,n)}},t.extend(r.Region,{buildRegion:function(e,t){var n=typeof e=="string",r=typeof e.selector=="string",i=typeof e.regionType=="undefined",s=typeof e=="function";if(!s&&!n&&!r)throw new Error("Region must be specified as a Region type, a selector string or an object with selector property");var o,u;n&&(o=e),e.selector&&(o=e.selector),s&&(u=e),!s&&i&&(u=t),e.regionType&&(u=e.regionType);var a=new u({el:o});return a}}),t.extend(r.Region.prototype,e.Events,{show:function(e){this.ensureEl(),this.close(),e.render(),this.open(e),r.triggerMethod.call(e,"show"),r.triggerMethod.call(this,"show",e),this.currentView=e},ensureEl:function(){if(!this.$el||this.$el.length===0)this.$el=this.getEl(this.el)},getEl:function(e){return n(e)},open:function(e){this.$el.empty().append(e.el)},close:function(){var e=this.currentView;if(!e||e.isClosed)return;e.close&&e.close(),r.triggerMethod.call(this,"close"),delete this.currentView},attachView:function(e){this.currentView=e},reset:function(){this.close(),delete this.$el}}),r.Region.extend=r.extend,r.TemplateCache=function(e){this.templateId=e},t.extend(r.TemplateCache,{templateCaches:{},get:function(e){var t=this,n=this.templateCaches[e];return n||(n=new r.TemplateCache(e),this.templateCaches[e]=n),n.load()},clear:function(){var e,t=Array.prototype.slice.apply(arguments),n=t.length;if(n>0)for(e=0;e<n;e++)delete this.templateCaches[t[e]];else this.templateCaches={}}}),t.extend(r.TemplateCache.prototype,{load:function(){var e=this;if(this.compiledTemplate)return this.compiledTemplate;var t=this.loadTemplate(this.templateId);return this.compiledTemplate=this.compileTemplate(t),this.compiledTemplate},loadTemplate:function(e){var t=n(e).html();if(!t||t.length===0){var r="Could not find template: '"+e+"'",i=new Error(r);throw i.name="NoTemplateError",i}return t},compileTemplate:function(e){return t.template(e)}}),r.Renderer={render:function(e,t){var n=typeof e=="function"?e:r.TemplateCache.get(e),i=n(t);return i}},r.View=e.View.extend({constructor:function(){t.bindAll(this,"render");var n=Array.prototype.slice.apply(arguments);e.View.prototype.constructor.apply(this,n),r.MonitorDOMRefresh(this),this.listenTo(this,"show",this.onShowCalled,this)},triggerMethod:r.triggerMethod,getTemplate:function(){return r.getOption(this,"template")},mixinTemplateHelpers:function(e){e=e||{};var n=this.templateHelpers;return t.isFunction(n)&&(n=n.call(this)),t.extend(e,n)},configureTriggers:function(){if(!this.triggers)return;var e=this,n={},r=t.result(this,"triggers");return t.each(r,function(t,r){n[r]=function(n){n&&n.preventDefault&&n.preventDefault(),n&&n.stopPropagation&&n.stopPropagation();var r={view:this,model:this.model,collection:this.collection};e.triggerMethod(t,r)}}),n},delegateEvents:function(e){this._delegateDOMEvents(e),r.bindEntityEvents(this,this.model,r.getOption(this,"modelEvents")),r.bindEntityEvents(this,this.collection,r.getOption(this,"collectionEvents"))},_delegateDOMEvents:function(n){n=n||this.events,t.isFunction(n)&&(n=n.call(this));var r={},i=this.configureTriggers();t.extend(r,n,i),e.View.prototype.delegateEvents.call(this,r)},undelegateEvents:function(){var t=Array.prototype.slice.call(arguments);e.View.prototype.undelegateEvents.apply(this,t),r.unbindEntityEvents(this,this.model,r.getOption(this,"modelEvents")),r.unbindEntityEvents(this,this.collection,r.getOption(this,"collectionEvents"))},onShowCalled:function(){},close:function(){if(this.isClosed)return;var e=this.triggerMethod("before:close");if(e===!1)return;this.isClosed=!0,this.triggerMethod("close"),this.remove()},bindUIElements:function(){if(!this.ui)return;var e=this;this.uiBindings||(this.uiBindings=t.result(this,"ui")),this.ui={},t.each(t.keys(this.uiBindings),function(t){var n=e.uiBindings[t];e.ui[t]=e.$(n)})}}),r.ItemView=r.View.extend({constructor:function(){var e=Array.prototype.slice.apply(arguments);r.View.prototype.constructor.apply(this,e)},serializeData:function(){var e={};return this.model?e=this.model.toJSON():this.collection&&(e={items:this.collection.toJSON()}),e},render:function(){this.isClosed=!1,this.triggerMethod("before:render",this),this.triggerMethod("item:before:render",this);var e=this.serializeData();e=this.mixinTemplateHelpers(e);var t=this.getTemplate(),n=r.Renderer.render(t,e);return this.$el.html(n),this.bindUIElements(),this.triggerMethod("render",this),this.triggerMethod("item:rendered",this),this},close:function(){if(this.isClosed)return;this.triggerMethod("item:before:close");var e=Array.prototype.slice.apply(arguments);r.View.prototype.close.apply(this,e),this.triggerMethod("item:closed")}}),r.CollectionView=r.View.extend({itemViewEventPrefix:"itemview",constructor:function(e){this._initChildViewStorage();var t=Array.prototype.slice.apply(arguments);r.View.prototype.constructor.apply(this,t),this._initialEvents()},_initialEvents:function(){this.collection&&(this.listenTo(this.collection,"add",this.addChildView,this),this.listenTo(this.collection,"remove",this.removeItemView,this),this.listenTo(this.collection,"reset",this.render,this))},addChildView:function(e,t,n){this.closeEmptyView();var r=this.getItemView(e),i=this.collection.indexOf(e);this.addItemView(e,r,i)},onShowCalled:function(){this.children.each(function(e){r.triggerMethod.call(e,"show")})},triggerBeforeRender:function(){this.triggerMethod("before:render",this),this.triggerMethod("collection:before:render",this)},triggerRendered:function(){this.triggerMethod("render",this),this.triggerMethod("collection:rendered",this)},render:function(){return this.isClosed=!1,this.triggerBeforeRender(),this.closeEmptyView(),this.closeChildren(),this.collection&&this.collection.length>0?this.showCollection():this.showEmptyView(),this.triggerRendered(),this},showCollection:function(){var e=this,t;this.collection.each(function(n,r){t=e.getItemView(n),e.addItemView(n,t,r)})},showEmptyView:function(){var t=r.getOption(this,"emptyView");if(t&&!this._showingEmptyView){this._showingEmptyView=!0;var n=new e.Model;this.addItemView(n,t,0)}},closeEmptyView:function(){this._showingEmptyView&&(this.closeChildren(),delete this._showingEmptyView)},getItemView:function(e){var t=r.getOption(this,"itemView");if(!t){var n=new Error("An `itemView` must be specified");throw n.name="NoItemViewError",n}return t},addItemView:function(e,n,i){var s=this,o=r.getOption(this,"itemViewOptions");t.isFunction(o)&&(o=o.call(this,e));var u=this.buildItemView(e,n,o);this.addChildViewEventForwarding(u),this.triggerMethod("before:item:added",u),this.children.add(u),this.renderItemView(u,i),this._isShown&&r.triggerMethod.call(u,"show"),this.triggerMethod("after:item:added",u)},addChildViewEventForwarding:function(e){var t=r.getOption(this,"itemViewEventPrefix");this.listenTo(e,"all",function(){var n=i.call(arguments);n[0]=t+":"+n[0],n.splice(1,0,e),r.triggerMethod.apply(this,n)},this)},renderItemView:function(e,t){e.render(),this.appendHtml(this,e,t)},buildItemView:function(e,n,r){var i=t.extend({model:e},r),s=new n(i);return s},removeItemView:function(e){var t=this.children.findByModel(e);this.removeChildView(t),this.checkEmpty()},removeChildView:function(e){e&&(this.stopListening(e),e.close&&e.close(),this.children.remove(e)),this.triggerMethod("item:removed",e)},checkEmpty:function(){(!this.collection||this.collection.length===0)&&this.showEmptyView()},appendHtml:function(e,t,n){e.$el.append(t.el)},_initChildViewStorage:function(){this.children=new e.ChildViewContainer},close:function(){if(this.isClosed)return;this.triggerMethod("collection:before:close"),this.closeChildren(),this.triggerMethod("collection:closed");var e=Array.prototype.slice.apply(arguments);r.View.prototype.close.apply(this,e)},closeChildren:function(){this.children.each(function(e){this.removeChildView(e)},this),this.checkEmpty()}}),r.CompositeView=r.CollectionView.extend({constructor:function(e){var t=Array.prototype.slice.apply(arguments);r.CollectionView.apply(this,t),this.itemView=this.getItemView()},_initialEvents:function(){this.collection&&(this.listenTo(this.collection,"add",this.addChildView,this),this.listenTo(this.collection,"remove",this.removeItemView,this),this.listenTo(this.collection,"reset",this.renderCollection,this))},getItemView:function(e){var t=r.getOption(this,"itemView")||this.constructor;if(!t){var n=new Error("An `itemView` must be specified");throw n.name="NoItemViewError",n}return t},serializeData:function(){var e={};return this.model&&(e=this.model.toJSON()),e},render:function(){this.isClosed=!1,this.resetItemViewContainer();var e=this.renderModel();return this.$el.html(e),this.bindUIElements(),this.triggerMethod("composite:model:rendered"),this.renderCollection(),this.triggerMethod("composite:rendered"),this},renderCollection:function(){var e=Array.prototype.slice.apply(arguments);r.CollectionView.prototype.render.apply(this,e),this.triggerMethod("composite:collection:rendered")},renderModel:function(){var e={};e=this.serializeData(),e=this.mixinTemplateHelpers(e);var t=this.getTemplate();return r.Renderer.render(t,e)},appendHtml:function(e,t){var n=this.getItemViewContainer(e);n.append(t.el)},getItemViewContainer:function(e){if("$itemViewContainer"in e)return e.$itemViewContainer;var n;if(e.itemViewContainer){var r=t.result(e,"itemViewContainer");n=e.$(r);if(n.length<=0){var i=new Error("The specified `itemViewContainer` was not found: "+e.itemViewContainer);throw i.name="ItemViewContainerMissingError",i}}else n=e.$el;return e.$itemViewContainer=n,n},resetItemViewContainer:function(){this.$itemViewContainer&&delete this.$itemViewContainer}}),r.Layout=r.ItemView.extend({regionType:r.Region,constructor:function(){this._firstRender=!0,this.initializeRegions();var e=Array.prototype.slice.apply(arguments);r.ItemView.apply(this,e)},render:function(){this._firstRender?this._firstRender=!1:(this.closeRegions(),this.reInitializeRegions());var e=Array.prototype.slice.apply(arguments),t=r.ItemView.prototype.render.apply(this,e);return t},close:function(){if(this.isClosed)return;this.closeRegions(),this.destroyRegions();var e=Array.prototype.slice.apply(arguments);r.ItemView.prototype.close.apply(this,e)},initializeRegions:function(){this.regionManagers||(this.regionManagers={});var e=this,n=this.regions||{};t.each(n,function(t,n){var i=r.Region.buildRegion(t,e.regionType);i.getEl=function(t){return e.$(t)},e.regionManagers[n]=i,e[n]=i})},reInitializeRegions:function(){this.regionManagers&&t.size(this.regionManagers)===0?this.initializeRegions():t.each(this.regionManagers,function(e){e.reset()})},closeRegions:function(){var e=this;t.each(this.regionManagers,function(e,t){e.close()})},destroyRegions:function(){var e=this;t.each(this.regionManagers,function(t,n){delete e[n]}),this.regionManagers={}}}),r.AppRouter=e.Router.extend({constructor:function(t){var n=Array.prototype.slice.apply(arguments);e.Router.prototype.constructor.apply(this,n),this.options=t;if(this.appRoutes){var i=r.getOption(this,"controller");this.processAppRoutes(i,this.appRoutes)}},processAppRoutes:function(e,n){var r,i,s,o,u,a=[],f=this;for(s in n)n.hasOwnProperty(s)&&a.unshift([s,n[s]]);o=a.length;for(u=0;u<o;u++){s=a[u][0],i=a[u][1],r=e[i];if(!r){var l="Method '"+i+"' was not found on the controller",c=new Error(l);throw c.name="NoMethodError",c}r=t.bind(r,e),f.route(s,i,r)}}}),r.Application=function(n){this.initCallbacks=new r.Callbacks,this.vent=new e.Wreqr.EventAggregator,this.commands=new e.Wreqr.Commands,this.reqres=new e.Wreqr.RequestResponse,this.submodules={},t.extend(this,n),this.triggerMethod=r.triggerMethod},t.extend(r.Application.prototype,e.Events,{execute:function(){var e=Array.prototype.slice.apply(arguments);this.commands.execute.apply(this.commands,e)},request:function(){var e=Array.prototype.slice.apply(arguments);return this.reqres.request.apply(this.reqres,e)},addInitializer:function(e){this.initCallbacks.add(e)},start:function(e){this.triggerMethod("initialize:before",e),this.initCallbacks.run(e,this),this.triggerMethod("initialize:after",e),this.triggerMethod("start",e)},addRegions:function(e){var n=this;t.each(e,function(e,t){var i=r.Region.buildRegion(e,r.Region);n[t]=i})},removeRegion:function(e){this[e].close(),delete this[e]},module:function(e,t){var n=i.call(arguments);return n.unshift(this),r.Module.create.apply(r.Module,n)}}),r.Application.extend=r.extend,r.Module=function(e,t){this.moduleName=e,this.submodules={},this._setupInitializersAndFinalizers(),this.app=t,this.startWithParent=!0,this.triggerMethod=r.triggerMethod},t.extend(r.Module.prototype,e.Events,{addInitializer:function(e){this._initializerCallbacks.add(e)},addFinalizer:function(e){this._finalizerCallbacks.add(e)},start:function(e){if(this._isInitialized)return;t.each(this.submodules,function(t){var n=!0;n=t.startWithParent,n&&t.start(e)}),this.triggerMethod("before:start",e),this._initializerCallbacks.run(e,this),this._isInitialized=!0,this.triggerMethod("start",e)},stop:function(){if(!this._isInitialized)return;this._isInitialized=!1,r.triggerMethod.call(this,"before:stop"),t.each(this.submodules,function(e){e.stop()}),this._finalizerCallbacks.run(undefined,this),this._initializerCallbacks.reset(),this._finalizerCallbacks.reset(),r.triggerMethod.call(this,"stop")},addDefinition:function(e,t){this._runModuleDefinition(e,t)},_runModuleDefinition:function(i,s){if(!i)return;var o=t.flatten([this,this.app,e,r,n,t,s]);i.apply(this,o)},_setupInitializersAndFinalizers:function(){this._initializerCallbacks=new r.Callbacks,this._finalizerCallbacks=new r.Callbacks}}),t.extend(r.Module,{create:function(e,n,r){var s=this,o=e,u=i.apply(arguments);u.splice(0,3),n=n.split(".");var a=n.length,f=[];return f[a-1]=r,t.each(n,function(t,n){var r=o;o=s._getModule(r,t,e),s._addModuleDefinition(r,o,f[n],u)}),o},_getModule:function(e,t,n,i,s){var o=e[t];return o||(o=new r.Module(t,n),e[t]=o,e.submodules[t]=o),o},_addModuleDefinition:function(e,n,r,i){var s,o;t.isFunction(r)?(s=r,o=!0):t.isObject(r)?(s=r.define,o=r.startWithParent):o=!0,s&&n.addDefinition(s,i);var u=n.startWithParent;n.startWithParent=n.startWithParent&&o,n.startWithParent&&!n.startWithParentIsConfigured&&(n.startWithParentIsConfigured=!0,e.addInitializer(function(e){n.startWithParent&&n.start(e)}))}}),r}(Backbone,_,$||window.jQuery||window.Zepto||window.ender);
 /*!
+* Bootstrap.js by @fat & @mdo
+* Copyright 2012 Twitter, Inc.
+* http://www.apache.org/licenses/LICENSE-2.0.txt
+*/
+!function(a){a(function(){"use strict",a.support.transition=function(){var a=function(){var a=document.createElement("bootstrap"),b={WebkitTransition:"webkitTransitionEnd",MozTransition:"transitionend",OTransition:"oTransitionEnd",msTransition:"MSTransitionEnd",transition:"transitionend"},c;for(c in b)if(a.style[c]!==undefined)return b[c]}();return a&&{end:a}}()})}(window.jQuery),!function(a){"use strict";var b='[data-dismiss="alert"]',c=function(c){a(c).on("click",b,this.close)};c.prototype.close=function(b){function f(){e.trigger("closed").remove()}var c=a(this),d=c.attr("data-target"),e;d||(d=c.attr("href"),d=d&&d.replace(/.*(?=#[^\s]*$)/,"")),e=a(d),b&&b.preventDefault(),e.length||(e=c.hasClass("alert")?c:c.parent()),e.trigger(b=a.Event("close"));if(b.isDefaultPrevented())return;e.removeClass("in"),a.support.transition&&e.hasClass("fade")?e.on(a.support.transition.end,f):f()},a.fn.alert=function(b){return this.each(function(){var d=a(this),e=d.data("alert");e||d.data("alert",e=new c(this)),typeof b=="string"&&e[b].call(d)})},a.fn.alert.Constructor=c,a(function(){a("body").on("click.alert.data-api",b,c.prototype.close)})}(window.jQuery),!function(a){"use strict";var b=function(b,c){this.$element=a(b),this.options=a.extend({},a.fn.button.defaults,c)};b.prototype.setState=function(a){var b="disabled",c=this.$element,d=c.data(),e=c.is("input")?"val":"html";a+="Text",d.resetText||c.data("resetText",c[e]()),c[e](d[a]||this.options[a]),setTimeout(function(){a=="loadingText"?c.addClass(b).attr(b,b):c.removeClass(b).removeAttr(b)},0)},b.prototype.toggle=function(){var a=this.$element.parent('[data-toggle="buttons-radio"]');a&&a.find(".active").removeClass("active"),this.$element.toggleClass("active")},a.fn.button=function(c){return this.each(function(){var d=a(this),e=d.data("button"),f=typeof c=="object"&&c;e||d.data("button",e=new b(this,f)),c=="toggle"?e.toggle():c&&e.setState(c)})},a.fn.button.defaults={loadingText:"loading..."},a.fn.button.Constructor=b,a(function(){a("body").on("click.button.data-api","[data-toggle^=button]",function(b){var c=a(b.target);c.hasClass("btn")||(c=c.closest(".btn")),c.button("toggle")})})}(window.jQuery),!function(a){"use strict";var b=function(b,c){this.$element=a(b),this.options=c,this.options.slide&&this.slide(this.options.slide),this.options.pause=="hover"&&this.$element.on("mouseenter",a.proxy(this.pause,this)).on("mouseleave",a.proxy(this.cycle,this))};b.prototype={cycle:function(b){return b||(this.paused=!1),this.options.interval&&!this.paused&&(this.interval=setInterval(a.proxy(this.next,this),this.options.interval)),this},to:function(b){var c=this.$element.find(".active"),d=c.parent().children(),e=d.index(c),f=this;if(b>d.length-1||b<0)return;return this.sliding?this.$element.one("slid",function(){f.to(b)}):e==b?this.pause().cycle():this.slide(b>e?"next":"prev",a(d[b]))},pause:function(a){return a||(this.paused=!0),clearInterval(this.interval),this.interval=null,this},next:function(){if(this.sliding)return;return this.slide("next")},prev:function(){if(this.sliding)return;return this.slide("prev")},slide:function(b,c){var d=this.$element.find(".active"),e=c||d[b](),f=this.interval,g=b=="next"?"left":"right",h=b=="next"?"first":"last",i=this,j=a.Event("slide");this.sliding=!0,f&&this.pause(),e=e.length?e:this.$element.find(".item")[h]();if(e.hasClass("active"))return;if(a.support.transition&&this.$element.hasClass("slide")){this.$element.trigger(j);if(j.isDefaultPrevented())return;e.addClass(b),e[0].offsetWidth,d.addClass(g),e.addClass(g),this.$element.one(a.support.transition.end,function(){e.removeClass([b,g].join(" ")).addClass("active"),d.removeClass(["active",g].join(" ")),i.sliding=!1,setTimeout(function(){i.$element.trigger("slid")},0)})}else{this.$element.trigger(j);if(j.isDefaultPrevented())return;d.removeClass("active"),e.addClass("active"),this.sliding=!1,this.$element.trigger("slid")}return f&&this.cycle(),this}},a.fn.carousel=function(c){return this.each(function(){var d=a(this),e=d.data("carousel"),f=a.extend({},a.fn.carousel.defaults,typeof c=="object"&&c);e||d.data("carousel",e=new b(this,f)),typeof c=="number"?e.to(c):typeof c=="string"||(c=f.slide)?e[c]():f.interval&&e.cycle()})},a.fn.carousel.defaults={interval:5e3,pause:"hover"},a.fn.carousel.Constructor=b,a(function(){a("body").on("click.carousel.data-api","[data-slide]",function(b){var c=a(this),d,e=a(c.attr("data-target")||(d=c.attr("href"))&&d.replace(/.*(?=#[^\s]+$)/,"")),f=!e.data("modal")&&a.extend({},e.data(),c.data());e.carousel(f),b.preventDefault()})})}(window.jQuery),!function(a){"use strict";var b=function(b,c){this.$element=a(b),this.options=a.extend({},a.fn.collapse.defaults,c),this.options.parent&&(this.$parent=a(this.options.parent)),this.options.toggle&&this.toggle()};b.prototype={constructor:b,dimension:function(){var a=this.$element.hasClass("width");return a?"width":"height"},show:function(){var b,c,d,e;if(this.transitioning)return;b=this.dimension(),c=a.camelCase(["scroll",b].join("-")),d=this.$parent&&this.$parent.find("> .accordion-group > .in");if(d&&d.length){e=d.data("collapse");if(e&&e.transitioning)return;d.collapse("hide"),e||d.data("collapse",null)}this.$element[b](0),this.transition("addClass",a.Event("show"),"shown"),this.$element[b](this.$element[0][c])},hide:function(){var b;if(this.transitioning)return;b=this.dimension(),this.reset(this.$element[b]()),this.transition("removeClass",a.Event("hide"),"hidden"),this.$element[b](0)},reset:function(a){var b=this.dimension();return this.$element.removeClass("collapse")[b](a||"auto")[0].offsetWidth,this.$element[a!==null?"addClass":"removeClass"]("collapse"),this},transition:function(b,c,d){var e=this,f=function(){c.type=="show"&&e.reset(),e.transitioning=0,e.$element.trigger(d)};this.$element.trigger(c);if(c.isDefaultPrevented())return;this.transitioning=1,this.$element[b]("in"),a.support.transition&&this.$element.hasClass("collapse")?this.$element.one(a.support.transition.end,f):f()},toggle:function(){this[this.$element.hasClass("in")?"hide":"show"]()}},a.fn.collapse=function(c){return this.each(function(){var d=a(this),e=d.data("collapse"),f=typeof c=="object"&&c;e||d.data("collapse",e=new b(this,f)),typeof c=="string"&&e[c]()})},a.fn.collapse.defaults={toggle:!0},a.fn.collapse.Constructor=b,a(function(){a("body").on("click.collapse.data-api","[data-toggle=collapse]",function(b){var c=a(this),d,e=c.attr("data-target")||b.preventDefault()||(d=c.attr("href"))&&d.replace(/.*(?=#[^\s]+$)/,""),f=a(e).data("collapse")?"toggle":c.data();a(e).collapse(f)})})}(window.jQuery),!function(a){function d(){a(b).parent().removeClass("open")}"use strict";var b='[data-toggle="dropdown"]',c=function(b){var c=a(b).on("click.dropdown.data-api",this.toggle);a("html").on("click.dropdown.data-api",function(){c.parent().removeClass("open")})};c.prototype={constructor:c,toggle:function(b){var c=a(this),e,f,g;if(c.is(".disabled, :disabled"))return;return f=c.attr("data-target"),f||(f=c.attr("href"),f=f&&f.replace(/.*(?=#[^\s]*$)/,"")),e=a(f),e.length||(e=c.parent()),g=e.hasClass("open"),d(),g||e.toggleClass("open"),!1}},a.fn.dropdown=function(b){return this.each(function(){var d=a(this),e=d.data("dropdown");e||d.data("dropdown",e=new c(this)),typeof b=="string"&&e[b].call(d)})},a.fn.dropdown.Constructor=c,a(function(){a("html").on("click.dropdown.data-api",d),a("body").on("click.dropdown",".dropdown form",function(a){a.stopPropagation()}).on("click.dropdown.data-api",b,c.prototype.toggle)})}(window.jQuery),!function(a){function c(){var b=this,c=setTimeout(function(){b.$element.off(a.support.transition.end),d.call(b)},500);this.$element.one(a.support.transition.end,function(){clearTimeout(c),d.call(b)})}function d(a){this.$element.hide().trigger("hidden"),e.call(this)}function e(b){var c=this,d=this.$element.hasClass("fade")?"fade":"";if(this.isShown&&this.options.backdrop){var e=a.support.transition&&d;this.$backdrop=a('<div class="modal-backdrop '+d+'" />').appendTo(document.body),this.options.backdrop!="static"&&this.$backdrop.click(a.proxy(this.hide,this)),e&&this.$backdrop[0].offsetWidth,this.$backdrop.addClass("in"),e?this.$backdrop.one(a.support.transition.end,b):b()}else!this.isShown&&this.$backdrop?(this.$backdrop.removeClass("in"),a.support.transition&&this.$element.hasClass("fade")?this.$backdrop.one(a.support.transition.end,a.proxy(f,this)):f.call(this)):b&&b()}function f(){this.$backdrop.remove(),this.$backdrop=null}function g(){var b=this;this.isShown&&this.options.keyboard?a(document).on("keyup.dismiss.modal",function(a){a.which==27&&b.hide()}):this.isShown||a(document).off("keyup.dismiss.modal")}"use strict";var b=function(b,c){this.options=c,this.$element=a(b).delegate('[data-dismiss="modal"]',"click.dismiss.modal",a.proxy(this.hide,this))};b.prototype={constructor:b,toggle:function(){return this[this.isShown?"hide":"show"]()},show:function(){var b=this,c=a.Event("show");this.$element.trigger(c);if(this.isShown||c.isDefaultPrevented())return;a("body").addClass("modal-open"),this.isShown=!0,g.call(this),e.call(this,function(){var c=a.support.transition&&b.$element.hasClass("fade");b.$element.parent().length||b.$element.appendTo(document.body),b.$element.show(),c&&b.$element[0].offsetWidth,b.$element.addClass("in"),c?b.$element.one(a.support.transition.end,function(){b.$element.trigger("shown")}):b.$element.trigger("shown")})},hide:function(b){b&&b.preventDefault();var e=this;b=a.Event("hide"),this.$element.trigger(b);if(!this.isShown||b.isDefaultPrevented())return;this.isShown=!1,a("body").removeClass("modal-open"),g.call(this),this.$element.removeClass("in"),a.support.transition&&this.$element.hasClass("fade")?c.call(this):d.call(this)}},a.fn.modal=function(c){return this.each(function(){var d=a(this),e=d.data("modal"),f=a.extend({},a.fn.modal.defaults,d.data(),typeof c=="object"&&c);e||d.data("modal",e=new b(this,f)),typeof c=="string"?e[c]():f.show&&e.show()})},a.fn.modal.defaults={backdrop:!0,keyboard:!0,show:!0},a.fn.modal.Constructor=b,a(function(){a("body").on("click.modal.data-api",'[data-toggle="modal"]',function(b){var c=a(this),d,e=a(c.attr("data-target")||(d=c.attr("href"))&&d.replace(/.*(?=#[^\s]+$)/,"")),f=e.data("modal")?"toggle":a.extend({},e.data(),c.data());b.preventDefault(),e.modal(f)})})}(window.jQuery),!function(a){"use strict";var b=function(a,b){this.init("tooltip",a,b)};b.prototype={constructor:b,init:function(b,c,d){var e,f;this.type=b,this.$element=a(c),this.options=this.getOptions(d),this.enabled=!0,this.options.trigger!="manual"&&(e=this.options.trigger=="hover"?"mouseenter":"focus",f=this.options.trigger=="hover"?"mouseleave":"blur",this.$element.on(e,this.options.selector,a.proxy(this.enter,this)),this.$element.on(f,this.options.selector,a.proxy(this.leave,this))),this.options.selector?this._options=a.extend({},this.options,{trigger:"manual",selector:""}):this.fixTitle()},getOptions:function(b){return b=a.extend({},a.fn[this.type].defaults,b,this.$element.data()),b.delay&&typeof b.delay=="number"&&(b.delay={show:b.delay,hide:b.delay}),b},enter:function(b){var c=a(b.currentTarget)[this.type](this._options).data(this.type);if(!c.options.delay||!c.options.delay.show)return c.show();clearTimeout(this.timeout),c.hoverState="in",this.timeout=setTimeout(function(){c.hoverState=="in"&&c.show()},c.options.delay.show)},leave:function(b){var c=a(b.currentTarget)[this.type](this._options).data(this.type);this.timeout&&clearTimeout(this.timeout);if(!c.options.delay||!c.options.delay.hide)return c.hide();c.hoverState="out",this.timeout=setTimeout(function(){c.hoverState=="out"&&c.hide()},c.options.delay.hide)},show:function(){var a,b,c,d,e,f,g;if(this.hasContent()&&this.enabled){a=this.tip(),this.setContent(),this.options.animation&&a.addClass("fade"),f=typeof this.options.placement=="function"?this.options.placement.call(this,a[0],this.$element[0]):this.options.placement,b=/in/.test(f),a.remove().css({top:0,left:0,display:"block"}).appendTo(b?this.$element:document.body),c=this.getPosition(b),d=a[0].offsetWidth,e=a[0].offsetHeight;switch(b?f.split(" ")[1]:f){case"bottom":g={top:c.top+c.height,left:c.left+c.width/2-d/2};break;case"top":g={top:c.top-e,left:c.left+c.width/2-d/2};break;case"left":g={top:c.top+c.height/2-e/2,left:c.left-d};break;case"right":g={top:c.top+c.height/2-e/2,left:c.left+c.width}}a.css(g).addClass(f).addClass("in")}},isHTML:function(a){return typeof a!="string"||a.charAt(0)==="<"&&a.charAt(a.length-1)===">"&&a.length>=3||/^(?:[^<]*<[\w\W]+>[^>]*$)/.exec(a)},setContent:function(){var a=this.tip(),b=this.getTitle();a.find(".tooltip-inner")[this.isHTML(b)?"html":"text"](b),a.removeClass("fade in top bottom left right")},hide:function(){function d(){var b=setTimeout(function(){c.off(a.support.transition.end).remove()},500);c.one(a.support.transition.end,function(){clearTimeout(b),c.remove()})}var b=this,c=this.tip();c.removeClass("in"),a.support.transition&&this.$tip.hasClass("fade")?d():c.remove()},fixTitle:function(){var a=this.$element;(a.attr("title")||typeof a.attr("data-original-title")!="string")&&a.attr("data-original-title",a.attr("title")||"").removeAttr("title")},hasContent:function(){return this.getTitle()},getPosition:function(b){return a.extend({},b?{top:0,left:0}:this.$element.offset(),{width:this.$element[0].offsetWidth,height:this.$element[0].offsetHeight})},getTitle:function(){var a,b=this.$element,c=this.options;return a=b.attr("data-original-title")||(typeof c.title=="function"?c.title.call(b[0]):c.title),a},tip:function(){return this.$tip=this.$tip||a(this.options.template)},validate:function(){this.$element[0].parentNode||(this.hide(),this.$element=null,this.options=null)},enable:function(){this.enabled=!0},disable:function(){this.enabled=!1},toggleEnabled:function(){this.enabled=!this.enabled},toggle:function(){this[this.tip().hasClass("in")?"hide":"show"]()}},a.fn.tooltip=function(c){return this.each(function(){var d=a(this),e=d.data("tooltip"),f=typeof c=="object"&&c;e||d.data("tooltip",e=new b(this,f)),typeof c=="string"&&e[c]()})},a.fn.tooltip.Constructor=b,a.fn.tooltip.defaults={animation:!0,placement:"top",selector:!1,template:'<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',trigger:"hover",title:"",delay:0}}(window.jQuery),!function(a){"use strict";var b=function(a,b){this.init("popover",a,b)};b.prototype=a.extend({},a.fn.tooltip.Constructor.prototype,{constructor:b,setContent:function(){var a=this.tip(),b=this.getTitle(),c=this.getContent();a.find(".popover-title")[this.isHTML(b)?"html":"text"](b),a.find(".popover-content > *")[this.isHTML(c)?"html":"text"](c),a.removeClass("fade top bottom left right in")},hasContent:function(){return this.getTitle()||this.getContent()},getContent:function(){var a,b=this.$element,c=this.options;return a=b.attr("data-content")||(typeof c.content=="function"?c.content.call(b[0]):c.content),a},tip:function(){return this.$tip||(this.$tip=a(this.options.template)),this.$tip}}),a.fn.popover=function(c){return this.each(function(){var d=a(this),e=d.data("popover"),f=typeof c=="object"&&c;e||d.data("popover",e=new b(this,f)),typeof c=="string"&&e[c]()})},a.fn.popover.Constructor=b,a.fn.popover.defaults=a.extend({},a.fn.tooltip.defaults,{placement:"right",content:"",template:'<div class="popover"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'})}(window.jQuery),!function(a){function b(b,c){var d=a.proxy(this.process,this),e=a(b).is("body")?a(window):a(b),f;this.options=a.extend({},a.fn.scrollspy.defaults,c),this.$scrollElement=e.on("scroll.scroll.data-api",d),this.selector=(this.options.target||(f=a(b).attr("href"))&&f.replace(/.*(?=#[^\s]+$)/,"")||"")+" .nav li > a",this.$body=a("body"),this.refresh(),this.process()}"use strict",b.prototype={constructor:b,refresh:function(){var b=this,c;this.offsets=a([]),this.targets=a([]),c=this.$body.find(this.selector).map(function(){var b=a(this),c=b.data("target")||b.attr("href"),d=/^#\w/.test(c)&&a(c);return d&&c.length&&[[d.position().top,c]]||null}).sort(function(a,b){return a[0]-b[0]}).each(function(){b.offsets.push(this[0]),b.targets.push(this[1])})},process:function(){var a=this.$scrollElement.scrollTop()+this.options.offset,b=this.$scrollElement[0].scrollHeight||this.$body[0].scrollHeight,c=b-this.$scrollElement.height(),d=this.offsets,e=this.targets,f=this.activeTarget,g;if(a>=c)return f!=(g=e.last()[0])&&this.activate(g);for(g=d.length;g--;)f!=e[g]&&a>=d[g]&&(!d[g+1]||a<=d[g+1])&&this.activate(e[g])},activate:function(b){var c,d;this.activeTarget=b,a(this.selector).parent(".active").removeClass("active"),d=this.selector+'[data-target="'+b+'"],'+this.selector+'[href="'+b+'"]',c=a(d).parent("li").addClass("active"),c.parent(".dropdown-menu")&&(c=c.closest("li.dropdown").addClass("active")),c.trigger("activate")}},a.fn.scrollspy=function(c){return this.each(function(){var d=a(this),e=d.data("scrollspy"),f=typeof c=="object"&&c;e||d.data("scrollspy",e=new b(this,f)),typeof c=="string"&&e[c]()})},a.fn.scrollspy.Constructor=b,a.fn.scrollspy.defaults={offset:10},a(function(){a('[data-spy="scroll"]').each(function(){var b=a(this);b.scrollspy(b.data())})})}(window.jQuery),!function(a){"use strict";var b=function(b){this.element=a(b)};b.prototype={constructor:b,show:function(){var b=this.element,c=b.closest("ul:not(.dropdown-menu)"),d=b.attr("data-target"),e,f,g;d||(d=b.attr("href"),d=d&&d.replace(/.*(?=#[^\s]*$)/,""));if(b.parent("li").hasClass("active"))return;e=c.find(".active a").last()[0],g=a.Event("show",{relatedTarget:e}),b.trigger(g);if(g.isDefaultPrevented())return;f=a(d),this.activate(b.parent("li"),c),this.activate(f,f.parent(),function(){b.trigger({type:"shown",relatedTarget:e})})},activate:function(b,c,d){function g(){e.removeClass("active").find("> .dropdown-menu > .active").removeClass("active"),b.addClass("active"),f?(b[0].offsetWidth,b.addClass("in")):b.removeClass("fade"),b.parent(".dropdown-menu")&&b.closest("li.dropdown").addClass("active"),d&&d()}var e=c.find("> .active"),f=d&&a.support.transition&&e.hasClass("fade");f?e.one(a.support.transition.end,g):g(),e.removeClass("in")}},a.fn.tab=function(c){return this.each(function(){var d=a(this),e=d.data("tab");e||d.data("tab",e=new b(this)),typeof c=="string"&&e[c]()})},a.fn.tab.Constructor=b,a(function(){a("body").on("click.tab.data-api",'[data-toggle="tab"], [data-toggle="pill"]',function(b){b.preventDefault(),a(this).tab("show")})})}(window.jQuery),!function(a){"use strict";var b=function(b,c){this.$element=a(b),this.options=a.extend({},a.fn.typeahead.defaults,c),this.matcher=this.options.matcher||this.matcher,this.sorter=this.options.sorter||this.sorter,this.highlighter=this.options.highlighter||this.highlighter,this.updater=this.options.updater||this.updater,this.$menu=a(this.options.menu).appendTo("body"),this.source=this.options.source,this.shown=!1,this.listen()};b.prototype={constructor:b,select:function(){var a=this.$menu.find(".active").attr("data-value");return this.$element.val(this.updater(a)).change(),this.hide()},updater:function(a){return a},show:function(){var b=a.extend({},this.$element.offset(),{height:this.$element[0].offsetHeight});return this.$menu.css({top:b.top+b.height,left:b.left}),this.$menu.show(),this.shown=!0,this},hide:function(){return this.$menu.hide(),this.shown=!1,this},lookup:function(b){var c=this,d,e;return this.query=this.$element.val(),this.query?(d=a.grep(this.source,function(a){return c.matcher(a)}),d=this.sorter(d),d.length?this.render(d.slice(0,this.options.items)).show():this.shown?this.hide():this):this.shown?this.hide():this},matcher:function(a){return~a.toLowerCase().indexOf(this.query.toLowerCase())},sorter:function(a){var b=[],c=[],d=[],e;while(e=a.shift())e.toLowerCase().indexOf(this.query.toLowerCase())?~e.indexOf(this.query)?c.push(e):d.push(e):b.push(e);return b.concat(c,d)},highlighter:function(a){var b=this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g,"\\$&");return a.replace(new RegExp("("+b+")","ig"),function(a,b){return"<strong>"+b+"</strong>"})},render:function(b){var c=this;return b=a(b).map(function(b,d){return b=a(c.options.item).attr("data-value",d),b.find("a").html(c.highlighter(d)),b[0]}),b.first().addClass("active"),this.$menu.html(b),this},next:function(b){var c=this.$menu.find(".active").removeClass("active"),d=c.next();d.length||(d=a(this.$menu.find("li")[0])),d.addClass("active")},prev:function(a){var b=this.$menu.find(".active").removeClass("active"),c=b.prev();c.length||(c=this.$menu.find("li").last()),c.addClass("active")},listen:function(){this.$element.on("blur",a.proxy(this.blur,this)).on("keypress",a.proxy(this.keypress,this)).on("keyup",a.proxy(this.keyup,this)),(a.browser.webkit||a.browser.msie)&&this.$element.on("keydown",a.proxy(this.keypress,this)),this.$menu.on("click",a.proxy(this.click,this)).on("mouseenter","li",a.proxy(this.mouseenter,this))},keyup:function(a){switch(a.keyCode){case 40:case 38:break;case 9:case 13:if(!this.shown)return;this.select();break;case 27:if(!this.shown)return;this.hide();break;default:this.lookup()}a.stopPropagation(),a.preventDefault()},keypress:function(a){if(!this.shown)return;switch(a.keyCode){case 9:case 13:case 27:a.preventDefault();break;case 38:if(a.type!="keydown")break;a.preventDefault(),this.prev();break;case 40:if(a.type!="keydown")break;a.preventDefault(),this.next()}a.stopPropagation()},blur:function(a){var b=this;setTimeout(function(){b.hide()},150)},click:function(a){a.stopPropagation(),a.preventDefault(),this.select()},mouseenter:function(b){this.$menu.find(".active").removeClass("active"),a(b.currentTarget).addClass("active")}},a.fn.typeahead=function(c){return this.each(function(){var d=a(this),e=d.data("typeahead"),f=typeof c=="object"&&c;e||d.data("typeahead",e=new b(this,f)),typeof c=="string"&&e[c]()})},a.fn.typeahead.defaults={source:[],items:8,menu:'<ul class="typeahead dropdown-menu"></ul>',item:'<li><a href="#"></a></li>'},a.fn.typeahead.Constructor=b,a(function(){a("body").on("focus.typeahead.data-api",'[data-provide="typeahead"]',function(b){var c=a(this);if(c.data("typeahead"))return;b.preventDefault(),c.typeahead(c.data())})})}(window.jQuery);
+/*!
 
  handlebars v1.1.2
 
@@ -2665,6 +2671,1732 @@ var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, _
  * Copyright 2012 David DeSandro / Metafizzy
  */
 (function(a,b,c){"use strict";var d=a.document,e=a.Modernizr,f=function(a){return a.charAt(0).toUpperCase()+a.slice(1)},g="Moz Webkit O Ms".split(" "),h=function(a){var b=d.documentElement.style,c;if(typeof b[a]=="string")return a;a=f(a);for(var e=0,h=g.length;e<h;e++){c=g[e]+a;if(typeof b[c]=="string")return c}},i=h("transform"),j=h("transitionProperty"),k={csstransforms:function(){return!!i},csstransforms3d:function(){var a=!!h("perspective");if(a){var c=" -o- -moz- -ms- -webkit- -khtml- ".split(" "),d="@media ("+c.join("transform-3d),(")+"modernizr)",e=b("<style>"+d+"{#modernizr{height:3px}}"+"</style>").appendTo("head"),f=b('<div id="modernizr" />').appendTo("html");a=f.height()===3,f.remove(),e.remove()}return a},csstransitions:function(){return!!j}},l;if(e)for(l in k)e.hasOwnProperty(l)||e.addTest(l,k[l]);else{e=a.Modernizr={_version:"1.6ish: miniModernizr for Isotope"};var m=" ",n;for(l in k)n=k[l](),e[l]=n,m+=" "+(n?"":"no-")+l;b("html").addClass(m)}if(e.csstransforms){var o=e.csstransforms3d?{translate:function(a){return"translate3d("+a[0]+"px, "+a[1]+"px, 0) "},scale:function(a){return"scale3d("+a+", "+a+", 1) "}}:{translate:function(a){return"translate("+a[0]+"px, "+a[1]+"px) "},scale:function(a){return"scale("+a+") "}},p=function(a,c,d){var e=b.data(a,"isoTransform")||{},f={},g,h={},j;f[c]=d,b.extend(e,f);for(g in e)j=e[g],h[g]=o[g](j);var k=h.translate||"",l=h.scale||"",m=k+l;b.data(a,"isoTransform",e),a.style[i]=m};b.cssNumber.scale=!0,b.cssHooks.scale={set:function(a,b){p(a,"scale",b)},get:function(a,c){var d=b.data(a,"isoTransform");return d&&d.scale?d.scale:1}},b.fx.step.scale=function(a){b.cssHooks.scale.set(a.elem,a.now+a.unit)},b.cssNumber.translate=!0,b.cssHooks.translate={set:function(a,b){p(a,"translate",b)},get:function(a,c){var d=b.data(a,"isoTransform");return d&&d.translate?d.translate:[0,0]}}}var q,r;e.csstransitions&&(q={WebkitTransitionProperty:"webkitTransitionEnd",MozTransitionProperty:"transitionend",OTransitionProperty:"oTransitionEnd",transitionProperty:"transitionEnd"}[j],r=h("transitionDuration"));var s=b.event,t;s.special.smartresize={setup:function(){b(this).bind("resize",s.special.smartresize.handler)},teardown:function(){b(this).unbind("resize",s.special.smartresize.handler)},handler:function(a,b){var c=this,d=arguments;a.type="smartresize",t&&clearTimeout(t),t=setTimeout(function(){jQuery.event.handle.apply(c,d)},b==="execAsap"?0:100)}},b.fn.smartresize=function(a){return a?this.bind("smartresize",a):this.trigger("smartresize",["execAsap"])},b.Isotope=function(a,c,d){this.element=b(c),this._create(a),this._init(d)};var u=["width","height"],v=b(a);b.Isotope.settings={resizable:!0,layoutMode:"masonry",containerClass:"isotope",itemClass:"isotope-item",hiddenClass:"isotope-hidden",hiddenStyle:{opacity:0,scale:.001},visibleStyle:{opacity:1,scale:1},containerStyle:{position:"relative",overflow:"hidden"},animationEngine:"best-available",animationOptions:{queue:!1,duration:800},sortBy:"original-order",sortAscending:!0,resizesContainer:!0,transformsEnabled:!b.browser.opera,itemPositionDataEnabled:!1},b.Isotope.prototype={_create:function(a){this.options=b.extend({},b.Isotope.settings,a),this.styleQueue=[],this.elemCount=0;var c=this.element[0].style;this.originalStyle={};var d=u.slice(0);for(var e in this.options.containerStyle)d.push(e);for(var f=0,g=d.length;f<g;f++)e=d[f],this.originalStyle[e]=c[e]||"";this.element.css(this.options.containerStyle),this._updateAnimationEngine(),this._updateUsingTransforms();var h={"original-order":function(a,b){return b.elemCount++,b.elemCount},random:function(){return Math.random()}};this.options.getSortData=b.extend(this.options.getSortData,h),this.reloadItems(),this.offset={left:parseInt(this.element.css("padding-left")||0,10),top:parseInt(this.element.css("padding-top")||0,10)};var i=this;setTimeout(function(){i.element.addClass(i.options.containerClass)},0),this.options.resizable&&v.bind("smartresize.isotope",function(){i.resize()}),this.element.delegate("."+this.options.hiddenClass,"click",function(){return!1})},_getAtoms:function(a){var b=this.options.itemSelector,c=b?a.filter(b).add(a.find(b)):a,d={position:"absolute"};return this.usingTransforms&&(d.left=0,d.top=0),c.css(d).addClass(this.options.itemClass),this.updateSortData(c,!0),c},_init:function(a){this.$filteredAtoms=this._filter(this.$allAtoms),this._sort(),this.reLayout(a)},option:function(a){if(b.isPlainObject(a)){this.options=b.extend(!0,this.options,a);var c;for(var d in a)c="_update"+f(d),this[c]&&this[c]()}},_updateAnimationEngine:function(){var a=this.options.animationEngine.toLowerCase().replace(/[ _\-]/g,""),b;switch(a){case"css":case"none":b=!1;break;case"jquery":b=!0;break;default:b=!e.csstransitions}this.isUsingJQueryAnimation=b,this._updateUsingTransforms()},_updateTransformsEnabled:function(){this._updateUsingTransforms()},_updateUsingTransforms:function(){var a=this.usingTransforms=this.options.transformsEnabled&&e.csstransforms&&e.csstransitions&&!this.isUsingJQueryAnimation;a||(delete this.options.hiddenStyle.scale,delete this.options.visibleStyle.scale),this.getPositionStyles=a?this._translate:this._positionAbs},_filter:function(a){var b=this.options.filter===""?"*":this.options.filter;if(!b)return a;var c=this.options.hiddenClass,d="."+c,e=a.filter(d),f=e;if(b!=="*"){f=e.filter(b);var g=a.not(d).not(b).addClass(c);this.styleQueue.push({$el:g,style:this.options.hiddenStyle})}return this.styleQueue.push({$el:f,style:this.options.visibleStyle}),f.removeClass(c),a.filter(b)},updateSortData:function(a,c){var d=this,e=this.options.getSortData,f,g;a.each(function(){f=b(this),g={};for(var a in e)!c&&a==="original-order"?g[a]=b.data(this,"isotope-sort-data")[a]:g[a]=e[a](f,d);b.data(this,"isotope-sort-data",g)})},_sort:function(){var a=this.options.sortBy,b=this._getSorter,c=this.options.sortAscending?1:-1,d=function(d,e){var f=b(d,a),g=b(e,a);return f===g&&a!=="original-order"&&(f=b(d,"original-order"),g=b(e,"original-order")),(f>g?1:f<g?-1:0)*c};this.$filteredAtoms.sort(d)},_getSorter:function(a,c){return b.data(a,"isotope-sort-data")[c]},_translate:function(a,b){return{translate:[a,b]}},_positionAbs:function(a,b){return{left:a,top:b}},_pushPosition:function(a,b,c){b=Math.round(b+this.offset.left),c=Math.round(c+this.offset.top);var d=this.getPositionStyles(b,c);this.styleQueue.push({$el:a,style:d}),this.options.itemPositionDataEnabled&&a.data("isotope-item-position",{x:b,y:c})},layout:function(a,b){var c=this.options.layoutMode;this["_"+c+"Layout"](a);if(this.options.resizesContainer){var d=this["_"+c+"GetContainerSize"]();this.styleQueue.push({$el:this.element,style:d})}this._processStyleQueue(a,b),this.isLaidOut=!0},_processStyleQueue:function(a,c){var d=this.isLaidOut?this.isUsingJQueryAnimation?"animate":"css":"css",f=this.options.animationOptions,g=this.options.onLayout,h,i,j,k;i=function(a,b){b.$el[d](b.style,f)};if(this._isInserting&&this.isUsingJQueryAnimation)i=function(a,b){h=b.$el.hasClass("no-transition")?"css":d,b.$el[h](b.style,f)};else if(c||g||f.complete){var l=!1,m=[c,g,f.complete],n=this;j=!0,k=function(){if(l)return;var b;for(var c=0,d=m.length;c<d;c++)b=m[c],typeof b=="function"&&b.call(n.element,a,n);l=!0};if(this.isUsingJQueryAnimation&&d==="animate")f.complete=k,j=!1;else if(e.csstransitions){var o=0,p=this.styleQueue[0],s=p&&p.$el,t;while(!s||!s.length){t=this.styleQueue[o++];if(!t)return;s=t.$el}var u=parseFloat(getComputedStyle(s[0])[r]);u>0&&(i=function(a,b){b.$el[d](b.style,f).one(q,k)},j=!1)}}b.each(this.styleQueue,i),j&&k(),this.styleQueue=[]},resize:function(){this["_"+this.options.layoutMode+"ResizeChanged"]()&&this.reLayout()},reLayout:function(a){this["_"+this.options.layoutMode+"Reset"](),this.layout(this.$filteredAtoms,a)},addItems:function(a,b){var c=this._getAtoms(a);this.$allAtoms=this.$allAtoms.add(c),b&&b(c)},insert:function(a,b){this.element.append(a);var c=this;this.addItems(a,function(a){var d=c._filter(a);c._addHideAppended(d),c._sort(),c.reLayout(),c._revealAppended(d,b)})},appended:function(a,b){var c=this;this.addItems(a,function(a){c._addHideAppended(a),c.layout(a),c._revealAppended(a,b)})},_addHideAppended:function(a){this.$filteredAtoms=this.$filteredAtoms.add(a),a.addClass("no-transition"),this._isInserting=!0,this.styleQueue.push({$el:a,style:this.options.hiddenStyle})},_revealAppended:function(a,b){var c=this;setTimeout(function(){a.removeClass("no-transition"),c.styleQueue.push({$el:a,style:c.options.visibleStyle}),c._isInserting=!1,c._processStyleQueue(a,b)},10)},reloadItems:function(){this.$allAtoms=this._getAtoms(this.element.children())},remove:function(a,b){var c=this,d=function(){c.$allAtoms=c.$allAtoms.not(a),a.remove(),b&&b.call(c.element)};a.filter(":not(."+this.options.hiddenClass+")").length?(this.styleQueue.push({$el:a,style:this.options.hiddenStyle}),this.$filteredAtoms=this.$filteredAtoms.not(a),this._sort(),this.reLayout(d)):d()},shuffle:function(a){this.updateSortData(this.$allAtoms),this.options.sortBy="random",this._sort(),this.reLayout(a)},destroy:function(){var a=this.usingTransforms,b=this.options;this.$allAtoms.removeClass(b.hiddenClass+" "+b.itemClass).each(function(){var b=this.style;b.position="",b.top="",b.left="",b.opacity="",a&&(b[i]="")});var c=this.element[0].style;for(var d in this.originalStyle)c[d]=this.originalStyle[d];this.element.unbind(".isotope").undelegate("."+b.hiddenClass,"click").removeClass(b.containerClass).removeData("isotope"),v.unbind(".isotope")},_getSegments:function(a){var b=this.options.layoutMode,c=a?"rowHeight":"columnWidth",d=a?"height":"width",e=a?"rows":"cols",g=this.element[d](),h,i=this.options[b]&&this.options[b][c]||this.$filteredAtoms["outer"+f(d)](!0)||g;h=Math.floor(g/i),h=Math.max(h,1),this[b][e]=h,this[b][c]=i},_checkIfSegmentsChanged:function(a){var b=this.options.layoutMode,c=a?"rows":"cols",d=this[b][c];return this._getSegments(a),this[b][c]!==d},_masonryReset:function(){this.masonry={},this._getSegments();var a=this.masonry.cols;this.masonry.colYs=[];while(a--)this.masonry.colYs.push(0)},_masonryLayout:function(a){var c=this,d=c.masonry;a.each(function(){var a=b(this),e=Math.ceil(a.outerWidth(!0)/d.columnWidth);e=Math.min(e,d.cols);if(e===1)c._masonryPlaceBrick(a,d.colYs);else{var f=d.cols+1-e,g=[],h,i;for(i=0;i<f;i++)h=d.colYs.slice(i,i+e),g[i]=Math.max.apply(Math,h);c._masonryPlaceBrick(a,g)}})},_masonryPlaceBrick:function(a,b){var c=Math.min.apply(Math,b),d=0;for(var e=0,f=b.length;e<f;e++)if(b[e]===c){d=e;break}var g=this.masonry.columnWidth*d,h=c;this._pushPosition(a,g,h);var i=c+a.outerHeight(!0),j=this.masonry.cols+1-f;for(e=0;e<j;e++)this.masonry.colYs[d+e]=i},_masonryGetContainerSize:function(){var a=Math.max.apply(Math,this.masonry.colYs);return{height:a}},_masonryResizeChanged:function(){return this._checkIfSegmentsChanged()},_fitRowsReset:function(){this.fitRows={x:0,y:0,height:0}},_fitRowsLayout:function(a){var c=this,d=this.element.width(),e=this.fitRows;a.each(function(){var a=b(this),f=a.outerWidth(!0),g=a.outerHeight(!0);e.x!==0&&f+e.x>d&&(e.x=0,e.y=e.height),c._pushPosition(a,e.x,e.y),e.height=Math.max(e.y+g,e.height),e.x+=f})},_fitRowsGetContainerSize:function(){return{height:this.fitRows.height}},_fitRowsResizeChanged:function(){return!0},_cellsByRowReset:function(){this.cellsByRow={index:0},this._getSegments(),this._getSegments(!0)},_cellsByRowLayout:function(a){var c=this,d=this.cellsByRow;a.each(function(){var a=b(this),e=d.index%d.cols,f=Math.floor(d.index/d.cols),g=(e+.5)*d.columnWidth-a.outerWidth(!0)/2,h=(f+.5)*d.rowHeight-a.outerHeight(!0)/2;c._pushPosition(a,g,h),d.index++})},_cellsByRowGetContainerSize:function(){return{height:Math.ceil(this.$filteredAtoms.length/this.cellsByRow.cols)*this.cellsByRow.rowHeight+this.offset.top}},_cellsByRowResizeChanged:function(){return this._checkIfSegmentsChanged()},_straightDownReset:function(){this.straightDown={y:0}},_straightDownLayout:function(a){var c=this;a.each(function(a){var d=b(this);c._pushPosition(d,0,c.straightDown.y),c.straightDown.y+=d.outerHeight(!0)})},_straightDownGetContainerSize:function(){return{height:this.straightDown.y}},_straightDownResizeChanged:function(){return!0},_masonryHorizontalReset:function(){this.masonryHorizontal={},this._getSegments(!0);var a=this.masonryHorizontal.rows;this.masonryHorizontal.rowXs=[];while(a--)this.masonryHorizontal.rowXs.push(0)},_masonryHorizontalLayout:function(a){var c=this,d=c.masonryHorizontal;a.each(function(){var a=b(this),e=Math.ceil(a.outerHeight(!0)/d.rowHeight);e=Math.min(e,d.rows);if(e===1)c._masonryHorizontalPlaceBrick(a,d.rowXs);else{var f=d.rows+1-e,g=[],h,i;for(i=0;i<f;i++)h=d.rowXs.slice(i,i+e),g[i]=Math.max.apply(Math,h);c._masonryHorizontalPlaceBrick(a,g)}})},_masonryHorizontalPlaceBrick:function(a,b){var c=Math.min.apply(Math,b),d=0;for(var e=0,f=b.length;e<f;e++)if(b[e]===c){d=e;break}var g=c,h=this.masonryHorizontal.rowHeight*d;this._pushPosition(a,g,h);var i=c+a.outerWidth(!0),j=this.masonryHorizontal.rows+1-f;for(e=0;e<j;e++)this.masonryHorizontal.rowXs[d+e]=i},_masonryHorizontalGetContainerSize:function(){var a=Math.max.apply(Math,this.masonryHorizontal.rowXs);return{width:a}},_masonryHorizontalResizeChanged:function(){return this._checkIfSegmentsChanged(!0)},_fitColumnsReset:function(){this.fitColumns={x:0,y:0,width:0}},_fitColumnsLayout:function(a){var c=this,d=this.element.height(),e=this.fitColumns;a.each(function(){var a=b(this),f=a.outerWidth(!0),g=a.outerHeight(!0);e.y!==0&&g+e.y>d&&(e.x=e.width,e.y=0),c._pushPosition(a,e.x,e.y),e.width=Math.max(e.x+f,e.width),e.y+=g})},_fitColumnsGetContainerSize:function(){return{width:this.fitColumns.width}},_fitColumnsResizeChanged:function(){return!0},_cellsByColumnReset:function(){this.cellsByColumn={index:0},this._getSegments(),this._getSegments(!0)},_cellsByColumnLayout:function(a){var c=this,d=this.cellsByColumn;a.each(function(){var a=b(this),e=Math.floor(d.index/d.rows),f=d.index%d.rows,g=(e+.5)*d.columnWidth-a.outerWidth(!0)/2,h=(f+.5)*d.rowHeight-a.outerHeight(!0)/2;c._pushPosition(a,g,h),d.index++})},_cellsByColumnGetContainerSize:function(){return{width:Math.ceil(this.$filteredAtoms.length/this.cellsByColumn.rows)*this.cellsByColumn.columnWidth}},_cellsByColumnResizeChanged:function(){return this._checkIfSegmentsChanged(!0)},_straightAcrossReset:function(){this.straightAcross={x:0}},_straightAcrossLayout:function(a){var c=this;a.each(function(a){var d=b(this);c._pushPosition(d,c.straightAcross.x,0),c.straightAcross.x+=d.outerWidth(!0)})},_straightAcrossGetContainerSize:function(){return{width:this.straightAcross.x}},_straightAcrossResizeChanged:function(){return!0}},b.fn.imagesLoaded=function(a){function h(){a.call(c,d)}function i(a){var c=a.target;c.src!==f&&b.inArray(c,g)===-1&&(g.push(c),--e<=0&&(setTimeout(h),d.unbind(".imagesLoaded",i)))}var c=this,d=c.find("img").add(c.filter("img")),e=d.length,f="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",g=[];return e||h(),d.bind("load.imagesLoaded error.imagesLoaded",i).each(function(){var a=this.src;this.src=f,this.src=a}),c};var w=function(b){a.console&&a.console.error(b)};b.fn.isotope=function(a,c){if(typeof a=="string"){var d=Array.prototype.slice.call(arguments,1);this.each(function(){var c=b.data(this,"isotope");if(!c){w("cannot call methods on isotope prior to initialization; attempted to call method '"+a+"'");return}if(!b.isFunction(c[a])||a.charAt(0)==="_"){w("no such method '"+a+"' for isotope instance");return}c[a].apply(c,d)})}else this.each(function(){var d=b.data(this,"isotope");d?(d.option(a),d._init(c)):b.data(this,"isotope",new b.Isotope(a,this,c))});return this}})(window,jQuery);
+
+// Released under MIT license
+// Copyright (c) 2009-2010 Dominic Baggott
+// Copyright (c) 2009-2010 Ash Berlin
+// Copyright (c) 2011 Christoph Dorn <christoph@christophdorn.com> (http://www.christophdorn.com)
+
+/*jshint browser:true, devel:true */
+
+(function( expose ) {
+
+/**
+ *  class Markdown
+ *
+ *  Markdown processing in Javascript done right. We have very particular views
+ *  on what constitutes 'right' which include:
+ *
+ *  - produces well-formed HTML (this means that em and strong nesting is
+ *    important)
+ *
+ *  - has an intermediate representation to allow processing of parsed data (We
+ *    in fact have two, both as [JsonML]: a markdown tree and an HTML tree).
+ *
+ *  - is easily extensible to add new dialects without having to rewrite the
+ *    entire parsing mechanics
+ *
+ *  - has a good test suite
+ *
+ *  This implementation fulfills all of these (except that the test suite could
+ *  do with expanding to automatically run all the fixtures from other Markdown
+ *  implementations.)
+ *
+ *  ##### Intermediate Representation
+ *
+ *  *TODO* Talk about this :) Its JsonML, but document the node names we use.
+ *
+ *  [JsonML]: http://jsonml.org/ "JSON Markup Language"
+ **/
+var Markdown = expose.Markdown = function(dialect) {
+  switch (typeof dialect) {
+    case "undefined":
+      this.dialect = Markdown.dialects.Gruber;
+      break;
+    case "object":
+      this.dialect = dialect;
+      break;
+    default:
+      if ( dialect in Markdown.dialects ) {
+        this.dialect = Markdown.dialects[dialect];
+      }
+      else {
+        throw new Error("Unknown Markdown dialect '" + String(dialect) + "'");
+      }
+      break;
+  }
+  this.em_state = [];
+  this.strong_state = [];
+  this.debug_indent = "";
+};
+
+/**
+ *  parse( markdown, [dialect] ) -> JsonML
+ *  - markdown (String): markdown string to parse
+ *  - dialect (String | Dialect): the dialect to use, defaults to gruber
+ *
+ *  Parse `markdown` and return a markdown document as a Markdown.JsonML tree.
+ **/
+expose.parse = function( source, dialect ) {
+  // dialect will default if undefined
+  var md = new Markdown( dialect );
+  return md.toTree( source );
+};
+
+/**
+ *  toHTML( markdown, [dialect]  ) -> String
+ *  toHTML( md_tree ) -> String
+ *  - markdown (String): markdown string to parse
+ *  - md_tree (Markdown.JsonML): parsed markdown tree
+ *
+ *  Take markdown (either as a string or as a JsonML tree) and run it through
+ *  [[toHTMLTree]] then turn it into a well-formated HTML fragment.
+ **/
+expose.toHTML = function toHTML( source , dialect , options ) {
+  var input = expose.toHTMLTree( source , dialect , options );
+
+  return expose.renderJsonML( input );
+};
+
+/**
+ *  toHTMLTree( markdown, [dialect] ) -> JsonML
+ *  toHTMLTree( md_tree ) -> JsonML
+ *  - markdown (String): markdown string to parse
+ *  - dialect (String | Dialect): the dialect to use, defaults to gruber
+ *  - md_tree (Markdown.JsonML): parsed markdown tree
+ *
+ *  Turn markdown into HTML, represented as a JsonML tree. If a string is given
+ *  to this function, it is first parsed into a markdown tree by calling
+ *  [[parse]].
+ **/
+expose.toHTMLTree = function toHTMLTree( input, dialect , options ) {
+  // convert string input to an MD tree
+  if ( typeof input ==="string" ) input = this.parse( input, dialect );
+
+  // Now convert the MD tree to an HTML tree
+
+  // remove references from the tree
+  var attrs = extract_attr( input ),
+      refs = {};
+
+  if ( attrs && attrs.references ) {
+    refs = attrs.references;
+  }
+
+  var html = convert_tree_to_html( input, refs , options );
+  merge_text_nodes( html );
+  return html;
+};
+
+// For Spidermonkey based engines
+function mk_block_toSource() {
+  return "Markdown.mk_block( " +
+          uneval(this.toString()) +
+          ", " +
+          uneval(this.trailing) +
+          ", " +
+          uneval(this.lineNumber) +
+          " )";
+}
+
+// node
+function mk_block_inspect() {
+  var util = require("util");
+  return "Markdown.mk_block( " +
+          util.inspect(this.toString()) +
+          ", " +
+          util.inspect(this.trailing) +
+          ", " +
+          util.inspect(this.lineNumber) +
+          " )";
+
+}
+
+var mk_block = Markdown.mk_block = function(block, trail, line) {
+  // Be helpful for default case in tests.
+  if ( arguments.length == 1 ) trail = "\n\n";
+
+  var s = new String(block);
+  s.trailing = trail;
+  // To make it clear its not just a string
+  s.inspect = mk_block_inspect;
+  s.toSource = mk_block_toSource;
+
+  if ( line != undefined )
+    s.lineNumber = line;
+
+  return s;
+};
+
+function count_lines( str ) {
+  var n = 0, i = -1;
+  while ( ( i = str.indexOf("\n", i + 1) ) !== -1 ) n++;
+  return n;
+}
+
+// Internal - split source into rough blocks
+Markdown.prototype.split_blocks = function splitBlocks( input, startLine ) {
+  input = input.replace(/(\r\n|\n|\r)/g, "\n");
+  // [\s\S] matches _anything_ (newline or space)
+  // [^] is equivalent but doesn't work in IEs.
+  var re = /([\s\S]+?)($|\n#|\n(?:\s*\n|$)+)/g,
+      blocks = [],
+      m;
+
+  var line_no = 1;
+
+  if ( ( m = /^(\s*\n)/.exec(input) ) != null ) {
+    // skip (but count) leading blank lines
+    line_no += count_lines( m[0] );
+    re.lastIndex = m[0].length;
+  }
+
+  while ( ( m = re.exec(input) ) !== null ) {
+    if (m[2] == "\n#") {
+      m[2] = "\n";
+      re.lastIndex--;
+    }
+    blocks.push( mk_block( m[1], m[2], line_no ) );
+    line_no += count_lines( m[0] );
+  }
+
+  return blocks;
+};
+
+/**
+ *  Markdown#processBlock( block, next ) -> undefined | [ JsonML, ... ]
+ *  - block (String): the block to process
+ *  - next (Array): the following blocks
+ *
+ * Process `block` and return an array of JsonML nodes representing `block`.
+ *
+ * It does this by asking each block level function in the dialect to process
+ * the block until one can. Succesful handling is indicated by returning an
+ * array (with zero or more JsonML nodes), failure by a false value.
+ *
+ * Blocks handlers are responsible for calling [[Markdown#processInline]]
+ * themselves as appropriate.
+ *
+ * If the blocks were split incorrectly or adjacent blocks need collapsing you
+ * can adjust `next` in place using shift/splice etc.
+ *
+ * If any of this default behaviour is not right for the dialect, you can
+ * define a `__call__` method on the dialect that will get invoked to handle
+ * the block processing.
+ */
+Markdown.prototype.processBlock = function processBlock( block, next ) {
+  var cbs = this.dialect.block,
+      ord = cbs.__order__;
+
+  if ( "__call__" in cbs ) {
+    return cbs.__call__.call(this, block, next);
+  }
+
+  for ( var i = 0; i < ord.length; i++ ) {
+    //D:this.debug( "Testing", ord[i] );
+    var res = cbs[ ord[i] ].call( this, block, next );
+    if ( res ) {
+      //D:this.debug("  matched");
+      if ( !isArray(res) || ( res.length > 0 && !( isArray(res[0]) ) ) )
+        this.debug(ord[i], "didn't return a proper array");
+      //D:this.debug( "" );
+      return res;
+    }
+  }
+
+  // Uhoh! no match! Should we throw an error?
+  return [];
+};
+
+Markdown.prototype.processInline = function processInline( block ) {
+  return this.dialect.inline.__call__.call( this, String( block ) );
+};
+
+/**
+ *  Markdown#toTree( source ) -> JsonML
+ *  - source (String): markdown source to parse
+ *
+ *  Parse `source` into a JsonML tree representing the markdown document.
+ **/
+// custom_tree means set this.tree to `custom_tree` and restore old value on return
+Markdown.prototype.toTree = function toTree( source, custom_root ) {
+  var blocks = source instanceof Array ? source : this.split_blocks( source );
+
+  // Make tree a member variable so its easier to mess with in extensions
+  var old_tree = this.tree;
+  try {
+    this.tree = custom_root || this.tree || [ "markdown" ];
+
+    blocks:
+    while ( blocks.length ) {
+      var b = this.processBlock( blocks.shift(), blocks );
+
+      // Reference blocks and the like won't return any content
+      if ( !b.length ) continue blocks;
+
+      this.tree.push.apply( this.tree, b );
+    }
+    return this.tree;
+  }
+  finally {
+    if ( custom_root ) {
+      this.tree = old_tree;
+    }
+  }
+};
+
+// Noop by default
+Markdown.prototype.debug = function () {
+  var args = Array.prototype.slice.call( arguments);
+  args.unshift(this.debug_indent);
+  if ( typeof print !== "undefined" )
+      print.apply( print, args );
+  if ( typeof console !== "undefined" && typeof console.log !== "undefined" )
+      console.log.apply( null, args );
+}
+
+Markdown.prototype.loop_re_over_block = function( re, block, cb ) {
+  // Dont use /g regexps with this
+  var m,
+      b = block.valueOf();
+
+  while ( b.length && (m = re.exec(b) ) != null ) {
+    b = b.substr( m[0].length );
+    cb.call(this, m);
+  }
+  return b;
+};
+
+/**
+ * Markdown.dialects
+ *
+ * Namespace of built-in dialects.
+ **/
+Markdown.dialects = {};
+
+/**
+ * Markdown.dialects.Gruber
+ *
+ * The default dialect that follows the rules set out by John Gruber's
+ * markdown.pl as closely as possible. Well actually we follow the behaviour of
+ * that script which in some places is not exactly what the syntax web page
+ * says.
+ **/
+Markdown.dialects.Gruber = {
+  block: {
+    atxHeader: function atxHeader( block, next ) {
+      var m = block.match( /^(#{1,6})\s*(.*?)\s*#*\s*(?:\n|$)/ );
+
+      if ( !m ) return undefined;
+
+      var header = [ "header", { level: m[ 1 ].length } ];
+      Array.prototype.push.apply(header, this.processInline(m[ 2 ]));
+
+      if ( m[0].length < block.length )
+        next.unshift( mk_block( block.substr( m[0].length ), block.trailing, block.lineNumber + 2 ) );
+
+      return [ header ];
+    },
+
+    setextHeader: function setextHeader( block, next ) {
+      var m = block.match( /^(.*)\n([-=])\2\2+(?:\n|$)/ );
+
+      if ( !m ) return undefined;
+
+      var level = ( m[ 2 ] === "=" ) ? 1 : 2;
+      var header = [ "header", { level : level }, m[ 1 ] ];
+
+      if ( m[0].length < block.length )
+        next.unshift( mk_block( block.substr( m[0].length ), block.trailing, block.lineNumber + 2 ) );
+
+      return [ header ];
+    },
+
+    code: function code( block, next ) {
+      // |    Foo
+      // |bar
+      // should be a code block followed by a paragraph. Fun
+      //
+      // There might also be adjacent code block to merge.
+
+      var ret = [],
+          re = /^(?: {0,3}\t| {4})(.*)\n?/,
+          lines;
+
+      // 4 spaces + content
+      if ( !block.match( re ) ) return undefined;
+
+      block_search:
+      do {
+        // Now pull out the rest of the lines
+        var b = this.loop_re_over_block(
+                  re, block.valueOf(), function( m ) { ret.push( m[1] ); } );
+
+        if ( b.length ) {
+          // Case alluded to in first comment. push it back on as a new block
+          next.unshift( mk_block(b, block.trailing) );
+          break block_search;
+        }
+        else if ( next.length ) {
+          // Check the next block - it might be code too
+          if ( !next[0].match( re ) ) break block_search;
+
+          // Pull how how many blanks lines follow - minus two to account for .join
+          ret.push ( block.trailing.replace(/[^\n]/g, "").substring(2) );
+
+          block = next.shift();
+        }
+        else {
+          break block_search;
+        }
+      } while ( true );
+
+      return [ [ "code_block", ret.join("\n") ] ];
+    },
+
+    horizRule: function horizRule( block, next ) {
+      // this needs to find any hr in the block to handle abutting blocks
+      var m = block.match( /^(?:([\s\S]*?)\n)?[ \t]*([-_*])(?:[ \t]*\2){2,}[ \t]*(?:\n([\s\S]*))?$/ );
+
+      if ( !m ) {
+        return undefined;
+      }
+
+      var jsonml = [ [ "hr" ] ];
+
+      // if there's a leading abutting block, process it
+      if ( m[ 1 ] ) {
+        jsonml.unshift.apply( jsonml, this.processBlock( m[ 1 ], [] ) );
+      }
+
+      // if there's a trailing abutting block, stick it into next
+      if ( m[ 3 ] ) {
+        next.unshift( mk_block( m[ 3 ] ) );
+      }
+
+      return jsonml;
+    },
+
+    // There are two types of lists. Tight and loose. Tight lists have no whitespace
+    // between the items (and result in text just in the <li>) and loose lists,
+    // which have an empty line between list items, resulting in (one or more)
+    // paragraphs inside the <li>.
+    //
+    // There are all sorts weird edge cases about the original markdown.pl's
+    // handling of lists:
+    //
+    // * Nested lists are supposed to be indented by four chars per level. But
+    //   if they aren't, you can get a nested list by indenting by less than
+    //   four so long as the indent doesn't match an indent of an existing list
+    //   item in the 'nest stack'.
+    //
+    // * The type of the list (bullet or number) is controlled just by the
+    //    first item at the indent. Subsequent changes are ignored unless they
+    //    are for nested lists
+    //
+    lists: (function( ) {
+      // Use a closure to hide a few variables.
+      var any_list = "[*+-]|\\d+\\.",
+          bullet_list = /[*+-]/,
+          number_list = /\d+\./,
+          // Capture leading indent as it matters for determining nested lists.
+          is_list_re = new RegExp( "^( {0,3})(" + any_list + ")[ \t]+" ),
+          indent_re = "(?: {0,3}\\t| {4})";
+
+      // TODO: Cache this regexp for certain depths.
+      // Create a regexp suitable for matching an li for a given stack depth
+      function regex_for_depth( depth ) {
+
+        return new RegExp(
+          // m[1] = indent, m[2] = list_type
+          "(?:^(" + indent_re + "{0," + depth + "} {0,3})(" + any_list + ")\\s+)|" +
+          // m[3] = cont
+          "(^" + indent_re + "{0," + (depth-1) + "}[ ]{0,4})"
+        );
+      }
+      function expand_tab( input ) {
+        return input.replace( / {0,3}\t/g, "    " );
+      }
+
+      // Add inline content `inline` to `li`. inline comes from processInline
+      // so is an array of content
+      function add(li, loose, inline, nl) {
+        if ( loose ) {
+          li.push( [ "para" ].concat(inline) );
+          return;
+        }
+        // Hmmm, should this be any block level element or just paras?
+        var add_to = li[li.length -1] instanceof Array && li[li.length - 1][0] == "para"
+                   ? li[li.length -1]
+                   : li;
+
+        // If there is already some content in this list, add the new line in
+        if ( nl && li.length > 1 ) inline.unshift(nl);
+
+        for ( var i = 0; i < inline.length; i++ ) {
+          var what = inline[i],
+              is_str = typeof what == "string";
+          if ( is_str && add_to.length > 1 && typeof add_to[add_to.length-1] == "string" ) {
+            add_to[ add_to.length-1 ] += what;
+          }
+          else {
+            add_to.push( what );
+          }
+        }
+      }
+
+      // contained means have an indent greater than the current one. On
+      // *every* line in the block
+      function get_contained_blocks( depth, blocks ) {
+
+        var re = new RegExp( "^(" + indent_re + "{" + depth + "}.*?\\n?)*$" ),
+            replace = new RegExp("^" + indent_re + "{" + depth + "}", "gm"),
+            ret = [];
+
+        while ( blocks.length > 0 ) {
+          if ( re.exec( blocks[0] ) ) {
+            var b = blocks.shift(),
+                // Now remove that indent
+                x = b.replace( replace, "");
+
+            ret.push( mk_block( x, b.trailing, b.lineNumber ) );
+          }
+          else {
+            break;
+          }
+        }
+        return ret;
+      }
+
+      // passed to stack.forEach to turn list items up the stack into paras
+      function paragraphify(s, i, stack) {
+        var list = s.list;
+        var last_li = list[list.length-1];
+
+        if ( last_li[1] instanceof Array && last_li[1][0] == "para" ) {
+          return;
+        }
+        if ( i + 1 == stack.length ) {
+          // Last stack frame
+          // Keep the same array, but replace the contents
+          last_li.push( ["para"].concat( last_li.splice(1, last_li.length - 1) ) );
+        }
+        else {
+          var sublist = last_li.pop();
+          last_li.push( ["para"].concat( last_li.splice(1, last_li.length - 1) ), sublist );
+        }
+      }
+
+      // The matcher function
+      return function( block, next ) {
+        var m = block.match( is_list_re );
+        if ( !m ) return undefined;
+
+        function make_list( m ) {
+          var list = bullet_list.exec( m[2] )
+                   ? ["bulletlist"]
+                   : ["numberlist"];
+
+          stack.push( { list: list, indent: m[1] } );
+          return list;
+        }
+
+
+        var stack = [], // Stack of lists for nesting.
+            list = make_list( m ),
+            last_li,
+            loose = false,
+            ret = [ stack[0].list ],
+            i;
+
+        // Loop to search over block looking for inner block elements and loose lists
+        loose_search:
+        while ( true ) {
+          // Split into lines preserving new lines at end of line
+          var lines = block.split( /(?=\n)/ );
+
+          // We have to grab all lines for a li and call processInline on them
+          // once as there are some inline things that can span lines.
+          var li_accumulate = "";
+
+          // Loop over the lines in this block looking for tight lists.
+          tight_search:
+          for ( var line_no = 0; line_no < lines.length; line_no++ ) {
+            var nl = "",
+                l = lines[line_no].replace(/^\n/, function(n) { nl = n; return ""; });
+
+            // TODO: really should cache this
+            var line_re = regex_for_depth( stack.length );
+
+            m = l.match( line_re );
+            //print( "line:", uneval(l), "\nline match:", uneval(m) );
+
+            // We have a list item
+            if ( m[1] !== undefined ) {
+              // Process the previous list item, if any
+              if ( li_accumulate.length ) {
+                add( last_li, loose, this.processInline( li_accumulate ), nl );
+                // Loose mode will have been dealt with. Reset it
+                loose = false;
+                li_accumulate = "";
+              }
+
+              m[1] = expand_tab( m[1] );
+              var wanted_depth = Math.floor(m[1].length/4)+1;
+              //print( "want:", wanted_depth, "stack:", stack.length);
+              if ( wanted_depth > stack.length ) {
+                // Deep enough for a nested list outright
+                //print ( "new nested list" );
+                list = make_list( m );
+                last_li.push( list );
+                last_li = list[1] = [ "listitem" ];
+              }
+              else {
+                // We aren't deep enough to be strictly a new level. This is
+                // where Md.pl goes nuts. If the indent matches a level in the
+                // stack, put it there, else put it one deeper then the
+                // wanted_depth deserves.
+                var found = false;
+                for ( i = 0; i < stack.length; i++ ) {
+                  if ( stack[ i ].indent != m[1] ) continue;
+                  list = stack[ i ].list;
+                  stack.splice( i+1, stack.length - (i+1) );
+                  found = true;
+                  break;
+                }
+
+                if (!found) {
+                  //print("not found. l:", uneval(l));
+                  wanted_depth++;
+                  if ( wanted_depth <= stack.length ) {
+                    stack.splice(wanted_depth, stack.length - wanted_depth);
+                    //print("Desired depth now", wanted_depth, "stack:", stack.length);
+                    list = stack[wanted_depth-1].list;
+                    //print("list:", uneval(list) );
+                  }
+                  else {
+                    //print ("made new stack for messy indent");
+                    list = make_list(m);
+                    last_li.push(list);
+                  }
+                }
+
+                //print( uneval(list), "last", list === stack[stack.length-1].list );
+                last_li = [ "listitem" ];
+                list.push(last_li);
+              } // end depth of shenegains
+              nl = "";
+            }
+
+            // Add content
+            if ( l.length > m[0].length ) {
+              li_accumulate += nl + l.substr( m[0].length );
+            }
+          } // tight_search
+
+          if ( li_accumulate.length ) {
+            add( last_li, loose, this.processInline( li_accumulate ), nl );
+            // Loose mode will have been dealt with. Reset it
+            loose = false;
+            li_accumulate = "";
+          }
+
+          // Look at the next block - we might have a loose list. Or an extra
+          // paragraph for the current li
+          var contained = get_contained_blocks( stack.length, next );
+
+          // Deal with code blocks or properly nested lists
+          if ( contained.length > 0 ) {
+            // Make sure all listitems up the stack are paragraphs
+            forEach( stack, paragraphify, this);
+
+            last_li.push.apply( last_li, this.toTree( contained, [] ) );
+          }
+
+          var next_block = next[0] && next[0].valueOf() || "";
+
+          if ( next_block.match(is_list_re) || next_block.match( /^ / ) ) {
+            block = next.shift();
+
+            // Check for an HR following a list: features/lists/hr_abutting
+            var hr = this.dialect.block.horizRule( block, next );
+
+            if ( hr ) {
+              ret.push.apply(ret, hr);
+              break;
+            }
+
+            // Make sure all listitems up the stack are paragraphs
+            forEach( stack, paragraphify, this);
+
+            loose = true;
+            continue loose_search;
+          }
+          break;
+        } // loose_search
+
+        return ret;
+      };
+    })(),
+
+    blockquote: function blockquote( block, next ) {
+      if ( !block.match( /^>/m ) )
+        return undefined;
+
+      var jsonml = [];
+
+      // separate out the leading abutting block, if any. I.e. in this case:
+      //
+      //  a
+      //  > b
+      //
+      if ( block[ 0 ] != ">" ) {
+        var lines = block.split( /\n/ ),
+            prev = [],
+            line_no = block.lineNumber;
+
+        // keep shifting lines until you find a crotchet
+        while ( lines.length && lines[ 0 ][ 0 ] != ">" ) {
+            prev.push( lines.shift() );
+            line_no++;
+        }
+
+        var abutting = mk_block( prev.join( "\n" ), "\n", block.lineNumber );
+        jsonml.push.apply( jsonml, this.processBlock( abutting, [] ) );
+        // reassemble new block of just block quotes!
+        block = mk_block( lines.join( "\n" ), block.trailing, line_no );
+      }
+
+
+      // if the next block is also a blockquote merge it in
+      while ( next.length && next[ 0 ][ 0 ] == ">" ) {
+        var b = next.shift();
+        block = mk_block( block + block.trailing + b, b.trailing, block.lineNumber );
+      }
+
+      // Strip off the leading "> " and re-process as a block.
+      var input = block.replace( /^> ?/gm, "" ),
+          old_tree = this.tree,
+          processedBlock = this.toTree( input, [ "blockquote" ] ),
+          attr = extract_attr( processedBlock );
+
+      // If any link references were found get rid of them
+      if ( attr && attr.references ) {
+        delete attr.references;
+        // And then remove the attribute object if it's empty
+        if ( isEmpty( attr ) ) {
+          processedBlock.splice( 1, 1 );
+        }
+      }
+
+      jsonml.push( processedBlock );
+      return jsonml;
+    },
+
+    referenceDefn: function referenceDefn( block, next) {
+      var re = /^\s*\[(.*?)\]:\s*(\S+)(?:\s+(?:(['"])(.*?)\3|\((.*?)\)))?\n?/;
+      // interesting matches are [ , ref_id, url, , title, title ]
+
+      if ( !block.match(re) )
+        return undefined;
+
+      // make an attribute node if it doesn't exist
+      if ( !extract_attr( this.tree ) ) {
+        this.tree.splice( 1, 0, {} );
+      }
+
+      var attrs = extract_attr( this.tree );
+
+      // make a references hash if it doesn't exist
+      if ( attrs.references === undefined ) {
+        attrs.references = {};
+      }
+
+      var b = this.loop_re_over_block(re, block, function( m ) {
+
+        if ( m[2] && m[2][0] == "<" && m[2][m[2].length-1] == ">" )
+          m[2] = m[2].substring( 1, m[2].length - 1 );
+
+        var ref = attrs.references[ m[1].toLowerCase() ] = {
+          href: m[2]
+        };
+
+        if ( m[4] !== undefined )
+          ref.title = m[4];
+        else if ( m[5] !== undefined )
+          ref.title = m[5];
+
+      } );
+
+      if ( b.length )
+        next.unshift( mk_block( b, block.trailing ) );
+
+      return [];
+    },
+
+    para: function para( block, next ) {
+      // everything's a para!
+      return [ ["para"].concat( this.processInline( block ) ) ];
+    }
+  }
+};
+
+Markdown.dialects.Gruber.inline = {
+
+    __oneElement__: function oneElement( text, patterns_or_re, previous_nodes ) {
+      var m,
+          res,
+          lastIndex = 0;
+
+      patterns_or_re = patterns_or_re || this.dialect.inline.__patterns__;
+      var re = new RegExp( "([\\s\\S]*?)(" + (patterns_or_re.source || patterns_or_re) + ")" );
+
+      m = re.exec( text );
+      if (!m) {
+        // Just boring text
+        return [ text.length, text ];
+      }
+      else if ( m[1] ) {
+        // Some un-interesting text matched. Return that first
+        return [ m[1].length, m[1] ];
+      }
+
+      var res;
+      if ( m[2] in this.dialect.inline ) {
+        res = this.dialect.inline[ m[2] ].call(
+                  this,
+                  text.substr( m.index ), m, previous_nodes || [] );
+      }
+      // Default for now to make dev easier. just slurp special and output it.
+      res = res || [ m[2].length, m[2] ];
+      return res;
+    },
+
+    __call__: function inline( text, patterns ) {
+
+      var out = [],
+          res;
+
+      function add(x) {
+        //D:self.debug("  adding output", uneval(x));
+        if ( typeof x == "string" && typeof out[out.length-1] == "string" )
+          out[ out.length-1 ] += x;
+        else
+          out.push(x);
+      }
+
+      while ( text.length > 0 ) {
+        res = this.dialect.inline.__oneElement__.call(this, text, patterns, out );
+        text = text.substr( res.shift() );
+        forEach(res, add )
+      }
+
+      return out;
+    },
+
+    // These characters are intersting elsewhere, so have rules for them so that
+    // chunks of plain text blocks don't include them
+    "]": function () {},
+    "}": function () {},
+
+    __escape__ : /^\\[\\`\*_{}\[\]()#\+.!\-]/,
+
+    "\\": function escaped( text ) {
+      // [ length of input processed, node/children to add... ]
+      // Only esacape: \ ` * _ { } [ ] ( ) # * + - . !
+      if ( this.dialect.inline.__escape__.exec( text ) )
+        return [ 2, text.charAt( 1 ) ];
+      else
+        // Not an esacpe
+        return [ 1, "\\" ];
+    },
+
+    "![": function image( text ) {
+
+      // Unlike images, alt text is plain text only. no other elements are
+      // allowed in there
+
+      // ![Alt text](/path/to/img.jpg "Optional title")
+      //      1          2            3       4         <--- captures
+      var m = text.match( /^!\[(.*?)\][ \t]*\([ \t]*([^")]*?)(?:[ \t]+(["'])(.*?)\3)?[ \t]*\)/ );
+
+      if ( m ) {
+        if ( m[2] && m[2][0] == "<" && m[2][m[2].length-1] == ">" )
+          m[2] = m[2].substring( 1, m[2].length - 1 );
+
+        m[2] = this.dialect.inline.__call__.call( this, m[2], /\\/ )[0];
+
+        var attrs = { alt: m[1], href: m[2] || "" };
+        if ( m[4] !== undefined)
+          attrs.title = m[4];
+
+        return [ m[0].length, [ "img", attrs ] ];
+      }
+
+      // ![Alt text][id]
+      m = text.match( /^!\[(.*?)\][ \t]*\[(.*?)\]/ );
+
+      if ( m ) {
+        // We can't check if the reference is known here as it likely wont be
+        // found till after. Check it in md tree->hmtl tree conversion
+        return [ m[0].length, [ "img_ref", { alt: m[1], ref: m[2].toLowerCase(), original: m[0] } ] ];
+      }
+
+      // Just consume the '!['
+      return [ 2, "![" ];
+    },
+
+    "[": function link( text ) {
+
+      var orig = String(text);
+      // Inline content is possible inside `link text`
+      var res = Markdown.DialectHelpers.inline_until_char.call( this, text.substr(1), "]" );
+
+      // No closing ']' found. Just consume the [
+      if ( !res ) return [ 1, "[" ];
+
+      var consumed = 1 + res[ 0 ],
+          children = res[ 1 ],
+          link,
+          attrs;
+
+      // At this point the first [...] has been parsed. See what follows to find
+      // out which kind of link we are (reference or direct url)
+      text = text.substr( consumed );
+
+      // [link text](/path/to/img.jpg "Optional title")
+      //                 1            2       3         <--- captures
+      // This will capture up to the last paren in the block. We then pull
+      // back based on if there a matching ones in the url
+      //    ([here](/url/(test))
+      // The parens have to be balanced
+      var m = text.match( /^\s*\([ \t]*([^"']*)(?:[ \t]+(["'])(.*?)\2)?[ \t]*\)/ );
+      if ( m ) {
+        var url = m[1];
+        consumed += m[0].length;
+
+        if ( url && url[0] == "<" && url[url.length-1] == ">" )
+          url = url.substring( 1, url.length - 1 );
+
+        // If there is a title we don't have to worry about parens in the url
+        if ( !m[3] ) {
+          var open_parens = 1; // One open that isn't in the capture
+          for ( var len = 0; len < url.length; len++ ) {
+            switch ( url[len] ) {
+            case "(":
+              open_parens++;
+              break;
+            case ")":
+              if ( --open_parens == 0) {
+                consumed -= url.length - len;
+                url = url.substring(0, len);
+              }
+              break;
+            }
+          }
+        }
+
+        // Process escapes only
+        url = this.dialect.inline.__call__.call( this, url, /\\/ )[0];
+
+        attrs = { href: url || "" };
+        if ( m[3] !== undefined)
+          attrs.title = m[3];
+
+        link = [ "link", attrs ].concat( children );
+        return [ consumed, link ];
+      }
+
+      // [Alt text][id]
+      // [Alt text] [id]
+      m = text.match( /^\s*\[(.*?)\]/ );
+
+      if ( m ) {
+
+        consumed += m[ 0 ].length;
+
+        // [links][] uses links as its reference
+        attrs = { ref: ( m[ 1 ] || String(children) ).toLowerCase(),  original: orig.substr( 0, consumed ) };
+
+        link = [ "link_ref", attrs ].concat( children );
+
+        // We can't check if the reference is known here as it likely wont be
+        // found till after. Check it in md tree->hmtl tree conversion.
+        // Store the original so that conversion can revert if the ref isn't found.
+        return [ consumed, link ];
+      }
+
+      // [id]
+      // Only if id is plain (no formatting.)
+      if ( children.length == 1 && typeof children[0] == "string" ) {
+
+        attrs = { ref: children[0].toLowerCase(),  original: orig.substr( 0, consumed ) };
+        link = [ "link_ref", attrs, children[0] ];
+        return [ consumed, link ];
+      }
+
+      // Just consume the "["
+      return [ 1, "[" ];
+    },
+
+
+    "<": function autoLink( text ) {
+      var m;
+
+      if ( ( m = text.match( /^<(?:((https?|ftp|mailto):[^>]+)|(.*?@.*?\.[a-zA-Z]+))>/ ) ) != null ) {
+        if ( m[3] ) {
+          return [ m[0].length, [ "link", { href: "mailto:" + m[3] }, m[3] ] ];
+
+        }
+        else if ( m[2] == "mailto" ) {
+          return [ m[0].length, [ "link", { href: m[1] }, m[1].substr("mailto:".length ) ] ];
+        }
+        else
+          return [ m[0].length, [ "link", { href: m[1] }, m[1] ] ];
+      }
+
+      return [ 1, "<" ];
+    },
+
+    "`": function inlineCode( text ) {
+      // Inline code block. as many backticks as you like to start it
+      // Always skip over the opening ticks.
+      var m = text.match( /(`+)(([\s\S]*?)\1)/ );
+
+      if ( m && m[2] )
+        return [ m[1].length + m[2].length, [ "inlinecode", m[3] ] ];
+      else {
+        // TODO: No matching end code found - warn!
+        return [ 1, "`" ];
+      }
+    },
+
+    "  \n": function lineBreak( text ) {
+      return [ 3, [ "linebreak" ] ];
+    }
+
+};
+
+// Meta Helper/generator method for em and strong handling
+function strong_em( tag, md ) {
+
+  var state_slot = tag + "_state",
+      other_slot = tag == "strong" ? "em_state" : "strong_state";
+
+  function CloseTag(len) {
+    this.len_after = len;
+    this.name = "close_" + md;
+  }
+
+  return function ( text, orig_match ) {
+
+    if ( this[state_slot][0] == md ) {
+      // Most recent em is of this type
+      //D:this.debug("closing", md);
+      this[state_slot].shift();
+
+      // "Consume" everything to go back to the recrusion in the else-block below
+      return[ text.length, new CloseTag(text.length-md.length) ];
+    }
+    else {
+      // Store a clone of the em/strong states
+      var other = this[other_slot].slice(),
+          state = this[state_slot].slice();
+
+      this[state_slot].unshift(md);
+
+      //D:this.debug_indent += "  ";
+
+      // Recurse
+      var res = this.processInline( text.substr( md.length ) );
+      //D:this.debug_indent = this.debug_indent.substr(2);
+
+      var last = res[res.length - 1];
+
+      //D:this.debug("processInline from", tag + ": ", uneval( res ) );
+
+      var check = this[state_slot].shift();
+      if ( last instanceof CloseTag ) {
+        res.pop();
+        // We matched! Huzzah.
+        var consumed = text.length - last.len_after;
+        return [ consumed, [ tag ].concat(res) ];
+      }
+      else {
+        // Restore the state of the other kind. We might have mistakenly closed it.
+        this[other_slot] = other;
+        this[state_slot] = state;
+
+        // We can't reuse the processed result as it could have wrong parsing contexts in it.
+        return [ md.length, md ];
+      }
+    }
+  }; // End returned function
+}
+
+Markdown.dialects.Gruber.inline["**"] = strong_em("strong", "**");
+Markdown.dialects.Gruber.inline["__"] = strong_em("strong", "__");
+Markdown.dialects.Gruber.inline["*"]  = strong_em("em", "*");
+Markdown.dialects.Gruber.inline["_"]  = strong_em("em", "_");
+
+
+// Build default order from insertion order.
+Markdown.buildBlockOrder = function(d) {
+  var ord = [];
+  for ( var i in d ) {
+    if ( i == "__order__" || i == "__call__" ) continue;
+    ord.push( i );
+  }
+  d.__order__ = ord;
+};
+
+// Build patterns for inline matcher
+Markdown.buildInlinePatterns = function(d) {
+  var patterns = [];
+
+  for ( var i in d ) {
+    // __foo__ is reserved and not a pattern
+    if ( i.match( /^__.*__$/) ) continue;
+    var l = i.replace( /([\\.*+?|()\[\]{}])/g, "\\$1" )
+             .replace( /\n/, "\\n" );
+    patterns.push( i.length == 1 ? l : "(?:" + l + ")" );
+  }
+
+  patterns = patterns.join("|");
+  d.__patterns__ = patterns;
+  //print("patterns:", uneval( patterns ) );
+
+  var fn = d.__call__;
+  d.__call__ = function(text, pattern) {
+    if ( pattern != undefined ) {
+      return fn.call(this, text, pattern);
+    }
+    else
+    {
+      return fn.call(this, text, patterns);
+    }
+  };
+};
+
+Markdown.DialectHelpers = {};
+Markdown.DialectHelpers.inline_until_char = function( text, want ) {
+  var consumed = 0,
+      nodes = [];
+
+  while ( true ) {
+    if ( text.charAt( consumed ) == want ) {
+      // Found the character we were looking for
+      consumed++;
+      return [ consumed, nodes ];
+    }
+
+    if ( consumed >= text.length ) {
+      // No closing char found. Abort.
+      return null;
+    }
+
+    var res = this.dialect.inline.__oneElement__.call(this, text.substr( consumed ) );
+    consumed += res[ 0 ];
+    // Add any returned nodes.
+    nodes.push.apply( nodes, res.slice( 1 ) );
+  }
+}
+
+// Helper function to make sub-classing a dialect easier
+Markdown.subclassDialect = function( d ) {
+  function Block() {}
+  Block.prototype = d.block;
+  function Inline() {}
+  Inline.prototype = d.inline;
+
+  return { block: new Block(), inline: new Inline() };
+};
+
+Markdown.buildBlockOrder ( Markdown.dialects.Gruber.block );
+Markdown.buildInlinePatterns( Markdown.dialects.Gruber.inline );
+
+Markdown.dialects.Maruku = Markdown.subclassDialect( Markdown.dialects.Gruber );
+
+Markdown.dialects.Maruku.processMetaHash = function processMetaHash( meta_string ) {
+  var meta = split_meta_hash( meta_string ),
+      attr = {};
+
+  for ( var i = 0; i < meta.length; ++i ) {
+    // id: #foo
+    if ( /^#/.test( meta[ i ] ) ) {
+      attr.id = meta[ i ].substring( 1 );
+    }
+    // class: .foo
+    else if ( /^\./.test( meta[ i ] ) ) {
+      // if class already exists, append the new one
+      if ( attr["class"] ) {
+        attr["class"] = attr["class"] + meta[ i ].replace( /./, " " );
+      }
+      else {
+        attr["class"] = meta[ i ].substring( 1 );
+      }
+    }
+    // attribute: foo=bar
+    else if ( /\=/.test( meta[ i ] ) ) {
+      var s = meta[ i ].split( /\=/ );
+      attr[ s[ 0 ] ] = s[ 1 ];
+    }
+  }
+
+  return attr;
+}
+
+function split_meta_hash( meta_string ) {
+  var meta = meta_string.split( "" ),
+      parts = [ "" ],
+      in_quotes = false;
+
+  while ( meta.length ) {
+    var letter = meta.shift();
+    switch ( letter ) {
+      case " " :
+        // if we're in a quoted section, keep it
+        if ( in_quotes ) {
+          parts[ parts.length - 1 ] += letter;
+        }
+        // otherwise make a new part
+        else {
+          parts.push( "" );
+        }
+        break;
+      case "'" :
+      case '"' :
+        // reverse the quotes and move straight on
+        in_quotes = !in_quotes;
+        break;
+      case "\\" :
+        // shift off the next letter to be used straight away.
+        // it was escaped so we'll keep it whatever it is
+        letter = meta.shift();
+      default :
+        parts[ parts.length - 1 ] += letter;
+        break;
+    }
+  }
+
+  return parts;
+}
+
+Markdown.dialects.Maruku.block.document_meta = function document_meta( block, next ) {
+  // we're only interested in the first block
+  if ( block.lineNumber > 1 ) return undefined;
+
+  // document_meta blocks consist of one or more lines of `Key: Value\n`
+  if ( ! block.match( /^(?:\w+:.*\n)*\w+:.*$/ ) ) return undefined;
+
+  // make an attribute node if it doesn't exist
+  if ( !extract_attr( this.tree ) ) {
+    this.tree.splice( 1, 0, {} );
+  }
+
+  var pairs = block.split( /\n/ );
+  for ( p in pairs ) {
+    var m = pairs[ p ].match( /(\w+):\s*(.*)$/ ),
+        key = m[ 1 ].toLowerCase(),
+        value = m[ 2 ];
+
+    this.tree[ 1 ][ key ] = value;
+  }
+
+  // document_meta produces no content!
+  return [];
+};
+
+Markdown.dialects.Maruku.block.block_meta = function block_meta( block, next ) {
+  // check if the last line of the block is an meta hash
+  var m = block.match( /(^|\n) {0,3}\{:\s*((?:\\\}|[^\}])*)\s*\}$/ );
+  if ( !m ) return undefined;
+
+  // process the meta hash
+  var attr = this.dialect.processMetaHash( m[ 2 ] );
+
+  var hash;
+
+  // if we matched ^ then we need to apply meta to the previous block
+  if ( m[ 1 ] === "" ) {
+    var node = this.tree[ this.tree.length - 1 ];
+    hash = extract_attr( node );
+
+    // if the node is a string (rather than JsonML), bail
+    if ( typeof node === "string" ) return undefined;
+
+    // create the attribute hash if it doesn't exist
+    if ( !hash ) {
+      hash = {};
+      node.splice( 1, 0, hash );
+    }
+
+    // add the attributes in
+    for ( a in attr ) {
+      hash[ a ] = attr[ a ];
+    }
+
+    // return nothing so the meta hash is removed
+    return [];
+  }
+
+  // pull the meta hash off the block and process what's left
+  var b = block.replace( /\n.*$/, "" ),
+      result = this.processBlock( b, [] );
+
+  // get or make the attributes hash
+  hash = extract_attr( result[ 0 ] );
+  if ( !hash ) {
+    hash = {};
+    result[ 0 ].splice( 1, 0, hash );
+  }
+
+  // attach the attributes to the block
+  for ( a in attr ) {
+    hash[ a ] = attr[ a ];
+  }
+
+  return result;
+};
+
+Markdown.dialects.Maruku.block.definition_list = function definition_list( block, next ) {
+  // one or more terms followed by one or more definitions, in a single block
+  var tight = /^((?:[^\s:].*\n)+):\s+([\s\S]+)$/,
+      list = [ "dl" ],
+      i, m;
+
+  // see if we're dealing with a tight or loose block
+  if ( ( m = block.match( tight ) ) ) {
+    // pull subsequent tight DL blocks out of `next`
+    var blocks = [ block ];
+    while ( next.length && tight.exec( next[ 0 ] ) ) {
+      blocks.push( next.shift() );
+    }
+
+    for ( var b = 0; b < blocks.length; ++b ) {
+      var m = blocks[ b ].match( tight ),
+          terms = m[ 1 ].replace( /\n$/, "" ).split( /\n/ ),
+          defns = m[ 2 ].split( /\n:\s+/ );
+
+      // print( uneval( m ) );
+
+      for ( i = 0; i < terms.length; ++i ) {
+        list.push( [ "dt", terms[ i ] ] );
+      }
+
+      for ( i = 0; i < defns.length; ++i ) {
+        // run inline processing over the definition
+        list.push( [ "dd" ].concat( this.processInline( defns[ i ].replace( /(\n)\s+/, "$1" ) ) ) );
+      }
+    }
+  }
+  else {
+    return undefined;
+  }
+
+  return [ list ];
+};
+
+// splits on unescaped instances of @ch. If @ch is not a character the result
+// can be unpredictable
+
+Markdown.dialects.Maruku.block.table = function table (block, next) {
+
+    var _split_on_unescaped = function(s, ch) {
+        ch = ch || '\\s';
+        if (ch.match(/^[\\|\[\]{}?*.+^$]$/)) { ch = '\\' + ch; }
+        var res = [ ],
+            r = new RegExp('^((?:\\\\.|[^\\\\' + ch + '])*)' + ch + '(.*)'),
+            m;
+        while(m = s.match(r)) {
+            res.push(m[1]);
+            s = m[2];
+        }
+        res.push(s);
+        return res;
+    }
+
+    var leading_pipe = /^ {0,3}\|(.+)\n {0,3}\|\s*([\-:]+[\-| :]*)\n((?:\s*\|.*(?:\n|$))*)(?=\n|$)/,
+        // find at least an unescaped pipe in each line
+        no_leading_pipe = /^ {0,3}(\S(?:\\.|[^\\|])*\|.*)\n {0,3}([\-:]+\s*\|[\-| :]*)\n((?:(?:\\.|[^\\|])*\|.*(?:\n|$))*)(?=\n|$)/,
+        i, m;
+    if (m = block.match(leading_pipe)) {
+        // remove leading pipes in contents
+        // (header and horizontal rule already have the leading pipe left out)
+        m[3] = m[3].replace(/^\s*\|/gm, '');
+    } else if (! ( m = block.match(no_leading_pipe))) {
+        return undefined;
+    }
+
+    var table = [ "table", [ "thead", [ "tr" ] ], [ "tbody" ] ];
+
+    // remove trailing pipes, then split on pipes
+    // (no escaped pipes are allowed in horizontal rule)
+    m[2] = m[2].replace(/\|\s*$/, '').split('|');
+
+    // process alignment
+    var html_attrs = [ ];
+    forEach (m[2], function (s) {
+        if (s.match(/^\s*-+:\s*$/))       html_attrs.push({align: "right"});
+        else if (s.match(/^\s*:-+\s*$/))  html_attrs.push({align: "left"});
+        else if (s.match(/^\s*:-+:\s*$/)) html_attrs.push({align: "center"});
+        else                              html_attrs.push({});
+    });
+
+    // now for the header, avoid escaped pipes
+    m[1] = _split_on_unescaped(m[1].replace(/\|\s*$/, ''), '|');
+    for (i = 0; i < m[1].length; i++) {
+        table[1][1].push(['th', html_attrs[i] || {}].concat(
+            this.processInline(m[1][i].trim())));
+    }
+
+    // now for body contents
+    forEach (m[3].replace(/\|\s*$/mg, '').split('\n'), function (row) {
+        var html_row = ['tr'];
+        row = _split_on_unescaped(row, '|');
+        for (i = 0; i < row.length; i++) {
+            html_row.push(['td', html_attrs[i] || {}].concat(this.processInline(row[i].trim())));
+        }
+        table[2].push(html_row);
+    }, this);
+
+    return [table];
+}
+
+Markdown.dialects.Maruku.inline[ "{:" ] = function inline_meta( text, matches, out ) {
+  if ( !out.length ) {
+    return [ 2, "{:" ];
+  }
+
+  // get the preceeding element
+  var before = out[ out.length - 1 ];
+
+  if ( typeof before === "string" ) {
+    return [ 2, "{:" ];
+  }
+
+  // match a meta hash
+  var m = text.match( /^\{:\s*((?:\\\}|[^\}])*)\s*\}/ );
+
+  // no match, false alarm
+  if ( !m ) {
+    return [ 2, "{:" ];
+  }
+
+  // attach the attributes to the preceeding element
+  var meta = this.dialect.processMetaHash( m[ 1 ] ),
+      attr = extract_attr( before );
+
+  if ( !attr ) {
+    attr = {};
+    before.splice( 1, 0, attr );
+  }
+
+  for ( var k in meta ) {
+    attr[ k ] = meta[ k ];
+  }
+
+  // cut out the string and replace it with nothing
+  return [ m[ 0 ].length, "" ];
+};
+
+Markdown.dialects.Maruku.inline.__escape__ = /^\\[\\`\*_{}\[\]()#\+.!\-|:]/;
+
+Markdown.buildBlockOrder ( Markdown.dialects.Maruku.block );
+Markdown.buildInlinePatterns( Markdown.dialects.Maruku.inline );
+
+var isArray = Array.isArray || function(obj) {
+  return Object.prototype.toString.call(obj) == "[object Array]";
+};
+
+var forEach;
+// Don't mess with Array.prototype. Its not friendly
+if ( Array.prototype.forEach ) {
+  forEach = function( arr, cb, thisp ) {
+    return arr.forEach( cb, thisp );
+  };
+}
+else {
+  forEach = function(arr, cb, thisp) {
+    for (var i = 0; i < arr.length; i++) {
+      cb.call(thisp || arr, arr[i], i, arr);
+    }
+  }
+}
+
+var isEmpty = function( obj ) {
+  for ( var key in obj ) {
+    if ( hasOwnProperty.call( obj, key ) ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function extract_attr( jsonml ) {
+  return isArray(jsonml)
+      && jsonml.length > 1
+      && typeof jsonml[ 1 ] === "object"
+      && !( isArray(jsonml[ 1 ]) )
+      ? jsonml[ 1 ]
+      : undefined;
+}
+
+
+
+/**
+ *  renderJsonML( jsonml[, options] ) -> String
+ *  - jsonml (Array): JsonML array to render to XML
+ *  - options (Object): options
+ *
+ *  Converts the given JsonML into well-formed XML.
+ *
+ *  The options currently understood are:
+ *
+ *  - root (Boolean): wether or not the root node should be included in the
+ *    output, or just its children. The default `false` is to not include the
+ *    root itself.
+ */
+expose.renderJsonML = function( jsonml, options ) {
+  options = options || {};
+  // include the root element in the rendered output?
+  options.root = options.root || false;
+
+  var content = [];
+
+  if ( options.root ) {
+    content.push( render_tree( jsonml ) );
+  }
+  else {
+    jsonml.shift(); // get rid of the tag
+    if ( jsonml.length && typeof jsonml[ 0 ] === "object" && !( jsonml[ 0 ] instanceof Array ) ) {
+      jsonml.shift(); // get rid of the attributes
+    }
+
+    while ( jsonml.length ) {
+      content.push( render_tree( jsonml.shift() ) );
+    }
+  }
+
+  return content.join( "\n\n" );
+};
+
+function escapeHTML( text ) {
+  return text.replace( /&/g, "&amp;" )
+             .replace( /</g, "&lt;" )
+             .replace( />/g, "&gt;" )
+             .replace( /"/g, "&quot;" )
+             .replace( /'/g, "&#39;" );
+}
+
+function render_tree( jsonml ) {
+  // basic case
+  if ( typeof jsonml === "string" ) {
+    return escapeHTML( jsonml );
+  }
+
+  var tag = jsonml.shift(),
+      attributes = {},
+      content = [];
+
+  if ( jsonml.length && typeof jsonml[ 0 ] === "object" && !( jsonml[ 0 ] instanceof Array ) ) {
+    attributes = jsonml.shift();
+  }
+
+  while ( jsonml.length ) {
+    content.push( render_tree( jsonml.shift() ) );
+  }
+
+  var tag_attrs = "";
+  for ( var a in attributes ) {
+    tag_attrs += " " + a + '="' + escapeHTML( attributes[ a ] ) + '"';
+  }
+
+  // be careful about adding whitespace here for inline elements
+  if ( tag == "img" || tag == "br" || tag == "hr" ) {
+    return "<"+ tag + tag_attrs + "/>";
+  }
+  else {
+    return "<"+ tag + tag_attrs + ">" + content.join( "" ) + "</" + tag + ">";
+  }
+}
+
+function convert_tree_to_html( tree, references, options ) {
+  var i;
+  options = options || {};
+
+  // shallow clone
+  var jsonml = tree.slice( 0 );
+
+  if ( typeof options.preprocessTreeNode === "function" ) {
+      jsonml = options.preprocessTreeNode(jsonml, references);
+  }
+
+  // Clone attributes if they exist
+  var attrs = extract_attr( jsonml );
+  if ( attrs ) {
+    jsonml[ 1 ] = {};
+    for ( i in attrs ) {
+      jsonml[ 1 ][ i ] = attrs[ i ];
+    }
+    attrs = jsonml[ 1 ];
+  }
+
+  // basic case
+  if ( typeof jsonml === "string" ) {
+    return jsonml;
+  }
+
+  // convert this node
+  switch ( jsonml[ 0 ] ) {
+    case "header":
+      jsonml[ 0 ] = "h" + jsonml[ 1 ].level;
+      delete jsonml[ 1 ].level;
+      break;
+    case "bulletlist":
+      jsonml[ 0 ] = "ul";
+      break;
+    case "numberlist":
+      jsonml[ 0 ] = "ol";
+      break;
+    case "listitem":
+      jsonml[ 0 ] = "li";
+      break;
+    case "para":
+      jsonml[ 0 ] = "p";
+      break;
+    case "markdown":
+      jsonml[ 0 ] = "html";
+      if ( attrs ) delete attrs.references;
+      break;
+    case "code_block":
+      jsonml[ 0 ] = "pre";
+      i = attrs ? 2 : 1;
+      var code = [ "code" ];
+      code.push.apply( code, jsonml.splice( i, jsonml.length - i ) );
+      jsonml[ i ] = code;
+      break;
+    case "inlinecode":
+      jsonml[ 0 ] = "code";
+      break;
+    case "img":
+      jsonml[ 1 ].src = jsonml[ 1 ].href;
+      delete jsonml[ 1 ].href;
+      break;
+    case "linebreak":
+      jsonml[ 0 ] = "br";
+    break;
+    case "link":
+      jsonml[ 0 ] = "a";
+      break;
+    case "link_ref":
+      jsonml[ 0 ] = "a";
+
+      // grab this ref and clean up the attribute node
+      var ref = references[ attrs.ref ];
+
+      // if the reference exists, make the link
+      if ( ref ) {
+        delete attrs.ref;
+
+        // add in the href and title, if present
+        attrs.href = ref.href;
+        if ( ref.title ) {
+          attrs.title = ref.title;
+        }
+
+        // get rid of the unneeded original text
+        delete attrs.original;
+      }
+      // the reference doesn't exist, so revert to plain text
+      else {
+        return attrs.original;
+      }
+      break;
+    case "img_ref":
+      jsonml[ 0 ] = "img";
+
+      // grab this ref and clean up the attribute node
+      var ref = references[ attrs.ref ];
+
+      // if the reference exists, make the link
+      if ( ref ) {
+        delete attrs.ref;
+
+        // add in the href and title, if present
+        attrs.src = ref.href;
+        if ( ref.title ) {
+          attrs.title = ref.title;
+        }
+
+        // get rid of the unneeded original text
+        delete attrs.original;
+      }
+      // the reference doesn't exist, so revert to plain text
+      else {
+        return attrs.original;
+      }
+      break;
+  }
+
+  // convert all the children
+  i = 1;
+
+  // deal with the attribute node, if it exists
+  if ( attrs ) {
+    // if there are keys, skip over it
+    for ( var key in jsonml[ 1 ] ) {
+        i = 2;
+        break;
+    }
+    // if there aren't, remove it
+    if ( i === 1 ) {
+      jsonml.splice( i, 1 );
+    }
+  }
+
+  for ( ; i < jsonml.length; ++i ) {
+    jsonml[ i ] = convert_tree_to_html( jsonml[ i ], references, options );
+  }
+
+  return jsonml;
+}
+
+
+// merges adjacent text nodes into a single node
+function merge_text_nodes( jsonml ) {
+  // skip the tag name and attribute hash
+  var i = extract_attr( jsonml ) ? 2 : 1;
+
+  while ( i < jsonml.length ) {
+    // if it's a string check the next item too
+    if ( typeof jsonml[ i ] === "string" ) {
+      if ( i + 1 < jsonml.length && typeof jsonml[ i + 1 ] === "string" ) {
+        // merge the second string into the first and remove it
+        jsonml[ i ] += jsonml.splice( i + 1, 1 )[ 0 ];
+      }
+      else {
+        ++i;
+      }
+    }
+    // if it's not a string recurse
+    else {
+      merge_text_nodes( jsonml[ i ] );
+      ++i;
+    }
+  }
+}
+
+} )( (function() {
+  if ( typeof exports === "undefined" ) {
+    window.markdown = {};
+    return window.markdown;
+  }
+  else {
+    return exports;
+  }
+} )() );
 
 //! moment.js
 //! version : 2.5.1

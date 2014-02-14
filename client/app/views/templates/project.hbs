@@ -5,9 +5,10 @@
     {{/if}}
   </div>
   <div class="well-content">
-    <h3>{{title}} ({{domain}})</h3>
+    <h3><a href="{{instanceURL}}">{{domain}}</a></h3>
+    <h4>{{title}}</h4>
     <br/>
-    {{description}}
+    {{{markdown description}}}
   </div>
   <div class="row-fluid footer-box">
     <div class="aging activity created_at">
@@ -15,13 +16,30 @@
     </div>
     <div class="activity people">
       {{followers.length}} 
-      <a href="#"><i class="icon-heart"></i>
-      </a>
+      <a><i class="icon-heart"></i></a>
     </div>
 
+    {{#if link}}
     <div class="pull-right edit">
-      <a href="{{projectURL}}" class="btn btn-link">View</a>
+      <a href="{{link}}" target="_blank" class="btn btn-link">Demo</a>
     </div>
+    {{/if}}
 
+    {{#if showActions}}
+    <div class="pull-right contributor">
+      {{#if contributing}}
+      <a class="btn btn-link leave">Leave</a>
+      {{else}}
+      <a class="btn btn-link join">Join</a>
+      {{/if}}
+    </div>
+    <div class="pull-right follower">
+      {{#if following}}
+      <a class="btn btn-link unfollow">Unfollow</a>
+      {{else}}
+      <a class="btn btn-link follow">Follow</a>
+      {{/if}}
+    </div>
+    {{/if}}
   </div>
 </div>

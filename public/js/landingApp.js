@@ -155,37 +155,41 @@
 					 * 
 					 */
 					
+					Handlebars.registerHelper('markdown', function(md) {
+					  return markdown.toHTML(md);
+					});
+					
 					Handlebars.registerHelper('isLoggedIn', function() {
 					  return window.hackdash.user ? true : false;
 					});
 					
 					Handlebars.registerHelper('timeAgo', function(date) {
-					  if (date && moment.unix(date).isValid()) {
-					    return moment.unix(date).fromNow();
+					  if (date && moment(date).isValid()) {
+					    return moment(date).fromNow();
 					  }
 					
 					  return "-";
 					});
 					
 					Handlebars.registerHelper('formatDate', function(date) {
-					  if (date && moment.unix(date).isValid()) {
-					    return moment.unix(date).format("DD/MM/YYYY HH:mm");
+					  if (date && moment(date).isValid()) {
+					    return moment(date).format("DD/MM/YYYY HH:mm");
 					  } 
 					  
 					  return "-";
 					});
 					
 					Handlebars.registerHelper('formatDateText', function(date) {
-					  if (date && moment.unix(date).isValid()) {
-					    return moment.unix(date).format("DD MMM YYYY, HH:mm");
+					  if (date && moment(date).isValid()) {
+					    return moment(date).format("DD MMM YYYY, HH:mm");
 					  } 
 					  
 					  return "";
 					});
 					
 					Handlebars.registerHelper('formatDateTime', function(date) {
-					  if (date && moment.unix(date).isValid()) {
-					    return moment.unix(date).format("HH:mm");
+					  if (date && moment(date).isValid()) {
+					    return moment(date).format("HH:mm");
 					  } 
 					  
 					  return "";
@@ -225,6 +229,60 @@
 
 					module.exports = Backbone.Model.extend({
 
+					  idAttribute: "_id",
+
+					  doAction: function(type, res, done){
+					    $.ajax({
+					      url: this.url() + '/' + res,
+					      type: type,
+					      context: this
+					    }).done(done);
+					  },
+
+					  updateList: function(type, add){
+					    var list = this.get(type);
+					    var uid = hackdash.user._id;
+
+					    function exists(){
+					      return list.indexOf(uid) > -1;
+					    }
+
+					    if (add && !exists()){
+					      list.push(uid);
+					    }
+					    else if (!add && exists()){
+					      var idx = list.indexOf(uid);
+					      list.splice(idx, 1);
+					    }
+
+					    this.set(type, list);
+					    this.trigger("change");
+					  },
+
+					  join: function(){
+					    this.doAction("POST", "contributors", function(){
+					      this.updateList("contributors", true);
+					    });
+					  },
+
+					  leave: function(){
+					    this.doAction("DELETE", "contributors", function(){
+					      this.updateList("contributors", false);
+					    });
+					  },
+
+					  follow: function(){
+					    this.doAction("POST", "followers", function(){
+					      this.updateList("followers", true);
+					    });
+					  },
+
+					  unfollow: function(){
+					    this.doAction("DELETE", "followers", function(){
+					      this.updateList("followers", false);
+					    });
+					  },
+
 					});
 
 				},
@@ -241,6 +299,8 @@
 
 					  model: Project,
 
+					  idAttribute: "_id",
+					  
 					  url: function(){
 					    return hackdash.apiURL + '/projects'; 
 					  },
@@ -270,10 +330,32 @@
 					  className: "project tooltips span4",
 					  template: template,
 
+					  events: {
+					    "click .contributor a": "onContribute",
+					    "click .follower a": "onFollow"
+					  },
+
 					  templateHelpers: {
-					    projectURL: function(){
-					      return "http://" + this.domain + "." + hackdash.baseURL + "/p/" + this._id;
+					    instanceURL: function(){
+					      return "http://" + this.domain + "." + hackdash.baseURL;
+					    },
+					    showActions: function(){
+					      var show = false;
+
+					      if (hackdash.user){
+					        show = true;
+
+					        if (hackdash.user._id === this.leader){
+					          show = false;
+					        }
+					      }
+
+					      return show;
 					    }
+					  },
+
+					  modelEvents: {
+					    "change": "render"
 					  },
 
 					  //--------------------------------------
@@ -281,19 +363,29 @@
 					  //--------------------------------------
 
 					  onRender: function(){
-					    this.$el.addClass(this.model.get("status"));
+					    this.$el
+					      .addClass(this.model.get("status"))
+					      .attr({
+					        "title": this.model.get("status")
+					      })
+					      .tooltip({});
 
-					    this.$el.attr({
-					      /*
-					      "data-id": this.model.get("_id"),
-					      "data-contribs": this.model.get("contributors").length,
-					      "data-name": this.model.get("name"),
-					      "data-date": this.model.get("created_at"),
-					      */
-					      "title": this.model.get("status")
+					    $('.tooltips', this.$el).tooltip({});
+
+					    var url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
+					      "/p/" + this.model.get("_id");
+
+					    this.$el.on("click", function(){
+					      window.location = url;
 					    });
+					  },
 
-					  }
+					  serializeData: function(){
+					    return _.extend({
+					      contributing: this.isContributor(),
+					      following: this.isFollower()
+					    }, this.model.toJSON());
+					  },
 
 					  //--------------------------------------
 					  //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -303,9 +395,51 @@
 					  //+ EVENT HANDLERS
 					  //--------------------------------------
 
+					  onContribute: function(e){
+					    if (this.isContributor()){
+					      this.model.leave();
+					    }
+					    else {
+					      this.model.join();
+					    }
+
+					    e.stopPropagation();
+					  },
+
+					  onFollow: function(e){
+					    if (this.isFollower()){
+					      this.model.unfollow();
+					    }
+					    else {
+					      this.model.follow();
+					    }
+
+					    e.stopPropagation();
+					  },
+
 					  //--------------------------------------
 					  //+ PRIVATE AND PROTECTED METHODS
 					  //--------------------------------------
+
+					  isContributor: function(){
+					    return this.userExist(this.model.get("contributors"));
+					  },
+
+					  isFollower: function(){
+					    return this.userExist(this.model.get("followers"));
+					  },
+
+					  userExist: function(arr){
+
+					    if (!hackdash.user){
+					      return false;
+					    }
+
+					    var uid = hackdash.user._id;
+					    return _.find(arr, function(id){
+					      return (id === uid);
+					    }) ? true : false;
+					  }
 
 					});
 				},
@@ -469,31 +603,84 @@
 						  return buffer;
 						  }
 
+						function program3(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n    <div class=\"pull-right edit\">\n      <a href=\"";
+						  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\" target=\"_blank\" class=\"btn btn-link\">Demo</a>\n    </div>\n    ";
+						  return buffer;
+						  }
+
+						function program5(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n    <div class=\"pull-right contributor\">\n      ";
+						  stack1 = helpers['if'].call(depth0, depth0.contributing, {hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n    </div>\n    <div class=\"pull-right follower\">\n      ";
+						  stack1 = helpers['if'].call(depth0, depth0.following, {hash:{},inverse:self.program(12, program12, data),fn:self.program(10, program10, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n    </div>\n    ";
+						  return buffer;
+						  }
+						function program6(depth0,data) {
+						  
+						  
+						  return "\n      <a class=\"btn btn-link leave\">Leave</a>\n      ";
+						  }
+
+						function program8(depth0,data) {
+						  
+						  
+						  return "\n      <a class=\"btn btn-link join\">Join</a>\n      ";
+						  }
+
+						function program10(depth0,data) {
+						  
+						  
+						  return "\n      <a class=\"btn btn-link unfollow\">Unfollow</a>\n      ";
+						  }
+
+						function program12(depth0,data) {
+						  
+						  
+						  return "\n      <a class=\"btn btn-link follow\">Follow</a>\n      ";
+						  }
+
 						  buffer += "<div class=\"well\">\n  <div class=\"cover shadow\"> \n    ";
 						  stack1 = helpers['if'].call(depth0, depth0.cover, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n  </div>\n  <div class=\"well-content\">\n    <h3>";
-						  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-						  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += "\n  </div>\n  <div class=\"well-content\">\n    <h3><a href=\"";
+						  if (stack1 = helpers.instanceURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.instanceURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
-						    + " (";
+						    + "\">";
 						  if (stack1 = helpers.domain) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.domain; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
-						    + ")</h3>\n    <br/>\n    ";
-						  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-						  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						    + "</a></h3>\n    <h4>";
+						  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
-						    + "\n  </div>\n  <div class=\"row-fluid footer-box\">\n    <div class=\"aging activity created_at\">\n      <i rel=\"tooltip\" title=\"";
+						    + "</h4>\n    <br/>\n    ";
+						  options = {hash:{},data:data};
+						  stack2 = ((stack1 = helpers.markdown || depth0.markdown),stack1 ? stack1.call(depth0, depth0.description, options) : helperMissing.call(depth0, "markdown", depth0.description, options));
+						  if(stack2 || stack2 === 0) { buffer += stack2; }
+						  buffer += "\n  </div>\n  <div class=\"row-fluid footer-box\">\n    <div class=\"aging activity created_at\">\n      <i rel=\"tooltip\" title=\"";
 						  options = {hash:{},data:data};
 						  buffer += escapeExpression(((stack1 = helpers.timeAgo || depth0.timeAgo),stack1 ? stack1.call(depth0, depth0.created_at, options) : helperMissing.call(depth0, "timeAgo", depth0.created_at, options)))
 						    + "\" class=\"tooltips icon-time icon-1\"></i>\n    </div>\n    <div class=\"activity people\">\n      "
 						    + escapeExpression(((stack1 = ((stack1 = depth0.followers),stack1 == null || stack1 === false ? stack1 : stack1.length)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-						    + " \n      <a href=\"#\"><i class=\"icon-heart\"></i>\n      </a>\n    </div>\n\n    <div class=\"pull-right edit\">\n      <a href=\"";
-						  if (stack2 = helpers.projectURL) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-						  else { stack2 = depth0.projectURL; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
-						  buffer += escapeExpression(stack2)
-						    + "\" class=\"btn btn-link\">View</a>\n    </div>\n\n  </div>\n</div>\n";
+						    + " \n      <a><i class=\"icon-heart\"></i></a>\n    </div>\n\n    ";
+						  stack2 = helpers['if'].call(depth0, depth0.link, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+						  if(stack2 || stack2 === 0) { buffer += stack2; }
+						  buffer += "\n\n    ";
+						  stack2 = helpers['if'].call(depth0, depth0.showActions, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+						  if(stack2 || stack2 === 0) { buffer += stack2; }
+						  buffer += "\n  </div>\n</div>\n";
 						  return buffer;
 						  })
 						;
@@ -502,10 +689,18 @@
 						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 						  this.compilerInfo = [4,'>= 1.0.0'];
 						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  var buffer = "", stack1, self=this;
+
+						function program1(depth0,data) {
 						  
+						  
+						  return "\n<div class=\"orderby\">\n  <div class=\"btn-group\">\n    <button data-option-value=\"name\" class=\"sort btn\">Order by name</button>\n    <button data-option-value=\"date\" class=\"sort btn\">Order by date</button>\n  </div>\n</div>\n";
+						  }
 
-
-						  return "<i class=\"icon-large icon-search\"></i>\n<input id=\"searchInput\" type=\"text\" class=\"search-query input-large\"/>\n<div class=\"orderby\">\n  <div class=\"btn-group\">\n    <button data-option-value=\"name\" class=\"sort btn\">Order by name</button>\n    <button data-option-value=\"date\" class=\"sort btn\">Order by date</button>\n  </div>\n</div>";
+						  buffer += "<i class=\"icon-large icon-search\"></i>\n<input id=\"searchInput\" type=\"text\" class=\"search-query input-large\"/>\n";
+						  stack1 = helpers['if'].call(depth0, depth0.showSort, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  return buffer;
 						  })
 						;
 					}

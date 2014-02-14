@@ -9,12 +9,3 @@ header
             a.btn.logout(href="/logout") Logout
       
     a.logo(href="/")= title
-    h1
-    p.lead
-    - if (user) {
-      a.btn.btn-large(href="/projects/create") New project
-    - } else { 
-      a.btn.btn-large(href="/login") Login to create a project
-    - }
-        
-

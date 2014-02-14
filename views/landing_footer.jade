@@ -1,9 +1,12 @@
 script(src="/js/libs/jquery.min.js")
 script(src="/js/libs/bootstrap.min.js")
 script(src="/js/vendor.js")
-script.
-  if ("undefined" == typeof user)
-    window.hackdash = { user: !{JSON.stringify(user)} };
-  else 
+
+if ("undefined" == typeof user)
+  script.
     window.hackdash = { user: null };
+else 
+  script.
+    window.hackdash = { user: !{JSON.stringify(user)} };
+    
 script(src="/js/landingApp.js")

@@ -3,37 +3,41 @@
  * 
  */
 
+Handlebars.registerHelper('markdown', function(md) {
+  return markdown.toHTML(md);
+});
+
 Handlebars.registerHelper('isLoggedIn', function() {
   return window.hackdash.user ? true : false;
 });
 
 Handlebars.registerHelper('timeAgo', function(date) {
-  if (date && moment.unix(date).isValid()) {
-    return moment.unix(date).fromNow();
+  if (date && moment(date).isValid()) {
+    return moment(date).fromNow();
   }
 
   return "-";
 });
 
 Handlebars.registerHelper('formatDate', function(date) {
-  if (date && moment.unix(date).isValid()) {
-    return moment.unix(date).format("DD/MM/YYYY HH:mm");
+  if (date && moment(date).isValid()) {
+    return moment(date).format("DD/MM/YYYY HH:mm");
   } 
   
   return "-";
 });
 
 Handlebars.registerHelper('formatDateText', function(date) {
-  if (date && moment.unix(date).isValid()) {
-    return moment.unix(date).format("DD MMM YYYY, HH:mm");
+  if (date && moment(date).isValid()) {
+    return moment(date).format("DD MMM YYYY, HH:mm");
   } 
   
   return "";
 });
 
 Handlebars.registerHelper('formatDateTime', function(date) {
-  if (date && moment.unix(date).isValid()) {
-    return moment.unix(date).format("HH:mm");
+  if (date && moment(date).isValid()) {
+    return moment(date).format("HH:mm");
   } 
   
   return "";
