@@ -15,7 +15,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   itemView: Project,
 
   collectionEvents: {
-    "reset": "updateIsotope"
+    "reset": "render"
   },
 
   //--------------------------------------
@@ -49,17 +49,6 @@ module.exports = Backbone.Marionette.CollectionView.extend({
         , resizable: true
         , masonry: { columnWidth: self.projectColumnWidth() }
         , sortAscending: true
-        /*
-        , getSortData : {
-              'name' : function ( $elem ) {
-                return $elem.data('name').toLowerCase();
-              },
-              'date' : function ( $elem ) {
-                return $elem.data('date');
-              }
-          }
-        , sortBy: 'name'
-        */
       });
     });
   },

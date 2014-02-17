@@ -17,17 +17,6 @@ module.exports = function(app) {
     , "created_at": {type: Date, default: Date.now },
   });
 
-  User
-    .virtual('profilePic')
-    .get(function () {
-      switch(this.provider){
-        case "twitter": return "http://avatars.io/twitter/" + this.username;
-        case "facebook": return "http://avatars.io/facebook/" + this.provider_id;
-      }
-
-      return this.picture;
-    });
-
   mongoose.model('User', User);
 
   var Project = new Schema({

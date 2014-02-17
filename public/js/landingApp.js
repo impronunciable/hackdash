@@ -244,14 +244,22 @@
 					    var uid = hackdash.user._id;
 
 					    function exists(){
-					      return list.indexOf(uid) > -1;
+					      return _.find(list, function(usr){
+					        return (usr._id === uid);
+					      }) ? true : false;
 					    }
 
 					    if (add && !exists()){
-					      list.push(uid);
+					      list.push(hackdash.user);
 					    }
 					    else if (!add && exists()){
-					      var idx = list.indexOf(uid);
+					      var idx = 0;
+					      _.each(list, function(usr, i){
+					        if (usr._id === uid) {
+					          idx = i;
+					        }
+					      });
+
 					      list.splice(idx, 1);
 					    }
 
@@ -436,8 +444,8 @@
 					    }
 
 					    var uid = hackdash.user._id;
-					    return _.find(arr, function(id){
-					      return (id === uid);
+					    return _.find(arr, function(usr){
+					      return (usr._id === uid);
 					    }) ? true : false;
 					  }
 
@@ -461,7 +469,7 @@
 					  itemView: Project,
 
 					  collectionEvents: {
-					    "reset": "updateIsotope"
+					    "reset": "render"
 					  },
 
 					  //--------------------------------------
@@ -495,17 +503,6 @@
 					        , resizable: true
 					        , masonry: { columnWidth: self.projectColumnWidth() }
 					        , sortAscending: true
-					        /*
-					        , getSortData : {
-					              'name' : function ( $elem ) {
-					                return $elem.data('name').toLowerCase();
-					              },
-					              'date' : function ( $elem ) {
-					                return $elem.data('date');
-					              }
-					          }
-					        , sortBy: 'name'
-					        */
 					      });
 					    });
 					  },
@@ -606,6 +603,25 @@
 						function program3(depth0,data) {
 						  
 						  var buffer = "", stack1;
+						  buffer += "\n      <img class=\"avatar tooltips\" rel=\"tooltip\" \n        src=\"";
+						  if (stack1 = helpers.picture) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.picture; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\" data-id=\"";
+						  if (stack1 = helpers.id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\" title=\"";
+						  if (stack1 = helpers.name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.name; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\">\n    ";
+						  return buffer;
+						  }
+
+						function program5(depth0,data) {
+						  
+						  var buffer = "", stack1;
 						  buffer += "\n    <div class=\"pull-right edit\">\n      <a href=\"";
 						  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
@@ -614,37 +630,37 @@
 						  return buffer;
 						  }
 
-						function program5(depth0,data) {
+						function program7(depth0,data) {
 						  
 						  var buffer = "", stack1;
 						  buffer += "\n    <div class=\"pull-right contributor\">\n      ";
-						  stack1 = helpers['if'].call(depth0, depth0.contributing, {hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data});
+						  stack1 = helpers['if'].call(depth0, depth0.contributing, {hash:{},inverse:self.program(10, program10, data),fn:self.program(8, program8, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  buffer += "\n    </div>\n    <div class=\"pull-right follower\">\n      ";
-						  stack1 = helpers['if'].call(depth0, depth0.following, {hash:{},inverse:self.program(12, program12, data),fn:self.program(10, program10, data),data:data});
+						  stack1 = helpers['if'].call(depth0, depth0.following, {hash:{},inverse:self.program(14, program14, data),fn:self.program(12, program12, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  buffer += "\n    </div>\n    ";
 						  return buffer;
 						  }
-						function program6(depth0,data) {
+						function program8(depth0,data) {
 						  
 						  
 						  return "\n      <a class=\"btn btn-link leave\">Leave</a>\n      ";
 						  }
 
-						function program8(depth0,data) {
+						function program10(depth0,data) {
 						  
 						  
 						  return "\n      <a class=\"btn btn-link join\">Join</a>\n      ";
 						  }
 
-						function program10(depth0,data) {
+						function program12(depth0,data) {
 						  
 						  
 						  return "\n      <a class=\"btn btn-link unfollow\">Unfollow</a>\n      ";
 						  }
 
-						function program12(depth0,data) {
+						function program14(depth0,data) {
 						  
 						  
 						  return "\n      <a class=\"btn btn-link follow\">Follow</a>\n      ";
@@ -669,16 +685,19 @@
 						  options = {hash:{},data:data};
 						  stack2 = ((stack1 = helpers.markdown || depth0.markdown),stack1 ? stack1.call(depth0, depth0.description, options) : helperMissing.call(depth0, "markdown", depth0.description, options));
 						  if(stack2 || stack2 === 0) { buffer += stack2; }
+						  buffer += "\n    ";
+						  stack2 = helpers.each.call(depth0, depth0.contributors, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+						  if(stack2 || stack2 === 0) { buffer += stack2; }
 						  buffer += "\n  </div>\n  <div class=\"row-fluid footer-box\">\n    <div class=\"aging activity created_at\">\n      <i rel=\"tooltip\" title=\"";
 						  options = {hash:{},data:data};
 						  buffer += escapeExpression(((stack1 = helpers.timeAgo || depth0.timeAgo),stack1 ? stack1.call(depth0, depth0.created_at, options) : helperMissing.call(depth0, "timeAgo", depth0.created_at, options)))
 						    + "\" class=\"tooltips icon-time icon-1\"></i>\n    </div>\n    <div class=\"activity people\">\n      "
 						    + escapeExpression(((stack1 = ((stack1 = depth0.followers),stack1 == null || stack1 === false ? stack1 : stack1.length)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
 						    + " \n      <a><i class=\"icon-heart\"></i></a>\n    </div>\n\n    ";
-						  stack2 = helpers['if'].call(depth0, depth0.link, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+						  stack2 = helpers['if'].call(depth0, depth0.link, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
 						  if(stack2 || stack2 === 0) { buffer += stack2; }
 						  buffer += "\n\n    ";
-						  stack2 = helpers['if'].call(depth0, depth0.showActions, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+						  stack2 = helpers['if'].call(depth0, depth0.showActions, {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
 						  if(stack2 || stack2 === 0) { buffer += stack2; }
 						  buffer += "\n  </div>\n</div>\n";
 						  return buffer;

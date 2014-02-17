@@ -26,17 +26,17 @@
         .span4
           h5 Managed by
           a(href="/users/" + project.leader.id)
-            img.tooltips(src=project.leader.profilePic, title=project.leader.name, rel="tooltip")
+            img.tooltips(src=project.leader.picture, title=project.leader.name, rel="tooltip")
         .span4
           h5 Contributors 
           each contributor in project.contributors
             a(href="/users/" + contributor.id)
-              img.tooltips(src=contributor.profilePic, title=contributor.name, rel="tooltip")
+              img.tooltips(src=contributor.picture, title=contributor.name, rel="tooltip")
         .span4
           h5 #{project.followers.length} Likes
           each follower in project.followers
             a(href="/users/" + follower.id)
-              img.tooltips(src=follower.profilePic, title=follower.name, rel="tooltip")
+              img.tooltips(src=follower.picture, title=follower.name, rel="tooltip")
 
     if disqus_shortname
       #disqus_thread.well-header

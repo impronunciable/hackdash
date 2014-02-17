@@ -106,21 +106,24 @@ var setQuery = function(req, res, next){
   var query = req.query.q || "";
 
   if (query.length === 0){
+    req.query = { 'contributors.2': { $exists: true } };
     return next();
   }
 
   var regex = new RegExp(query, 'i');
-  
-  req.query = {
-    $or: [ { title: regex }, { description: regex } ]
-  };
+
+  req.query = {};
+  req.query.$or = [ { title: regex }, { description: regex } ];
 
   next();
 };
 
 var setProjects = function(req, res, next){
   Project.find(req.query || {})
+    .populate('contributors')
+    .populate('followers')
     .limit(50)
+    .sort( { "created_at" : -1 } )
     .exec(function(err, projects) {
       if(err) return res.send(500);
       res.projects = projects;

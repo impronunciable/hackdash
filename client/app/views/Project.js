@@ -123,8 +123,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     }
 
     var uid = hackdash.user._id;
-    return _.find(arr, function(id){
-      return (id === uid);
+    return _.find(arr, function(usr){
+      return (usr._id === uid);
     }) ? true : false;
   }
 

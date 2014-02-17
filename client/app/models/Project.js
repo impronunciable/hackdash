@@ -20,14 +20,22 @@ module.exports = Backbone.Model.extend({
     var uid = hackdash.user._id;
 
     function exists(){
-      return list.indexOf(uid) > -1;
+      return _.find(list, function(usr){
+        return (usr._id === uid);
+      }) ? true : false;
     }
 
     if (add && !exists()){
-      list.push(uid);
+      list.push(hackdash.user);
     }
     else if (!add && exists()){
-      var idx = list.indexOf(uid);
+      var idx = 0;
+      _.each(list, function(usr, i){
+        if (usr._id === uid) {
+          idx = i;
+        }
+      });
+
       list.splice(idx, 1);
     }
 

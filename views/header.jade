@@ -11,7 +11,7 @@ header(style="background: #{dashboard.background}")
     .createProject.pull-right.btn-group
         if(user)
             a.btn-profile(href="/users/profile")
-              img.avatar(src=user.profilePic + '?s=50').tooltips(rel='tooltip', data-placement='bottom', data-original-title='Edit profile')
+              img.avatar(src=user.picture + '?s=50').tooltips(rel='tooltip', data-placement='bottom', data-original-title='Edit profile')
             a.btn.logout(href="/logout") Logout
       
     a.logo(href="/")= title

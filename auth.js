@@ -55,6 +55,20 @@ failureRedirect: '/' }), redirectSubdomain);
     function(token, tokenSecret, profile, done) {
       User.findOne({provider_id: profile.id, provider: provider}, function(err,
 user){
+
+        function setPicture(){
+          if(profile.photos && profile.photos.length && profile.photos[0].value) {
+            user.picture =  profile.photos[0].value.replace('_normal', '_bigger');
+          } else if(profile.provider == 'facebook') {
+            user.picture = "https://graph.facebook.com/" + profile.id + "/picture";
+            user.picture += "?width=73&height=73";
+          } else {
+            user.picture = gravatar.url(user.email || '', {s: '73'});
+          }
+
+          user.picture = user.picture || '/default_avatar.png';
+        }
+
         if(!user) {
           var user = new User();
           user.provider = provider;
@@ -63,45 +77,33 @@ user){
           if(profile.emails && profile.emails.length && profile.emails[0].value)
             user.email = profile.emails[0].value;
 
-          if(profile.photos && profile.photos.length && profile.photos[0].value)
-{
-            user.picture =  profile.photos[0].value.replace('_normal',
-'_bigger');
-          } else if(profile.provider == 'facebook') {
-            user.picture = "https://graph.facebook.com/" + profile.id +
-"/picture";
-            user.picture += "?width=73&height=73";
-          } else {
-            user.picture = gravatar.url(user.email || '', {s: '73'});
-          }
-
-          user.picture = user.picture || '/default_avatar.png';
+          setPicture();
+          
           user.name = profile.displayName;
           user.username = profile.username || profile.displayName;
           user.save(function(err, user){  
             done(null, user);
           });
-        } else {  
-          done(null, user);
+        } else { 
+
+          //Update user picture provider if url changed
+          var picBefore = user.picture;
+          setPicture();
+          
+          if (user.picture !== picBefore){
+            user.save(function(err, user){  
+              done(null, user);
+            });
+          }
+          else {
+            done(null, user);
+          }
+
         }
       });
     }));
 
   })(strategy);
-
-var getProfilePicture = function(profile, email) {
-  var picture = '/images/default_avatar.png';
-  if(profile.photos && profile.photos.length && profile.photos[0].value) {
-    picture =  profile.photos[0].value.replace('_normal', '_bigger');
-  } else if(profile.provider == 'facebook') {
-    picture = "https://graph.facebook.com/" + profile.id + "/picture";
-    picture += "?width=73&height=73";
-  } else {
-    picture = gravatar.url(email || '', {s: '73'});
-  }
-  
-  return picture;
-};
 
 }
 

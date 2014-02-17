@@ -44,10 +44,10 @@ module.exports = function(app) {
     render('live')
 	];
 
-  var landingStack = [
+  var isearchStack = [
     loadUser, 
     loadProviders,
-    render('landing')
+    render('isearch')
   ];
 
   app.get('/', homeStack);
@@ -68,7 +68,7 @@ module.exports = function(app) {
 
   app.post('/dashboard/create', isAuth, validateSubdomain, createDashboard(app));
 
-  app.get('/landing', landingStack);
+  app.get('/isearch', isearchStack);
 };
 
 /*
