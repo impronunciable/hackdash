@@ -53,7 +53,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.$el
       .addClass(this.model.get("status"))
       .attr({
-        "title": this.model.get("status")
+          "title": this.model.get("status")
+        , "data-name": this.model.get("title")
+        , "data-date": this.model.get("created_at")
       })
       .tooltip({});
 

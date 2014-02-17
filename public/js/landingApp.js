@@ -113,7 +113,7 @@
 
 				  app.addRegions({
 				    leftHeader: "div#left-header",
-				    main: "#page"
+				    main: "#main"
 				  });
 
 				  app.projects = new Projects();
@@ -123,7 +123,13 @@
 				    collection: app.projects
 				  }));
 
-				  app.projects.fetch();
+				  var query = hackdash.getQueryVariable("q");
+				  if (query && query.length > 0){
+				    app.projects.fetch({ data: $.param({ q: query }) });
+				  }
+				  else {
+				    app.projects.fetch();
+				  }
 
 				});
 			},
@@ -137,6 +143,16 @@
 				  require('./helpers/handlebars');
 
 				  window.hackdash = window.hackdash || {}; //settings;
+
+				  window.hackdash.getQueryVariable = function(variable){
+				    var query = window.location.search.substring(1);
+				    var vars = query.split("&");
+				    for (var i=0;i<vars.length;i++) {
+				      var pair = vars[i].split("=");
+				      if(pair[0] === variable){return decodeURI(pair[1]);}
+				    }
+				    return(false);
+				  };
 
 				  //require('./helpers/backboneOverrides');
 				  //require('./helpers/jQueryOverrides');
@@ -374,7 +390,9 @@
 					    this.$el
 					      .addClass(this.model.get("status"))
 					      .attr({
-					        "title": this.model.get("status")
+					          "title": this.model.get("status")
+					        , "data-name": this.model.get("title")
+					        , "data-date": this.model.get("created_at")
 					      })
 					      .tooltip({});
 
@@ -466,6 +484,7 @@
 					  //--------------------------------------
 
 					  id: "projects",
+					  className: "row projects",
 					  itemView: Project,
 
 					  collectionEvents: {
@@ -476,8 +495,11 @@
 					  //+ INHERITED / OVERRIDES
 					  //--------------------------------------
 
-					  onDomRefresh: function(){
-					    this.updateIsotope();
+					  onRender: function(){
+					    var self = this;
+					    _.defer(function(){
+					      self.updateIsotope();
+					    });
 					  },
 
 					  //--------------------------------------
@@ -497,28 +519,40 @@
 					    var self = this;
 
 					    $projects.imagesLoaded(function() {
-					      $projects.isotope({
+					      $projects.isotope('destroy').isotope({
 					          itemSelector: '.project'
 					        , animationEngine: 'jquery'
 					        , resizable: true
 					        , masonry: { columnWidth: self.projectColumnWidth() }
+					        /*
 					        , sortAscending: true
+					        , getSortData : {
+					            'name' : function ( $elem ) {
+					              return $elem.data('name').toLowerCase();
+					            },
+					            'date' : function ( $elem ) {
+					              return $elem.data('date');
+					            }
+					          }
+					        , sortBy: 'name'
+					        */
 					      });
 					    });
 					  },
 
 					  projectColumnWidth: function () {
 					    var $projects = this.$el;
-
-					    return ($projects.width() >= 1200) ? 300
-					      :
-					      ($projects.width() === 960) ?
-					        $projects.width() / 3
-					      :
-					      ($projects.width() === 744) ?
-					        $projects.width() / 2
-					      :
-					        $projects.width();
+					    
+					    return ($projects.width() >= 1200) ? 
+					            300
+					          :
+					          ($projects.width() === 960) ?
+					            $projects.width() / 3
+					          :
+					          ($projects.width() === 744) ?
+					            $projects.width() / 2
+					          :
+					            $projects.width();
 					  }
 
 					});
@@ -549,6 +583,13 @@
 					  //--------------------------------------
 					  //+ INHERITED / OVERRIDES
 					  //--------------------------------------
+
+					  onRender: function(){
+					    var query = hackdash.getQueryVariable("q");
+					    if (query && query.length > 0){
+					      this.ui.searchbox.val(query);
+					    }
+					  },
 
 					  //--------------------------------------
 					  //+ PUBLIC METHODS / GETTERS / SETTERS

@@ -18,18 +18,40 @@ require('../models')({
 
 var User = mongoose.model('User');
 
-var regexp = /^https:\/\/si0.twimg.com\/profile_images\//;
+var regexp = /^https:\/\/si0.twimg.com\//;
 
 User.find({
   picture: regexp
 }, function(err, users){
+
   for(var i=0; i<users.length; i++){
     console.log(users[i].username + " - " + users[i].picture);
-    var final = users[i].picture.replace(regexp, "https://pbs.twimg.com/profile_images/");
+    var final = users[i].picture.replace(regexp, "https://pbs.twimg.com/");
     console.log("> " + final);
-
+    users[i].picture = final;   
   }
-  console.log("Users found and replaced: " + users.length);
 
+  var i=0;
+  function next(){
+    users[i].save(function(err, usr){
+      if (err) return console.log(err);
+      i++;
+      if (i<users.length){
+        next();
+      }
+      else {
+        console.log("Users found and replaced: " + i);
+        process.kill();
+      }
+    });
+  }
+
+  if (users.length > 0){
+    next();
+  }
+  else {
+    console.log("No Users found");
+    process.kill();
+  }
 });
 

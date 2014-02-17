@@ -14,4 +14,16 @@ $('#domain').keyup(function(){
   }
 });
 
+
+function goToSearch(){
+  var q = $('#search-projects').val();
+  window.location = '/isearch?q=' + q;
+}
+
+$('#search-projects-btn').on("click", goToSearch);
+$('#search-projects').on("keyup", function(e){
+  var key = e.keyCode || e.which;
+  if (key === 13) goToSearch();
+});
+
 })();

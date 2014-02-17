@@ -24,6 +24,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  onRender: function(){
+    var query = hackdash.getQueryVariable("q");
+    if (query && query.length > 0){
+      this.ui.searchbox.val(query);
+    }
+  },
+
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------

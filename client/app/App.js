@@ -14,7 +14,7 @@ app.addInitializer( function () {
 
   app.addRegions({
     leftHeader: "div#left-header",
-    main: "#page"
+    main: "#main"
   });
 
   app.projects = new Projects();
@@ -24,6 +24,12 @@ app.addInitializer( function () {
     collection: app.projects
   }));
 
-  app.projects.fetch();
+  var query = hackdash.getQueryVariable("q");
+  if (query && query.length > 0){
+    app.projects.fetch({ data: $.param({ q: query }) });
+  }
+  else {
+    app.projects.fetch();
+  }
 
 });

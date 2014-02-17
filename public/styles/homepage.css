@@ -19,9 +19,15 @@ section {
   margin-bottom: 20px;
 }
 
-#domain {
-  padding: 10px 10px;
-  border-radius: 10px;
+#domain,
+.search-box {
+  padding: 10px 10px !important;
+  border-radius: 10px !important;
+}
+
+.search-btn {
+  margin-top: -10px;
+  margin-left: 5px;
 }
 
 .brand {
