@@ -2,7 +2,8 @@
   
   .well
     .well-header
-
+      h3
+        a(href="/", target="_blank") #{project.domain}
       h3
         a(href="/p/" + project.id, target="_blank") #{project.title}
       p #{project.description}

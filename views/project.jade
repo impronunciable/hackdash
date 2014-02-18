@@ -41,3 +41,7 @@
         else 
           .pull-right.follower
             a.btn.btn-link(href='/projects/follow/'+project._id) Follow
+
+        if(project.link)
+          .pull-right.follower
+            a.btn.btn-link(href=project.link, target='_blank') Demo

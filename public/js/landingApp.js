@@ -127,11 +127,6 @@
 				  if (query && query.length > 0){
 				    app.projects.fetch({ data: $.param({ q: query }) });
 				  }
-				  /*
-				  else {
-				    app.projects.fetch();
-				  }
-				  */
 
 				});
 			},
@@ -719,7 +714,7 @@
 						  buffer += "<div class=\"well\">\n  <div class=\"cover shadow\"> \n    ";
 						  stack1 = helpers['if'].call(depth0, depth0.cover, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n  </div>\n  <div class=\"well-content\">\n    <h3><a href=\"";
+						  buffer += "\n  </div>\n  <div class=\"well-content\">\n    <h4><a href=\"";
 						  if (stack1 = helpers.instanceURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.instanceURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
@@ -727,7 +722,7 @@
 						  if (stack1 = helpers.domain) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.domain; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
-						    + "</a></h3>\n    <h4>";
+						    + "</a></h4>\n    <h4>";
 						  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
