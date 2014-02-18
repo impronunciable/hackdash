@@ -122,7 +122,7 @@ var setProjects = function(req, res, next){
   Project.find(req.query || {})
     .populate('contributors')
     .populate('followers')
-    .limit(50)
+    .limit(30)
     .sort( { "created_at" : -1 } )
     .exec(function(err, projects) {
       if(err) return res.send(500);

@@ -597,17 +597,26 @@
 					  //--------------------------------------
 
 					  search: function(){
-					    var keyword = this.ui.searchbox.val();
+					    var self = this;
+					    window.clearTimeout(this.timer);
 
-					    var opts = {
-					      reset: true
-					    };
+					    this.timer = window.setTimeout(function(){
+					      var keyword = self.ui.searchbox.val();
 
-					    if (keyword.length > 0) {
-					      opts.data = $.param({ q: keyword });
-					    }
+					      var opts = {
+					        reset: true
+					      };
 
-					    hackdash.app.projects.fetch(opts);
+					      if (keyword.length > 0) {
+					        opts.data = $.param({ q: keyword });
+					        window.history.pushState({}, "", "isearch?q=" + keyword);
+					      }
+					      else {
+					        window.history.pushState({}, "", "isearch");
+					      }
+
+					      hackdash.app.projects.fetch(opts);
+					    }, 300);
 					  }
 
 					  //--------------------------------------
