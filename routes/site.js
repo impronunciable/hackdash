@@ -44,9 +44,13 @@ module.exports = function(app) {
     render('live')
 	];
 
+  var appPort = app.get('config').port;
+  var appHost = app.get('config').host + (appPort && appPort !== 80 ? ':' + appPort : '');
+
   var isearchStack = [
     loadUser, 
     loadProviders,
+    setViewVar('host', appHost),
     render('isearch')
   ];
 

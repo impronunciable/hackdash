@@ -4,9 +4,15 @@ script(src="/js/vendor.js")
 
 if ("undefined" == typeof user)
   script.
-    window.hackdash = { user: null };
+    window.hackdash = { 
+      user: null,
+      baseURL: "!{host}"
+    };
 else 
   script.
-    window.hackdash = { user: !{JSON.stringify(user)} };
+    window.hackdash = { 
+      user: !{JSON.stringify(user)},
+      baseURL: "!{host}"
+    };
     
 script(src="/js/landingApp.js")
