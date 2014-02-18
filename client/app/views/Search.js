@@ -53,12 +53,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
       if (keyword.length > 0) {
         opts.data = $.param({ q: keyword });
         window.history.pushState({}, "", "isearch?q=" + keyword);
+        hackdash.app.projects.fetch(opts);
       }
       else {
+        hackdash.app.projects.reset();        
         window.history.pushState({}, "", "isearch");
       }
-
-      hackdash.app.projects.fetch(opts);
+      
     }, 300);
   }
 

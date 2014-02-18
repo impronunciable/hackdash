@@ -127,9 +127,11 @@
 				  if (query && query.length > 0){
 				    app.projects.fetch({ data: $.param({ q: query }) });
 				  }
+				  /*
 				  else {
 				    app.projects.fetch();
 				  }
+				  */
 
 				});
 			},
@@ -483,7 +485,7 @@
 					  id: "projects",
 					  className: "row projects",
 					  itemView: Project,
-
+					  
 					  collectionEvents: {
 					    "reset": "render"
 					  },
@@ -610,12 +612,13 @@
 					      if (keyword.length > 0) {
 					        opts.data = $.param({ q: keyword });
 					        window.history.pushState({}, "", "isearch?q=" + keyword);
+					        hackdash.app.projects.fetch(opts);
 					      }
 					      else {
+					        hackdash.app.projects.reset();        
 					        window.history.pushState({}, "", "isearch");
 					      }
-
-					      hackdash.app.projects.fetch(opts);
+					      
 					    }, 300);
 					  }
 
@@ -763,7 +766,7 @@
 						  return "\n<div class=\"orderby\">\n  <div class=\"btn-group\">\n    <button data-option-value=\"name\" class=\"sort btn\">Order by name</button>\n    <button data-option-value=\"date\" class=\"sort btn\">Order by date</button>\n  </div>\n</div>\n";
 						  }
 
-						  buffer += "<i class=\"icon-large icon-search\"></i>\n<input id=\"searchInput\" type=\"text\" class=\"search-query input-large\"/>\n";
+						  buffer += "<i class=\"icon-large icon-search\"></i>\n<input id=\"searchInput\" type=\"text\" class=\"search-query input-large\" placeholder=\"Type here\"/>\n";
 						  stack1 = helpers['if'].call(depth0, depth0.showSort, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  return buffer;

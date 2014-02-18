@@ -28,8 +28,5 @@ app.addInitializer( function () {
   if (query && query.length > 0){
     app.projects.fetch({ data: $.param({ q: query }) });
   }
-  else {
-    app.projects.fetch();
-  }
 
 });
