@@ -19,7 +19,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   events: {
     "click .contributor a": "onContribute",
-    "click .follower a": "onFollow"
+    "click .follower a": "onFollow",
+    "click .remove a": "onRemove"
   },
 
   templateHelpers: {
@@ -27,17 +28,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
       return "http://" + this.domain + "." + hackdash.baseURL;
     },
     showActions: function(){
-      var show = false;
-
-      if (hackdash.user){
-        show = true;
-
-        if (hackdash.user._id === this.leader){
-          show = false;
-        }
-      }
-
-      return show;
+      return hackdash.user._id !== this.leader;
+    },
+    isAdminOrLeader: function(){
+      var user = hackdash.user;
+      return user._id === this.leader || user.admin_in.indexOf(this.domain) >= 0;
     }
   },
 
@@ -101,6 +96,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
     }
     else {
       this.model.follow();
+    }
+
+    e.stopPropagation();
+  },
+
+  onRemove: function(e){
+    if (window.confirm("This project is going to be deleted. Are you sure?")){
+      this.model.destroy();
     }
 
     e.stopPropagation();

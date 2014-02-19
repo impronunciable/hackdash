@@ -14,5 +14,10 @@ else
       user: !{JSON.stringify(user)},
       baseURL: "!{host}"
     };
-    
-script(src="/js/landingApp.js")
+
+script(src="/js/hackdashApp.js")
+
+script.
+  $(function(){
+    window.hackdash.startApp("!{app_type}");
+  });

@@ -18,7 +18,7 @@ module.exports = function(grunt) {
       },
       dist: {
         root: "dist/",
-        appName: "landingApp.js",
+        appName: "hackdashApp.js",
         vendorName: "vendor.js",
         export: "../public/js/"
       }

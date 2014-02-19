@@ -7,8 +7,34 @@ Handlebars.registerHelper('markdown', function(md) {
   return markdown.toHTML(md);
 });
 
-Handlebars.registerHelper('isLoggedIn', function() {
-  return window.hackdash.user ? true : false;
+Handlebars.registerHelper('user', function(prop) {
+  if (window.hackdash.user){
+    return window.hackdash.user[prop];
+  }
+});
+
+Handlebars.registerHelper('isLoggedIn', function(options) {
+  if (window.hackdash.user){
+    return options.fn(this);
+  } else {
+    return options.inverse(this);
+  }
+});
+
+Handlebars.registerHelper('isDashboardView', function(options) {
+  if (window.hackdash.app.type === "dashboard"){
+    return options.fn(this);
+  } else {
+    return options.inverse(this);
+  }
+});
+
+Handlebars.registerHelper('isSearchView', function(options) {
+  if (window.hackdash.app.type === "isearch"){
+    return options.fn(this);
+  } else {
+    return options.inverse(this);
+  }
 });
 
 Handlebars.registerHelper('timeAgo', function(date) {

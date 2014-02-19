@@ -21,6 +21,7 @@ module.exports = function(app) {
   var uri = '/api/' + apiVersion;
 
   app.get(uri + '/projects', setQuery, setProjects, sendProjects);
+  app.del(uri + '/projects/:pid', isAuth, getProject, canEditOrRemove, removeProject);
   
   app.post(uri + '/projects/:pid/followers', isAuth, getProject, validate, addFollower);
   app.del(uri + '/projects/:pid/followers', isAuth, getProject, validate, removeFollower);
@@ -48,6 +49,25 @@ var isAuth = function(req, res, next){
   }
 
   next();
+};
+
+var canEditOrRemove = function(req, res, next){
+
+  var isLeader = req.user.id === req.project.leader.id;
+  var isAdmin = (req.project.domain && req.user.admin_in.indexOf(req.project.domain) >= 0);
+
+  if (!isLeader && !isAdmin) {
+    return res.send(403, "Only Leader or Administrators can remove this project.");
+  }
+
+  next();
+};
+
+var removeProject = function(req, res){
+  req.project.remove(function (err){
+    if (err) return res.send(500, "An error ocurred when removing this project");
+    res.send(204); //all good, no content
+  });
 };
 
 // TODO: change this validations for external API access.
@@ -105,14 +125,18 @@ var removeContributor = function(req, res){
 var setQuery = function(req, res, next){
   var query = req.query.q || "";
 
+  req.query = {};
+
+  if (req.subdomains.length > 0) {
+    req.query = { domain: req.subdomains[0] };
+  }
+
   if (query.length === 0){
-    req.query = { 'contributors.2': { $exists: true } };
+    //req.query = { 'contributors.2': { $exists: true } };
     return next();
   }
 
   var regex = new RegExp(query, 'i');
-
-  req.query = {};
   req.query.$or = [ { title: regex }, { description: regex } ];
 
   next();

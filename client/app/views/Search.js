@@ -24,11 +24,24 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  lastSearch: "",
+
+  initialize: function(options){
+    this.showSort = (options && options.showSort) || false;
+  },
+
   onRender: function(){
     var query = hackdash.getQueryVariable("q");
     if (query && query.length > 0){
       this.ui.searchbox.val(query);
+      this.lastSearch = query;
     }
+  },
+
+  serializeData: function(){
+    return {
+      showSort: this.showSort
+    };
   },
 
   //--------------------------------------
@@ -46,18 +59,30 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.timer = window.setTimeout(function(){
       var keyword = self.ui.searchbox.val();
 
-      var opts = {
-        reset: true
-      };
+      if (keyword !== self.lastSearch) {
+        self.lastSearch = keyword;
 
-      if (keyword.length > 0) {
-        opts.data = $.param({ q: keyword });
-        window.history.pushState({}, "", "isearch?q=" + keyword);
-        hackdash.app.projects.fetch(opts);
-      }
-      else {
-        hackdash.app.projects.reset();        
-        window.history.pushState({}, "", "isearch");
+        var opts = {
+          reset: true
+        };
+
+        if (keyword.length > 0) {
+          opts.data = $.param({ q: keyword });
+          
+          var baseURL = (window.hackdash.app.type === "isearch" ? "isearch" : "search");
+          window.history.pushState({}, "", baseURL + "?q=" + keyword);
+
+          hackdash.app.projects.fetch(opts);
+        }
+        else {
+          if (window.hackdash.app.type === "isearch"){
+            hackdash.app.projects.reset();
+          }
+          else {
+            hackdash.app.projects.fetch();
+          }
+          window.history.pushState({}, "", window.hackdash.app.type === "isearch" ? "isearch" : "");
+        }
       }
       
     }, 300);

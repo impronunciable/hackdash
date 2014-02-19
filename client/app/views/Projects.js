@@ -16,7 +16,8 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   itemView: Project,
   
   collectionEvents: {
-    "reset": "render"
+    "reset": "render",
+    "remove": "render"
   },
 
   //--------------------------------------

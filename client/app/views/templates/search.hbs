@@ -1,10 +1,11 @@
 <i class="icon-large icon-search"></i>
 <input id="searchInput" type="text" class="search-query input-large" placeholder="Type here"/>
-{{#if showSort}}
+
+{{#isDashboardView}}
 <div class="orderby">
   <div class="btn-group">
     <button data-option-value="name" class="sort btn">Order by name</button>
     <button data-option-value="date" class="sort btn">Order by date</button>
   </div>
 </div>
-{{/if}}
+{{/isDashboardView}}

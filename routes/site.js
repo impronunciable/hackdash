@@ -47,22 +47,33 @@ module.exports = function(app) {
   var appPort = app.get('config').port;
   var appHost = app.get('config').host + (appPort && appPort !== 80 ? ':' + appPort : '');
 
-  var isearchStack = [
+  var hackdashStack = [
     loadUser, 
     loadProviders,
-    setViewVar('host', appHost),
-    render('isearch')
+    setViewVar('host', appHost)
   ];
 
-  app.get('/', homeStack);
+  var hackdashDashboardStack = [
+    loadUser, 
+    loadProviders,
+    isHomepage,
+    dashExists,
+    checkProfile,
+    setViewVar('host', appHost)
+  ];
+
+  app.get('/', hackdashDashboardStack, setViewVar('app_type', 'dashboard'), render('isearch'));
+  app.get('/search', hackdashDashboardStack, setViewVar('app_type', 'dashboard'), render('isearch'));
+
+  //app.get('/', homeStack); // X
   app.get('/live', liveStack);
-  app.get('/login', dashboardStack);
-  app.get('/sort', dashboardStack);
+  app.get('/login', dashboardStack); // X
+  app.get('/sort', dashboardStack); // X
   app.get('/projects/create', dashboardStack);
   app.get('/sort/:type', dashboardStack);
   app.get('/projects/edit/:project_id', dashboardStack);
   app.get('/p/:project_id', dashboardStack);
-  app.get('/search', dashboardStack);
+  //app.get('/search', dashboardStack); // X
   app.get('/logout', logout, redirect('/'));
   
   app.get('/about', loadUser, render('about'));
@@ -72,7 +83,7 @@ module.exports = function(app) {
 
   app.post('/dashboard/create', isAuth, validateSubdomain, createDashboard(app));
 
-  app.get('/isearch', isearchStack);
+  app.get('/isearch', hackdashStack, setViewVar('app_type', 'isearch'), render('isearch'));
 };
 
 /*

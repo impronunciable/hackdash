@@ -1,9 +1,6 @@
 
 module.exports = function(){
 
-  // Init Handlebars Helpers
-  require('./helpers/handlebars');
-
   window.hackdash = window.hackdash || {};
 
   window.hackdash.getQueryVariable = function(variable){
@@ -16,11 +13,13 @@ module.exports = function(){
     return(false);
   };
 
+   // Init Handlebars Helpers
+  require('./helpers/handlebars');
+  
   //require('./helpers/backboneOverrides');
   //require('./helpers/jQueryOverrides');
   
   window.hackdash.apiURL = "/api/v2";
 
-  window.hackdash.app = require('./App');
-  window.hackdash.app.start();
+  window.hackdash.startApp = require('./HackdashApp');
 };
