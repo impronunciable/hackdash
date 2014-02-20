@@ -26,21 +26,23 @@
     </div>
 
     {{#if link}}
-    <div class="pull-right edit">
+    <div class="pull-right demo">
       <a href="{{link}}" target="_blank" class="btn btn-link">Demo</a>
     </div>
     {{/if}}
 
     {{#isLoggedIn}}
 
-      {{#if isAdminOrLeader}}
-      <div class="pull-right remove">
-        <a class="btn btn-link remove">Remove</a>
-      </div>
-      <div class="pull-right edit">
-        <a class="btn btn-link edit" href="/projects/edit/{{_id}}">Edit</a>
-      </div>
-      {{/if}}
+      {{#isDashboardView}}
+        {{#if isAdminOrLeader}}
+        <div class="pull-right remove">
+          <a class="btn btn-link remove">Remove</a>
+        </div>
+        <div class="pull-right edit">
+          <a class="btn btn-link edit" href="/projects/edit/{{_id}}">Edit</a>
+        </div>
+        {{/if}}
+      {{/isDashboardView}}
 
       {{#if showActions}}
       <div class="pull-right contributor">

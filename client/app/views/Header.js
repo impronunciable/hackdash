@@ -32,6 +32,8 @@ module.exports = Backbone.Marionette.Layout.extend({
 
       })
     }));
+
+    $('.tooltips', this.$el).tooltip({});
   }
 
   //--------------------------------------

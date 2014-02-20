@@ -17,7 +17,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   events: {
-    "keyup #searchInput": "search"
+    "keyup #searchInput": "search",
+    "click .sort": "sort"
   },
 
   //--------------------------------------
@@ -52,6 +53,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
+  sort: function(e){
+    e.preventDefault();
+    var val = $(e.currentTarget).data("option-value");
+    hackdash.app.projects.trigger("sort:" + val);
+  },
+
   search: function(){
     var self = this;
     window.clearTimeout(this.timer);
@@ -69,19 +76,19 @@ module.exports = Backbone.Marionette.ItemView.extend({
         if (keyword.length > 0) {
           opts.data = $.param({ q: keyword });
           
-          var baseURL = (window.hackdash.app.type === "isearch" ? "isearch" : "search");
+          var baseURL = (hackdash.app.type === "isearch" ? "isearch" : "search");
           window.history.pushState({}, "", baseURL + "?q=" + keyword);
 
           hackdash.app.projects.fetch(opts);
         }
         else {
-          if (window.hackdash.app.type === "isearch"){
+          if (hackdash.app.type === "isearch"){
             hackdash.app.projects.reset();
           }
           else {
             hackdash.app.projects.fetch();
           }
-          window.history.pushState({}, "", window.hackdash.app.type === "isearch" ? "isearch" : "");
+          window.history.pushState({}, "", hackdash.app.type === "isearch" ? "isearch" : "");
         }
       }
       

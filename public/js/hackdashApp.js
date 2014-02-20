@@ -461,6 +461,8 @@
 
 					      })
 					    }));
+
+					    $('.tooltips', this.$el).tooltip({});
 					  }
 
 					  //--------------------------------------
@@ -500,7 +502,8 @@
 					  events: {
 					    "click .contributor a": "onContribute",
 					    "click .follower a": "onFollow",
-					    "click .remove a": "onRemove"
+					    "click .remove a": "onRemove",
+					    "click .demo a": "onDemo"
 					  },
 
 					  templateHelpers: {
@@ -558,6 +561,10 @@
 					  //--------------------------------------
 					  //+ EVENT HANDLERS
 					  //--------------------------------------
+
+					  onDemo: function(e){
+					    e.stopPropagation();
+					  },
 
 					  onContribute: function(e){
 					    if (this.isContributor()){
@@ -634,8 +641,9 @@
 					  itemView: Project,
 					  
 					  collectionEvents: {
-					    "reset": "render",
-					    "remove": "render"
+					    "reset remove": "render",
+					    "sort:date": "sortByDate",
+					    "sort:name": "sortByName"
 					  },
 
 					  //--------------------------------------
@@ -661,29 +669,43 @@
 					  //+ PRIVATE AND PROTECTED METHODS
 					  //--------------------------------------
 
+					  sortByName: function(){
+					    this.$el.isotope({"sortBy": "name"});
+					  },
+
+					  sortByDate: function(){
+					    this.$el.isotope({"sortBy": "date"});
+					  },
+
+					  isotopeInitialized: false,
 					  updateIsotope: function(){
 					    var $projects = this.$el;
 					    var self = this;
 
 					    $projects.imagesLoaded(function() {
-					      $projects.isotope('destroy').isotope({
-					          itemSelector: '.project'
-					        , animationEngine: 'jquery'
+
+					      if (this.isotopeInitialized){
+					        $projects.isotope("destroy");
+					      }
+
+					      $projects.isotope({
+					          itemSelector: ".project"
+					        , animationEngine: "jquery"
 					        , resizable: true
 					        , masonry: { columnWidth: self.projectColumnWidth() }
-					        /*
 					        , sortAscending: true
 					        , getSortData : {
-					            'name' : function ( $elem ) {
-					              return $elem.data('name').toLowerCase();
+					            "name" : function ( $elem ) {
+					              return $elem.data("name").toLowerCase();
 					            },
-					            'date' : function ( $elem ) {
-					              return $elem.data('date');
+					            "date" : function ( $elem ) {
+					              return $elem.data("date");
 					            }
 					          }
-					        , sortBy: 'name'
-					        */
+					        , sortBy: "name"
 					      });
+					      
+					      this.isotopeInitialized = true;
 					    });
 					  },
 
@@ -724,7 +746,8 @@
 					  },
 
 					  events: {
-					    "keyup #searchInput": "search"
+					    "keyup #searchInput": "search",
+					    "click .sort": "sort"
 					  },
 
 					  //--------------------------------------
@@ -759,6 +782,12 @@
 					  //+ EVENT HANDLERS
 					  //--------------------------------------
 
+					  sort: function(e){
+					    e.preventDefault();
+					    var val = $(e.currentTarget).data("option-value");
+					    hackdash.app.projects.trigger("sort:" + val);
+					  },
+
 					  search: function(){
 					    var self = this;
 					    window.clearTimeout(this.timer);
@@ -776,19 +805,19 @@
 					        if (keyword.length > 0) {
 					          opts.data = $.param({ q: keyword });
 					          
-					          var baseURL = (window.hackdash.app.type === "isearch" ? "isearch" : "search");
+					          var baseURL = (hackdash.app.type === "isearch" ? "isearch" : "search");
 					          window.history.pushState({}, "", baseURL + "?q=" + keyword);
 
 					          hackdash.app.projects.fetch(opts);
 					        }
 					        else {
-					          if (window.hackdash.app.type === "isearch"){
+					          if (hackdash.app.type === "isearch"){
 					            hackdash.app.projects.reset();
 					          }
 					          else {
 					            hackdash.app.projects.fetch();
 					          }
-					          window.history.pushState({}, "", window.hackdash.app.type === "isearch" ? "isearch" : "");
+					          window.history.pushState({}, "", hackdash.app.type === "isearch" ? "isearch" : "");
 					        }
 					      }
 					      
@@ -927,7 +956,7 @@
 						function program7(depth0,data) {
 						  
 						  var buffer = "", stack1;
-						  buffer += "\n    <div class=\"pull-right edit\">\n      <a href=\"";
+						  buffer += "\n    <div class=\"pull-right demo\">\n      <a href=\"";
 						  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
@@ -937,12 +966,15 @@
 
 						function program9(depth0,data) {
 						  
-						  var buffer = "", stack1;
+						  var buffer = "", stack1, options;
 						  buffer += "\n\n      ";
-						  stack1 = helpers['if'].call(depth0, depth0.isAdminOrLeader, {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
+						  options = {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data};
+						  if (stack1 = helpers.isDashboardView) { stack1 = stack1.call(depth0, options); }
+						  else { stack1 = depth0.isDashboardView; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  if (!helpers.isDashboardView) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  buffer += "\n\n      ";
-						  stack1 = helpers['if'].call(depth0, depth0.showActions, {hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data});
+						  stack1 = helpers['if'].call(depth0, depth0.showActions, {hash:{},inverse:self.noop,fn:self.program(13, program13, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  buffer += "\n\n    ";
 						  return buffer;
@@ -950,45 +982,54 @@
 						function program10(depth0,data) {
 						  
 						  var buffer = "", stack1;
-						  buffer += "\n      <div class=\"pull-right remove\">\n        <a class=\"btn btn-link remove\">Remove</a>\n      </div>\n      <div class=\"pull-right edit\">\n        <a class=\"btn btn-link edit\" href=\"/projects/edit/";
+						  buffer += "\n        ";
+						  stack1 = helpers['if'].call(depth0, depth0.isAdminOrLeader, {hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n      ";
+						  return buffer;
+						  }
+						function program11(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n        <div class=\"pull-right remove\">\n          <a class=\"btn btn-link remove\">Remove</a>\n        </div>\n        <div class=\"pull-right edit\">\n          <a class=\"btn btn-link edit\" href=\"/projects/edit/";
 						  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
-						    + "\">Edit</a>\n      </div>\n      ";
+						    + "\">Edit</a>\n        </div>\n        ";
 						  return buffer;
 						  }
 
-						function program12(depth0,data) {
+						function program13(depth0,data) {
 						  
 						  var buffer = "", stack1;
 						  buffer += "\n      <div class=\"pull-right contributor\">\n        ";
-						  stack1 = helpers['if'].call(depth0, depth0.contributing, {hash:{},inverse:self.program(15, program15, data),fn:self.program(13, program13, data),data:data});
+						  stack1 = helpers['if'].call(depth0, depth0.contributing, {hash:{},inverse:self.program(16, program16, data),fn:self.program(14, program14, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  buffer += "\n      </div>\n      <div class=\"pull-right follower\">\n        ";
-						  stack1 = helpers['if'].call(depth0, depth0.following, {hash:{},inverse:self.program(19, program19, data),fn:self.program(17, program17, data),data:data});
+						  stack1 = helpers['if'].call(depth0, depth0.following, {hash:{},inverse:self.program(20, program20, data),fn:self.program(18, program18, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  buffer += "\n      </div>\n      ";
 						  return buffer;
 						  }
-						function program13(depth0,data) {
+						function program14(depth0,data) {
 						  
 						  
 						  return "\n        <a class=\"btn btn-link leave\">Leave</a>\n        ";
 						  }
 
-						function program15(depth0,data) {
+						function program16(depth0,data) {
 						  
 						  
 						  return "\n        <a class=\"btn btn-link join\">Join</a>\n        ";
 						  }
 
-						function program17(depth0,data) {
+						function program18(depth0,data) {
 						  
 						  
 						  return "\n        <a class=\"btn btn-link unfollow\">Unfollow</a>\n        ";
 						  }
 
-						function program19(depth0,data) {
+						function program20(depth0,data) {
 						  
 						  
 						  return "\n        <a class=\"btn btn-link follow\">Follow</a>\n        ";

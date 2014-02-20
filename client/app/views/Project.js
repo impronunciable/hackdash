@@ -20,7 +20,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
   events: {
     "click .contributor a": "onContribute",
     "click .follower a": "onFollow",
-    "click .remove a": "onRemove"
+    "click .remove a": "onRemove",
+    "click .demo a": "onDemo"
   },
 
   templateHelpers: {
@@ -78,6 +79,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  onDemo: function(e){
+    e.stopPropagation();
+  },
 
   onContribute: function(e){
     if (this.isContributor()){

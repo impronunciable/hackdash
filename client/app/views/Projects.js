@@ -16,8 +16,9 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   itemView: Project,
   
   collectionEvents: {
-    "reset": "render",
-    "remove": "render"
+    "reset remove": "render",
+    "sort:date": "sortByDate",
+    "sort:name": "sortByName"
   },
 
   //--------------------------------------
@@ -43,29 +44,43 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
+  sortByName: function(){
+    this.$el.isotope({"sortBy": "name"});
+  },
+
+  sortByDate: function(){
+    this.$el.isotope({"sortBy": "date"});
+  },
+
+  isotopeInitialized: false,
   updateIsotope: function(){
     var $projects = this.$el;
     var self = this;
 
     $projects.imagesLoaded(function() {
-      $projects.isotope('destroy').isotope({
-          itemSelector: '.project'
-        , animationEngine: 'jquery'
+
+      if (this.isotopeInitialized){
+        $projects.isotope("destroy");
+      }
+
+      $projects.isotope({
+          itemSelector: ".project"
+        , animationEngine: "jquery"
         , resizable: true
         , masonry: { columnWidth: self.projectColumnWidth() }
-        /*
         , sortAscending: true
         , getSortData : {
-            'name' : function ( $elem ) {
-              return $elem.data('name').toLowerCase();
+            "name" : function ( $elem ) {
+              return $elem.data("name").toLowerCase();
             },
-            'date' : function ( $elem ) {
-              return $elem.data('date');
+            "date" : function ( $elem ) {
+              return $elem.data("date");
             }
           }
-        , sortBy: 'name'
-        */
+        , sortBy: "name"
       });
+      
+      this.isotopeInitialized = true;
     });
   },
 
