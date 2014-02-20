@@ -20,8 +20,18 @@ module.exports = function(app) {
 
   var uri = '/api/' + apiVersion;
 
+  //Dashboard
+
+  app.get(uri + '/', getDashboard, sendDashboard);
+  app.put(uri + '/', isAuth, getDashboard, canChangeDashboard, updateDashboard, sendDashboard);
+
+  app.post(uri + '/', notAllowed);
+  app.del(uri + '/', notAllowed);
+
+  // Projects
+
   app.get(uri + '/projects', setQuery, setProjects, sendProjects);
-  app.del(uri + '/projects/:pid', isAuth, getProject, canEditOrRemove, removeProject);
+  app.del(uri + '/projects/:pid', isAuth, getProject, canChangeProject, removeProject);
   
   app.post(uri + '/projects/:pid/followers', isAuth, getProject, validate, addFollower);
   app.del(uri + '/projects/:pid/followers', isAuth, getProject, validate, removeFollower);
@@ -30,6 +40,58 @@ module.exports = function(app) {
   app.del(uri + '/projects/:pid/contributors', isAuth, getProject, validate, removeContributor);
 
 };
+
+var notAllowed = function(req, res){
+  res.send(405); //Not Allowd
+};
+
+var getDashboard = function(req, res, next){
+  if (req.subdomains.length > 0) {
+    Dashboard.findOne({ domain: req.subdomains[0] })
+      .exec(function(err, dashboard) {
+        if(err) return res.send(500);
+        if(!dashboard) return res.send(404);
+        req.dashboard = dashboard;
+        next();
+      });
+  }
+  else {
+    res.send(400, "Expected to be called at a subdomain");
+  } 
+}
+
+var canChangeDashboard = function(req, res, next){
+  var isAdmin = (req.user.admin_in.indexOf(req.dashboard.domain) >= 0);
+
+  if (!isAdmin) {
+    return res.send(403, "Only Administrators edit this dashboard.");
+  }
+
+  next();
+};
+
+var updateDashboard = function(req, res, next) {
+  var dashboard = req.dashboard;
+
+  if(req.body.link && req.body.link.indexOf('http') != 0) {
+    req.body.link = 'http://' + req.body.link;
+  }
+
+  dashboard.title = req.body.title || dashboard.title;
+  dashboard.description = req.body.description || dashboard.description;
+  dashboard.link = req.body.link || dashboard.link;
+  
+  dashboard.save(function(err, dashboard){
+    if(err) return res.send(500);
+    req.dashboard = dashboard;
+    next();
+  });
+};
+
+var sendDashboard = function(req, res){
+  res.send(req.dashboard);
+};
+
 
 var getProject = function(req, res, next){
   Project.findById(req.params.pid)
@@ -51,13 +113,13 @@ var isAuth = function(req, res, next){
   next();
 };
 
-var canEditOrRemove = function(req, res, next){
+var canChangeProject = function(req, res, next){
 
   var isLeader = req.user.id === req.project.leader.id;
   var isAdmin = (req.project.domain && req.user.admin_in.indexOf(req.project.domain) >= 0);
 
   if (!isLeader && !isAdmin) {
-    return res.send(403, "Only Leader or Administrators can remove this project.");
+    return res.send(403, "Only Leader or Administrators can edit or remove this project.");
   }
 
   next();

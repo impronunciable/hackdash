@@ -13,6 +13,9 @@ module.exports = function(){
     return(false);
   };
 
+  // Set global mode for InlineEditor (X-Editable)
+  $.fn.editable.defaults.mode = 'modal';
+
    // Init Handlebars Helpers
   require('./helpers/handlebars');
   

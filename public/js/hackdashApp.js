@@ -103,9 +103,10 @@
 				 */
 
 				var 
-				    Header = require('./views/Header')
-				  , Projects = require('./models/Projects')
-				  , ProjectsView = require('./views/Projects');
+				    Header = require("./views/Header")
+				  , Dashboard = require("./models/Dashboard")
+				  , Projects = require("./models/Projects")
+				  , ProjectsView = require("./views/Projects");
 
 				module.exports = function(type){
 
@@ -135,13 +136,18 @@
 
 				  function initDashboard() {
 				  
+				    app.dashboard = new Dashboard();
 				    app.projects = new Projects();
 
-				    app.header.show(new Header());
+				    app.header.show(new Header({
+				      model: app.dashboard
+				    }));
 
 				    app.main.show(new ProjectsView({
 				      collection: app.projects
 				    }));
+
+				    app.dashboard.fetch();
 
 				    var query = hackdash.getQueryVariable("q");
 				    if (query && query.length > 0){
@@ -150,7 +156,6 @@
 				    else {
 				      app.projects.fetch(); 
 				    }
-
 				  }
 
 				  switch(type){
@@ -183,6 +188,9 @@
 				    }
 				    return(false);
 				  };
+
+				  // Set global mode for InlineEditor (X-Editable)
+				  $.fn.editable.defaults.mode = 'modal';
 
 				   // Init Handlebars Helpers
 				  require('./helpers/handlebars');
@@ -294,6 +302,23 @@
 				});
 			},
 			"models": {
+				"Dashboard.js": function (exports, module, require) {
+					/**
+					 * MODEL: Project
+					 *
+					 */
+
+					module.exports = Backbone.Model.extend({
+
+					  url: function(){
+					    return hackdash.apiURL + "/"; 
+					  },
+
+					  idAttribute: "_id",  
+
+					});
+
+				},
 				"Project.js": function (exports, module, require) {
 					/**
 					 * MODEL: Project
@@ -406,11 +431,40 @@
 					  //+ PUBLIC PROPERTIES / CONSTANTS
 					  //--------------------------------------
 
-					  template: template
+					  template: template,
+
+					  ui: {
+					    "title": "#dashboard-title",
+					    "description": "#dashboard-description",
+					    "link": "#dashboard-link"
+					  },
+
+					  templateHelpers: {
+					    isAdmin: function(){
+					      var user = hackdash.user;
+					      return user && user.admin_in.indexOf(this.domain) >= 0 || false;
+					    }
+					  },
+
+					  modelEvents: {
+					    "change": "render"
+					  },
 
 					  //--------------------------------------
 					  //+ INHERITED / OVERRIDES
 					  //--------------------------------------
+
+					  onRender: function(){
+					    var user = hackdash.user;
+
+					    if (user){
+					      var isAdmin = user.admin_in.indexOf(this.model.get("domain")) >= 0;
+					      
+					      if (isAdmin){
+					        this.initEditables();
+					      }
+					    }
+					  },
 
 					  //--------------------------------------
 					  //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -423,6 +477,43 @@
 					  //--------------------------------------
 					  //+ PRIVATE AND PROTECTED METHODS
 					  //--------------------------------------
+
+					  initEditables: function(){
+					    var self = this;
+
+					    this.ui.title.editable({
+					      type: 'text',
+					      title: 'Enter title',
+					      emptytext: "Enter a title",
+
+					      success: function(response, newValue) {
+					        self.model.set('title', newValue);
+					        self.model.save();
+					      }
+					    });
+
+					    this.ui.description.editable({
+					      type: 'text',
+					      title: 'Enter description',
+					      emptytext: "Enter a description",
+
+					      success: function(response, newValue) {
+					        self.model.set('description', newValue);
+					        self.model.save();
+					      }
+					    });
+
+					    this.ui.link.editable({
+					      type: 'text',
+					      title: 'Enter a link',
+					      emptytext: "Enter a link",
+
+					      success: function(response, newValue) {
+					        self.model.set('link', newValue);
+					        self.model.save();
+					      }
+					    });
+					  }
 
 					});
 				},
@@ -452,15 +543,17 @@
 					  //--------------------------------------
 
 					  onRender: function(){
+					    var isDashboard = (window.hackdash.app.type === "dashboard" ? true : false);
+					    
 					    this.search.show(new Search({
-					      showSort: true
+					      showSort: isDashboard
 					    }));
 
-					    this.dashboard.show(new DashboardDetails({
-					      model: new Backbone.Model({
-
-					      })
-					    }));
+					    if (isDashboard){
+					      this.dashboard.show(new DashboardDetails({
+					        model: this.model
+					      }));
+					    }
 
 					    $('.tooltips', this.$el).tooltip({});
 					  }
@@ -835,10 +928,79 @@
 						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 						  this.compilerInfo = [4,'>= 1.0.0'];
 						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+						function program1(depth0,data) {
 						  
+						  var buffer = "", stack1;
+						  buffer += "\n\n  <h1>\n    <a id=\"dashboard-title\">";
+						  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</a>\n  </h1>\n\n  <p class=\"lead\">\n    <a id=\"dashboard-description\">";
+						  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</a>\n  </p>\n\n  <p>\n    <a id=\"dashboard-link\">";
+						  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</a>\n  </p>\n\n";
+						  return buffer;
+						  }
 
+						function program3(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n\n  ";
+						  stack1 = helpers['if'].call(depth0, depth0.title, {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n\n  ";
+						  stack1 = helpers['if'].call(depth0, depth0.description, {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n\n";
+						  return buffer;
+						  }
+						function program4(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n  <h1>\n    ";
+						  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\n\n    ";
+						  stack1 = helpers['if'].call(depth0, depth0.link, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n  </h1>\n  ";
+						  return buffer;
+						  }
+						function program5(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n    <a class=\"dashboard-link\" href=\"";
+						  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\" target=\"_blank\">site</a>\n    ";
+						  return buffer;
+						  }
 
-						  return "<h1>Dashboard Title</h1>\n<p class=\"lead\">dashboard description asjnd akjsdnaskjdnaskj dnask jdnas dkjnas dkjans dkjas dnksaj dnas kjdnasd kjsn adkjs adnkasj nd askjndaskjasdn kjas dnasd kjnas dkjsn adkjasd njk asdn</p>";
+						function program7(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n  <p class=\"lead\">";
+						  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</p>\n  ";
+						  return buffer;
+						  }
+
+						  buffer += "\n";
+						  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n";
+						  return buffer;
 						  })
 						;
 					},

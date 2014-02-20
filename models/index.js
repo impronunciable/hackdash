@@ -37,7 +37,9 @@ module.exports = function(app) {
 
   var Dashboard = new Schema({
       "domain": String
-    , "created_at": { type:Date, default: Date.now }
+    , "title": String
+    , "description": String
+    , "link": String
     , "created_at": { type: Date, default: Date.now }
   });
 

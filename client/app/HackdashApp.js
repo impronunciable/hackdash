@@ -4,9 +4,10 @@
  */
 
 var 
-    Header = require('./views/Header')
-  , Projects = require('./models/Projects')
-  , ProjectsView = require('./views/Projects');
+    Header = require("./views/Header")
+  , Dashboard = require("./models/Dashboard")
+  , Projects = require("./models/Projects")
+  , ProjectsView = require("./views/Projects");
 
 module.exports = function(type){
 
@@ -36,13 +37,18 @@ module.exports = function(type){
 
   function initDashboard() {
   
+    app.dashboard = new Dashboard();
     app.projects = new Projects();
 
-    app.header.show(new Header());
+    app.header.show(new Header({
+      model: app.dashboard
+    }));
 
     app.main.show(new ProjectsView({
       collection: app.projects
     }));
+
+    app.dashboard.fetch();
 
     var query = hackdash.getQueryVariable("q");
     if (query && query.length > 0){
@@ -51,7 +57,6 @@ module.exports = function(type){
     else {
       app.projects.fetch(); 
     }
-
   }
 
   switch(type){

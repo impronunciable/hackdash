@@ -467,21 +467,8 @@ h1,h2,h3,h4,h5,h6,p {
   top:0; left: 0
 }
 
-.dashboard-header {
-  text-align: left;
-  color: #FFF;
-}
-
-.dashboard-header .dash-info {
-  margin-bottom: 20px;
-}
-
-.dashboard-header p {
-  font-size: 20px;
-}
-
-.dashboard-header a {
-  font-size: 20px;
+.dashboard-link {
+  font-size: 25px;
 }
 
 .search {

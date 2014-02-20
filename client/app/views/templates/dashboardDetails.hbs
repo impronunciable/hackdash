@@ -1,2 +1,32 @@
-<h1>Dashboard Title</h1>
-<p class="lead">dashboard description asjnd akjsdnaskjdnaskj dnask jdnas dkjnas dkjans dkjas dnksaj dnas kjdnasd kjsn adkjs adnkasj nd askjndaskjasdn kjas dnasd kjnas dkjsn adkjasd njk asdn</p>
+
+{{#if isAdmin}}
+
+  <h1>
+    <a id="dashboard-title">{{title}}</a>
+  </h1>
+
+  <p class="lead">
+    <a id="dashboard-description">{{description}}</a>
+  </p>
+
+  <p>
+    <a id="dashboard-link">{{link}}</a>
+  </p>
+
+{{else}}
+
+  {{#if title}}
+  <h1>
+    {{title}}
+
+    {{#if link}}
+    <a class="dashboard-link" href="{{link}}" target="_blank">site</a>
+    {{/if}}
+  </h1>
+  {{/if}}
+
+  {{#if description}}
+  <p class="lead">{{description}}</p>
+  {{/if}}
+
+{{/if}}

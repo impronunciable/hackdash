@@ -23,15 +23,17 @@ module.exports = Backbone.Marionette.Layout.extend({
   //--------------------------------------
 
   onRender: function(){
+    var isDashboard = (window.hackdash.app.type === "dashboard" ? true : false);
+    
     this.search.show(new Search({
-      showSort: true
+      showSort: isDashboard
     }));
 
-    this.dashboard.show(new DashboardDetails({
-      model: new Backbone.Model({
-
-      })
-    }));
+    if (isDashboard){
+      this.dashboard.show(new DashboardDetails({
+        model: this.model
+      }));
+    }
 
     $('.tooltips', this.$el).tooltip({});
   }
