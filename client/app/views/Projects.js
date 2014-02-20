@@ -24,7 +24,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
-
+  
   onRender: function(){
     var self = this;
     _.defer(function(){

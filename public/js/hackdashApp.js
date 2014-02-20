@@ -411,6 +411,28 @@
 					    return hackdash.apiURL + '/projects'; 
 					  },
 
+					  parse: function(response){
+					    var projects = [];
+
+					    // only parse projects actives if no user or user not admin of dash
+					    _.each(response, function(project){
+
+					      if (hackdash.app.type === "dashboard"){
+					        var user = hackdash.user;
+					        var isAdmin = user && (user._id === project.leader || user.admin_in.indexOf(this.domain) >= 0);
+					        if (isAdmin || project.active){
+					          projects.push(project);
+					        }
+					      }
+					      else if (project.active) {
+					        projects.push(project);
+					      }
+
+					    });
+
+					    return projects;
+					  }
+
 					});
 
 				}
@@ -592,11 +614,17 @@
 					  className: "project tooltips span4",
 					  template: template,
 
+					  ui: {
+					    "switcher": ".switcher input"
+					  },
+
 					  events: {
 					    "click .contributor a": "onContribute",
 					    "click .follower a": "onFollow",
 					    "click .remove a": "onRemove",
-					    "click .demo a": "onDemo"
+
+					    "click .demo a": "stopPropagation",
+					    "click .switcher": "stopPropagation"
 					  },
 
 					  templateHelpers: {
@@ -638,6 +666,8 @@
 					    this.$el.on("click", function(){
 					      window.location = url;
 					    });
+
+					    this.initSwitcher();
 					  },
 
 					  serializeData: function(){
@@ -655,7 +685,7 @@
 					  //+ EVENT HANDLERS
 					  //--------------------------------------
 
-					  onDemo: function(e){
+					  stopPropagation: function(e){
 					    e.stopPropagation();
 					  },
 
@@ -692,6 +722,17 @@
 					  //--------------------------------------
 					  //+ PRIVATE AND PROTECTED METHODS
 					  //--------------------------------------
+
+					  initSwitcher: function(){
+					    var self = this;
+
+					    this.ui.switcher
+					      .bootstrapSwitch()
+					      .on('switch-change', function (e, data) {
+					        self.model.set("active", data.value);
+					        self.model.save({ silent: true });
+					      });
+					  },
 
 					  isContributor: function(){
 					    return this.userExist(this.model.get("contributors"));
@@ -742,7 +783,7 @@
 					  //--------------------------------------
 					  //+ INHERITED / OVERRIDES
 					  //--------------------------------------
-
+					  
 					  onRender: function(){
 					    var self = this;
 					    _.defer(function(){
@@ -1197,6 +1238,42 @@
 						  return "\n        <a class=\"btn btn-link follow\">Follow</a>\n        ";
 						  }
 
+						function program22(depth0,data) {
+						  
+						  var buffer = "", stack1, options;
+						  buffer += "\n    ";
+						  options = {hash:{},inverse:self.noop,fn:self.program(23, program23, data),data:data};
+						  if (stack1 = helpers.isDashboardView) { stack1 = stack1.call(depth0, options); }
+						  else { stack1 = depth0.isDashboardView; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  if (!helpers.isDashboardView) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n  ";
+						  return buffer;
+						  }
+						function program23(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n      ";
+						  stack1 = helpers['if'].call(depth0, depth0.isAdminOrLeader, {hash:{},inverse:self.noop,fn:self.program(24, program24, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n    ";
+						  return buffer;
+						  }
+						function program24(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n\n        <div class=\"switcher\">\n          <input type=\"checkbox\" ";
+						  stack1 = helpers['if'].call(depth0, depth0.active, {hash:{},inverse:self.noop,fn:self.program(25, program25, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += " data-size=\"small\"\n            data-on-color=\"success\" data-off-color=\"danger\">\n        </div>\n\n       ";
+						  return buffer;
+						  }
+						function program25(depth0,data) {
+						  
+						  
+						  return "checked";
+						  }
+
 						  buffer += "<div class=\"well\">\n  <div class=\"cover shadow\"> \n    ";
 						  stack1 = helpers['if'].call(depth0, depth0.cover, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
@@ -1231,7 +1308,13 @@
 						  else { stack2 = depth0.isLoggedIn; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
 						  if (!helpers.isLoggedIn) { stack2 = blockHelperMissing.call(depth0, stack2, options); }
 						  if(stack2 || stack2 === 0) { buffer += stack2; }
-						  buffer += "\n    \n  </div>\n</div>\n";
+						  buffer += "\n    \n  </div>\n\n  ";
+						  options = {hash:{},inverse:self.noop,fn:self.program(22, program22, data),data:data};
+						  if (stack2 = helpers.isLoggedIn) { stack2 = stack2.call(depth0, options); }
+						  else { stack2 = depth0.isLoggedIn; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+						  if (!helpers.isLoggedIn) { stack2 = blockHelperMissing.call(depth0, stack2, options); }
+						  if(stack2 || stack2 === 0) { buffer += stack2; }
+						  buffer += "\n</div>\n";
 						  return buffer;
 						  })
 						;

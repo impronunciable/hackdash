@@ -471,6 +471,12 @@ h1,h2,h3,h4,h5,h6,p {
   font-size: 25px;
 }
 
+.switcher {
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+
 .search {
   clear: left;
   float: left;

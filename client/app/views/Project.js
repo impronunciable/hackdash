@@ -17,11 +17,17 @@ module.exports = Backbone.Marionette.ItemView.extend({
   className: "project tooltips span4",
   template: template,
 
+  ui: {
+    "switcher": ".switcher input"
+  },
+
   events: {
     "click .contributor a": "onContribute",
     "click .follower a": "onFollow",
     "click .remove a": "onRemove",
-    "click .demo a": "onDemo"
+
+    "click .demo a": "stopPropagation",
+    "click .switcher": "stopPropagation"
   },
 
   templateHelpers: {
@@ -63,6 +69,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.$el.on("click", function(){
       window.location = url;
     });
+
+    this.initSwitcher();
   },
 
   serializeData: function(){
@@ -80,7 +88,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
-  onDemo: function(e){
+  stopPropagation: function(e){
     e.stopPropagation();
   },
 
@@ -117,6 +125,17 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
+
+  initSwitcher: function(){
+    var self = this;
+
+    this.ui.switcher
+      .bootstrapSwitch()
+      .on('switch-change', function (e, data) {
+        self.model.set("active", data.value);
+        self.model.save({ silent: true });
+      });
+  },
 
   isContributor: function(){
     return this.userExist(this.model.get("contributors"));

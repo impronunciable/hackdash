@@ -32,6 +32,7 @@ module.exports = function(app) {
 
   app.get(uri + '/projects', setQuery, setProjects, sendProjects);
   app.del(uri + '/projects/:pid', isAuth, getProject, canChangeProject, removeProject);
+  app.put(uri + '/projects/:pid', isAuth, getProject, canChangeProject, updateProjects, sendProjects);
   
   app.post(uri + '/projects/:pid/followers', isAuth, getProject, validate, addFollower);
   app.del(uri + '/projects/:pid/followers', isAuth, getProject, validate, removeFollower);
@@ -123,6 +124,18 @@ var canChangeProject = function(req, res, next){
   }
 
   next();
+};
+
+var updateProjects = function(req, res, next) {
+  var project = req.project;
+
+  project.active = req.body.hasOwnProperty("active") ? req.body.active : project.active;
+  
+  project.save(function(err, project){
+    if(err) return res.send(500);
+    req.project = project;
+    next();
+  });
 };
 
 var removeProject = function(req, res){

@@ -64,4 +64,17 @@
     {{/isLoggedIn}}
     
   </div>
+
+  {{#isLoggedIn}}
+    {{#isDashboardView}}
+      {{#if isAdminOrLeader}}
+
+        <div class="switcher">
+          <input type="checkbox" {{#if active}}checked{{/if}} data-size="small"
+            data-on-color="success" data-off-color="danger">
+        </div>
+
+       {{/if}}
+    {{/isDashboardView}}
+  {{/isLoggedIn}}
 </div>
