@@ -560,6 +560,17 @@
 					    "dashboard": ".dashboard-ctn"
 					  },
 
+					  templateHelpers: {
+					    isAdmin: function(){
+					      var user = hackdash.user;
+					      return user && user.admin_in.indexOf(this.domain) >= 0 || false;
+					    }
+					  },
+
+					  modelEvents: {
+					    "change": "render"
+					  },
+
 					  //--------------------------------------
 					  //+ INHERITED / OVERRIDES
 					  //--------------------------------------
@@ -1065,7 +1076,7 @@
 						  
 						  var buffer = "", stack1, options;
 						  buffer += "\n  <div class=\"dashboard-ctn\"></div>\n\n  ";
-						  options = {hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),data:data};
+						  options = {hash:{},inverse:self.program(7, program7, data),fn:self.program(4, program4, data),data:data};
 						  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
 						  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
@@ -1075,11 +1086,20 @@
 						  }
 						function program4(depth0,data) {
 						  
+						  var buffer = "", stack1;
+						  buffer += "\n  <a class=\"btn btn-large\" href=\"/projects/create\">New Project</a>\n\n    ";
+						  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n\n  ";
+						  return buffer;
+						  }
+						function program5(depth0,data) {
 						  
-						  return "\n  <a class=\"btn btn-large\" href=\"/projects/create\">New Project</a>\n  ";
+						  
+						  return "\n    <a class=\"btn export\" href=\"/api/v2/csv\">Export CSV</a>    \n    ";
 						  }
 
-						function program6(depth0,data) {
+						function program7(depth0,data) {
 						  
 						  
 						  return "\n  <a class=\"btn btn-large\" href=\"/login\">Login to create a project</a>\n  ";

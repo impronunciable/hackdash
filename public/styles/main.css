@@ -79,6 +79,14 @@ header .btn:hover {
   background: #FFF; color:#000; 
 }
 
+header .btn.export {
+  position: absolute;
+  right: 0;
+  padding: 10px;
+  bottom: 0;
+  font-size: 20px;
+}
+
 .kindafixed-top {
   top: 90px;
 }

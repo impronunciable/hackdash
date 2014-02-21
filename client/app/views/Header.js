@@ -18,6 +18,17 @@ module.exports = Backbone.Marionette.Layout.extend({
     "dashboard": ".dashboard-ctn"
   },
 
+  templateHelpers: {
+    isAdmin: function(){
+      var user = hackdash.user;
+      return user && user.admin_in.indexOf(this.domain) >= 0 || false;
+    }
+  },
+
+  modelEvents: {
+    "change": "render"
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------

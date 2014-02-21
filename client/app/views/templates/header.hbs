@@ -16,6 +16,11 @@
 
   {{#isLoggedIn}}
   <a class="btn btn-large" href="/projects/create">New Project</a>
+
+    {{#if isAdmin}}
+    <a class="btn export" href="/api/v2/csv">Export CSV</a>    
+    {{/if}}
+
   {{else}}
   <a class="btn btn-large" href="/login">Login to create a project</a>
   {{/isLoggedIn}}
