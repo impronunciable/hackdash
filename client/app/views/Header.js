@@ -18,6 +18,10 @@ module.exports = Backbone.Marionette.Layout.extend({
     "dashboard": ".dashboard-ctn"
   },
 
+  ui: {
+    "switcher": ".dashboard-switcher input"
+  },
+
   templateHelpers: {
     isAdmin: function(){
       var user = hackdash.user;
@@ -47,7 +51,8 @@ module.exports = Backbone.Marionette.Layout.extend({
     }
 
     $('.tooltips', this.$el).tooltip({});
-  }
+    this.initSwitcher();
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -60,5 +65,16 @@ module.exports = Backbone.Marionette.Layout.extend({
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
+
+  initSwitcher: function(){
+    var self = this;
+
+    this.ui.switcher
+      .bootstrapSwitch()
+      .on('switch-change', function (e, data) {
+        self.model.set({ "open": data.value}, { trigger: false });
+        self.model.save({ wait: true });
+      });
+  }
 
 });

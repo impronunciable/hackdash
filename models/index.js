@@ -41,6 +41,7 @@ module.exports = function(app) {
     , "title": String
     , "description": String
     , "link": String
+    , "open": { type: Boolean, default: true }
     , "created_at": { type: Date, default: Date.now }
   });
 

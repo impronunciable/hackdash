@@ -479,6 +479,12 @@ h1,h2,h3,h4,h5,h6,p {
   font-size: 25px;
 }
 
+.dashboard-switcher {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
 .switcher {
   position: absolute;
   top: 0;

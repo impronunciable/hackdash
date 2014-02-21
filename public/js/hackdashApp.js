@@ -560,6 +560,10 @@
 					    "dashboard": ".dashboard-ctn"
 					  },
 
+					  ui: {
+					    "switcher": ".dashboard-switcher input"
+					  },
+
 					  templateHelpers: {
 					    isAdmin: function(){
 					      var user = hackdash.user;
@@ -589,7 +593,8 @@
 					    }
 
 					    $('.tooltips', this.$el).tooltip({});
-					  }
+					    this.initSwitcher();
+					  },
 
 					  //--------------------------------------
 					  //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -602,6 +607,17 @@
 					  //--------------------------------------
 					  //+ PRIVATE AND PROTECTED METHODS
 					  //--------------------------------------
+
+					  initSwitcher: function(){
+					    var self = this;
+
+					    this.ui.switcher
+					      .bootstrapSwitch()
+					      .on('switch-change', function (e, data) {
+					        self.model.set({ "open": data.value}, { trigger: false });
+					        self.model.save({ wait: true });
+					      });
+					  }
 
 					});
 				},
@@ -1076,7 +1092,7 @@
 						  
 						  var buffer = "", stack1, options;
 						  buffer += "\n  <div class=\"dashboard-ctn\"></div>\n\n  ";
-						  options = {hash:{},inverse:self.program(7, program7, data),fn:self.program(4, program4, data),data:data};
+						  options = {hash:{},inverse:self.program(10, program10, data),fn:self.program(4, program4, data),data:data};
 						  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
 						  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
@@ -1087,8 +1103,11 @@
 						function program4(depth0,data) {
 						  
 						  var buffer = "", stack1;
-						  buffer += "\n  <a class=\"btn btn-large\" href=\"/projects/create\">New Project</a>\n\n    ";
-						  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+						  buffer += "\n\n  ";
+						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n\n    ";
+						  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  buffer += "\n\n  ";
 						  return buffer;
@@ -1096,13 +1115,37 @@
 						function program5(depth0,data) {
 						  
 						  
-						  return "\n    <a class=\"btn export\" href=\"/api/v2/csv\">Export CSV</a>    \n    ";
+						  return "\n  <a class=\"btn btn-large\" href=\"/projects/create\">New Project</a>\n  ";
 						  }
 
 						function program7(depth0,data) {
 						  
+						  var buffer = "", stack1;
+						  buffer += "\n    <div class=\"dashboard-switcher\">\n      <input type=\"checkbox\" ";
+						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += " data-size=\"small\"\n        data-on-color=\"success\" data-off-color=\"danger\">\n    </div>\n\n    <a class=\"btn export\" href=\"/api/v2/csv\">Export CSV</a>\n    ";
+						  return buffer;
+						  }
+						function program8(depth0,data) {
 						  
-						  return "\n  <a class=\"btn btn-large\" href=\"/login\">Login to create a project</a>\n  ";
+						  
+						  return "checked";
+						  }
+
+						function program10(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n    \n    ";
+						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n\n  ";
+						  return buffer;
+						  }
+						function program11(depth0,data) {
+						  
+						  
+						  return "\n    <a class=\"btn btn-large\" href=\"/login\">Login to create a project</a>\n    ";
 						  }
 
 						  buffer += "<div class=\"search-ctn\"></div>\n\n<div class=\"createProject pull-right btn-group\">\n  ";

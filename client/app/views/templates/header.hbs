@@ -15,13 +15,25 @@
   <div class="dashboard-ctn"></div>
 
   {{#isLoggedIn}}
+
+  {{#if open}}
   <a class="btn btn-large" href="/projects/create">New Project</a>
+  {{/if}}
 
     {{#if isAdmin}}
-    <a class="btn export" href="/api/v2/csv">Export CSV</a>    
+    <div class="dashboard-switcher">
+      <input type="checkbox" {{#if open}}checked{{/if}} data-size="small"
+        data-on-color="success" data-off-color="danger">
+    </div>
+
+    <a class="btn export" href="/api/v2/csv">Export CSV</a>
     {{/if}}
 
   {{else}}
-  <a class="btn btn-large" href="/login">Login to create a project</a>
+    
+    {{#if open}}
+    <a class="btn btn-large" href="/login">Login to create a project</a>
+    {{/if}}
+
   {{/isLoggedIn}}
 {{/isDashboardView}}

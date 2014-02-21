@@ -61,6 +61,8 @@ var updateDashboard = function(req, res, next) {
   dashboard.title = req.body.title || dashboard.title;
   dashboard.description = req.body.description || dashboard.description;
   dashboard.link = req.body.link || dashboard.link;
+
+  dashboard.open = req.body.hasOwnProperty("open") ? req.body.open : project.open;
   
   dashboard.save(function(err, dashboard){
     if(err) return res.send(500);
