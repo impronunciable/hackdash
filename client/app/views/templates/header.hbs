@@ -21,9 +21,11 @@
   {{/if}}
 
     {{#if isAdmin}}
-    <div class="dashboard-switcher">
-      <input type="checkbox" {{#if open}}checked{{/if}} data-size="small"
-        data-on-color="success" data-off-color="danger">
+    <div class="tooltips dashboard-switcher"
+      data-placement="top" data-original-title="Toggle creation of projects on this Dashboard">
+      
+      <input type="checkbox" {{#if open}}checked{{/if}} class="switch-large"
+        data-off-label="CLOSE" data-on-label="OPEN">
     </div>
 
     <a class="btn export" href="/api/v2/csv">Export CSV</a>

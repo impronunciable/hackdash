@@ -66,6 +66,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
       type: 'text',
       title: 'Enter title',
       emptytext: "Enter a title",
+      inputclass: 'dashboard-edit-title',
 
       success: function(response, newValue) {
         self.model.set('title', newValue);
@@ -74,9 +75,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
     });
 
     this.ui.description.editable({
-      type: 'text',
+      type: 'textarea',
       title: 'Enter description',
       emptytext: "Enter a description",
+      inputclass: "dashboard-edit-desc",
 
       success: function(response, newValue) {
         self.model.set('description', newValue);
@@ -88,6 +90,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
       type: 'text',
       title: 'Enter a link',
       emptytext: "Enter a link",
+      inputclass: "dashboard-edit-link",
 
       success: function(response, newValue) {
         self.model.set('link', newValue);

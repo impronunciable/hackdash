@@ -190,7 +190,7 @@
 				  };
 
 				  // Set global mode for InlineEditor (X-Editable)
-				  $.fn.editable.defaults.mode = 'modal';
+				  $.fn.editable.defaults.mode = 'inline';
 
 				   // Init Handlebars Helpers
 				  require('./helpers/handlebars');
@@ -507,6 +507,7 @@
 					      type: 'text',
 					      title: 'Enter title',
 					      emptytext: "Enter a title",
+					      inputclass: 'dashboard-edit-title',
 
 					      success: function(response, newValue) {
 					        self.model.set('title', newValue);
@@ -515,9 +516,10 @@
 					    });
 
 					    this.ui.description.editable({
-					      type: 'text',
+					      type: 'textarea',
 					      title: 'Enter description',
 					      emptytext: "Enter a description",
+					      inputclass: "dashboard-edit-desc",
 
 					      success: function(response, newValue) {
 					        self.model.set('description', newValue);
@@ -529,6 +531,7 @@
 					      type: 'text',
 					      title: 'Enter a link',
 					      emptytext: "Enter a link",
+					      inputclass: "dashboard-edit-link",
 
 					      success: function(response, newValue) {
 					        self.model.set('link', newValue);
@@ -1005,11 +1008,11 @@
 						  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
-						    + "</a>\n  </h1>\n\n  <p class=\"lead\">\n    <a id=\"dashboard-description\">";
+						    + "</a>\n  </h1>\n\n  <p class=\"lead dashboard-lead\">\n    <a id=\"dashboard-description\">";
 						  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
-						    + "</a>\n  </p>\n\n  <p>\n    <a id=\"dashboard-link\">";
+						    + "</a>\n  </p>\n\n  <p class=\"dashboard-link\">\n    <a id=\"dashboard-link\">";
 						  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
@@ -1121,10 +1124,10 @@
 						function program7(depth0,data) {
 						  
 						  var buffer = "", stack1;
-						  buffer += "\n    <div class=\"dashboard-switcher\">\n      <input type=\"checkbox\" ";
+						  buffer += "\n    <div class=\"tooltips dashboard-switcher\"\n      data-placement=\"top\" data-original-title=\"Toggle creation of projects on this Dashboard\">\n      \n      <input type=\"checkbox\" ";
 						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += " data-size=\"small\"\n        data-on-color=\"success\" data-off-color=\"danger\">\n    </div>\n\n    <a class=\"btn export\" href=\"/api/v2/csv\">Export CSV</a>\n    ";
+						  buffer += " class=\"switch-large\"\n        data-off-label=\"CLOSE\" data-on-label=\"OPEN\">\n    </div>\n\n    <a class=\"btn export\" href=\"/api/v2/csv\">Export CSV</a>\n    ";
 						  return buffer;
 						  }
 						function program8(depth0,data) {
@@ -1325,10 +1328,10 @@
 						function program24(depth0,data) {
 						  
 						  var buffer = "", stack1;
-						  buffer += "\n\n        <div class=\"switcher\">\n          <input type=\"checkbox\" ";
+						  buffer += "\n\n        <div class=\"switcher tooltips\" data-placement=\"top\" data-original-title=\"Toggle visibility\">\n          <input type=\"checkbox\" ";
 						  stack1 = helpers['if'].call(depth0, depth0.active, {hash:{},inverse:self.noop,fn:self.program(25, program25, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += " data-size=\"small\"\n            data-on-color=\"success\" data-off-color=\"danger\">\n        </div>\n\n       ";
+						  buffer += " class=\"switch-small\">\n        </div>\n\n       ";
 						  return buffer;
 						  }
 						function program25(depth0,data) {

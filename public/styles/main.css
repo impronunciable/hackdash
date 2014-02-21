@@ -475,8 +475,37 @@ h1,h2,h3,h4,h5,h6,p {
   top:0; left: 0
 }
 
+.dashboard-edit-title {
+  font-size: 45px !important;
+  line-height: 1.3em !important;
+  height: auto !important;
+  width: auto !important;
+}
+
+.dashboard-edit-desc {
+  height: auto !important;
+  width: auto !important;
+}
+
+.dashboard-lead{
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+
 .dashboard-link {
-  font-size: 25px;
+  font-size: 18px;
+}
+
+.dashboard-edit-link {
+  font-size: 26px !important;
+  line-height: 1.3em !important;
+  height: auto !important;
+  width: auto !important;
+}
+
+.dashboard-link .editable-submit,
+.dashboard-link .editable-cancel {
+  font-size: 12px !important;
 }
 
 .dashboard-switcher {
@@ -489,6 +518,40 @@ h1,h2,h3,h4,h5,h6,p {
   position: absolute;
   top: 0;
   right: 10px;
+}
+
+.dashboard-switcher .has-switch span.switch-left,
+.switcher .has-switch span.switch-left {
+  background-color: #5bb75b;
+} 
+
+.dashboard-switcher .has-switch span.switch-right,
+.switcher .has-switch span.switch-right {
+  background-color: #bd362f;
+} 
+
+.dashboard-switcher .has-switch span.switch-left,
+.dashboard-switcher .has-switch span.switch-right,
+.switcher .has-switch span.switch-left,
+.switcher .has-switch span.switch-right {
+  background-image: none;
+  
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+}
+
+.has-switch.switch-large label {
+  border: 2px solid #FFF;
+  background: #FFF;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+.has-switch.switch-small label {
+  border: 2px solid #FFF;
+  background: #FFF;
+  padding-top: 1px;
+  padding-bottom: 1px;
 }
 
 .search {

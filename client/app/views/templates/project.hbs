@@ -69,9 +69,8 @@
     {{#isDashboardView}}
       {{#if isAdminOrLeader}}
 
-        <div class="switcher">
-          <input type="checkbox" {{#if active}}checked{{/if}} data-size="small"
-            data-on-color="success" data-off-color="danger">
+        <div class="switcher tooltips" data-placement="top" data-original-title="Toggle visibility">
+          <input type="checkbox" {{#if active}}checked{{/if}} class="switch-small">
         </div>
 
        {{/if}}
