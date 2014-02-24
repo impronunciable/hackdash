@@ -475,6 +475,10 @@ h1,h2,h3,h4,h5,h6,p {
   top:0; left: 0
 }
 
+.dashboard-closed {
+  color: #DD0000;
+}
+
 .dashboard-edit-title {
   font-size: 45px !important;
   line-height: 1.3em !important;
@@ -483,7 +487,7 @@ h1,h2,h3,h4,h5,h6,p {
 }
 
 .dashboard-edit-desc {
-  height: auto !important;
+  height: 85px!important;
   width: auto !important;
 }
 
@@ -494,6 +498,7 @@ h1,h2,h3,h4,h5,h6,p {
 
 .dashboard-link {
   font-size: 18px;
+  font-weight: bold!important;
 }
 
 .dashboard-edit-link {
@@ -563,6 +568,11 @@ h1,h2,h3,h4,h5,h6,p {
   position: relative;
 }
 
+.editable-click, a.editable-click, a.editable-click:hover {
+  text-decoration: underline;
+  border-bottom: 0;
+  color: white;
+}
 
 .formSearch i {
   color:#FFF;
@@ -574,16 +584,14 @@ h1,h2,h3,h4,h5,h6,p {
   color:#000;
 }
 
-
 .formSearch input {
   height: 30px;
   border-radius: 50px;
 }
 
-
-  header .orderby {
-    margin-top: 20px;
-  }
+header .orderby {
+  margin-top: 20px;
+}
 
 .people {
   font-weight: bold;

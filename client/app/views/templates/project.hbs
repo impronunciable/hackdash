@@ -11,10 +11,14 @@
     <h4>{{title}}</h4>
     <br/>
     {{{markdown description}}}
+    <div id="contributors">
     {{#each contributors}}
-      <img class="avatar tooltips" rel="tooltip" 
-        src="{{picture}}" data-id="{{_id}}" title="{{name}}">
+      <a href="/users/{{_id}}">
+        <img class="avatar tooltips" rel="tooltip" 
+          src="{{picture}}" data-id="{{_id}}" title="{{name}}">
+      </a>
     {{/each}}
+    </div>
   </div>
   <div class="row-fluid footer-box">
     <div class="aging activity created_at">

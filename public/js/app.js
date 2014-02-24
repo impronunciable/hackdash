@@ -127,7 +127,9 @@
 
     $('.ajaxForm').ajaxForm({
       error: formError,
-      success: formSuccess,
+      success: function(){
+        page('/');
+      },
       resetForm: true,
       beforeSubmit: formValidate
     });

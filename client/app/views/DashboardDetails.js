@@ -67,6 +67,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
       title: 'Enter title',
       emptytext: "Enter a title",
       inputclass: 'dashboard-edit-title',
+      tpl: '<input type="text" maxlength="30">',
 
       success: function(response, newValue) {
         self.model.set('title', newValue);
@@ -79,6 +80,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
       title: 'Enter description',
       emptytext: "Enter a description",
       inputclass: "dashboard-edit-desc",
+      tpl: '<textarea maxlength="250" cols="50"></textarea>',
 
       success: function(response, newValue) {
         self.model.set('description', newValue);
