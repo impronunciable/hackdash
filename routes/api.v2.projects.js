@@ -12,7 +12,18 @@ var passport = require('passport')
 var User = mongoose.model('User')
   , Project = mongoose.model('Project');
 
+var notify;
+
 module.exports = function(app, uri, common) {
+
+  notify = function(type, req) {
+    app.emit('post', {
+      type: type, 
+      project: req.project, 
+      user: req.user,
+      domain: req.project.domain
+    });
+  };
 
   app.get(uri + '/projects', setQuery, setProjects, sendProjects);
   app.del(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, removeProject);
@@ -89,6 +100,8 @@ var addFollower = function(req, res){
     if(err) return res.send(500);
     res.send(200);
   });
+
+  notify('project_follow', req);
 };
 
 var removeFollower = function(req, res){
@@ -99,6 +112,8 @@ var removeFollower = function(req, res){
     if(err) return res.send(500);
     res.send(200);
   });
+
+  notify('project_unfollow', req);
 };
 
 var addContributor = function(req, res){
@@ -109,6 +124,8 @@ var addContributor = function(req, res){
     if(err) return res.send(500);
     res.send(200);
   });
+
+  notify('project_join', req);
 };
 
 var removeContributor = function(req, res){
@@ -119,6 +136,8 @@ var removeContributor = function(req, res){
     if(err) return res.send(500);
     res.send(200);
   });
+
+  notify('project_leave', req);
 };
 
 var setQuery = function(req, res, next){
