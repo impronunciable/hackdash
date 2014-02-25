@@ -58,11 +58,14 @@ var updateDashboard = function(req, res, next) {
     req.body.link = 'http://' + req.body.link;
   }
 
-  dashboard.title = req.body.title || dashboard.title;
-  dashboard.description = req.body.description || dashboard.description;
-  dashboard.link = req.body.link || dashboard.link;
+  function getValue(prop){
+    return req.body.hasOwnProperty(prop) ? req.body[prop] : dashboard[prop];    
+  }
 
-  dashboard.open = req.body.hasOwnProperty("open") ? req.body.open : project.open;
+  dashboard.title = getValue("title");
+  dashboard.description = getValue("description");
+  dashboard.link = getValue("link");
+  dashboard.open = getValue("open");
   
   dashboard.save(function(err, dashboard){
     if(err) return res.send(500);

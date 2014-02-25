@@ -41,6 +41,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
     isAdminOrLeader: function(){
       var user = hackdash.user;
       return user._id === this.leader || user.admin_in.indexOf(this.domain) >= 0;
+    },
+    isDashboardAdmin: function(){
+      return hackdash.user && hackdash.user.admin_in.indexOf(this.domain) >= 0;
     }
   },
 
