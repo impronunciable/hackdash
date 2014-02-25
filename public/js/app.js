@@ -407,8 +407,8 @@ text:project.language}]);
       uploadFinished: function(i, file, res, time) {
         cover_path = res.href;
         $dragdrop
-          .css('background', 'url('+res.href+') center center')
-          .css('background-size', '100% 100%')
+          .css('background', 'url(' + res.href + ')')
+          .addClass("project-image")
           .children('p').hide();
       }
     });

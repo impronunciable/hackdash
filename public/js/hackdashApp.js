@@ -1,5 +1,5 @@
 /*! 
-* Hackdash - v0.3.0
+* Hackdash - v0.3.1
 * Copyright (c) 2014 Hackdash 
 *  
 */ 
@@ -936,7 +936,7 @@
 					  itemView: Project,
 					  
 					  collectionEvents: {
-					    "reset remove": "render",
+					    "remove": "render",
 					    "sort:date": "sortByDate",
 					    "sort:name": "sortByName"
 					  },
@@ -975,48 +975,28 @@
 					  isotopeInitialized: false,
 					  updateIsotope: function(){
 					    var $projects = this.$el;
-					    var self = this;
 
-					    $projects.imagesLoaded(function() {
+					    if (this.isotopeInitialized){
+					      $projects.isotope("destroy");
+					    }
 
-					      if (this.isotopeInitialized){
-					        $projects.isotope("destroy");
-					      }
-
-					      $projects.isotope({
-					          itemSelector: ".project"
-					        , animationEngine: "jquery"
-					        , resizable: true
-					        , masonry: { columnWidth: self.projectColumnWidth() }
-					        , sortAscending: true
-					        , getSortData : {
-					            "name" : function ( $elem ) {
-					              return $elem.data("name").toLowerCase();
-					            },
-					            "date" : function ( $elem ) {
-					              return $elem.data("date");
-					            }
+					    $projects.isotope({
+					        itemSelector: ".project"
+					      , animationEngine: "jquery"
+					      , resizable: true
+					      , sortAscending: true
+					      , getSortData : {
+					          "name" : function ( $elem ) {
+					            return $elem.data("name").toLowerCase();
+					          },
+					          "date" : function ( $elem ) {
+					            return $elem.data("date");
 					          }
-					        , sortBy: "name"
-					      });
-					      
-					      this.isotopeInitialized = true;
+					        }
+					      , sortBy: "name"
 					    });
-					  },
-
-					  projectColumnWidth: function () {
-					    var $projects = this.$el;
 					    
-					    return ($projects.width() >= 1200) ? 
-					            300
-					          :
-					          ($projects.width() === 960) ?
-					            $projects.width() / 3
-					          :
-					          ($projects.width() === 744) ?
-					            $projects.width() / 2
-					          :
-					            $projects.width();
+					    this.isotopeInitialized = true;
 					  }
 
 					});
@@ -1417,15 +1397,11 @@
 						function program1(depth0,data) {
 						  
 						  var buffer = "", stack1;
-						  buffer += "\n    <img src=\"";
+						  buffer += "\n    <div class=\"project-image\" style=\"background-image: url('";
 						  if (stack1 = helpers.cover) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.cover; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
-						    + "\" alt=\"";
-						  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-						  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-						  buffer += escapeExpression(stack1)
-						    + "\"/>\n    ";
+						    + "');\"></div>\n    ";
 						  return buffer;
 						  }
 

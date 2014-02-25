@@ -16,7 +16,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   itemView: Project,
   
   collectionEvents: {
-    "reset remove": "render",
+    "remove": "render",
     "sort:date": "sortByDate",
     "sort:name": "sortByName"
   },
@@ -55,48 +55,28 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   isotopeInitialized: false,
   updateIsotope: function(){
     var $projects = this.$el;
-    var self = this;
 
-    $projects.imagesLoaded(function() {
+    if (this.isotopeInitialized){
+      $projects.isotope("destroy");
+    }
 
-      if (this.isotopeInitialized){
-        $projects.isotope("destroy");
-      }
-
-      $projects.isotope({
-          itemSelector: ".project"
-        , animationEngine: "jquery"
-        , resizable: true
-        , masonry: { columnWidth: self.projectColumnWidth() }
-        , sortAscending: true
-        , getSortData : {
-            "name" : function ( $elem ) {
-              return $elem.data("name").toLowerCase();
-            },
-            "date" : function ( $elem ) {
-              return $elem.data("date");
-            }
+    $projects.isotope({
+        itemSelector: ".project"
+      , animationEngine: "jquery"
+      , resizable: true
+      , sortAscending: true
+      , getSortData : {
+          "name" : function ( $elem ) {
+            return $elem.data("name").toLowerCase();
+          },
+          "date" : function ( $elem ) {
+            return $elem.data("date");
           }
-        , sortBy: "name"
-      });
-      
-      this.isotopeInitialized = true;
+        }
+      , sortBy: "name"
     });
-  },
-
-  projectColumnWidth: function () {
-    var $projects = this.$el;
     
-    return ($projects.width() >= 1200) ? 
-            300
-          :
-          ($projects.width() === 960) ?
-            $projects.width() / 3
-          :
-          ($projects.width() === 744) ?
-            $projects.width() / 2
-          :
-            $projects.width();
+    this.isotopeInitialized = true;
   }
 
 });

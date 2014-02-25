@@ -138,7 +138,8 @@ header .btn.export {
   background: #000;
 }
 
-.well .cover img{
+.well .cover img, 
+.well .cover .project-image {
   opacity: 0.8;
         /* Firefox */
   -moz-transition: all 0.2s ease-in-out;
@@ -153,10 +154,17 @@ header .btn.export {
 }
 
 
-.well:hover .cover img {
+.well:hover .cover img,
+.well:hover .cover .project-image {
   opacity: 1
 }
 
+.project-image {
+  width: 100%;
+  height: 200px;
+  background-position: center!important;
+  background-size: cover!important;
+}
 
 #projects .well:hover {
   box-shadow: 0 2px 3px rgba(0,0,0,0.3);
@@ -289,8 +297,8 @@ line-height:                     0;
 
 	header {
 		position: static;
-		height: 50px;
-		padding-bottom: 300px;
+		/*height: 50px;
+		padding-bottom: 300px;*/
     margin-bottom: 10px;
 	}
 
@@ -340,6 +348,16 @@ line-height:                     0;
     display: none;
 	}
 	
+  header .dashboard-switcher {
+    position: static;
+    margin-top: 20px;
+  }
+
+  header .btn.export {
+    position: static;
+    margin-top: 20px;
+  }
+
   .isotope .project {
     position: static ! important;
     -webkit-transform: translate(0px, 0px) ! important;
@@ -429,7 +447,6 @@ line-height:                     0;
 .project.wireframing .well { border-top-color:#55c5ff;}
 .project.researching .well { border-top-color:red;}
 .project.brainstorming .well { border-top-color:#ff5a00;}
-
 
 h1,h2,h3,h4,h5,h6,p {
   font-family: 'Open Sans', sans-serif;
@@ -689,6 +706,10 @@ vertical-align: top;
   border: dashed 2px #999;
   border-radius: 5px;
   text-align: center;
+
+  width: 50%;
+  height: 200px;
+  margin: auto;
 }
 
 #dragdrop p {
