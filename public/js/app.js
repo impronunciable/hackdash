@@ -128,7 +128,7 @@
     $('.ajaxForm').ajaxForm({
       error: formError,
       success: function(){
-        page('/');
+        window.location = "/";
       },
       resetForm: true,
       beforeSubmit: formValidate
@@ -147,7 +147,9 @@
 
       $('.ajaxForm').ajaxForm({
         error: formError,
-        success: formSuccess,
+        success: function(){
+          window.location = "/";
+        },
         resetForm: true,
         beforeSubmit: formValidate
       });

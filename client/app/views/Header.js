@@ -44,7 +44,7 @@ module.exports = Backbone.Marionette.Layout.extend({
       showSort: isDashboard
     }));
 
-    if (isDashboard){
+    if (isDashboard && this.model.get("_id")){
       this.dashboard.show(new DashboardDetails({
         model: this.model
       }));

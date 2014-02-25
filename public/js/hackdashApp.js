@@ -591,7 +591,7 @@
 					      showSort: isDashboard
 					    }));
 
-					    if (isDashboard){
+					    if (isDashboard && this.model.get("_id")){
 					      this.dashboard.show(new DashboardDetails({
 					        model: this.model
 					      }));
@@ -670,6 +670,9 @@
 					    isAdminOrLeader: function(){
 					      var user = hackdash.user;
 					      return user._id === this.leader || user.admin_in.indexOf(this.domain) >= 0;
+					    },
+					    isDashboardAdmin: function(){
+					      return hackdash.user && hackdash.user.admin_in.indexOf(this.domain) >= 0;
 					    }
 					  },
 
@@ -1096,77 +1099,86 @@
 
 						function program3(depth0,data) {
 						  
-						  var buffer = "", stack1, options;
-						  buffer += "\n  <div class=\"dashboard-ctn\"></div>\n\n  ";
-						  options = {hash:{},inverse:self.program(12, program12, data),fn:self.program(4, program4, data),data:data};
-						  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
-						  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-						  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+						  var buffer = "", stack1;
+						  buffer += "\n  ";
+						  stack1 = helpers['if'].call(depth0, depth0._id, {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n\n";
+						  buffer += "\n";
 						  return buffer;
 						  }
 						function program4(depth0,data) {
 						  
-						  var buffer = "", stack1;
-						  buffer += "\n\n    ";
-						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
+						  var buffer = "", stack1, options;
+						  buffer += "\n    <div class=\"dashboard-ctn\"></div>\n\n    ";
+						  options = {hash:{},inverse:self.program(13, program13, data),fn:self.program(5, program5, data),data:data};
+						  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
+						  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n\n    ";
-						  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data});
-						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n\n  ";
+						  buffer += "\n  ";
 						  return buffer;
 						  }
 						function program5(depth0,data) {
 						  
-						  
-						  return "\n    <a class=\"btn btn-large\" href=\"/projects/create\">New Project</a>\n    ";
-						  }
-
-						function program7(depth0,data) {
-						  
-						  
-						  return "\n    <h4 class=\"tooltips dashboard-closed\" data-placement=\"bottom\" data-original-title=\"Dashboard closed for creating projects\">Dashboard Closed</h4>\n    ";
-						  }
-
-						function program9(depth0,data) {
-						  
 						  var buffer = "", stack1;
-						  buffer += "\n    <div class=\"tooltips dashboard-switcher\"\n      data-placement=\"top\" data-original-title=\"Toggle creation of projects on this Dashboard\">\n      \n      <input type=\"checkbox\" ";
-						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
+						  buffer += "\n\n      ";
+						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += " class=\"switch-large\"\n        data-off-label=\"CLOSE\" data-on-label=\"OPEN\">\n    </div>\n\n    <a class=\"btn export\" href=\"/api/v2/csv\">Export CSV</a>\n    ";
+						  buffer += "\n\n      ";
+						  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n\n    ";
 						  return buffer;
 						  }
+						function program6(depth0,data) {
+						  
+						  
+						  return "\n      <a class=\"btn btn-large\" href=\"/projects/create\">New Project</a>\n      ";
+						  }
+
+						function program8(depth0,data) {
+						  
+						  
+						  return "\n      <h4 class=\"tooltips dashboard-closed\" data-placement=\"bottom\" data-original-title=\"Dashboard closed for creating projects\">Dashboard Closed</h4>\n      ";
+						  }
+
 						function program10(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n      <div class=\"tooltips dashboard-switcher\"\n        data-placement=\"top\" data-original-title=\"Toggle creation of projects on this Dashboard\">\n        \n        <input type=\"checkbox\" ";
+						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += " class=\"switch-large\"\n          data-off-label=\"CLOSE\" data-on-label=\"OPEN\">\n      </div>\n\n      <a class=\"btn export\" href=\"/api/v2/csv\">Export CSV</a>\n      ";
+						  return buffer;
+						  }
+						function program11(depth0,data) {
 						  
 						  
 						  return "checked";
 						  }
 
-						function program12(depth0,data) {
-						  
-						  var buffer = "", stack1;
-						  buffer += "\n    \n    ";
-						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(15, program15, data),fn:self.program(13, program13, data),data:data});
-						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n\n  ";
-						  return buffer;
-						  }
 						function program13(depth0,data) {
 						  
+						  var buffer = "", stack1;
+						  buffer += "\n      \n      ";
+						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(16, program16, data),fn:self.program(14, program14, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n\n    ";
+						  return buffer;
+						  }
+						function program14(depth0,data) {
 						  
-						  return "\n    <a class=\"btn btn-large\" href=\"/login\">Login to create a project</a>\n    ";
+						  
+						  return "\n      <a class=\"btn btn-large\" href=\"/login\">Login to create a project</a>\n      ";
 						  }
 
-						function program15(depth0,data) {
+						function program16(depth0,data) {
 						  
 						  
-						  return "\n    <a class=\"btn btn-large\" href=\"/login\">Login to join/follow projects</a>\n    ";
+						  return "\n      <a class=\"btn btn-large\" href=\"/login\">Login to join/follow projects</a>\n      ";
 						  }
 
-						function program17(depth0,data) {
+						function program18(depth0,data) {
 						  
 						  
 						  return "\n  <h1>Search Projects</h1>\n";
@@ -1179,7 +1191,7 @@
 						  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  buffer += "\n</div>\n\n<a class=\"logo\" href=\"/\"></a>\n\n";
-						  options = {hash:{},inverse:self.program(17, program17, data),fn:self.program(3, program3, data),data:data};
+						  options = {hash:{},inverse:self.program(18, program18, data),fn:self.program(3, program3, data),data:data};
 						  if (stack1 = helpers.isDashboardView) { stack1 = stack1.call(depth0, options); }
 						  else { stack1 = depth0.isDashboardView; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  if (!helpers.isDashboardView) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
@@ -1345,7 +1357,7 @@
 						  
 						  var buffer = "", stack1;
 						  buffer += "\n      ";
-						  stack1 = helpers['if'].call(depth0, depth0.isAdminOrLeader, {hash:{},inverse:self.noop,fn:self.program(24, program24, data),data:data});
+						  stack1 = helpers['if'].call(depth0, depth0.isDashboardAdmin, {hash:{},inverse:self.noop,fn:self.program(24, program24, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  buffer += "\n    ";
 						  return buffer;
