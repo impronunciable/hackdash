@@ -50,7 +50,8 @@ module.exports = function(app) {
   var hackdashStack = [
     loadUser, 
     loadProviders,
-    setViewVar('host', appHost)
+    setViewVar('host', appHost),
+    setViewVar('version', app.get('clientVersion'))
   ];
 
   var hackdashDashboardStack = [
@@ -59,7 +60,8 @@ module.exports = function(app) {
     isHomepage,
     dashExists,
     checkProfile,
-    setViewVar('host', appHost)
+    setViewVar('host', appHost),
+    setViewVar('version', app.get('clientVersion'))
   ];
 
   app.get('/', hackdashDashboardStack, setViewVar('app_type', 'dashboard'), render('hackdashApp'));

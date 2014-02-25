@@ -8,7 +8,8 @@ var express = require('express')
   , mongoose = require('mongoose')
   , MongoStore = require('connect-mongo')(express)
   , config = require('./config.json')
-  , http = require('http');
+  , http = require('http')
+  , clientVersion = require('./client/package.json').version;
 
 /*
  * DB
@@ -24,6 +25,7 @@ var app = exports.app = express();
 
 app.configure(function(){
   app.set('config', config);
+  app.set('clientVersion', clientVersion);
   app.set('port', process.env.PORT || app.get('config').port);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
