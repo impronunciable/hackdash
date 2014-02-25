@@ -62,8 +62,8 @@ module.exports = function(app) {
     setViewVar('host', appHost)
   ];
 
-  app.get('/', hackdashDashboardStack, setViewVar('app_type', 'dashboard'), render('isearch'));
-  app.get('/search', hackdashDashboardStack, setViewVar('app_type', 'dashboard'), render('isearch'));
+  app.get('/', hackdashDashboardStack, setViewVar('app_type', 'dashboard'), render('hackdashApp'));
+  app.get('/search', hackdashDashboardStack, setViewVar('app_type', 'dashboard'), render('hackdashApp'));
 
   //app.get('/', homeStack); // X
   app.get('/live', liveStack);
@@ -83,7 +83,7 @@ module.exports = function(app) {
 
   app.post('/dashboard/create', isAuth, validateSubdomain, createDashboard(app));
 
-  app.get('/isearch', hackdashStack, setViewVar('app_type', 'isearch'), render('isearch'));
+  app.get('/isearch', hackdashStack, setViewVar('app_type', 'isearch'), render('hackdashApp'));
 };
 
 /*

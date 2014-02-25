@@ -723,6 +723,12 @@ footer {
   margin: 100px 0 0 0;
 }
 
+footer h4 {
+  color: white;
+  float: left;
+  margin-right: 50px;
+}
+
 .hidden {
   display: none;
 }

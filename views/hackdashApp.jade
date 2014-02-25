@@ -16,9 +16,34 @@ html
 
   body
 
-  
     header
     .container#page
       #main
         block content
-    include isearch_footer
+    
+    footer
+
+    script(src="/js/libs/jquery.min.js")
+    script(src="/js/libs/bootstrap.min.js")
+    script(src="/js/vendor.js")
+    script(src='//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/js/bootstrap-editable.min.js')
+
+    if ("undefined" == typeof user)
+      script.
+        window.hackdash = { 
+          user: null,
+          baseURL: "!{host}"
+        };
+    else 
+      script.
+        window.hackdash = { 
+          user: !{JSON.stringify(user)},
+          baseURL: "!{host}"
+        };
+
+    script(src="/js/hackdashApp.js")
+
+    script.
+      $(function(){
+        window.hackdash.startApp("!{app_type}");
+      });

@@ -104,6 +104,7 @@
 
 				var 
 				    Header = require("./views/Header")
+				  , Footer = require("./views/Footer")
 				  , Dashboard = require("./models/Dashboard")
 				  , Projects = require("./models/Projects")
 				  , ProjectsView = require("./views/Projects");
@@ -114,7 +115,8 @@
 
 				  app.addRegions({
 				    header: "header",
-				    main: "#main"
+				    main: "#main",
+				    footer: "footer"
 				  });
 
 				  function initISearch() {
@@ -145,6 +147,10 @@
 
 				    app.main.show(new ProjectsView({
 				      collection: app.projects
+				    }));
+
+				    app.footer.show(new Footer({
+				      model: app.dashboard
 				    }));
 
 				    app.dashboard.fetch();
@@ -302,19 +308,51 @@
 				});
 			},
 			"models": {
+				"Admins.js": function (exports, module, require) {
+					/**
+					 * Collection: Administrators of a Dashboard
+					 *
+					 */
+
+					var 
+					  Users = require('./Users'),
+					  User = require('./User');
+
+					module.exports = Users.extend({
+					  
+					  model: User,
+					  idAttribute: "_id",
+
+					  url: function(){
+					    return hackdash.apiURL + '/admins'; 
+					  },
+
+					});
+
+				},
 				"Dashboard.js": function (exports, module, require) {
 					/**
 					 * MODEL: Project
 					 *
 					 */
 
+					var Admins = require("./Admins");
+
 					module.exports = Backbone.Model.extend({
+
+					  defaults: {
+					    admins: null
+					  },
 
 					  url: function(){
 					    return hackdash.apiURL + "/"; 
 					  },
 
-					  idAttribute: "_id",  
+					  idAttribute: "_id", 
+
+					  initialize: function(){
+					    this.set("admins", new Admins());
+					  },
 
 					});
 
@@ -435,6 +473,40 @@
 
 					});
 
+				},
+				"User.js": function (exports, module, require) {
+					/**
+					 * MODEL: User
+					 *
+					 */
+
+					module.exports = Backbone.Model.extend({
+
+					  idAttribute: "_id",
+
+					});
+				},
+				"Users.js": function (exports, module, require) {
+					/**
+					 * Collection: Users
+					 *
+					 */
+
+					var 
+					  User = require('./User');
+
+					module.exports = Backbone.Collection.extend({
+					  
+					  model: User,
+					  
+					  idAttribute: "_id",
+
+					  url: function(){
+					    return hackdash.apiURL + '/users'; 
+					  },
+
+					});
+
 				}
 			},
 			"views": {
@@ -541,6 +613,59 @@
 					      }
 					    });
 					  }
+
+					});
+				},
+				"Footer.js": function (exports, module, require) {
+					
+					var 
+					    template = require('./templates/footer.hbs')
+					  , Users = require('./Users');
+
+					module.exports = Backbone.Marionette.Layout.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  className: "container",
+					  template: template,
+
+					  regions: {
+					    "admins": ".admins-ctn"
+					  },
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  onRender: function(){
+					    var isDashboard = (hackdash.app.type === "dashboard" ? true : false);
+					    
+					    if (isDashboard){
+
+					      this.admins.show(new Users({
+					        collection: this.model.get("admins")
+					      }));
+
+					      this.model.get("admins").fetch();
+					    }
+
+					    $('.tooltips', this.$el).tooltip({});
+					  },
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
 
 					});
 				},
@@ -1000,6 +1125,78 @@
 
 					});
 				},
+				"User.js": function (exports, module, require) {
+					/**
+					 * VIEW: User
+					 * 
+					 */
+					 
+					var template = require('./templates/user.hbs');
+
+					module.exports = Backbone.Marionette.ItemView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  template: template,
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  onRender: function(){
+					    $('.tooltips', this.$el).tooltip({});
+					  }
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					});
+				},
+				"Users.js": function (exports, module, require) {
+					/**
+					 * VIEW: Collection of Users
+					 * 
+					 */
+
+					var User = require('./User');
+
+					module.exports = Backbone.Marionette.CollectionView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  itemView: User
+					  
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					});
+				},
 				"templates": {
 					"dashboardDetails.hbs.js": function (exports, module, require) {
 						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1078,6 +1275,17 @@
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  buffer += "\n";
 						  return buffer;
+						  })
+						;
+					},
+					"footer.hbs.js": function (exports, module, require) {
+						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+						  this.compilerInfo = [4,'>= 1.0.0'];
+						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  
+
+
+						  return "<h4>Admins</h4>\n<div class=\"well-content admins-ctn\"></div>";
 						  })
 						;
 					},
@@ -1440,6 +1648,34 @@
 						  else { stack1 = depth0.isDashboardView; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  if (!helpers.isDashboardView) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  return buffer;
+						  })
+						;
+					},
+					"user.hbs.js": function (exports, module, require) {
+						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+						  this.compilerInfo = [4,'>= 1.0.0'];
+						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+						  buffer += "<a href=\"/users/";
+						  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\">\n  <img class=\"avatar tooltips\" rel=\"tooltip\" \n    src=\"";
+						  if (stack1 = helpers.picture) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.picture; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\" data-id=\"";
+						  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\" title=\"";
+						  if (stack1 = helpers.name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.name; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\">\n</a>";
 						  return buffer;
 						  })
 						;

@@ -5,6 +5,7 @@
 
 var 
     Header = require("./views/Header")
+  , Footer = require("./views/Footer")
   , Dashboard = require("./models/Dashboard")
   , Projects = require("./models/Projects")
   , ProjectsView = require("./views/Projects");
@@ -15,7 +16,8 @@ module.exports = function(type){
 
   app.addRegions({
     header: "header",
-    main: "#main"
+    main: "#main",
+    footer: "footer"
   });
 
   function initISearch() {
@@ -46,6 +48,10 @@ module.exports = function(type){
 
     app.main.show(new ProjectsView({
       collection: app.projects
+    }));
+
+    app.footer.show(new Footer({
+      model: app.dashboard
     }));
 
     app.dashboard.fetch();
