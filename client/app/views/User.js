@@ -11,6 +11,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
+  tagName: "li",
   template: template,
 
   //--------------------------------------

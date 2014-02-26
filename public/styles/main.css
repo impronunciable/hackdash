@@ -530,6 +530,10 @@ h1,h2,h3,h4,h5,h6,p {
   font-size: 12px !important;
 }
 
+.editable-empty {
+  color: rgba(255,255,255,0.4)!important;
+}
+
 .dashboard-switcher {
   position: absolute;
   bottom: 0;
@@ -729,14 +733,6 @@ vertical-align: top;
   background: #669900;
 }
 
-/*
-Click on project effect
-*/
-
-.zoomed {
-  visibility: hidden;
-}
-
 
 footer { 
   padding: 18px 0 17px 0;
@@ -747,7 +743,29 @@ footer {
 footer h4 {
   color: white;
   float: left;
-  margin-right: 50px;
+}
+
+.admins-ctn {
+  padding: 0;
+  float: left;
+}
+
+.admins-ctn ul {
+  list-style: none;
+}
+
+.admins-ctn ul>li {
+  float: left;
+  margin-left: 15px;
+}
+
+
+/*
+Click on project effect
+*/
+
+.zoomed {
+  visibility: hidden;
 }
 
 .hidden {

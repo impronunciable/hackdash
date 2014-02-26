@@ -11,6 +11,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
+  tagName: "ul",
   itemView: User
   
   //--------------------------------------

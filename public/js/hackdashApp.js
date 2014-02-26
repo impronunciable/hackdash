@@ -1119,6 +1119,7 @@
 					  //+ PUBLIC PROPERTIES / CONSTANTS
 					  //--------------------------------------
 
+					  tagName: "li",
 					  template: template,
 
 					  //--------------------------------------
@@ -1157,6 +1158,7 @@
 					  //+ PUBLIC PROPERTIES / CONSTANTS
 					  //--------------------------------------
 
+					  tagName: "ul",
 					  itemView: User
 					  
 					  //--------------------------------------
