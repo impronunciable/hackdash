@@ -4,10 +4,14 @@
  */
 
 var 
-    Header = require("./views/Header")
-  , Footer = require("./views/Footer")
-  , Dashboard = require("./models/Dashboard")
+    Dashboard = require("./models/Dashboard")
   , Projects = require("./models/Projects")
+  , Profile = require("./models/Profile")
+
+  , Header = require("./views/Header")
+  , Footer = require("./views/Footer")
+
+  , ProfileView = require("./views/Profile")
   , ProjectsView = require("./views/Projects");
 
 module.exports = function(type){
@@ -35,6 +39,23 @@ module.exports = function(type){
       app.projects.fetch({ data: $.param({ q: query }) });
     }
 
+  }
+
+  function initProfile() {
+
+    var userId = (window.location.pathname.split('/').pop()).split('?')[0];
+    
+    app.profile = new Profile({
+      _id: userId
+    });
+
+    app.profile.fetch({ parse: true });
+
+    app.header.show(new Header());
+
+    app.main.show(new ProfileView({
+      model: app.profile
+    }));
   }
 
   function initDashboard() {
@@ -71,6 +92,9 @@ module.exports = function(type){
       break;
     case "isearch":
       app.addInitializer(initISearch);
+      break;
+    case "profile":
+      app.addInitializer(initProfile);
       break;
   }
 

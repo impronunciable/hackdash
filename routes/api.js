@@ -10,20 +10,27 @@ var User = mongoose.model('User')
 
 module.exports = function(app) {
   app.get('/api/projects', loadProjects, render('projects'));
+ 
   app.post('/api/projects/create', isAuth, validateProject, saveProject, notify(app, 'project_created'), gracefulRes());
   app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject, notify(app, 'project_removed'), gracefulRes());
   app.get('/api/projects/create', isAuth, setViewVar('statuses', app.get('statuses')), render('new_project'));
   app.post('/api/cover', isAuth, uploadCover);
   app.get('/api/projects/edit/:project_id', isAuth, setViewVar('statuses', app.get('statuses')), isProjectLeader, loadProject, render('edit'));
   app.post('/api/projects/edit/:project_id', isAuth, isProjectLeader, validateProject, updateProject, notify(app, 'project_edited'), gracefulRes());
+  
+  /*
   app.get('/api/projects/join/:project_id', isAuth, joinProject, followProject, loadProject, notify(app, 'project_join'), sendMail(app, 'join'), gracefulRes()); 
   app.get('/api/projects/leave/:project_id', isAuth, isProjectMember, leaveProject, loadProject, notify(app, 'project_leave'), gracefulRes()); 
   app.get('/api/projects/follow/:project_id', isAuth, followProject, loadProject, notify(app, 'project_follow'), gracefulRes()); 
   app.get('/api/projects/unfollow/:project_id', isAuth, isProjectFollower, unfollowProject, loadProject, notify(app, 'project_unfollow'), gracefulRes()); 
+  */
+
   app.get('/api/p/:project_id', loadProject, render('project_full'));
-  app.get('/api/search', prepareSearchQuery,  render('projects'));
+  //app.get('/api/search', prepareSearchQuery,  render('projects'));
+
   app.get('/api/users/profile', isAuth, loadUser, userIsProfile, render('edit_profile'));
   app.get('/api/users/:user_id', loadUser, findUser, render('profile'));
+  
   app.post('/api/users/:user_id', isAuth, updateUser, gracefulRes('ok!'));
 };
 

@@ -22,8 +22,6 @@ module.exports = function(app, uri, common) {
   app.post(uri + '/', common.notAllowed);
   app.del(uri + '/', common.notAllowed);
 
-  app.get(uri + '/admins', getDashboard, getDashboardAdmins, sendUsers);
-
   app.get(uri + '/csv', common.isAuth, getDashboard, isAdminDashboard, sendDashboardCSV);
 
 };
@@ -76,22 +74,8 @@ var updateDashboard = function(req, res, next) {
   });
 };
 
-var getDashboardAdmins = function(req, res, next){
-  User
-    .find({ "admin_in": req.dashboard.domain })
-    .exec(function(err, users) {
-      if(err) return res.send(500);
-      req.users = users || [];
-      next();
-    });
-};
-
 var sendDashboard = function(req, res){
   res.send(req.dashboard);
-};
-
-var sendUsers = function(req, res){
-  res.send(req.users);
 };
 
 var sendDashboardCSV = function(req, res){

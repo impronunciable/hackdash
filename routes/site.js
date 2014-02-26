@@ -64,6 +64,14 @@ module.exports = function(app) {
     setViewVar('version', app.get('clientVersion'))
   ];
 
+  var hackdashProfileStack = [
+    loadUser, 
+    loadProviders,
+    checkProfile,
+    setViewVar('host', appHost),
+    setViewVar('version', app.get('clientVersion'))
+  ];
+
   app.get('/', hackdashDashboardStack, setViewVar('app_type', 'dashboard'), render('hackdashApp'));
   app.get('/search', hackdashDashboardStack, setViewVar('app_type', 'dashboard'), render('hackdashApp'));
 
@@ -81,7 +89,10 @@ module.exports = function(app) {
   app.get('/about', loadUser, render('about'));
 
   app.get('/users/profile', dashboardStack);
-  app.get('/users/:user_id', dashboardStack);
+  //app.get('/users/:user_id', dashboardStack);
+
+  //app.get('/users/profile', hackdashProfileStack, setViewVar('app_type', 'profile'), render('hackdashApp'));
+  app.get('/users/:user_id', hackdashProfileStack, setViewVar('app_type', 'profile'), render('hackdashApp'));
 
   app.post('/dashboard/create', isAuth, validateSubdomain, createDashboard(app));
 

@@ -103,10 +103,14 @@
 				 */
 
 				var 
-				    Header = require("./views/Header")
-				  , Footer = require("./views/Footer")
-				  , Dashboard = require("./models/Dashboard")
+				    Dashboard = require("./models/Dashboard")
 				  , Projects = require("./models/Projects")
+				  , Profile = require("./models/Profile")
+
+				  , Header = require("./views/Header")
+				  , Footer = require("./views/Footer")
+
+				  , ProfileView = require("./views/Profile")
 				  , ProjectsView = require("./views/Projects");
 
 				module.exports = function(type){
@@ -134,6 +138,23 @@
 				      app.projects.fetch({ data: $.param({ q: query }) });
 				    }
 
+				  }
+
+				  function initProfile() {
+
+				    var userId = (window.location.pathname.split('/').pop()).split('?')[0];
+				    
+				    app.profile = new Profile({
+				      _id: userId
+				    });
+
+				    app.profile.fetch({ parse: true });
+
+				    app.header.show(new Header());
+
+				    app.main.show(new ProfileView({
+				      model: app.profile
+				    }));
 				  }
 
 				  function initDashboard() {
@@ -170,6 +191,9 @@
 				      break;
 				    case "isearch":
 				      app.addInitializer(initISearch);
+				      break;
+				    case "profile":
+				      app.addInitializer(initProfile);
 				      break;
 				  }
 
@@ -356,6 +380,44 @@
 
 					});
 
+				},
+				"Profile.js": function (exports, module, require) {
+					/**
+					 * MODEL: User
+					 *
+					 */
+
+					var Projects = require("./Projects");
+
+					module.exports = Backbone.Model.extend({
+
+					  idAttribute: "_id",
+
+					  defaults: {
+					    dashboards: null,
+					    projects: null,
+					    contributions: null,
+					    likes: null
+					  },
+
+					  urlRoot: function(){
+					    return hackdash.apiURL + '/profiles'; 
+					  },
+
+					  parse: function(response){
+
+					    response.dashboards = new Backbone.Collection(
+					      _.map(response.admin_in, function(dash){ return { title: dash }; })
+					    );
+					    
+					    response.projects = new Projects(response.projects);
+					    response.contributions = new Projects(response.contributions);
+					    response.likes = new Projects(response.likes);
+
+					    return response;
+					  }
+
+					});
 				},
 				"Project.js": function (exports, module, require) {
 					/**
@@ -751,6 +813,71 @@
 
 					});
 				},
+				"Profile.js": function (exports, module, require) {
+					
+					var 
+					    template = require("./templates/profile.hbs")
+					  , ProjectList = require("./ProjectList");
+
+					module.exports = Backbone.Marionette.Layout.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  className: "container profile-ctn",
+					  template: template,
+
+					  regions: {
+					    "dashboards": ".dashboards-ctn",
+					    "projects": ".projects-ctn",
+					    "contributions": ".contributions-ctn",
+					    "likes": ".likes-ctn",
+					  },
+
+					  modelEvents: {
+					    "change": "render"
+					  },
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  onRender: function(){
+
+					    this.dashboards.show(new ProjectList({
+					      collection: this.model.get("dashboards")
+					    }));
+
+					    this.projects.show(new ProjectList({
+					      collection: this.model.get("projects")
+					    }));
+					    
+					    this.contributions.show(new ProjectList({
+					      collection: this.model.get("contributions")
+					    }));
+
+					    this.likes.show(new ProjectList({
+					      collection: this.model.get("likes")
+					    }));
+
+					    $('.tooltips', this.$el).tooltip({});
+					  }
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					});
+				},
 				"Project.js": function (exports, module, require) {
 					/**
 					 * VIEW: Project
@@ -914,6 +1041,91 @@
 					      return (usr._id === uid);
 					    }) ? true : false;
 					  }
+
+					});
+				},
+				"ProjectList.js": function (exports, module, require) {
+					/**
+					 * VIEW: Projects of an Instance
+					 * 
+					 */
+
+					var Project = require('./ProjectListItem');
+
+					module.exports = Backbone.Marionette.CollectionView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  tagName: "ul",
+					  itemView: Project,
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+					  
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					});
+				},
+				"ProjectListItem.js": function (exports, module, require) {
+					/**
+					 * VIEW: Project
+					 * 
+					 */
+					 
+					var template = require('./templates/projectListItem.hbs');
+
+					module.exports = Backbone.Marionette.ItemView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  tagName: "li",
+					  template: template,
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  onRender: function(){
+					    this.$el
+					      .addClass(this.model.get("status"))
+					      .tooltip({});
+
+					    $('.tooltips', this.$el).tooltip({});
+
+					    var url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
+					      "/p/" + this.model.get("_id");
+
+					    this.$el.on("click", function(){
+					      window.location = url;
+					    });
+					  }
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
 
 					});
 				},
@@ -1390,6 +1602,34 @@
 						  })
 						;
 					},
+					"profile.hbs.js": function (exports, module, require) {
+						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+						  this.compilerInfo = [4,'>= 1.0.0'];
+						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+						  buffer += "<div class=\"span4 span-center\">\n  <div class=\"boxxy\">\n    <h3 class=\"header\">\n      <img src=\"";
+						  if (stack1 = helpers.picture) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.picture; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\" style=\"margin-right: 10px;\" class=\"avatar\">\n      ";
+						  if (stack1 = helpers.name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.name; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\n    </h3>\n    <div class=\"profileInfo\">\n      <p><strong>Email: </strong>";
+						  if (stack1 = helpers.email) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</p>\n      <p><strong>Bio: </strong>";
+						  if (stack1 = helpers.bio) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.bio; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</p>\n    </div>\n  </div>\n\n  <h4>Dashboards</h4>\n  <div class=\"dashboards-ctn\"></div>\n\n  <h4>Projects created</h4>\n  <div class=\"projects-ctn\"></div>\n\n  <h4>Contributions</h4>\n  <div class=\"contributions-ctn\"></div>\n\n  <h4>Likes</h4>\n  <div class=\"likes-ctn\"></div>\n  \n</div>\n";
+						  return buffer;
+						  })
+						;
+					},
 					"project.hbs.js": function (exports, module, require) {
 						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 						  this.compilerInfo = [4,'>= 1.0.0'];
@@ -1604,6 +1844,22 @@
 						  if (!helpers.isLoggedIn) { stack2 = blockHelperMissing.call(depth0, stack2, options); }
 						  if(stack2 || stack2 === 0) { buffer += stack2; }
 						  buffer += "\n</div>\n";
+						  return buffer;
+						  })
+						;
+					},
+					"projectListItem.hbs.js": function (exports, module, require) {
+						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+						  this.compilerInfo = [4,'>= 1.0.0'];
+						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+						  buffer += "<a>\n  <div class=\"well\">\n    ";
+						  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\n  </div>\n</a>";
 						  return buffer;
 						  })
 						;

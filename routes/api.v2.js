@@ -10,16 +10,13 @@ var passport = require('passport')
   , mongoose = require('mongoose')
   , config = require('../config.json');
 
-var User = mongoose.model('User')
-  , Project = mongoose.model('Project')
-  , Dashboard = mongoose.model('Dashboard');
-
 module.exports = function(app) {
 
   var root = '/api/';
 
   require('./api.v2.dashboard')(app, root + 'v2', common);
   require('./api.v2.projects')(app, root + 'v2', common);
+  require('./api.v2.users')(app, root + 'v2', common);
 
 };
 

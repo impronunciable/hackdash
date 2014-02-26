@@ -436,7 +436,24 @@ line-height:                     0;
   height: 50px;
 }
 
+.profile-ctn ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 30px;
+}
 
+.profile-ctn ul>li>a {
+  display: inline;
+  line-height: 35px;
+  text-indent: 15px;
+  cursor: pointer;
+  color: inherit;
+}
+
+.profile-ctn ul>li>a:hover {
+  text-decoration: none;
+}
 
 .project .well {
   border-top:10px solid #000;
@@ -447,6 +464,17 @@ line-height:                     0;
 .project.wireframing .well { border-top-color:#55c5ff;}
 .project.researching .well { border-top-color:red;}
 .project.brainstorming .well { border-top-color:#ff5a00;}
+
+.profile-ctn li .well {
+  border-left:10px solid #000;
+  margin-bottom: 2px;
+}
+
+.profile-ctn li.prototyping .well { border-left-color:#ff5f8c;}
+.profile-ctn li.building .well { border-left-color:#77db45;}
+.profile-ctn li.wireframing .well { border-left-color:#55c5ff;}
+.profile-ctn li.researching .well { border-left-color:red;}
+.profile-ctn li.brainstorming .well { border-left-color:#ff5a00;}
 
 h1,h2,h3,h4,h5,h6,p {
   font-family: 'Open Sans', sans-serif;
