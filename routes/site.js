@@ -67,7 +67,6 @@ module.exports = function(app) {
   var hackdashProfileStack = [
     loadUser, 
     loadProviders,
-    checkProfile,
     setViewVar('host', appHost),
     setViewVar('version', app.get('clientVersion'))
   ];
@@ -123,7 +122,8 @@ var redirect = function(route) {
 
 var checkProfile = function(req, res, next){
   if (req.user && !req.user.email){
-    res.redirect('/users/profile');
+    res.redirect('/users/' + req.user._id);
+    //res.redirect('/users/profile');
   }
 
   next();
