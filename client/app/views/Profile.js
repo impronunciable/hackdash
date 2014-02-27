@@ -35,7 +35,7 @@ module.exports = Backbone.Marionette.Layout.extend({
 
   onRender: function(){
 
-    if (this.model.get("_id") === hackdash.user._id){
+    if (hackdash.user && this.model.get("_id") === hackdash.user._id){
       this.profileCard.show(new ProfileCardEdit({
         model: this.model
       }));
