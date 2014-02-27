@@ -10,10 +10,10 @@ module.exports = Backbone.Model.extend({
   idAttribute: "_id",
 
   defaults: {
-    dashboards: null,
-    projects: null,
-    contributions: null,
-    likes: null
+    dashboards: new Backbone.Collection(),
+    projects: new Projects(),
+    contributions: new Projects(),
+    likes: new Projects()
   },
 
   urlRoot: function(){
@@ -22,14 +22,14 @@ module.exports = Backbone.Model.extend({
 
   parse: function(response){
 
-    response.dashboards = new Backbone.Collection(
+    this.get("dashboards").reset( 
       _.map(response.admin_in, function(dash){ return { title: dash }; })
     );
     
-    response.projects = new Projects(response.projects);
-    response.contributions = new Projects(response.contributions);
-    response.likes = new Projects(response.likes);
-
+    this.get("projects").reset(response.projects);
+    this.get("contributions").reset(response.contributions);
+    this.get("likes").reset(response.likes);
+    
     return response;
   }
 

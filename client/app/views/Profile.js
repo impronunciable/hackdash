@@ -22,8 +22,11 @@ module.exports = Backbone.Marionette.Layout.extend({
     "likes": ".likes-ctn",
   },
 
-  modelEvents: {
-    "change": "render"
+  ui: {
+    "dashboardsLen": ".dash-length",
+    "projectsLen": ".proj-length",
+    "contributionsLen": ".contrib-length",
+    "likesLen": ".likes-length"
   },
 
   //--------------------------------------
@@ -51,7 +54,7 @@ module.exports = Backbone.Marionette.Layout.extend({
     this.projects.show(new ProjectList({
       collection: this.model.get("projects")
     }));
-    
+
     this.contributions.show(new ProjectList({
       collection: this.model.get("contributions")
     }));
@@ -61,7 +64,13 @@ module.exports = Backbone.Marionette.Layout.extend({
     }));
 
     $('.tooltips', this.$el).tooltip({});
-  }
+
+    this.model.get("dashboards").on("reset", this.updateCount.bind(this, "dashboards"));
+    this.model.get("projects").on("reset", this.updateCount.bind(this, "projects"));
+    this.model.get("contributions").on("reset", this.updateCount.bind(this, "contributions"));
+    this.model.get("likes").on("reset", this.updateCount.bind(this, "likes"));
+
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -70,6 +79,10 @@ module.exports = Backbone.Marionette.Layout.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  updateCount: function(which){
+    this.ui[which + "Len"].text(this.model.get(which).length);
+  }
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS

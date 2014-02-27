@@ -413,10 +413,10 @@
 					  idAttribute: "_id",
 
 					  defaults: {
-					    dashboards: null,
-					    projects: null,
-					    contributions: null,
-					    likes: null
+					    dashboards: new Backbone.Collection(),
+					    projects: new Projects(),
+					    contributions: new Projects(),
+					    likes: new Projects()
 					  },
 
 					  urlRoot: function(){
@@ -425,14 +425,14 @@
 
 					  parse: function(response){
 
-					    response.dashboards = new Backbone.Collection(
+					    this.get("dashboards").reset( 
 					      _.map(response.admin_in, function(dash){ return { title: dash }; })
 					    );
 					    
-					    response.projects = new Projects(response.projects);
-					    response.contributions = new Projects(response.contributions);
-					    response.likes = new Projects(response.likes);
-
+					    this.get("projects").reset(response.projects);
+					    this.get("contributions").reset(response.contributions);
+					    this.get("likes").reset(response.likes);
+					    
 					    return response;
 					  }
 
@@ -860,8 +860,11 @@
 					    "likes": ".likes-ctn",
 					  },
 
-					  modelEvents: {
-					    "change": "render"
+					  ui: {
+					    "dashboardsLen": ".dash-length",
+					    "projectsLen": ".proj-length",
+					    "contributionsLen": ".contrib-length",
+					    "likesLen": ".likes-length"
 					  },
 
 					  //--------------------------------------
@@ -889,7 +892,7 @@
 					    this.projects.show(new ProjectList({
 					      collection: this.model.get("projects")
 					    }));
-					    
+
 					    this.contributions.show(new ProjectList({
 					      collection: this.model.get("contributions")
 					    }));
@@ -899,7 +902,13 @@
 					    }));
 
 					    $('.tooltips', this.$el).tooltip({});
-					  }
+
+					    this.model.get("dashboards").on("reset", this.updateCount.bind(this, "dashboards"));
+					    this.model.get("projects").on("reset", this.updateCount.bind(this, "projects"));
+					    this.model.get("contributions").on("reset", this.updateCount.bind(this, "contributions"));
+					    this.model.get("likes").on("reset", this.updateCount.bind(this, "likes"));
+
+					  },
 
 					  //--------------------------------------
 					  //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -908,6 +917,10 @@
 					  //--------------------------------------
 					  //+ EVENT HANDLERS
 					  //--------------------------------------
+
+					  updateCount: function(which){
+					    this.ui[which + "Len"].text(this.model.get(which).length);
+					  }
 
 					  //--------------------------------------
 					  //+ PRIVATE AND PROTECTED METHODS
@@ -1231,13 +1244,45 @@
 					    };
 					  },
 
+					  showAll: false,
+
 					  //--------------------------------------
 					  //+ INHERITED / OVERRIDES
 					  //--------------------------------------
 					  
 					  initialize: function(options){
+					    this.fullList = options.collection;
 					    this.isDashboard = (options && options.isDashboard) || false;
-					  }
+					  },
+
+					  onBeforeRender: function(){
+					    if (this.fullList.length > 5){
+					      if (this.showAll) {
+					        this.collection = this.fullList;
+					      }
+					      else {
+					        this.collection = new Backbone.Collection(this.fullList.first(5));
+					      }
+					    }
+					  },
+
+					  onRender: function(){
+					    $(".show-more", this.$el).add(".show-less", this.$el).remove();
+
+					    if (this.fullList.length > 5){
+					      var li;
+					      if (this.showAll){
+					        li = $('<li class="show-less">Show less</li>');
+					        li.on("click", this.toggleAll.bind(this)); 
+					      }
+					      else {
+					        li = $('<li class="show-more">Show more</li>');
+					        li.on("click", this.toggleAll.bind(this));
+					      }
+
+					      this.$el.append(li);
+					    }
+					  },
 
 					  //--------------------------------------
 					  //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -1246,6 +1291,11 @@
 					  //--------------------------------------
 					  //+ EVENT HANDLERS
 					  //--------------------------------------
+
+					  toggleAll: function(){
+					    this.showAll = !this.showAll;
+					    this.render();
+					  }
 
 					  //--------------------------------------
 					  //+ PRIVATE AND PROTECTED METHODS
@@ -1810,7 +1860,7 @@
 						  
 
 
-						  return "<div class=\"span6 span-center\">\n\n  <div class=\"profile-card\"></div>\n\n  <h4>Dashboards</h4>\n  <div class=\"dashboards-ctn\"></div>\n\n  <h4>Projects created</h4>\n  <div class=\"projects-ctn\"></div>\n\n  <h4>Contributions</h4>\n  <div class=\"contributions-ctn\"></div>\n\n  <h4>Likes</h4>\n  <div class=\"likes-ctn\"></div>\n  \n</div>\n";
+						  return "<div class=\"span6 span-center\">\n\n  <div class=\"profile-card\"></div>\n\n  <h4>Dashboards (<span class=\"dash-length\">0</span>)</h4>\n  <div class=\"dashboards-ctn\"></div>\n\n  <h4>Projects created (<span class=\"proj-length\">0</span>)</h4>\n  <div class=\"projects-ctn\"></div>\n\n  <h4>Contributions (<span class=\"contrib-length\">0</span>)</h4>\n  <div class=\"contributions-ctn\"></div>\n\n  <h4>Likes (<span class=\"likes-length\">0</span>)</h4>\n  <div class=\"likes-ctn\"></div>\n  \n</div>\n";
 						  })
 						;
 					},
