@@ -15,18 +15,11 @@ module.exports = Backbone.Marionette.Layout.extend({
 
   regions: {
     "search": ".search-ctn",
-    "dashboard": ".dashboard-ctn"
+    "page": ".page-ctn"
   },
 
   ui: {
-    "switcher": ".dashboard-switcher input"
-  },
-
-  templateHelpers: {
-    isAdmin: function(){
-      var user = hackdash.user;
-      return user && user.admin_in.indexOf(this.domain) >= 0 || false;
-    }
+    pageTitle: ".page-title"
   },
 
   modelEvents: {
@@ -38,23 +31,38 @@ module.exports = Backbone.Marionette.Layout.extend({
   //--------------------------------------
 
   onRender: function(){
-    var isDashboard = (window.hackdash.app.type === "dashboard" ? true : false);
-    var isSearch = (window.hackdash.app.type === "isearch" ? true : false);
+    var type = window.hackdash.app.type;
     
-    if(isDashboard || isSearch){
-      this.search.show(new Search({
-        showSort: isDashboard
+    var self = this;
+    function showSearch(){
+      self.search.show(new Search({
+        showSort: type === "dashboard"
       }));
     }
 
-    if (isDashboard && this.model.get("_id")){
-      this.dashboard.show(new DashboardDetails({
-        model: this.model
-      }));
+    switch(type){
+      case "isearch":
+        showSearch();
+        this.ui.pageTitle.text("Search Projects");
+        break;
+
+      case "csearch":
+        showSearch();
+        this.ui.pageTitle.text("Search Collections");
+        break;
+
+      case "dashboard":
+        showSearch();
+        
+        if (this.model.get("_id")){
+          this.page.show(new DashboardDetails({
+            model: this.model
+          }));
+        }
+        break;
     }
 
     $('.tooltips', this.$el).tooltip({});
-    this.initSwitcher();
   },
 
   //--------------------------------------
@@ -68,16 +76,5 @@ module.exports = Backbone.Marionette.Layout.extend({
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
-
-  initSwitcher: function(){
-    var self = this;
-
-    this.ui.switcher
-      .bootstrapSwitch()
-      .on('switch-change', function (e, data) {
-        self.model.set({ "open": data.value}, { trigger: false });
-        self.model.save({ wait: true });
-      });
-  }
 
 });

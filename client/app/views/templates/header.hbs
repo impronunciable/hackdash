@@ -12,40 +12,7 @@
 <a class="logo" href="/"></a>
 
 {{#isDashboardView}}
-  {{#if _id}}
-    <div class="dashboard-ctn"></div>
-
-    {{#isLoggedIn}}
-
-      {{#if open}}
-      <a class="btn btn-large" href="/projects/create">New Project</a>
-      {{else}}
-      <h4 class="tooltips dashboard-closed" data-placement="bottom" data-original-title="Dashboard closed for creating projects">Dashboard Closed</h4>
-      {{/if}}
-
-      {{#if isAdmin}}
-      <div class="tooltips dashboard-switcher"
-        data-placement="top" data-original-title="Toggle creation of projects on this Dashboard">
-        
-        <input type="checkbox" {{#if open}}checked{{/if}} class="switch-large"
-          data-off-label="CLOSE" data-on-label="OPEN">
-      </div>
-
-      <a class="btn export" href="/api/v2/csv">Export CSV</a>
-      {{/if}}
-
-    {{else}}
-      
-      {{#if open}}
-      <a class="btn btn-large" href="/login">Login to create a project</a>
-      {{else}}
-      <a class="btn btn-large" href="/login">Login to join/follow projects</a>
-      {{/if}}
-
-    {{/isLoggedIn}}
-  {{/if}}
+<div class="page-ctn"></div>
 {{else}}
-  {{#isSearchView}}
-  <h1>Search Projects</h1>
-  {{/isSearchView}}
+<h1 class="page-title"></h1>
 {{/isDashboardView}}

@@ -11,8 +11,7 @@ var passport = require('passport')
   , config = require('../config.json');
 
 var User = mongoose.model('User')
-  , Project = mongoose.model('Project')
-  , Dashboard = mongoose.model('Dashboard');
+  , Project = mongoose.model('Project');
 
 module.exports = function(app, uri, common) {
 

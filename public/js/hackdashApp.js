@@ -105,13 +105,15 @@
 				var 
 				    Dashboard = require("./models/Dashboard")
 				  , Projects = require("./models/Projects")
+				  , Collections = require("./models/Collections")
 				  , Profile = require("./models/Profile")
 
 				  , Header = require("./views/Header")
 				  , Footer = require("./views/Footer")
 
 				  , ProfileView = require("./views/Profile")
-				  , ProjectsView = require("./views/Projects");
+				  , ProjectsView = require("./views/Projects")
+				  , CollectionsView = require("./views/Collections");
 
 				module.exports = function(type){
 
@@ -136,6 +138,23 @@
 				    var query = hackdash.getQueryVariable("q");
 				    if (query && query.length > 0){
 				      app.projects.fetch({ data: $.param({ q: query }) });
+				    }
+
+				  }
+
+				  function initCSearch() {
+				  
+				    app.collections = new Collections();
+				    
+				    app.header.show(new Header());
+
+				    app.main.show(new CollectionsView({
+				      collection: app.collections
+				    }));
+
+				    var query = hackdash.getQueryVariable("q");
+				    if (query && query.length > 0){
+				      app.collections.fetch({ data: $.param({ q: query }) });
 				    }
 
 				  }
@@ -191,6 +210,9 @@
 				      break;
 				    case "isearch":
 				      app.addInitializer(initISearch);
+				      break;
+				    case "csearch":
+				      app.addInitializer(initCSearch);
 				      break;
 				    case "profile":
 				      app.addInitializer(initProfile);
@@ -369,6 +391,41 @@
 					  url: function(){
 					    return hackdash.apiURL + '/admins'; 
 					  },
+
+					});
+
+				},
+				"Collection.js": function (exports, module, require) {
+					/**
+					 * MODEL: Collection (a group of Dashboards)
+					 *
+					 */
+
+					module.exports = Backbone.Model.extend({
+
+					  idAttribute: "_id",
+
+					});
+
+				},
+				"Collections.js": function (exports, module, require) {
+					/**
+					 * Collection: Collections (group of Dashboards)
+					 *
+					 */
+
+					var 
+					  Collection = require('./Collection');
+
+					module.exports = Backbone.Collection.extend({
+
+					  model: Collection,
+
+					  idAttribute: "_id",
+					  
+					  url: function(){
+					    return hackdash.apiURL + '/collections'; 
+					  }
 
 					});
 
@@ -591,6 +648,128 @@
 				}
 			},
 			"views": {
+				"Collection.js": function (exports, module, require) {
+					/**
+					 * VIEW: Collection
+					 * 
+					 */
+					 
+					var template = require('./templates/collection.hbs');
+
+					module.exports = Backbone.Marionette.ItemView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  id: function(){
+					    return this.model.get("_id");
+					  },
+					  className: "collection span4",
+					  template: template,
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					});
+				},
+				"Collections.js": function (exports, module, require) {
+					/**
+					 * VIEW: Collections
+					 * 
+					 */
+
+					var Collection = require('./Collection');
+
+					module.exports = Backbone.Marionette.CollectionView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  id: "collection",
+					  className: "row collection",
+					  itemView: Collection,
+					  
+					  collectionEvents: {
+					    "remove": "render",
+					    "sort:date": "sortByDate",
+					    "sort:name": "sortByName"
+					  },
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+					  
+					  onRender: function(){
+					    var self = this;
+					    _.defer(function(){
+					      self.updateIsotope();
+					    });
+					  },
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					  sortByName: function(){
+					    this.$el.isotope({"sortBy": "name"});
+					  },
+
+					  sortByDate: function(){
+					    this.$el.isotope({"sortBy": "date"});
+					  },
+
+					  isotopeInitialized: false,
+					  updateIsotope: function(){
+					    var $collections = this.$el;
+
+					    if (this.isotopeInitialized){
+					      $collections.isotope("destroy");
+					    }
+
+					    $collections.isotope({
+					        itemSelector: ".project"
+					      , animationEngine: "jquery"
+					      , resizable: true
+					      , sortAscending: true
+					      , getSortData : {
+					          "name" : function ( $elem ) {
+					            return $elem.data("name").toLowerCase();
+					          },
+					          "date" : function ( $elem ) {
+					            return $elem.data("date");
+					          }
+					        }
+					      , sortBy: "name"
+					    });
+					    
+					    this.isotopeInitialized = true;
+					  }
+
+					});
+				},
 				"DashboardDetails.js": function (exports, module, require) {
 					/**
 					 * VIEW: DashboardHeader Layout
@@ -611,7 +790,8 @@
 					  ui: {
 					    "title": "#dashboard-title",
 					    "description": "#dashboard-description",
-					    "link": "#dashboard-link"
+					    "link": "#dashboard-link",
+					    "switcher": ".dashboard-switcher input"
 					  },
 
 					  templateHelpers: {
@@ -637,8 +817,11 @@
 					      
 					      if (isAdmin){
 					        this.initEditables();
+					        this.initSwitcher();
 					      }
 					    }
+
+					    $('.tooltips', this.$el).tooltip({});
 					  },
 
 					  //--------------------------------------
@@ -693,6 +876,17 @@
 					        self.model.save();
 					      }
 					    });
+					  },
+
+					  initSwitcher: function(){
+					    var self = this;
+
+					    this.ui.switcher
+					      .bootstrapSwitch()
+					      .on('switch-change', function (e, data) {
+					        self.model.set({ "open": data.value}, { trigger: false });
+					        self.model.save({ wait: true });
+					      });
 					  }
 
 					});
@@ -768,18 +962,11 @@
 
 					  regions: {
 					    "search": ".search-ctn",
-					    "dashboard": ".dashboard-ctn"
+					    "page": ".page-ctn"
 					  },
 
 					  ui: {
-					    "switcher": ".dashboard-switcher input"
-					  },
-
-					  templateHelpers: {
-					    isAdmin: function(){
-					      var user = hackdash.user;
-					      return user && user.admin_in.indexOf(this.domain) >= 0 || false;
-					    }
+					    pageTitle: ".page-title"
 					  },
 
 					  modelEvents: {
@@ -791,23 +978,38 @@
 					  //--------------------------------------
 
 					  onRender: function(){
-					    var isDashboard = (window.hackdash.app.type === "dashboard" ? true : false);
-					    var isSearch = (window.hackdash.app.type === "isearch" ? true : false);
+					    var type = window.hackdash.app.type;
 					    
-					    if(isDashboard || isSearch){
-					      this.search.show(new Search({
-					        showSort: isDashboard
+					    var self = this;
+					    function showSearch(){
+					      self.search.show(new Search({
+					        showSort: type === "dashboard"
 					      }));
 					    }
 
-					    if (isDashboard && this.model.get("_id")){
-					      this.dashboard.show(new DashboardDetails({
-					        model: this.model
-					      }));
+					    switch(type){
+					      case "isearch":
+					        showSearch();
+					        this.ui.pageTitle.text("Search Projects");
+					        break;
+
+					      case "csearch":
+					        showSearch();
+					        this.ui.pageTitle.text("Search Collections");
+					        break;
+
+					      case "dashboard":
+					        showSearch();
+					        
+					        if (this.model.get("_id")){
+					          this.page.show(new DashboardDetails({
+					            model: this.model
+					          }));
+					        }
+					        break;
 					    }
 
 					    $('.tooltips', this.$el).tooltip({});
-					    this.initSwitcher();
 					  },
 
 					  //--------------------------------------
@@ -821,17 +1023,6 @@
 					  //--------------------------------------
 					  //+ PRIVATE AND PROTECTED METHODS
 					  //--------------------------------------
-
-					  initSwitcher: function(){
-					    var self = this;
-
-					    this.ui.switcher
-					      .bootstrapSwitch()
-					      .on('switch-change', function (e, data) {
-					        self.model.set({ "open": data.value}, { trigger: false });
-					        self.model.save({ wait: true });
-					      });
-					  }
 
 					});
 				},
@@ -1639,11 +1830,34 @@
 					});
 				},
 				"templates": {
+					"collection.hbs.js": function (exports, module, require) {
+						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+						  this.compilerInfo = [4,'>= 1.0.0'];
+						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  var buffer = "", stack1, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+
+
+						  buffer += "<div class=\"well\">\n  <div class=\"well-content\">\n    <h4>";
+						  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</h4>\n    ";
+						  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\n  </div>\n  <div class=\"row-fluid footer-box\">\n    <div class=\"aging activity created_at\">\n      <i rel=\"tooltip\" title=\"";
+						  options = {hash:{},data:data};
+						  buffer += escapeExpression(((stack1 = helpers.timeAgo || depth0.timeAgo),stack1 ? stack1.call(depth0, depth0.created_at, options) : helperMissing.call(depth0, "timeAgo", depth0.created_at, options)))
+						    + "\" class=\"tooltips icon-time icon-1\"></i>\n    </div>\n  </div>\n</div>\n";
+						  return buffer;
+						  })
+						;
+					},
 					"dashboardDetails.hbs.js": function (exports, module, require) {
 						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 						  this.compilerInfo = [4,'>= 1.0.0'];
 						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-						  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+						  var buffer = "", stack1, options, functionType="function", escapeExpression=this.escapeExpression, self=this, blockHelperMissing=helpers.blockHelperMissing;
 
 						function program1(depth0,data) {
 						  
@@ -1711,10 +1925,75 @@
 						  return buffer;
 						  }
 
+						function program9(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n\n  ";
+						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(12, program12, data),fn:self.program(10, program10, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n\n  ";
+						  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.noop,fn:self.program(14, program14, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n\n  ";
+						  return buffer;
+						  }
+						function program10(depth0,data) {
+						  
+						  
+						  return "\n  <a class=\"btn btn-large\" href=\"/projects/create\">New Project</a>\n  ";
+						  }
+
+						function program12(depth0,data) {
+						  
+						  
+						  return "\n  <h4 class=\"tooltips dashboard-closed\" \n    data-placement=\"bottom\" data-original-title=\"Dashboard closed for creating projects\">Dashboard Closed</h4>\n  ";
+						  }
+
+						function program14(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n  <div class=\"tooltips dashboard-switcher\"\n    data-placement=\"top\" data-original-title=\"Toggle creation of projects on this Dashboard\">\n    \n    <input type=\"checkbox\" ";
+						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.noop,fn:self.program(15, program15, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += " class=\"switch-large\"\n      data-off-label=\"CLOSE\" data-on-label=\"OPEN\">\n  </div>\n\n  <a class=\"btn export\" href=\"/api/v2/csv\">Export CSV</a>\n  ";
+						  return buffer;
+						  }
+						function program15(depth0,data) {
+						  
+						  
+						  return "checked";
+						  }
+
+						function program17(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n\n  ";
+						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(20, program20, data),fn:self.program(18, program18, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n\n";
+						  return buffer;
+						  }
+						function program18(depth0,data) {
+						  
+						  
+						  return "\n  <a class=\"btn btn-large\" href=\"/login\">Login to create a project</a>\n  ";
+						  }
+
+						function program20(depth0,data) {
+						  
+						  
+						  return "\n  <a class=\"btn btn-large\" href=\"/login\">Login to join/follow projects</a>\n  ";
+						  }
+
 						  buffer += "\n";
 						  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n";
+						  buffer += "\n\n";
+						  options = {hash:{},inverse:self.program(17, program17, data),fn:self.program(9, program9, data),data:data};
+						  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
+						  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  return buffer;
 						  })
 						;
@@ -1748,101 +2027,14 @@
 
 						function program3(depth0,data) {
 						  
-						  var buffer = "", stack1;
-						  buffer += "\n  ";
-						  stack1 = helpers['if'].call(depth0, depth0._id, {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
-						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n";
-						  return buffer;
-						  }
-						function program4(depth0,data) {
 						  
-						  var buffer = "", stack1, options;
-						  buffer += "\n    <div class=\"dashboard-ctn\"></div>\n\n    ";
-						  options = {hash:{},inverse:self.program(13, program13, data),fn:self.program(5, program5, data),data:data};
-						  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
-						  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-						  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n  ";
-						  return buffer;
+						  return "\n<div class=\"page-ctn\"></div>\n";
 						  }
+
 						function program5(depth0,data) {
 						  
-						  var buffer = "", stack1;
-						  buffer += "\n\n      ";
-						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data});
-						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n\n      ";
-						  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
-						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n\n    ";
-						  return buffer;
-						  }
-						function program6(depth0,data) {
 						  
-						  
-						  return "\n      <a class=\"btn btn-large\" href=\"/projects/create\">New Project</a>\n      ";
-						  }
-
-						function program8(depth0,data) {
-						  
-						  
-						  return "\n      <h4 class=\"tooltips dashboard-closed\" data-placement=\"bottom\" data-original-title=\"Dashboard closed for creating projects\">Dashboard Closed</h4>\n      ";
-						  }
-
-						function program10(depth0,data) {
-						  
-						  var buffer = "", stack1;
-						  buffer += "\n      <div class=\"tooltips dashboard-switcher\"\n        data-placement=\"top\" data-original-title=\"Toggle creation of projects on this Dashboard\">\n        \n        <input type=\"checkbox\" ";
-						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data});
-						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += " class=\"switch-large\"\n          data-off-label=\"CLOSE\" data-on-label=\"OPEN\">\n      </div>\n\n      <a class=\"btn export\" href=\"/api/v2/csv\">Export CSV</a>\n      ";
-						  return buffer;
-						  }
-						function program11(depth0,data) {
-						  
-						  
-						  return "checked";
-						  }
-
-						function program13(depth0,data) {
-						  
-						  var buffer = "", stack1;
-						  buffer += "\n      \n      ";
-						  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(16, program16, data),fn:self.program(14, program14, data),data:data});
-						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n\n    ";
-						  return buffer;
-						  }
-						function program14(depth0,data) {
-						  
-						  
-						  return "\n      <a class=\"btn btn-large\" href=\"/login\">Login to create a project</a>\n      ";
-						  }
-
-						function program16(depth0,data) {
-						  
-						  
-						  return "\n      <a class=\"btn btn-large\" href=\"/login\">Login to join/follow projects</a>\n      ";
-						  }
-
-						function program18(depth0,data) {
-						  
-						  var buffer = "", stack1, options;
-						  buffer += "\n  ";
-						  options = {hash:{},inverse:self.noop,fn:self.program(19, program19, data),data:data};
-						  if (stack1 = helpers.isSearchView) { stack1 = stack1.call(depth0, options); }
-						  else { stack1 = depth0.isSearchView; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-						  if (!helpers.isSearchView) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n";
-						  return buffer;
-						  }
-						function program19(depth0,data) {
-						  
-						  
-						  return "\n  <h1>Search Projects</h1>\n  ";
+						  return "\n<h1 class=\"page-title\"></h1>\n";
 						  }
 
 						  buffer += "<div class=\"search-ctn\"></div>\n\n<div class=\"createProject pull-right btn-group\">\n  ";
@@ -1852,7 +2044,7 @@
 						  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  buffer += "\n</div>\n\n<a class=\"logo\" href=\"/\"></a>\n\n";
-						  options = {hash:{},inverse:self.program(18, program18, data),fn:self.program(3, program3, data),data:data};
+						  options = {hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data};
 						  if (stack1 = helpers.isDashboardView) { stack1 = stack1.call(depth0, options); }
 						  else { stack1 = depth0.isDashboardView; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  if (!helpers.isDashboardView) { stack1 = blockHelperMissing.call(depth0, stack1, options); }

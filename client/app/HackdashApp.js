@@ -6,13 +6,15 @@
 var 
     Dashboard = require("./models/Dashboard")
   , Projects = require("./models/Projects")
+  , Collections = require("./models/Collections")
   , Profile = require("./models/Profile")
 
   , Header = require("./views/Header")
   , Footer = require("./views/Footer")
 
   , ProfileView = require("./views/Profile")
-  , ProjectsView = require("./views/Projects");
+  , ProjectsView = require("./views/Projects")
+  , CollectionsView = require("./views/Collections");
 
 module.exports = function(type){
 
@@ -37,6 +39,23 @@ module.exports = function(type){
     var query = hackdash.getQueryVariable("q");
     if (query && query.length > 0){
       app.projects.fetch({ data: $.param({ q: query }) });
+    }
+
+  }
+
+  function initCSearch() {
+  
+    app.collections = new Collections();
+    
+    app.header.show(new Header());
+
+    app.main.show(new CollectionsView({
+      collection: app.collections
+    }));
+
+    var query = hackdash.getQueryVariable("q");
+    if (query && query.length > 0){
+      app.collections.fetch({ data: $.param({ q: query }) });
     }
 
   }
@@ -92,6 +111,9 @@ module.exports = function(type){
       break;
     case "isearch":
       app.addInitializer(initISearch);
+      break;
+    case "csearch":
+      app.addInitializer(initCSearch);
       break;
     case "profile":
       app.addInitializer(initProfile);

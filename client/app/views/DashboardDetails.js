@@ -17,7 +17,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
   ui: {
     "title": "#dashboard-title",
     "description": "#dashboard-description",
-    "link": "#dashboard-link"
+    "link": "#dashboard-link",
+    "switcher": ".dashboard-switcher input"
   },
 
   templateHelpers: {
@@ -43,8 +44,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
       
       if (isAdmin){
         this.initEditables();
+        this.initSwitcher();
       }
     }
+
+    $('.tooltips', this.$el).tooltip({});
   },
 
   //--------------------------------------
@@ -99,6 +103,17 @@ module.exports = Backbone.Marionette.ItemView.extend({
         self.model.save();
       }
     });
+  },
+
+  initSwitcher: function(){
+    var self = this;
+
+    this.ui.switcher
+      .bootstrapSwitch()
+      .on('switch-change', function (e, data) {
+        self.model.set({ "open": data.value}, { trigger: false });
+        self.model.save({ wait: true });
+      });
   }
 
 });

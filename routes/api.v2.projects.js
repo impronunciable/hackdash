@@ -9,8 +9,7 @@ var passport = require('passport')
   , mongoose = require('mongoose')
   , config = require('../config.json');
 
-var User = mongoose.model('User')
-  , Project = mongoose.model('Project');
+var Project = mongoose.model('Project');
 
 var notify;
 
@@ -27,7 +26,7 @@ module.exports = function(app, uri, common) {
 
   app.get(uri + '/projects', setQuery, setProjects, sendProjects);
   app.del(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, removeProject);
-  app.put(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, updateProjects, sendProjects);
+  app.put(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, updateProject, sendProjects);
   
   app.post(uri + '/projects/:pid/followers', common.isAuth, getProject, validate, addFollower);
   app.del(uri + '/projects/:pid/followers', common.isAuth, getProject, validate, removeFollower);
@@ -61,7 +60,7 @@ var canChangeProject = function(req, res, next){
   next();
 };
 
-var updateProjects = function(req, res, next) {
+var updateProject = function(req, res, next) {
   var project = req.project;
 
   project.active = req.body.hasOwnProperty("active") ? req.body.active : project.active;

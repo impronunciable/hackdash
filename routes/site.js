@@ -99,6 +99,7 @@ module.exports = function(app) {
   app.post('/dashboard/create', isAuth, validateSubdomain, createDashboard(app));
 
   app.get('/isearch', hackdashStack, setViewVar('app_type', 'isearch'), render('hackdashApp'));
+  app.get('/csearch', hackdashStack, setViewVar('app_type', 'csearch'), render('hackdashApp'));
 };
 
 /*

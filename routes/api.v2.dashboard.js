@@ -10,8 +10,7 @@ var passport = require('passport')
   , _ = require('underscore')
   , config = require('../config.json');
 
-var User = mongoose.model('User')
-  , Project = mongoose.model('Project')
+var Project = mongoose.model('Project')
   , Dashboard = mongoose.model('Dashboard');
 
 module.exports = function(app, uri, common) {
