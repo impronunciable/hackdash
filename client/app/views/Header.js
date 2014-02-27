@@ -39,10 +39,13 @@ module.exports = Backbone.Marionette.Layout.extend({
 
   onRender: function(){
     var isDashboard = (window.hackdash.app.type === "dashboard" ? true : false);
+    var isSearch = (window.hackdash.app.type === "isearch" ? true : false);
     
-    this.search.show(new Search({
-      showSort: isDashboard
-    }));
+    if(isDashboard || isSearch){
+      this.search.show(new Search({
+        showSort: isDashboard
+      }));
+    }
 
     if (isDashboard && this.model.get("_id")){
       this.dashboard.show(new DashboardDetails({

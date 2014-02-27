@@ -45,5 +45,7 @@
     {{/isLoggedIn}}
   {{/if}}
 {{else}}
+  {{#isSearchView}}
   <h1>Search Projects</h1>
+  {{/isSearchView}}
 {{/isDashboardView}}

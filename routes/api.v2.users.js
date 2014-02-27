@@ -20,6 +20,7 @@ module.exports = function(app, uri, common) {
   app.get(uri + '/users/:uid', getUser, sendUser);
 
   app.get(uri + '/profiles/:uid', getUser, setProjects, setContributions, setLikes, sendUser);
+  app.put(uri + '/profiles/:uid', common.isAuth, getUser, canUpdate, updateUser);
 
 };
 
@@ -42,6 +43,46 @@ var getUser = function(req, res, next){
       req.user_profile = user.toObject();
       next();
     });
+};
+
+var canUpdate = function(req, res, next){
+  var isLogedInUser = req.user.id === req.params.uid;
+  
+  if (!isLogedInUser) {
+    return res.send(403, "Only your own profile can be updated.");
+  }
+
+  next();
+};
+
+var updateUser = function(req, res){
+  var user = req.user;
+  
+  //add trim
+
+  if (!req.body.name){
+    return res.send(500, { error: "name_required" });
+  }
+
+  if (!req.body.email){
+    return res.send(500, { error: "email_required" });
+  }
+
+  user.name = req.body.name;
+  user.email = req.body.email;
+  user.bio = req.body.bio;
+
+  user.save(function(err, user){
+    if(err) {
+      if (err.errors.hasOwnProperty('email')){
+        return res.send(500, { error: "email_invalid" });
+      }
+
+      return res.send(500);
+    }
+    
+    res.send(200);
+  });
 };
 
 var setProjects = function(req, res, next){

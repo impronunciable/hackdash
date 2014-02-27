@@ -222,11 +222,11 @@
 				  // Set global mode for InlineEditor (X-Editable)
 				  $.fn.editable.defaults.mode = 'inline';
 
-				   // Init Handlebars Helpers
+				   // Init Helpers
 				  require('./helpers/handlebars');
+				  require('./helpers/backboneOverrides');
 				  
-				  //require('./helpers/backboneOverrides');
-				  //require('./helpers/jQueryOverrides');
+				  Placeholders.init({ live: true, hideOnFocus: true });
 				  
 				  window.hackdash.apiURL = "/api/v2";
 
@@ -234,6 +234,25 @@
 				};
 			},
 			"helpers": {
+				"backboneOverrides.js": function (exports, module, require) {
+					/*
+					 * Backbone Global Overrides
+					 *
+					 */
+
+					// Override Backbone.sync to use the PUT HTTP method for PATCH requests
+					//  when doing Model#save({...}, { patch: true });
+
+					var originalSync = Backbone.sync;
+
+					Backbone.sync = function(method, model, options) {
+					  if (method === 'patch') {
+					    options.type = 'PUT';
+					  }
+
+					  return originalSync(method, model, options);
+					};
+				},
 				"handlebars.js": function (exports, module, require) {
 					/**
 					 * HELPER: Handlebars Template Helpers
@@ -773,10 +792,13 @@
 
 					  onRender: function(){
 					    var isDashboard = (window.hackdash.app.type === "dashboard" ? true : false);
+					    var isSearch = (window.hackdash.app.type === "isearch" ? true : false);
 					    
-					    this.search.show(new Search({
-					      showSort: isDashboard
-					    }));
+					    if(isDashboard || isSearch){
+					      this.search.show(new Search({
+					        showSort: isDashboard
+					      }));
+					    }
 
 					    if (isDashboard && this.model.get("_id")){
 					      this.dashboard.show(new DashboardDetails({
@@ -817,6 +839,8 @@
 					
 					var 
 					    template = require("./templates/profile.hbs")
+					  , ProfileCard = require("./ProfileCard")
+					  , ProfileCardEdit = require("./ProfileCardEdit")
 					  , ProjectList = require("./ProjectList");
 
 					module.exports = Backbone.Marionette.Layout.extend({
@@ -829,6 +853,7 @@
 					  template: template,
 
 					  regions: {
+					    "profileCard": ".profile-card",
 					    "dashboards": ".dashboards-ctn",
 					    "projects": ".projects-ctn",
 					    "contributions": ".contributions-ctn",
@@ -845,8 +870,20 @@
 
 					  onRender: function(){
 
+					    if (this.model.get("_id") === hackdash.user._id){
+					      this.profileCard.show(new ProfileCardEdit({
+					        model: this.model
+					      }));
+					    }
+					    else {
+					      this.profileCard.show(new ProfileCard({
+					        model: this.model
+					      }));
+					    }
+
 					    this.dashboards.show(new ProjectList({
-					      collection: this.model.get("dashboards")
+					      collection: this.model.get("dashboards"),
+					      isDashboard: true
 					    }));
 
 					    this.projects.show(new ProjectList({
@@ -875,6 +912,133 @@
 					  //--------------------------------------
 					  //+ PRIVATE AND PROTECTED METHODS
 					  //--------------------------------------
+
+					});
+				},
+				"ProfileCard.js": function (exports, module, require) {
+					/**
+					 * VIEW: ProfileCard
+					 * 
+					 */
+					 
+					var template = require('./templates/profileCard.hbs');
+
+					module.exports = Backbone.Marionette.ItemView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  className: "boxxy",
+					  template: template,
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					});
+				},
+				"ProfileCardEdit.js": function (exports, module, require) {
+					/**
+					 * VIEW: ProfileCard Edit
+					 * 
+					 */
+					 
+					var template = require('./templates/profileCardEdit.hbs');
+
+					module.exports = Backbone.Marionette.ItemView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  className: "boxxy",
+					  template: template,
+
+					  ui: {
+					    "name": "input[name=name]",
+					    "email": "input[name=email]",
+					    "bio": "textarea[name=bio]"
+					  },
+
+					  events: {
+					    "click #save": "saveProfile",
+					    "click #cancel": "cancel"
+					  },
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  saveProfile: function(){
+					    var toSave = {};
+
+					    _.each(this.ui, function(ele, type){
+					      toSave[type] = ele.val();
+					    }, this);
+
+					    this.cleanErrors();
+
+					    $("#save", this.$el).button('loading');
+
+					    this.model
+					      .save(toSave, { patch: true, silent: true })
+					      .error(this.showError.bind(this));
+					  },
+
+					  cancel: function(){
+					    window.location = "/";
+					  },
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					  //TODO: move to i18n
+					  errors: {
+					    "name_required": "Name is required",
+					    "email_required": "Email is required",
+					    "email_invalid": "Invalid Email"
+					  },
+
+					  showError: function(err){
+					    $("#save", this.$el).button('reset');
+
+					    if (err.responseText === "OK"){
+					      return;
+					    }
+
+					    var error = JSON.parse(err.responseText).error;
+
+					    var ctrl = error.split("_")[0];
+					    this.ui[ctrl].parents('.control-group').addClass('error');
+					    this.ui[ctrl].after('<span class="help-inline">' + this.errors[error] + '</span>');
+					  },
+
+					  cleanErrors: function(){
+					    $(".error", this.$el).removeClass("error");
+					    $("span.help-inline", this.$el).remove();
+					  }
 
 					});
 				},
@@ -1061,10 +1225,20 @@
 					  tagName: "ul",
 					  itemView: Project,
 
+					  itemViewOptions: function() {
+					    return {
+					      isDashboard: this.isDashboard
+					    };
+					  },
+
 					  //--------------------------------------
 					  //+ INHERITED / OVERRIDES
 					  //--------------------------------------
 					  
+					  initialize: function(options){
+					    this.isDashboard = (options && options.isDashboard) || false;
+					  }
+
 					  //--------------------------------------
 					  //+ PUBLIC METHODS / GETTERS / SETTERS
 					  //--------------------------------------
@@ -1093,26 +1267,41 @@
 					  //+ PUBLIC PROPERTIES / CONSTANTS
 					  //--------------------------------------
 
-					  tagName: "li",
+					  tagName: "li tooltips",
 					  template: template,
 
 					  //--------------------------------------
 					  //+ INHERITED / OVERRIDES
 					  //--------------------------------------
 
+					  initialize: function(options){
+					    this.isDashboard = (options && options.isDashboard) || false;
+					  },
+
 					  onRender: function(){
 					    this.$el
 					      .addClass(this.model.get("status"))
+					      .attr({
+					        "title": this.model.get("status"),
+					        "data-placement": "left"
+					      })
 					      .tooltip({});
+					  },
 
-					    $('.tooltips', this.$el).tooltip({});
+					  serializeData: function(){
+					    var url;
 
-					    var url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
-					      "/p/" + this.model.get("_id");
+					    if (this.isDashboard){
+					      url = "http://" + this.model.get("title")  + "." + hackdash.baseURL;
+					    }
+					    else {
+					      url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
+					        "/p/" + this.model.get("_id");
+					    }
 
-					    this.$el.on("click", function(){
-					      window.location = url;
-					    });
+					    return _.extend({
+					      url: url
+					    }, this.model.toJSON());
 					  }
 
 					  //--------------------------------------
@@ -1582,8 +1771,20 @@
 
 						function program18(depth0,data) {
 						  
+						  var buffer = "", stack1, options;
+						  buffer += "\n  ";
+						  options = {hash:{},inverse:self.noop,fn:self.program(19, program19, data),data:data};
+						  if (stack1 = helpers.isSearchView) { stack1 = stack1.call(depth0, options); }
+						  else { stack1 = depth0.isSearchView; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  if (!helpers.isSearchView) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n";
+						  return buffer;
+						  }
+						function program19(depth0,data) {
 						  
-						  return "\n  <h1>Search Projects</h1>\n";
+						  
+						  return "\n  <h1>Search Projects</h1>\n  ";
 						  }
 
 						  buffer += "<div class=\"search-ctn\"></div>\n\n<div class=\"createProject pull-right btn-group\">\n  ";
@@ -1606,26 +1807,61 @@
 						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 						  this.compilerInfo = [4,'>= 1.0.0'];
 						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  
+
+
+						  return "<div class=\"span6 span-center\">\n\n  <div class=\"profile-card\"></div>\n\n  <h4>Dashboards</h4>\n  <div class=\"dashboards-ctn\"></div>\n\n  <h4>Projects created</h4>\n  <div class=\"projects-ctn\"></div>\n\n  <h4>Contributions</h4>\n  <div class=\"contributions-ctn\"></div>\n\n  <h4>Likes</h4>\n  <div class=\"likes-ctn\"></div>\n  \n</div>\n";
+						  })
+						;
+					},
+					"profileCard.hbs.js": function (exports, module, require) {
+						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+						  this.compilerInfo = [4,'>= 1.0.0'];
+						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 						  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-						  buffer += "<div class=\"span4 span-center\">\n  <div class=\"boxxy\">\n    <h3 class=\"header\">\n      <img src=\"";
+						  buffer += "<h3 class=\"header\">\n  <img src=\"";
 						  if (stack1 = helpers.picture) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.picture; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
-						    + "\" style=\"margin-right: 10px;\" class=\"avatar\">\n      ";
+						    + "\" style=\"margin-right: 10px;\" class=\"avatar\">\n  ";
 						  if (stack1 = helpers.name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.name; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
-						    + "\n    </h3>\n    <div class=\"profileInfo\">\n      <p><strong>Email: </strong>";
+						    + "\n</h3>\n<div class=\"profileInfo\">\n  <p><strong>Email: </strong>";
 						  if (stack1 = helpers.email) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
-						    + "</p>\n      <p><strong>Bio: </strong>";
+						    + "</p>\n  <p><strong>Bio: </strong>";
 						  if (stack1 = helpers.bio) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.bio; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
-						    + "</p>\n    </div>\n  </div>\n\n  <h4>Dashboards</h4>\n  <div class=\"dashboards-ctn\"></div>\n\n  <h4>Projects created</h4>\n  <div class=\"projects-ctn\"></div>\n\n  <h4>Contributions</h4>\n  <div class=\"contributions-ctn\"></div>\n\n  <h4>Likes</h4>\n  <div class=\"likes-ctn\"></div>\n  \n</div>\n";
+						    + "</p>\n</div>";
+						  return buffer;
+						  })
+						;
+					},
+					"profileCardEdit.hbs.js": function (exports, module, require) {
+						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+						  this.compilerInfo = [4,'>= 1.0.0'];
+						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+						  buffer += "<h3 class=\"header\">Edit Your Profile</h3>\n<div>\n  <form>\n    <div class=\"form-content\">\n      <div class=\"control-group\">\n        <div class=\"controls\">\n          <input name=\"name\" type=\"text\" placeholder=\"Name\" value=\"";
+						  if (stack1 = helpers.name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.name; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\" class=\"input-block-level\"/>\n        </div>\n      </div>\n      <div class=\"control-group\">\n        <div class=\"controls\">      \n          <input name=\"email\" type=\"text\" placeholder=\"Email\" value=\"";
+						  if (stack1 = helpers.email) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.email; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\" class=\"input-block-level\"/>\n        </div>\n      </div>\n      <div class=\"control-group\">\n        <div class=\"controls\">\n          <textarea name=\"bio\" placeholder=\"Some about you\" class=\"input-block-level\">";
+						  if (stack1 = helpers.bio) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.bio; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</textarea>\n        </div>\n      </div>\n    </div>\n    <div class=\"form-actions\">\n      <input id=\"save\" type=\"button\" data-loading-text=\"saving..\" value=\"Save profile\" class=\"btn primary btn-success pull-left\"/>\n      <a id=\"cancel\" class=\"cancel btn btn-cancel pull-right\">Cancel</a>\n    </div>\n  </form>\n</div>";
 						  return buffer;
 						  })
 						;
@@ -1855,7 +2091,11 @@
 						  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-						  buffer += "<a>\n  <div class=\"well\">\n    ";
+						  buffer += "<a href=\"";
+						  if (stack1 = helpers.url) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.url; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\">\n  <div class=\"well\">\n    ";
 						  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)

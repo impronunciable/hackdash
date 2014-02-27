@@ -11,26 +11,41 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  tagName: "li",
+  tagName: "li tooltips",
   template: template,
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  initialize: function(options){
+    this.isDashboard = (options && options.isDashboard) || false;
+  },
+
   onRender: function(){
     this.$el
       .addClass(this.model.get("status"))
+      .attr({
+        "title": this.model.get("status"),
+        "data-placement": "left"
+      })
       .tooltip({});
+  },
 
-    $('.tooltips', this.$el).tooltip({});
+  serializeData: function(){
+    var url;
 
-    var url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
-      "/p/" + this.model.get("_id");
+    if (this.isDashboard){
+      url = "http://" + this.model.get("title")  + "." + hackdash.baseURL;
+    }
+    else {
+      url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
+        "/p/" + this.model.get("_id");
+    }
 
-    this.$el.on("click", function(){
-      window.location = url;
-    });
+    return _.extend({
+      url: url
+    }, this.model.toJSON());
   }
 
   //--------------------------------------

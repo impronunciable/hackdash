@@ -1,6 +1,8 @@
 
 var 
     template = require("./templates/profile.hbs")
+  , ProfileCard = require("./ProfileCard")
+  , ProfileCardEdit = require("./ProfileCardEdit")
   , ProjectList = require("./ProjectList");
 
 module.exports = Backbone.Marionette.Layout.extend({
@@ -13,6 +15,7 @@ module.exports = Backbone.Marionette.Layout.extend({
   template: template,
 
   regions: {
+    "profileCard": ".profile-card",
     "dashboards": ".dashboards-ctn",
     "projects": ".projects-ctn",
     "contributions": ".contributions-ctn",
@@ -29,8 +32,20 @@ module.exports = Backbone.Marionette.Layout.extend({
 
   onRender: function(){
 
+    if (this.model.get("_id") === hackdash.user._id){
+      this.profileCard.show(new ProfileCardEdit({
+        model: this.model
+      }));
+    }
+    else {
+      this.profileCard.show(new ProfileCard({
+        model: this.model
+      }));
+    }
+
     this.dashboards.show(new ProjectList({
-      collection: this.model.get("dashboards")
+      collection: this.model.get("dashboards"),
+      isDashboard: true
     }));
 
     this.projects.show(new ProjectList({

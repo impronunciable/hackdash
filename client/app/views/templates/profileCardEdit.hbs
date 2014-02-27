@@ -1,0 +1,26 @@
+<h3 class="header">Edit Your Profile</h3>
+<div>
+  <form>
+    <div class="form-content">
+      <div class="control-group">
+        <div class="controls">
+          <input name="name" type="text" placeholder="Name" value="{{name}}" class="input-block-level"/>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">      
+          <input name="email" type="text" placeholder="Email" value="{{email}}" class="input-block-level"/>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <textarea name="bio" placeholder="Some about you" class="input-block-level">{{bio}}</textarea>
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <input id="save" type="button" data-loading-text="saving.." value="Save profile" class="btn primary btn-success pull-left"/>
+      <a id="cancel" class="cancel btn btn-cancel pull-right">Cancel</a>
+    </div>
+  </form>
+</div>

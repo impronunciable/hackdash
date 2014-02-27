@@ -88,10 +88,13 @@ module.exports = function(app) {
   
   app.get('/about', loadUser, render('about'));
 
-  app.get('/users/profile', dashboardStack);
+  //app.get('/users/profile', dashboardStack);
   //app.get('/users/:user_id', dashboardStack);
 
-  //app.get('/users/profile', hackdashProfileStack, setViewVar('app_type', 'profile'), render('hackdashApp'));
+  app.get('/users/profile', function(req, res){
+    res.redirect('/users/' + req.user._id);
+  });
+
   app.get('/users/:user_id', hackdashProfileStack, setViewVar('app_type', 'profile'), render('hackdashApp'));
 
   app.post('/dashboard/create', isAuth, validateSubdomain, createDashboard(app));

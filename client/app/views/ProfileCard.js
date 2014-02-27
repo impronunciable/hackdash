@@ -1,32 +1,22 @@
 /**
- * VIEW: Projects of an Instance
+ * VIEW: ProfileCard
  * 
  */
+ 
+var template = require('./templates/profileCard.hbs');
 
-var Project = require('./ProjectListItem');
-
-module.exports = Backbone.Marionette.CollectionView.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  tagName: "ul",
-  itemView: Project,
-
-  itemViewOptions: function() {
-    return {
-      isDashboard: this.isDashboard
-    };
-  },
+  className: "boxxy",
+  template: template,
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
-  
-  initialize: function(options){
-    this.isDashboard = (options && options.isDashboard) || false;
-  }
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
