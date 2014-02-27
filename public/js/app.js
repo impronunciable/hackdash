@@ -248,18 +248,18 @@
   };
 
 
-  page('/', loadProjects, cleanSearch, isotopeDashboard);
+  //page('/', loadProjects, cleanSearch, isotopeDashboard);
   page('/login', logIn);
-  page('/search', loadSearchProjects, isotopeDashboard);
+  //page('/search', loadSearchProjects, isotopeDashboard);
   page('/projects/create', createProject);
   page('/projects/edit/:project_id', editProject);
-  page('/projects/remove/:project_id', removeProject);
-  page('/projects/follow/:project_id', followProject);
-  page('/projects/unfollow/:project_id', unfollowProject);
-  page('/projects/join/:project_id', joinProject);
-  page('/projects/leave/:project_id', leaveProject);
-  page('/users/profile', getMyProfile);
-  page('/users/:user_id', getUserProfile);
+  //page('/projects/remove/:project_id', removeProject);
+  //page('/projects/follow/:project_id', followProject);
+  //page('/projects/unfollow/:project_id', unfollowProject);
+  //page('/projects/join/:project_id', joinProject);
+  //page('/projects/leave/:project_id', leaveProject);
+  //page('/users/profile', getMyProfile);
+  //page('/users/:user_id', getUserProfile);
   page('/p/:project_id', projectInfo);
   page('/auth/persona', personaLogin);
 

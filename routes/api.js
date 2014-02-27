@@ -9,7 +9,7 @@ var User = mongoose.model('User')
   , Project = mongoose.model('Project');
 
 module.exports = function(app) {
-  app.get('/api/projects', loadProjects, render('projects'));
+  //app.get('/api/projects', loadProjects, render('projects'));
  
   app.post('/api/projects/create', isAuth, validateProject, saveProject, notify(app, 'project_created'), gracefulRes());
   app.get('/api/projects/remove/:project_id', isAuth, isProjectLeader, removeProject, notify(app, 'project_removed'), gracefulRes());
