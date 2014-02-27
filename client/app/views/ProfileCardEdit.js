@@ -25,6 +25,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "click #cancel": "cancel"
   },
 
+  modelEvents:{
+    "change": "render"
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------

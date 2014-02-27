@@ -1,5 +1,5 @@
 /*! 
-* Hackdash - v0.3.1
+* Hackdash - v0.3.2
 * Copyright (c) 2014 Hackdash 
 *  
 */ 
@@ -945,6 +945,10 @@
 					  className: "boxxy",
 					  template: template,
 
+					  modelEvents:{
+					    "change": "render"
+					  },
+
 					  //--------------------------------------
 					  //+ INHERITED / OVERRIDES
 					  //--------------------------------------
@@ -989,6 +993,10 @@
 					  events: {
 					    "click #save": "saveProfile",
 					    "click #cancel": "cancel"
+					  },
+
+					  modelEvents:{
+					    "change": "render"
 					  },
 
 					  //--------------------------------------
