@@ -7,6 +7,10 @@ Handlebars.registerHelper('markdown', function(md) {
   return markdown.toHTML(md);
 });
 
+Handlebars.registerHelper('disqus_shortname', function() {
+  return window.hackdash.disqus_shortname;
+});
+
 Handlebars.registerHelper('user', function(prop) {
   if (window.hackdash.user){
     return window.hackdash.user[prop];

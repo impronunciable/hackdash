@@ -102,8 +102,52 @@
 				 *
 				 */
 
-				var 
-				    Dashboard = require("./models/Dashboard")
+				var HackdashRouter = require('./HackdashRouter');
+
+				module.exports = function(){
+
+				  var app = module.exports = new Backbone.Marionette.Application();
+
+				  function initRegions(){
+				    app.addRegions({
+				      header: "header",
+				      main: "#main",
+				      footer: "footer"
+				    });
+				  }
+
+				  function initRouter(){
+				    app.router = new HackdashRouter();
+				    Backbone.history.start({ pushState: true });
+				  }
+
+				  app.addInitializer(initRegions);
+				  app.addInitializer(initRouter);
+
+				  window.hackdash.app = app;
+				  window.hackdash.app.start();
+
+				  // Add navigation for BackboneRouter to all links 
+				  // unless they have attribute "data-bypass"
+				  $(window.document).on("click", "a:not([data-bypass])", function(evt) {
+				    var href = { prop: $(this).prop("href"), attr: $(this).attr("href") };
+				    var root = window.location.protocol + "//" + window.location.host + app.root;
+
+				    if (href.prop && href.prop.slice(0, root.length) === root) {
+				      evt.preventDefault();
+				      Backbone.history.navigate(href.attr, { trigger: true });
+				    }
+				  });
+
+				};
+			},
+			"HackdashRouter.js": function (exports, module, require) {
+				/*
+				 * Hackdash Router
+				 */
+
+				var Dashboard = require("./models/Dashboard")
+				  , Project = require("./models/Project")
 				  , Projects = require("./models/Projects")
 				  , Dashboards = require("./models/Dashboards")
 				  , Collections = require("./models/Collections")
@@ -113,96 +157,35 @@
 				  , Footer = require("./views/Footer")
 
 				  , ProfileView = require("./views/Profile")
+				  , ProjectFullView = require("./views/ProjectFull")
 				  , ProjectsView = require("./views/Projects")
 				  , DashboardsView = require("./views/Dashboards")
 				  , CollectionsView = require("./views/Collections");
 
-				module.exports = function(type){
-
-				  var app = module.exports = new Backbone.Marionette.Application();
-
-				  app.addRegions({
-				    header: "header",
-				    main: "#main",
-				    footer: "footer"
-				  });
-
-				  function initISearch() {
+				module.exports = Backbone.Marionette.AppRouter.extend({
 				  
-				    app.projects = new Projects();
+				  routes : {
+				      "" : "showDashboard"
 				    
-				    app.header.show(new Header({
-				      collection: app.projects
-				    }));
+				    , "projects" : "showProjects"
+				    , "projects/create" : "showProjectCreate"
+				    , "projects/:pid/edit" : "showProjectEdit"
+				    , "projects/:pid" : "showProjectFull"
 
-				    app.main.show(new ProjectsView({
-				      collection: app.projects
-				    }));
-
-				    var query = hackdash.getQueryVariable("q");
-				    if (query && query.length > 0){
-				      app.projects.fetch({ data: $.param({ q: query }) });
-				    }
-
-				  }
-
-				  function initCSearch() {
-				  
-				    app.collections = new Collections();
+				    , "dashboards" : "showDashboards"
 				    
-				    app.header.show(new Header({
-				      collection: app.dashboards
-				    }));
-
-				    app.main.show(new CollectionsView({
-				      collection: app.collections
-				    }));
-
-				    var query = hackdash.getQueryVariable("q");
-				    if (query && query.length > 0){
-				      app.collections.fetch({ data: $.param({ q: query }) });
-				    }
-
-				  }
-
-				  function initProfile() {
-
-				    var userId = (window.location.pathname.split('/').pop()).split('?')[0];
+				    , "collections" : "showCollections"
+				    , "collections/:cid" : "showCollection"
 				    
-				    app.profile = new Profile({
-				      _id: userId
-				    });
+				    , "users/profile": "showProfile"
+				    , "users/:user_id" : "showProfile"
+				  },
 
-				    app.profile.fetch({ parse: true });
+				  showDashboard: function() {
 
-				    app.header.show(new Header());
+				    var app = window.hackdash.app;
+				    app.type = "dashboard";
 
-				    app.main.show(new ProfileView({
-				      model: app.profile
-				    }));
-				  }
-
-				  function initDashboards() {
-				  
-				    app.dashboards = new Dashboards();
-				    
-				    app.header.show(new Header({
-				      collection: app.dashboards
-				    }));
-
-				    app.main.show(new DashboardsView({
-				      collection: app.dashboards
-				    }));
-
-				    var query = hackdash.getQueryVariable("q");
-				    if (query && query.length > 0){
-				      app.dashboards.fetch({ data: $.param({ q: query }) });
-				    }
-
-				  }
-
-				  function initDashboard() {
-				  
 				    app.dashboard = new Dashboard();
 				    app.projects = new Projects();
 
@@ -228,36 +211,122 @@
 				    else {
 				      app.projects.fetch(); 
 				    }
+				  },
+
+				  showProjects: function() {
+
+				    var app = window.hackdash.app;
+				    app.type = "isearch";
+
+				    app.projects = new Projects();
+				    
+				    app.header.show(new Header({
+				      collection: app.projects
+				    }));
+
+				    app.main.show(new ProjectsView({
+				      collection: app.projects
+				    }));
+
+				    var query = hackdash.getQueryVariable("q");
+				    if (query && query.length > 0){
+				      app.projects.fetch({ data: $.param({ q: query }) });
+				    }
+
+				  },
+
+				  showProjectCreate: function(){
+
+				  },
+
+				  showProjectEdit: function(){
+				    
+				  },
+
+				  showProjectFull: function(pid){
+				    var app = window.hackdash.app;
+				    app.type = "project";
+
+				    app.project = new Project({ _id: pid });
+				    
+				    app.header.show(new Header());
+
+				    app.main.show(new ProjectFullView({
+				      model: app.project
+				    }));
+
+				    app.project.fetch();
+				  },
+
+				  showCSearch: function() {
+				    var app = window.hackdash.app;
+				    app.type = "csearch";
+
+				    app.collections = new Collections();
+				    
+				    app.header.show(new Header({
+				      collection: app.dashboards
+				    }));
+
+				    app.main.show(new CollectionsView({
+				      collection: app.collections
+				    }));
+
+				    var query = hackdash.getQueryVariable("q");
+				    if (query && query.length > 0){
+				      app.collections.fetch({ data: $.param({ q: query }) });
+				    }
+
+				  },
+
+				  showProfile: function(userId) {
+				    var app = window.hackdash.app;
+				    app.type = "profile";
+
+				    if (!userId){
+				      if (hackdash.user){
+				        userId = hackdash.user._id;
+				      }
+				      else {
+				        window.location = "/";
+				      }
+				    }
+
+				    app.profile = new Profile({
+				      _id: userId
+				    });
+
+				    app.profile.fetch({ parse: true });
+
+				    app.header.show(new Header());
+
+				    app.main.show(new ProfileView({
+				      model: app.profile
+				    }));
+				  },
+
+				  showDashboards: function() {
+				    var app = window.hackdash.app;
+				    app.type = "dashboards";
+
+				    app.dashboards = new Dashboards();
+				    
+				    app.header.show(new Header({
+				      collection: app.dashboards
+				    }));
+
+				    app.main.show(new DashboardsView({
+				      collection: app.dashboards
+				    }));
+
+				    var query = hackdash.getQueryVariable("q");
+				    if (query && query.length > 0){
+				      app.dashboards.fetch({ data: $.param({ q: query }) });
+				    }
+
 				  }
 
-				  switch(type){
-				    case "dashboard": 
-				      app.addInitializer(initDashboard);
-				      break;
-				    case "dashboards": 
-				      app.addInitializer(initDashboards);
-				      break;
-				    /*
-				    case "collection": 
-				      app.addInitializer(initCollection);
-				      break;
-				    */
-				    case "isearch":
-				      app.addInitializer(initISearch);
-				      break;
-				    case "csearch":
-				      app.addInitializer(initCSearch);
-				      break;
-				    case "profile":
-				      app.addInitializer(initProfile);
-				      break;
-				  }
-
-				  window.hackdash.app = app;
-				  window.hackdash.app.type = type;
-				  window.hackdash.app.start();
-
-				};
+				});
 			},
 			"Initializer.js": function (exports, module, require) {
 				
@@ -317,6 +386,10 @@
 					
 					Handlebars.registerHelper('markdown', function(md) {
 					  return markdown.toHTML(md);
+					});
+					
+					Handlebars.registerHelper('disqus_shortname', function() {
+					  return window.hackdash.disqus_shortname;
 					});
 					
 					Handlebars.registerHelper('user', function(prop) {
@@ -555,6 +628,10 @@
 					module.exports = Backbone.Model.extend({
 
 					  idAttribute: "_id",
+
+					  urlRoot: function(){
+					    return hackdash.apiURL + '/projects'; 
+					  },
 
 					  doAction: function(type, res, done){
 					    $.ajax({
@@ -1272,6 +1349,12 @@
 					    "change": "render"
 					  },
 
+					  templateHelpers: {
+					    hackdashURL: function(){
+					      return "http://" + hackdash.baseURL;
+					    },
+					  },
+
 					  //--------------------------------------
 					  //+ INHERITED / OVERRIDES
 					  //--------------------------------------
@@ -1640,7 +1723,7 @@
 					    $('.tooltips', this.$el).tooltip({});
 
 					    var url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
-					      "/p/" + this.model.get("_id");
+					      "/projects/" + this.model.get("_id");
 
 					    this.$el.on("click", function(){
 					      window.location = url;
@@ -1732,6 +1815,58 @@
 					      return (usr._id === uid);
 					    }) ? true : false;
 					  }
+
+					});
+				},
+				"ProjectFull.js": function (exports, module, require) {
+					/**
+					 * VIEW: Full Project view
+					 * 
+					 */
+					 
+					var template = require('./templates/projectFull.hbs');
+
+					module.exports = Backbone.Marionette.ItemView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  id: function(){
+					    return this.model.get("_id");
+					  },
+
+					  className: "project tooltips",
+					  template: template,
+
+					  modelEvents: {
+					    "change": "render"
+					  },
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  onRender: function(){
+					    this.$el
+					      .addClass(this.model.get("status"))
+					      .attr({ "title": this.model.get("status") })
+					      .tooltip({});
+
+					    $('.tooltips', this.$el).tooltip({});
+					  }
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
 
 					});
 				},
@@ -2035,6 +2170,7 @@
 
 					    this.timer = window.setTimeout(function(){
 					      var keyword = self.ui.searchbox.val();
+					      var fragment = Backbone.history.fragment.replace(Backbone.history.location.search, "");
 
 					      if (keyword !== self.lastSearch) {
 					        self.lastSearch = keyword;
@@ -2046,12 +2182,7 @@
 					        if (keyword.length > 0) {
 					          opts.data = $.param({ q: keyword });
 					          
-					          var baseURL = hackdash.app.type;
-					          if (hackdash.app.type === "dashboard"){
-					            baseURL = "search";
-					          }
-
-					          window.history.pushState({}, "", baseURL + "?q=" + keyword);
+					          hackdash.app.router.navigate(fragment + "?q=" + keyword, { trigger: true });
 
 					          self.collection.fetch(opts);
 					        }
@@ -2062,7 +2193,8 @@
 					          else {
 					            self.collection.fetch();
 					          }
-					          window.history.pushState({}, "", hackdash.app.type === "isearch" ? "isearch" : "");
+
+					          hackdash.app.router.navigate(fragment, { trigger: true, replace: true });
 					        }
 					      }
 					      
@@ -2422,7 +2554,11 @@
 						  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n</div>\n\n<a class=\"logo\" href=\"/\"></a>\n\n<div class=\"page-ctn\"></div>\n<h1 class=\"page-title\"></h1>";
+						  buffer += "\n</div>\n\n<a class=\"logo\" href=\"";
+						  if (stack1 = helpers.hackdashURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.hackdashURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\"></a>\n\n<div class=\"page-ctn\"></div>\n<h1 class=\"page-title\"></h1>";
 						  return buffer;
 						  })
 						;
@@ -2704,6 +2840,107 @@
 						  if (!helpers.isLoggedIn) { stack2 = blockHelperMissing.call(depth0, stack2, options); }
 						  if(stack2 || stack2 === 0) { buffer += stack2; }
 						  buffer += "\n</div>\n";
+						  return buffer;
+						  })
+						;
+					},
+					"projectFull.hbs.js": function (exports, module, require) {
+						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+						  this.compilerInfo = [4,'>= 1.0.0'];
+						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+
+						function program1(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n    <a href=\"";
+						  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\">";
+						  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</a>\n    ";
+						  return buffer;
+						  }
+
+						function program3(depth0,data) {
+						  
+						  var buffer = "";
+						  buffer += "\n        <li>"
+						    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+						    + "</li>\n        ";
+						  return buffer;
+						  }
+
+						function program5(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "\n            <a href=\"/users/";
+						  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\">\n              <img class=\"tooltips\" rel=\"tooltip\" \n                src=\"";
+						  if (stack1 = helpers.picture) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.picture; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\" data-id=\"";
+						  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\" title=\"";
+						  if (stack1 = helpers.name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.name; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\">\n            </a>\n          ";
+						  return buffer;
+						  }
+
+						  buffer += "<div class=\"well\">\n  \n  <div class=\"well-header\">\n    <h3><a href=\"/\">";
+						  if (stack1 = helpers.domain) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.domain; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</a></h3>\n    <h3>";
+						  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</h3>\n    <p>";
+						  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</p>\n    ";
+						  stack1 = helpers['if'].call(depth0, depth0.link, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n  </div>\n\n  <div class=\"row-fluid\">\n\n    <div class=\"well-sidebar span4\">\n      <h6>Created</h6><strong>";
+						  options = {hash:{},data:data};
+						  buffer += escapeExpression(((stack1 = helpers.timeAgo || depth0.timeAgo),stack1 ? stack1.call(depth0, depth0.created_at, options) : helperMissing.call(depth0, "timeAgo", depth0.created_at, options)))
+						    + "</strong>\n      <h6>State</h6><strong>";
+						  if (stack2 = helpers.status) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+						  else { stack2 = depth0.status; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+						  buffer += escapeExpression(stack2)
+						    + "</strong>\n      <h6>Tags</h6>\n      <ul>\n        ";
+						  stack2 = helpers.each.call(depth0, depth0.tags, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+						  if(stack2 || stack2 === 0) { buffer += stack2; }
+						  buffer += "\n      </ul>\n    </div>\n\n    <div class=\"well-content span8\">\n\n      <div class=\"span4\">\n        <h5>Managed by</h5>\n        <a href=\"/users/"
+						    + escapeExpression(((stack1 = ((stack1 = depth0.leader),stack1 == null || stack1 === false ? stack1 : stack1._id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+						    + "\">\n          <img src=\""
+						    + escapeExpression(((stack1 = ((stack1 = depth0.leader),stack1 == null || stack1 === false ? stack1 : stack1.picture)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+						    + "\" title=\""
+						    + escapeExpression(((stack1 = ((stack1 = depth0.leader),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+						    + "\" rel=\"tooltip\" class=\"tooltips\"/>\n        </a>\n      </div>\n\n      <div class=\"span4\">\n        <h5>Contributors</h5>\n          ";
+						  stack2 = helpers.each.call(depth0, depth0.contributors, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+						  if(stack2 || stack2 === 0) { buffer += stack2; }
+						  buffer += "\n      </div>\n\n      <div class=\"span4\">\n        <h5>"
+						    + escapeExpression(((stack1 = ((stack1 = depth0.followers),stack1 == null || stack1 === false ? stack1 : stack1.length)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+						    + " Likes</h5>\n          ";
+						  stack2 = helpers.each.call(depth0, depth0.followers, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+						  if(stack2 || stack2 === 0) { buffer += stack2; }
+						  buffer += "\n      </div>\n\n    </div>\n\n    <div id=\"disqus_thread\" class=\"well-header\"></div>\n    <script src=\"/js/disqus.js\" disqus_shortname=\"";
+						  if (stack2 = helpers.disqus_shortname) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+						  else { stack2 = depth0.disqus_shortname; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+						  buffer += escapeExpression(stack2)
+						    + "\"></script>\n    \n  </div>\n</div>\n";
 						  return buffer;
 						  })
 						;

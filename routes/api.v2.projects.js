@@ -25,6 +25,8 @@ module.exports = function(app, uri, common) {
   };
 
   app.get(uri + '/projects', setQuery, setProjects, sendProjects);
+
+  app.get(uri + '/projects/:pid', getProject, sendProject);
   app.del(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, removeProject);
   app.put(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, updateProject, sendProjects);
   
@@ -39,6 +41,8 @@ module.exports = function(app, uri, common) {
 var getProject = function(req, res, next){
   Project.findById(req.params.pid)
     .populate('leader')
+    .populate('contributors')
+    .populate('followers')
     .exec(function(err, project) {
       if (err) return res.send(500);
       if (!project) return res.send(404);
@@ -166,11 +170,15 @@ var setProjects = function(req, res, next){
     .sort( { "created_at" : -1 } )
     .exec(function(err, projects) {
       if(err) return res.send(500);
-      res.projects = projects;
+      req.projects = projects;
       next();
     });
 }
 
+var sendProject = function(req, res){
+  res.send(req.project);
+};
+
 var sendProjects = function(req, res){
-  res.send(res.projects);
+  res.send(req.projects);
 };

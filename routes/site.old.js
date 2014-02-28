@@ -12,7 +12,7 @@ module.exports = function(app) {
   /*
    * Dashboard middleware stack
    */
-/*
+
   var dashboardStack = [
     dashExists,
     loadUser, 
@@ -42,7 +42,10 @@ module.exports = function(app) {
     setViewVar('disqus_shortname', config.disqus_shortname),
     setViewVar('live', true),
     render('live')
-  ];
+	];
+
+  var appPort = app.get('config').port;
+  var appHost = app.get('config').host + (appPort && appPort !== 80 ? ':' + appPort : '');
 
   var hackdashStack = [
     loadUser, 
@@ -51,7 +54,15 @@ module.exports = function(app) {
     setViewVar('version', app.get('clientVersion'))
   ];
 
-  
+  var hackdashDashboardStack = [
+    loadUser, 
+    loadProviders,
+    isHomepage,
+    dashExists,
+    checkProfile,
+    setViewVar('host', appHost),
+    setViewVar('version', app.get('clientVersion'))
+  ];
 
   var hackdashProfileStack = [
     loadUser, 
@@ -59,96 +70,6 @@ module.exports = function(app) {
     setViewVar('host', appHost),
     setViewVar('version', app.get('clientVersion'))
   ];
-*/
-
-  var liveStack = [
-    isLive(app),
-    loadUser, 
-    loadProviders,
-    dashExists,
-    setViewVar('statuses', app.get('statuses')),
-    setViewVar('disqus_shortname', config.disqus_shortname),
-    setViewVar('live', true),
-    render('live')
-  ];
-
-  var appPort = app.get('config').port;
-  var appHost = app.get('config').host + (appPort && appPort !== 80 ? ':' + appPort : '');
-
-  var hackdashUserStack = [
-    loadUser, 
-    loadProviders
-  ];
-
-  var hackasdAppStack = [
-    checkProfile,
-    setViewVar('host', appHost),
-    setViewVar('version', app.get('clientVersion')),
-    setViewVar('disqus_shortname', config.disqus_shortname),
-    render('hackdashApp')
-  ];
-
-  var hackdashFullStack = hackdashUserStack.concat(hackasdAppStack);
-
-  // home page if no subdomain
-  // dashboard if subdomain
-  app.get('/', hackdashUserStack, isHomepage, hackasdAppStack);
-
-  // Search all projects if no subdomain
-  // Search projects inside dashboard if subdomain
-  // ?q=[query]
-  app.get('/projects', hackdashFullStack);
-
-  // Project Create Form for a dashboard - ONLY with a subdomain
-  app.get('/projects/create', hackdashFullStack);
-
-  // Project View - Always Read Only
-  app.get('/projects/:pid', hackdashFullStack);
-
-  // Project Edit Form - ONLY with a domain - redirects if not
-  app.get('/projects/:pid/edit', hackdashFullStack);
-
-  // Dashboards search - ONLY without subdomain - redirects if any
-  // ?q=[query]
-  app.get('/dashboards', hackdashFullStack);
-
-  // Collections search - ONLY without subdomain - redirects if any
-  // ?q=[query]
-  app.get('/collections', hackdashFullStack);
-
-  // Collection View - ONLY without subdomain - redirects if any
-  // Shows a list of dashboards - NO SEARCH
-  app.get('/collections/:cid', hackdashFullStack);
-
-  // User Profile's View
-  app.get('/users/profile', hackdashFullStack);
-
-  // Users Profile's card and entities
-  app.get('/users/:user_id', hackdashFullStack);
-
-  // Live view of a Dashboard - ONLY with a subomain
-  app.get('/live', liveStack);
-
-  // Login view
-  app.get('/login', hackdashFullStack);
-  
-  // Logout
-  app.get('/logout', logout, redirect('/'));
-
-  // About
-  app.get('/about', loadUser, render('about'));
-
-  app.post('/dashboard/create', isAuth, validateSubdomain, createDashboard(app));
-
-
-  //keep previous Projects link working
-  app.get('/p/:pid', function(req, res){ 
-    res.redirect('/projects/' + req.params.pid);
-  });
-
-
-
-/*
 
   app.get('/', hackdashDashboardStack, setViewVar('app_type', 'dashboard'), render('hackdashApp'));
   app.get('/search', hackdashDashboardStack, setViewVar('app_type', 'dashboard'), render('hackdashApp'));
@@ -180,9 +101,6 @@ module.exports = function(app) {
   app.get('/isearch', hackdashStack, setViewVar('app_type', 'isearch'), render('hackdashApp'));
   app.get('/csearch', hackdashStack, setViewVar('app_type', 'csearch'), render('hackdashApp'));
   app.get('/dashboards', hackdashStack, setViewVar('app_type', 'dashboards'), render('hackdashApp'));
-
-*/
-
 };
 
 /*
@@ -214,13 +132,13 @@ var checkProfile = function(req, res, next){
 };
 
 var isLive = function(app) {
-  return function(req, res, next) {
-    if(app.get('config').live) {
-      next();
-    } else {
-      res.send(404);
-    }
-  }
+	return function(req, res, next) {
+		if(app.get('config').live) {
+			next();
+		} else {
+			res.send(404);
+		}
+	}
 };
 
 /*

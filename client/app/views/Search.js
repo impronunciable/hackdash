@@ -66,6 +66,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     this.timer = window.setTimeout(function(){
       var keyword = self.ui.searchbox.val();
+      var fragment = Backbone.history.fragment.replace(Backbone.history.location.search, "");
 
       if (keyword !== self.lastSearch) {
         self.lastSearch = keyword;
@@ -77,12 +78,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
         if (keyword.length > 0) {
           opts.data = $.param({ q: keyword });
           
-          var baseURL = hackdash.app.type;
-          if (hackdash.app.type === "dashboard"){
-            baseURL = "search";
-          }
-
-          window.history.pushState({}, "", baseURL + "?q=" + keyword);
+          hackdash.app.router.navigate(fragment + "?q=" + keyword, { trigger: true });
 
           self.collection.fetch(opts);
         }
@@ -93,7 +89,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
           else {
             self.collection.fetch();
           }
-          window.history.pushState({}, "", hackdash.app.type === "isearch" ? "isearch" : "");
+
+          hackdash.app.router.navigate(fragment, { trigger: true, replace: true });
         }
       }
       

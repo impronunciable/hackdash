@@ -32,18 +32,20 @@ html
       script.
         window.hackdash = { 
           user: null,
-          baseURL: "!{host}"
+          baseURL: "!{host}",
+          disqus_shortname: "!{disqus_shortname}"
         };
     else 
       script.
         window.hackdash = { 
           user: !{JSON.stringify(user)},
-          baseURL: "!{host}"
+          baseURL: "!{host}",
+          disqus_shortname: "!{disqus_shortname}"
         };
 
     script(src="/js/hackdashApp.js?v=" + version)
 
     script.
       $(function(){
-        window.hackdash.startApp("!{app_type}");
+        window.hackdash.startApp();
       });

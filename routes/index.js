@@ -15,7 +15,7 @@ module.exports = function(app) {
   require('./api.v2')(app);
 
   require('./site')(app);
-  require('./api')(app);
+  //require('./api')(app);
   require('./admin')(app);
 
 };

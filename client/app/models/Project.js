@@ -7,6 +7,10 @@ module.exports = Backbone.Model.extend({
 
   idAttribute: "_id",
 
+  urlRoot: function(){
+    return hackdash.apiURL + '/projects'; 
+  },
+
   doAction: function(type, res, done){
     $.ajax({
       url: this.url() + '/' + res,

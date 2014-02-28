@@ -68,7 +68,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     $('.tooltips', this.$el).tooltip({});
 
     var url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
-      "/p/" + this.model.get("_id");
+      "/projects/" + this.model.get("_id");
 
     this.$el.on("click", function(){
       window.location = url;

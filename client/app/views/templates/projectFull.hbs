@@ -1,0 +1,60 @@
+<div class="well">
+  
+  <div class="well-header">
+    <h3><a href="/">{{domain}}</a></h3>
+    <h3>{{title}}</h3>
+    <p>{{description}}</p>
+    {{#if link}}
+    <a href="{{link}}">{{link}}</a>
+    {{/if}}
+  </div>
+
+  <div class="row-fluid">
+
+    <div class="well-sidebar span4">
+      <h6>Created</h6><strong>{{timeAgo created_at}}</strong>
+      <h6>State</h6><strong>{{status}}</strong>
+      <h6>Tags</h6>
+      <ul>
+        {{#each tags}}
+        <li>{{.}}</li>
+        {{/each}}
+      </ul>
+    </div>
+
+    <div class="well-content span8">
+
+      <div class="span4">
+        <h5>Managed by</h5>
+        <a href="/users/{{leader._id}}">
+          <img src="{{leader.picture}}" title="{{leader.name}}" rel="tooltip" class="tooltips"/>
+        </a>
+      </div>
+
+      <div class="span4">
+        <h5>Contributors</h5>
+          {{#each contributors}}
+            <a href="/users/{{_id}}">
+              <img class="tooltips" rel="tooltip" 
+                src="{{picture}}" data-id="{{_id}}" title="{{name}}">
+            </a>
+          {{/each}}
+      </div>
+
+      <div class="span4">
+        <h5>{{followers.length}} Likes</h5>
+          {{#each followers}}
+            <a href="/users/{{_id}}">
+              <img class="tooltips" rel="tooltip" 
+                src="{{picture}}" data-id="{{_id}}" title="{{name}}">
+            </a>
+          {{/each}}
+      </div>
+
+    </div>
+
+    <div id="disqus_thread" class="well-header"></div>
+    <script src="/js/disqus.js" disqus_shortname="{{disqus_shortname}}"></script>
+    
+  </div>
+</div>

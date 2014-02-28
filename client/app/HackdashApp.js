@@ -3,159 +3,41 @@
  *
  */
 
-var 
-    Dashboard = require("./models/Dashboard")
-  , Projects = require("./models/Projects")
-  , Dashboards = require("./models/Dashboards")
-  , Collections = require("./models/Collections")
-  , Profile = require("./models/Profile")
+var HackdashRouter = require('./HackdashRouter');
 
-  , Header = require("./views/Header")
-  , Footer = require("./views/Footer")
-
-  , ProfileView = require("./views/Profile")
-  , ProjectsView = require("./views/Projects")
-  , DashboardsView = require("./views/Dashboards")
-  , CollectionsView = require("./views/Collections");
-
-module.exports = function(type){
+module.exports = function(){
 
   var app = module.exports = new Backbone.Marionette.Application();
 
-  app.addRegions({
-    header: "header",
-    main: "#main",
-    footer: "footer"
-  });
-
-  function initISearch() {
-  
-    app.projects = new Projects();
-    
-    app.header.show(new Header({
-      collection: app.projects
-    }));
-
-    app.main.show(new ProjectsView({
-      collection: app.projects
-    }));
-
-    var query = hackdash.getQueryVariable("q");
-    if (query && query.length > 0){
-      app.projects.fetch({ data: $.param({ q: query }) });
-    }
-
-  }
-
-  function initCSearch() {
-  
-    app.collections = new Collections();
-    
-    app.header.show(new Header({
-      collection: app.dashboards
-    }));
-
-    app.main.show(new CollectionsView({
-      collection: app.collections
-    }));
-
-    var query = hackdash.getQueryVariable("q");
-    if (query && query.length > 0){
-      app.collections.fetch({ data: $.param({ q: query }) });
-    }
-
-  }
-
-  function initProfile() {
-
-    var userId = (window.location.pathname.split('/').pop()).split('?')[0];
-    
-    app.profile = new Profile({
-      _id: userId
+  function initRegions(){
+    app.addRegions({
+      header: "header",
+      main: "#main",
+      footer: "footer"
     });
-
-    app.profile.fetch({ parse: true });
-
-    app.header.show(new Header());
-
-    app.main.show(new ProfileView({
-      model: app.profile
-    }));
   }
 
-  function initDashboards() {
-  
-    app.dashboards = new Dashboards();
-    
-    app.header.show(new Header({
-      collection: app.dashboards
-    }));
-
-    app.main.show(new DashboardsView({
-      collection: app.dashboards
-    }));
-
-    var query = hackdash.getQueryVariable("q");
-    if (query && query.length > 0){
-      app.dashboards.fetch({ data: $.param({ q: query }) });
-    }
-
+  function initRouter(){
+    app.router = new HackdashRouter();
+    Backbone.history.start({ pushState: true });
   }
 
-  function initDashboard() {
-  
-    app.dashboard = new Dashboard();
-    app.projects = new Projects();
-
-    app.header.show(new Header({
-      model: app.dashboard,
-      collection: app.projects
-    }));
-
-    app.main.show(new ProjectsView({
-      collection: app.projects
-    }));
-
-    app.footer.show(new Footer({
-      model: app.dashboard
-    }));
-
-    app.dashboard.fetch();
-
-    var query = hackdash.getQueryVariable("q");
-    if (query && query.length > 0){
-      app.projects.fetch({ data: $.param({ q: query }) });
-    }
-    else {
-      app.projects.fetch(); 
-    }
-  }
-
-  switch(type){
-    case "dashboard": 
-      app.addInitializer(initDashboard);
-      break;
-    case "dashboards": 
-      app.addInitializer(initDashboards);
-      break;
-    /*
-    case "collection": 
-      app.addInitializer(initCollection);
-      break;
-    */
-    case "isearch":
-      app.addInitializer(initISearch);
-      break;
-    case "csearch":
-      app.addInitializer(initCSearch);
-      break;
-    case "profile":
-      app.addInitializer(initProfile);
-      break;
-  }
+  app.addInitializer(initRegions);
+  app.addInitializer(initRouter);
 
   window.hackdash.app = app;
-  window.hackdash.app.type = type;
   window.hackdash.app.start();
+
+  // Add navigation for BackboneRouter to all links 
+  // unless they have attribute "data-bypass"
+  $(window.document).on("click", "a:not([data-bypass])", function(evt) {
+    var href = { prop: $(this).prop("href"), attr: $(this).attr("href") };
+    var root = window.location.protocol + "//" + window.location.host + app.root;
+
+    if (href.prop && href.prop.slice(0, root.length) === root) {
+      evt.preventDefault();
+      Backbone.history.navigate(href.attr, { trigger: true });
+    }
+  });
 
 };

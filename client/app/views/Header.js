@@ -28,6 +28,12 @@ module.exports = Backbone.Marionette.Layout.extend({
     "change": "render"
   },
 
+  templateHelpers: {
+    hackdashURL: function(){
+      return "http://" + hackdash.baseURL;
+    },
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------

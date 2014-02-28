@@ -17,7 +17,7 @@
 
   function goToSearchProjects(){
     var q = $('#search-projects').val();
-    window.location = '/isearch?q=' + q;
+    window.location = '/projects?q=' + q;
   }
 
   $('#search-projects-btn').on("click", goToSearchProjects);
