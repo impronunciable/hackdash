@@ -686,6 +686,104 @@
 
 					});
 				},
+				"CollectionHeader.js": function (exports, module, require) {
+					/**
+					 * VIEW: DashboardHeader Layout
+					 * 
+					 */
+
+					var 
+					    template = require('./templates/collectionHeader.hbs');
+
+					module.exports = Backbone.Marionette.ItemView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  template: template,
+
+					  ui: {
+					    "title": "#dashboard-title",
+					    "description": "#dashboard-description"
+					  },
+
+					  templateHelpers: {
+					    isLeader: function(){
+					      return false;
+					      /*
+					      var user = hackdash.user;
+					      return user && user.admin_in.indexOf(this.domain) >= 0 || false;
+					      */
+					    }
+					  },
+
+					  modelEvents: {
+					    "change": "render"
+					  },
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  onRender: function(){
+					    var user = hackdash.user;
+
+					    if (user){
+					      var isLeader = false; //user.admin_in.indexOf(this.model.get("domain")) >= 0;
+					      
+					      if (isLeader){
+					        this.initEditables();
+					      }
+					    }
+
+					    $('.tooltips', this.$el).tooltip({});
+					  },
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					  initEditables: function(){
+					    var self = this;
+
+					    this.ui.title.editable({
+					      type: 'text',
+					      title: 'Enter title',
+					      emptytext: "Enter a title",
+					      inputclass: 'dashboard-edit-title',
+					      tpl: '<input type="text" maxlength="30">',
+
+					      success: function(response, newValue) {
+					        self.model.set('title', newValue);
+					        self.model.save();
+					      }
+					    });
+
+					    this.ui.description.editable({
+					      type: 'textarea',
+					      title: 'Enter description',
+					      emptytext: "Enter a description",
+					      inputclass: "dashboard-edit-desc",
+					      tpl: '<textarea maxlength="250" cols="50"></textarea>',
+
+					      success: function(response, newValue) {
+					        self.model.set('description', newValue);
+					        self.model.save();
+					      }
+					    });
+					  },
+
+					});
+				},
 				"Collections.js": function (exports, module, require) {
 					/**
 					 * VIEW: Collections
@@ -770,14 +868,49 @@
 
 					});
 				},
-				"DashboardDetails.js": function (exports, module, require) {
+				"CollectionsHeader.js": function (exports, module, require) {
+					/**
+					 * VIEW: CollectionsHeader Layout
+					 * 
+					 */
+
+					var 
+					    template = require('./templates/collectionsHeader.hbs');
+
+					module.exports = Backbone.Marionette.ItemView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  template: template,
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					});
+				},
+				"DashboardHeader.js": function (exports, module, require) {
 					/**
 					 * VIEW: DashboardHeader Layout
 					 * 
 					 */
 
 					var 
-					    template = require('./templates/dashboardDetails.hbs');
+					    template = require('./templates/dashboardHeader.hbs');
 
 					module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -949,7 +1082,9 @@
 					var 
 					    template = require('./templates/header.hbs')
 					  , Search = require('./Search')
-					  , DashboardDetails = require('./DashboardDetails');
+					  , DashboardHeader = require('./DashboardHeader')
+					  , CollectionsHeader = require('./CollectionsHeader')
+					  , CollectionHeader = require('./CollectionHeader');
 
 					module.exports = Backbone.Marionette.Layout.extend({
 
@@ -995,14 +1130,19 @@
 
 					      case "csearch":
 					        showSearch();
-					        this.ui.pageTitle.text("Search Collections");
+					        this.page.show(new CollectionsHeader());
+					        break;
+
+					      case "collection":
+					        showSearch();
+					        this.page.show(new CollectionHeader());
 					        break;
 
 					      case "dashboard":
 					        showSearch();
 					        
 					        if (this.model.get("_id")){
-					          this.page.show(new DashboardDetails({
+					          this.page.show(new DashboardHeader({
 					            model: this.model
 					          }));
 					        }
@@ -1853,7 +1993,47 @@
 						  })
 						;
 					},
-					"dashboardDetails.hbs.js": function (exports, module, require) {
+					"collectionHeader.hbs.js": function (exports, module, require) {
+						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+						  this.compilerInfo = [4,'>= 1.0.0'];
+						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  var buffer = "";
+
+
+						  return buffer;
+						  })
+						;
+					},
+					"collectionsHeader.hbs.js": function (exports, module, require) {
+						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+						  this.compilerInfo = [4,'>= 1.0.0'];
+						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  var buffer = "", stack1, options, self=this, functionType="function", blockHelperMissing=helpers.blockHelperMissing;
+
+						function program1(depth0,data) {
+						  
+						  
+						  return "\n  <a class=\"btn btn-large\" href=\"#\">Create a Collection</a>\n  <a class=\"btn btn-large\" href=\"#\">My Collections</a>\n";
+						  }
+
+						function program3(depth0,data) {
+						  
+						  
+						  return "\n  <a class=\"btn btn-large\" href=\"/login\">Login to manage collections</a>\n";
+						  }
+
+						  buffer += "<h1>Search Collections</h1>\n\n";
+						  options = {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data};
+						  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
+						  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n";
+						  return buffer;
+						  })
+						;
+					},
+					"dashboardHeader.hbs.js": function (exports, module, require) {
 						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 						  this.compilerInfo = [4,'>= 1.0.0'];
 						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -1934,7 +2114,7 @@
 						  buffer += "\n\n  ";
 						  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.noop,fn:self.program(14, program14, data),data:data});
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n\n  ";
+						  buffer += "\n\n";
 						  return buffer;
 						  }
 						function program10(depth0,data) {
@@ -2025,30 +2205,13 @@
 						  return buffer;
 						  }
 
-						function program3(depth0,data) {
-						  
-						  
-						  return "\n<div class=\"page-ctn\"></div>\n";
-						  }
-
-						function program5(depth0,data) {
-						  
-						  
-						  return "\n<h1 class=\"page-title\"></h1>\n";
-						  }
-
 						  buffer += "<div class=\"search-ctn\"></div>\n\n<div class=\"createProject pull-right btn-group\">\n  ";
 						  options = {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data};
 						  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
 						  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
-						  buffer += "\n</div>\n\n<a class=\"logo\" href=\"/\"></a>\n\n";
-						  options = {hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data};
-						  if (stack1 = helpers.isDashboardView) { stack1 = stack1.call(depth0, options); }
-						  else { stack1 = depth0.isDashboardView; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-						  if (!helpers.isDashboardView) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n</div>\n\n<a class=\"logo\" href=\"/\"></a>\n\n<div class=\"page-ctn\"></div>\n<h1 class=\"page-title\"></h1>";
 						  return buffer;
 						  })
 						;

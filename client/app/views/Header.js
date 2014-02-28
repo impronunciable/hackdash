@@ -2,7 +2,9 @@
 var 
     template = require('./templates/header.hbs')
   , Search = require('./Search')
-  , DashboardDetails = require('./DashboardDetails');
+  , DashboardHeader = require('./DashboardHeader')
+  , CollectionsHeader = require('./CollectionsHeader')
+  , CollectionHeader = require('./CollectionHeader');
 
 module.exports = Backbone.Marionette.Layout.extend({
 
@@ -48,14 +50,19 @@ module.exports = Backbone.Marionette.Layout.extend({
 
       case "csearch":
         showSearch();
-        this.ui.pageTitle.text("Search Collections");
+        this.page.show(new CollectionsHeader());
+        break;
+
+      case "collection":
+        showSearch();
+        this.page.show(new CollectionHeader());
         break;
 
       case "dashboard":
         showSearch();
         
         if (this.model.get("_id")){
-          this.page.show(new DashboardDetails({
+          this.page.show(new DashboardHeader({
             model: this.model
           }));
         }
