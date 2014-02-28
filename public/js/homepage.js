@@ -38,4 +38,16 @@
     if (key === 13) goToSearchCollections();
   });
 
+
+  function goToSearchInstances(){
+    var q = $('#search-instances').val();
+    window.location = '/dashboards?q=' + q;
+  }
+
+  $('#search-instances-btn').on("click", goToSearchInstances);
+  $('#search-instances').on("keyup", function(e){
+    var key = e.keyCode || e.which;
+    if (key === 13) goToSearchInstances();
+  });
+
 })();

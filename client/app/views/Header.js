@@ -38,7 +38,8 @@ module.exports = Backbone.Marionette.Layout.extend({
     var self = this;
     function showSearch(){
       self.search.show(new Search({
-        showSort: type === "dashboard"
+        showSort: type === "dashboard",
+        collection: self.collection
       }));
     }
 
@@ -53,9 +54,9 @@ module.exports = Backbone.Marionette.Layout.extend({
         this.page.show(new CollectionsHeader());
         break;
 
-      case "collection":
+      case "dashboards":
         showSearch();
-        this.page.show(new CollectionHeader());
+        this.ui.pageTitle.text("Search Instances");
         break;
 
       case "dashboard":
@@ -63,6 +64,16 @@ module.exports = Backbone.Marionette.Layout.extend({
         
         if (this.model.get("_id")){
           this.page.show(new DashboardHeader({
+            model: this.model
+          }));
+        }
+        break;
+
+      case "collection":
+        showSearch();
+        
+        if (this.model.get("_id")){
+          this.page.show(new CollectionHeader({
             model: this.model
           }));
         }

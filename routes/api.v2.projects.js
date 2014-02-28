@@ -149,7 +149,6 @@ var setQuery = function(req, res, next){
   }
 
   if (query.length === 0){
-    //req.query = { 'contributors.2': { $exists: true } };
     return next();
   }
 

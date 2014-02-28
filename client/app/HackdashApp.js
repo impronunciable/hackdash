@@ -6,6 +6,7 @@
 var 
     Dashboard = require("./models/Dashboard")
   , Projects = require("./models/Projects")
+  , Dashboards = require("./models/Dashboards")
   , Collections = require("./models/Collections")
   , Profile = require("./models/Profile")
 
@@ -14,6 +15,7 @@ var
 
   , ProfileView = require("./views/Profile")
   , ProjectsView = require("./views/Projects")
+  , DashboardsView = require("./views/Dashboards")
   , CollectionsView = require("./views/Collections");
 
 module.exports = function(type){
@@ -30,7 +32,9 @@ module.exports = function(type){
   
     app.projects = new Projects();
     
-    app.header.show(new Header());
+    app.header.show(new Header({
+      collection: app.projects
+    }));
 
     app.main.show(new ProjectsView({
       collection: app.projects
@@ -47,7 +51,9 @@ module.exports = function(type){
   
     app.collections = new Collections();
     
-    app.header.show(new Header());
+    app.header.show(new Header({
+      collection: app.dashboards
+    }));
 
     app.main.show(new CollectionsView({
       collection: app.collections
@@ -77,13 +83,33 @@ module.exports = function(type){
     }));
   }
 
+  function initDashboards() {
+  
+    app.dashboards = new Dashboards();
+    
+    app.header.show(new Header({
+      collection: app.dashboards
+    }));
+
+    app.main.show(new DashboardsView({
+      collection: app.dashboards
+    }));
+
+    var query = hackdash.getQueryVariable("q");
+    if (query && query.length > 0){
+      app.dashboards.fetch({ data: $.param({ q: query }) });
+    }
+
+  }
+
   function initDashboard() {
   
     app.dashboard = new Dashboard();
     app.projects = new Projects();
 
     app.header.show(new Header({
-      model: app.dashboard
+      model: app.dashboard,
+      collection: app.projects
     }));
 
     app.main.show(new ProjectsView({
@@ -109,6 +135,14 @@ module.exports = function(type){
     case "dashboard": 
       app.addInitializer(initDashboard);
       break;
+    case "dashboards": 
+      app.addInitializer(initDashboards);
+      break;
+    /*
+    case "collection": 
+      app.addInitializer(initCollection);
+      break;
+    */
     case "isearch":
       app.addInitializer(initISearch);
       break;

@@ -100,6 +100,7 @@ module.exports = function(app) {
 
   app.get('/isearch', hackdashStack, setViewVar('app_type', 'isearch'), render('hackdashApp'));
   app.get('/csearch', hackdashStack, setViewVar('app_type', 'csearch'), render('hackdashApp'));
+  app.get('/dashboards', hackdashStack, setViewVar('app_type', 'dashboards'), render('hackdashApp'));
 };
 
 /*

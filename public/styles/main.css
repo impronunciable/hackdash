@@ -358,7 +358,8 @@ line-height:                     0;
     margin-top: 20px;
   }
 
-  .isotope .project {
+  .isotope .project,
+  .isotope .dashboard {
     position: static ! important;
     -webkit-transform: translate(0px, 0px) ! important;
        -moz-transform: translate(0px, 0px) ! important;
@@ -378,7 +379,8 @@ line-height:                     0;
 
 
 @media (min-width: 768px) and (max-width: 980px) {
-  .project.span4 {
+  .project.span4,
+  .dashboard.span4 {
     width: 352px;
   }
 }
@@ -388,7 +390,8 @@ line-height:                     0;
 }
 
 @media (min-width: 1200px) {
-  .project.span4 {
+  .project.span4,
+  .dashboard.span4 {
     width: 270px;
   }
 }

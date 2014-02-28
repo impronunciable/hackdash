@@ -15,6 +15,8 @@ var Project = mongoose.model('Project')
 
 module.exports = function(app, uri, common) {
 
+  app.get(uri + '/dashboards', setQuery, setDashboards, sendDashboards);
+
   app.get(uri + '/', getDashboard, sendDashboard);
   app.put(uri + '/', common.isAuth, getDashboard, isAdminDashboard, updateDashboard, sendDashboard);
 
@@ -24,6 +26,32 @@ module.exports = function(app, uri, common) {
   app.get(uri + '/csv', common.isAuth, getDashboard, isAdminDashboard, sendDashboardCSV);
 
 };
+
+var setQuery = function(req, res, next){
+  var query = req.query.q || "";
+
+  req.search_query = {};
+
+  if (query.length === 0){
+    return next();
+  }
+
+  var regex = new RegExp(query, 'i');
+  req.search_query.$or = [ { domain: regex }, { title: regex }, { description: regex } ];
+
+  next();
+};
+
+var setDashboards = function(req, res, next){
+  Dashboard.find(req.search_query || {})
+    .limit(30)
+    .sort( { "created_at" : -1 } )
+    .exec(function(err, dashboards) {
+      if(err) return res.send(500);
+      req.dashboards = dashboards || [];
+      next();
+    });
+}
 
 var getDashboard = function(req, res, next){
   if (req.subdomains.length > 0) {
@@ -75,6 +103,10 @@ var updateDashboard = function(req, res, next) {
 
 var sendDashboard = function(req, res){
   res.send(req.dashboard);
+};
+
+var sendDashboards = function(req, res){
+  res.send(req.dashboards);
 };
 
 var sendDashboardCSV = function(req, res){

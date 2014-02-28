@@ -105,6 +105,7 @@
 				var 
 				    Dashboard = require("./models/Dashboard")
 				  , Projects = require("./models/Projects")
+				  , Dashboards = require("./models/Dashboards")
 				  , Collections = require("./models/Collections")
 				  , Profile = require("./models/Profile")
 
@@ -113,6 +114,7 @@
 
 				  , ProfileView = require("./views/Profile")
 				  , ProjectsView = require("./views/Projects")
+				  , DashboardsView = require("./views/Dashboards")
 				  , CollectionsView = require("./views/Collections");
 
 				module.exports = function(type){
@@ -129,7 +131,9 @@
 				  
 				    app.projects = new Projects();
 				    
-				    app.header.show(new Header());
+				    app.header.show(new Header({
+				      collection: app.projects
+				    }));
 
 				    app.main.show(new ProjectsView({
 				      collection: app.projects
@@ -146,7 +150,9 @@
 				  
 				    app.collections = new Collections();
 				    
-				    app.header.show(new Header());
+				    app.header.show(new Header({
+				      collection: app.dashboards
+				    }));
 
 				    app.main.show(new CollectionsView({
 				      collection: app.collections
@@ -176,13 +182,33 @@
 				    }));
 				  }
 
+				  function initDashboards() {
+				  
+				    app.dashboards = new Dashboards();
+				    
+				    app.header.show(new Header({
+				      collection: app.dashboards
+				    }));
+
+				    app.main.show(new DashboardsView({
+				      collection: app.dashboards
+				    }));
+
+				    var query = hackdash.getQueryVariable("q");
+				    if (query && query.length > 0){
+				      app.dashboards.fetch({ data: $.param({ q: query }) });
+				    }
+
+				  }
+
 				  function initDashboard() {
 				  
 				    app.dashboard = new Dashboard();
 				    app.projects = new Projects();
 
 				    app.header.show(new Header({
-				      model: app.dashboard
+				      model: app.dashboard,
+				      collection: app.projects
 				    }));
 
 				    app.main.show(new ProjectsView({
@@ -208,6 +234,14 @@
 				    case "dashboard": 
 				      app.addInitializer(initDashboard);
 				      break;
+				    case "dashboards": 
+				      app.addInitializer(initDashboards);
+				      break;
+				    /*
+				    case "collection": 
+				      app.addInitializer(initCollection);
+				      break;
+				    */
 				    case "isearch":
 				      app.addInitializer(initISearch);
 				      break;
@@ -453,6 +487,23 @@
 					  initialize: function(){
 					    this.set("admins", new Admins());
 					  },
+
+					});
+
+				},
+				"Dashboards.js": function (exports, module, require) {
+					/**
+					 * MODEL: Dashboards
+					 *
+					 */
+
+					module.exports = Backbone.Collection.extend({
+
+					  url: function(){
+					    return hackdash.apiURL + "/dashboards"; 
+					  },
+
+					  idAttribute: "_id", 
 
 					});
 
@@ -710,11 +761,8 @@
 
 					  templateHelpers: {
 					    isLeader: function(){
-					      return false;
-					      /*
 					      var user = hackdash.user;
-					      return user && user.admin_in.indexOf(this.domain) >= 0 || false;
-					      */
+					      return (user && this.owner._id === user._id) || false;
 					    }
 					  },
 
@@ -730,7 +778,7 @@
 					    var user = hackdash.user;
 
 					    if (user){
-					      var isLeader = false; //user.admin_in.indexOf(this.model.get("domain")) >= 0;
+					      var isLeader = this.owner._id === user._id;
 					      
 					      if (isLeader){
 					        this.initEditables();
@@ -848,7 +896,7 @@
 					    }
 
 					    $collections.isotope({
-					        itemSelector: ".project"
+					        itemSelector: ".collection"
 					      , animationEngine: "jquery"
 					      , resizable: true
 					      , sortAscending: true
@@ -888,6 +936,62 @@
 					  //--------------------------------------
 					  //+ INHERITED / OVERRIDES
 					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					});
+				},
+				"Dashboard.js": function (exports, module, require) {
+					/**
+					 * VIEW: Dashboard
+					 * 
+					 */
+					 
+					var template = require('./templates/dashboard.hbs');
+
+					module.exports = Backbone.Marionette.ItemView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  id: function(){
+					    return this.model.get("_id");
+					  },
+					  className: "dashboard span4",
+					  template: template,
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  onRender: function(){
+					    this.$el
+					      .attr({
+					          "title": this.model.get("status")
+					        , "data-name": this.model.get("domain")
+					        , "data-date": this.model.get("created_at")
+					      })
+					      .tooltip({});
+
+					    $('.tooltips', this.$el).tooltip({});
+
+					    var url = "http://" + this.model.get("domain") + "." + hackdash.baseURL;
+
+					    this.$el.on("click", function(){
+					      window.location = url;
+					    });
+					  },
 
 					  //--------------------------------------
 					  //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -1024,6 +1128,66 @@
 
 					});
 				},
+				"Dashboards.js": function (exports, module, require) {
+					/**
+					 * VIEW: Dashboards
+					 * 
+					 */
+
+					var Dashboard = require('./Dashboard');
+
+					module.exports = Backbone.Marionette.CollectionView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  id: "dashboards",
+					  className: "row dashboards",
+					  itemView: Dashboard,
+					  
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+					  
+					  onRender: function(){
+					    var self = this;
+					    _.defer(function(){
+					      self.updateIsotope();
+					    });
+					  },
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					  isotopeInitialized: false,
+					  updateIsotope: function(){
+					    var $dashboards = this.$el;
+
+					    if (this.isotopeInitialized){
+					      $dashboards.isotope("destroy");
+					    }
+
+					    $dashboards.isotope({
+					        itemSelector: ".dashboard"
+					      , animationEngine: "jquery"
+					      , resizable: true
+					    });
+					    
+					    this.isotopeInitialized = true;
+					  }
+
+					});
+				},
 				"Footer.js": function (exports, module, require) {
 					
 					var 
@@ -1118,7 +1282,8 @@
 					    var self = this;
 					    function showSearch(){
 					      self.search.show(new Search({
-					        showSort: type === "dashboard"
+					        showSort: type === "dashboard",
+					        collection: self.collection
 					      }));
 					    }
 
@@ -1133,9 +1298,9 @@
 					        this.page.show(new CollectionsHeader());
 					        break;
 
-					      case "collection":
+					      case "dashboards":
 					        showSearch();
-					        this.page.show(new CollectionHeader());
+					        this.ui.pageTitle.text("Search Instances");
 					        break;
 
 					      case "dashboard":
@@ -1143,6 +1308,16 @@
 					        
 					        if (this.model.get("_id")){
 					          this.page.show(new DashboardHeader({
+					            model: this.model
+					          }));
+					        }
+					        break;
+
+					      case "collection":
+					        showSearch();
+					        
+					        if (this.model.get("_id")){
+					          this.page.show(new CollectionHeader({
 					            model: this.model
 					          }));
 					        }
@@ -1823,6 +1998,7 @@
 
 					  initialize: function(options){
 					    this.showSort = (options && options.showSort) || false;
+					    this.collection = options && options.collection;
 					  },
 
 					  onRender: function(){
@@ -1850,7 +2026,7 @@
 					  sort: function(e){
 					    e.preventDefault();
 					    var val = $(e.currentTarget).data("option-value");
-					    hackdash.app.projects.trigger("sort:" + val);
+					    this.collection.trigger("sort:" + val);
 					  },
 
 					  search: function(){
@@ -1870,17 +2046,21 @@
 					        if (keyword.length > 0) {
 					          opts.data = $.param({ q: keyword });
 					          
-					          var baseURL = (hackdash.app.type === "isearch" ? "isearch" : "search");
+					          var baseURL = hackdash.app.type;
+					          if (hackdash.app.type === "dashboard"){
+					            baseURL = "search";
+					          }
+
 					          window.history.pushState({}, "", baseURL + "?q=" + keyword);
 
-					          hackdash.app.projects.fetch(opts);
+					          self.collection.fetch(opts);
 					        }
 					        else {
 					          if (hackdash.app.type === "isearch"){
-					            hackdash.app.projects.reset();
+					            self.collection.reset();
 					          }
 					          else {
-					            hackdash.app.projects.fetch();
+					            self.collection.fetch();
 					          }
 					          window.history.pushState({}, "", hackdash.app.type === "isearch" ? "isearch" : "");
 					        }
@@ -2029,6 +2209,37 @@
 						  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
 						  if(stack1 || stack1 === 0) { buffer += stack1; }
 						  buffer += "\n";
+						  return buffer;
+						  })
+						;
+					},
+					"dashboard.hbs.js": function (exports, module, require) {
+						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+						  this.compilerInfo = [4,'>= 1.0.0'];
+						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  var buffer = "", stack1, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+
+
+						  buffer += "<div class=\"well\">\n  <div class=\"well-content\">\n    <h4>";
+						  if (stack1 = helpers.domain) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.domain; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</h4>\n    <h4>";
+						  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</h4>\n    ";
+						  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\n    <br/>\n    <a href=\"";
+						  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\" target=\"_blank\">site</a>\n  </div>\n  <div class=\"row-fluid footer-box\">\n    <div class=\"aging activity created_at\">\n      <i rel=\"tooltip\" title=\"";
+						  options = {hash:{},data:data};
+						  buffer += escapeExpression(((stack1 = helpers.timeAgo || depth0.timeAgo),stack1 ? stack1.call(depth0, depth0.created_at, options) : helperMissing.call(depth0, "timeAgo", depth0.created_at, options)))
+						    + "\" class=\"tooltips icon-time icon-1\"></i>\n    </div>\n  </div>\n</div>\n";
 						  return buffer;
 						  })
 						;

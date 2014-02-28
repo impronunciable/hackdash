@@ -21,11 +21,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   templateHelpers: {
     isLeader: function(){
-      return false;
-      /*
       var user = hackdash.user;
-      return user && user.admin_in.indexOf(this.domain) >= 0 || false;
-      */
+      return (user && this.owner._id === user._id) || false;
     }
   },
 
@@ -41,7 +38,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var user = hackdash.user;
 
     if (user){
-      var isLeader = false; //user.admin_in.indexOf(this.model.get("domain")) >= 0;
+      var isLeader = this.owner._id === user._id;
       
       if (isLeader){
         this.initEditables();
