@@ -125,7 +125,7 @@ var removeCollection = function(req, res){
 
 var addDashboard = function(req, res, next){
   var collectionId = req.collection.id;
-  var dashboardId = req.params.cid;
+  var dashboardId = req.params.did;
 
   Collection.update({ _id: collectionId }, { $addToSet : { 'dashboards': dashboardId }}, function(err){
     if(err) return res.send(500);
@@ -135,7 +135,7 @@ var addDashboard = function(req, res, next){
 
 var removeDashboard = function(req, res, next){
   var collectionId = req.collection.id;
-  var dashboardId = req.params.cid;
+  var dashboardId = req.params.did;
 
   Collection.update({ _id: collectionId }, { $pull : { 'dashboards': dashboardId }}, function(err){
     if(err) return res.send(500);

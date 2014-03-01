@@ -209,7 +209,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       collection: app.dashboards
     }));
 
-    app.collections.fetch();
+    app.collections.fetch({ parse: true });
 
     var query = hackdash.getQueryVariable("q");
     if (query && query.length > 0){

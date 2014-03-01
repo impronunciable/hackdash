@@ -355,7 +355,7 @@
 				      collection: app.dashboards
 				    }));
 
-				    app.collections.fetch();
+				    app.collections.fetch({ parse: true });
 
 				    var query = hackdash.getQueryVariable("q");
 				    if (query && query.length > 0){
@@ -382,9 +382,11 @@
 				    return(false);
 				  };
 
-				  // Set global mode for InlineEditor (X-Editable)
-				  $.fn.editable.defaults.mode = 'inline';
-
+				  if ($.fn.editable){
+				    // Set global mode for InlineEditor (X-Editable)
+				    $.fn.editable.defaults.mode = 'inline';
+				  }
+				  
 				   // Init Helpers
 				  require('./helpers/handlebars');
 				  require('./helpers/backboneOverrides');
@@ -550,9 +552,39 @@
 					 *
 					 */
 
+					var Dashboards = require('./Dashboards');
+
 					module.exports = Backbone.Model.extend({
 
 					  idAttribute: "_id",
+
+					  parse: function(response){
+					    response.dashboards = new Dashboards(response.dashboards || []);
+					    return response;
+					  },
+
+					  addDashboard: function(dashId){
+					    $.ajax({
+					      url: this.url() + '/dashboards/' + dashId,
+					      type: "POST",
+					      context: this
+					    });
+
+					    this.get("dashboards").add({ _id: dashId });
+					  },
+
+					  removeDashboard: function(dashId){
+					    $.ajax({
+					      url: this.url() + '/dashboards/' + dashId,
+					      type: "DELETE",
+					      context: this
+					    });
+
+					    var result = this.get("dashboards").where({ _id: dashId});
+					    if (result.length > 0){
+					      this.get("dashboards").remove(result[0]);
+					    }
+					  },
 
 					});
 
@@ -933,11 +965,15 @@
 						    "click .add": "add"
 						  },
 
+						  itemViewOptions: function(){
+						    return {
+						      dashboardId: this.model.get("_id")
+						    };
+						  },
+
 						  //--------------------------------------
 						  //+ INHERITED / OVERRIDES
 						  //--------------------------------------
-
-
 
 						  //--------------------------------------
 						  //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -982,9 +1018,23 @@
 						  tagName: "li",
 						  template: template,
 
+						  events: {
+						    "click input[type=checkbox]": "toggleDashboard"
+						  },
+
 						  //--------------------------------------
 						  //+ INHERITED / OVERRIDES
 						  //--------------------------------------
+
+						  initialize: function(options){
+						    this.dashboardId = options.dashboardId;
+						  },
+
+						  serializeData: function(){
+						    return _.extend({
+						      hasDash: this.hasDashboard()
+						    }, this.model.toJSON());
+						  },
 
 						  //--------------------------------------
 						  //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -994,9 +1044,22 @@
 						  //+ EVENT HANDLERS
 						  //--------------------------------------
 
+						  toggleDashboard: function(){
+						    if (this.hasDashboard()){
+						      this.model.removeDashboard(this.dashboardId);
+						    }
+						    else {
+						      this.model.addDashboard(this.dashboardId);
+						    }
+						  },
+
 						  //--------------------------------------
 						  //+ PRIVATE AND PROTECTED METHODS
 						  //--------------------------------------
+
+						  hasDashboard: function(){
+						    return this.model.get("dashboards").where({ _id: this.dashboardId}).length > 0;
+						  }
 
 						});
 					},
@@ -1077,14 +1140,22 @@
 							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 							  this.compilerInfo = [4,'>= 1.0.0'];
 							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-							  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+							  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
+							function program1(depth0,data) {
+							  
+							  
+							  return "checked";
+							  }
 
 							  buffer += "<input id=\"";
 							  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 							  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)
-							    + "\" type=\"checkbox\" value=\"false\" class=\"pull-left\">\n<label for=\"";
+							    + "\" type=\"checkbox\" value=\"false\" \n  class=\"pull-left\" ";
+							  stack1 = helpers['if'].call(depth0, depth0.hasDash, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += ">\n<label for=\"";
 							  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 							  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)

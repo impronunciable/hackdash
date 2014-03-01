@@ -27,11 +27,15 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     "click .add": "add"
   },
 
+  itemViewOptions: function(){
+    return {
+      dashboardId: this.model.get("_id")
+    };
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
-
-
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS

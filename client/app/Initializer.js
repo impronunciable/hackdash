@@ -13,9 +13,11 @@ module.exports = function(){
     return(false);
   };
 
-  // Set global mode for InlineEditor (X-Editable)
-  $.fn.editable.defaults.mode = 'inline';
-
+  if ($.fn.editable){
+    // Set global mode for InlineEditor (X-Editable)
+    $.fn.editable.defaults.mode = 'inline';
+  }
+  
    // Init Helpers
   require('./helpers/handlebars');
   require('./helpers/backboneOverrides');

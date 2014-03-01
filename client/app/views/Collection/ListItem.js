@@ -14,9 +14,23 @@ module.exports = Backbone.Marionette.ItemView.extend({
   tagName: "li",
   template: template,
 
+  events: {
+    "click input[type=checkbox]": "toggleDashboard"
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
+
+  initialize: function(options){
+    this.dashboardId = options.dashboardId;
+  },
+
+  serializeData: function(){
+    return _.extend({
+      hasDash: this.hasDashboard()
+    }, this.model.toJSON());
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -26,8 +40,21 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
+  toggleDashboard: function(){
+    if (this.hasDashboard()){
+      this.model.removeDashboard(this.dashboardId);
+    }
+    else {
+      this.model.addDashboard(this.dashboardId);
+    }
+  },
+
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
+
+  hasDashboard: function(){
+    return this.model.get("dashboards").where({ _id: this.dashboardId}).length > 0;
+  }
 
 });
