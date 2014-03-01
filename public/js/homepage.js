@@ -29,7 +29,7 @@
 
   function goToSearchCollections(){
     var q = $('#search-collections').val();
-    window.location = '/csearch?q=' + q;
+    window.location = '/collections?q=' + q;
   }
 
   $('#search-collections-btn').on("click", goToSearchCollections);

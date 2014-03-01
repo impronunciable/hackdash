@@ -14,7 +14,7 @@ var Collection = mongoose.model('Collection');
 module.exports = function(app, uri, common) {
 
   // Get & Search all collections
-  app.get(uri + '/collections', getAllCollections, sendCollections);
+  app.get(uri + '/collections', setQuery, getAllCollections, sendCollections);
 
   // Get user collections
   app.get(uri + '/collections/own', getUserCollections, sendCollections);
@@ -39,10 +39,26 @@ module.exports = function(app, uri, common) {
 
 };
 
+var setQuery = function(req, res, next){
+  var query = req.query.q || "";
+
+  req.search_query = {};
+
+  if (query.length === 0){
+    return next();
+  }
+
+  var regex = new RegExp(query, 'i');
+  req.search_query.$or = [ { title: regex }, { description: regex } ];
+
+  next();
+};
 
 var getAllCollections = function(req, res, next){
-  //TODO: query by title and desc
-  Collection.find()
+  
+  Collection.find(req.search_query || {})
+    .limit(30)
+    .sort( { "created_at" : -1 } )
     .populate('owner')
     .populate('dashboards')
     .exec(function(err, collections) {

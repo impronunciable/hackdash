@@ -293,14 +293,14 @@
 				    app.project.fetch();
 				  },
 
-				  showCSearch: function() {
+				  showCollections: function() {
 				    var app = window.hackdash.app;
-				    app.type = "csearch";
+				    app.type = "collections";
 
 				    app.collections = new Collections();
 				    
 				    app.header.show(new Header({
-				      collection: app.dashboards
+				      collection: app.collections
 				    }));
 
 				    app.main.show(new CollectionsView({
@@ -311,7 +311,6 @@
 				    if (query && query.length > 0){
 				      app.collections.fetch({ data: $.param({ q: query }) });
 				    }
-
 				  },
 
 				  showProfile: function(userId) {
@@ -361,7 +360,6 @@
 				    if (query && query.length > 0){
 				      app.dashboards.fetch({ data: $.param({ q: query }) });
 				    }
-
 				  }
 
 				});
@@ -865,14 +863,12 @@
 						  //+ PUBLIC PROPERTIES / CONSTANTS
 						  //--------------------------------------
 
-						  id: "collection",
-						  className: "row collection",
+						  id: "collections",
+						  className: "row collections",
 						  itemView: Collection,
 						  
 						  collectionEvents: {
-						    "remove": "render",
-						    "sort:date": "sortByDate",
-						    "sort:name": "sortByName"
+						    "remove": "render"
 						  },
 
 						  //--------------------------------------
@@ -898,14 +894,6 @@
 						  //+ PRIVATE AND PROTECTED METHODS
 						  //--------------------------------------
 
-						  sortByName: function(){
-						    this.$el.isotope({"sortBy": "name"});
-						  },
-
-						  sortByDate: function(){
-						    this.$el.isotope({"sortBy": "date"});
-						  },
-
 						  isotopeInitialized: false,
 						  updateIsotope: function(){
 						    var $collections = this.$el;
@@ -918,16 +906,6 @@
 						        itemSelector: ".collection"
 						      , animationEngine: "jquery"
 						      , resizable: true
-						      , sortAscending: true
-						      , getSortData : {
-						          "name" : function ( $elem ) {
-						            return $elem.data("name").toLowerCase();
-						          },
-						          "date" : function ( $elem ) {
-						            return $elem.data("date");
-						          }
-						        }
-						      , sortBy: "name"
 						    });
 						    
 						    this.isotopeInitialized = true;
@@ -1086,6 +1064,17 @@
 						  //--------------------------------------
 						  //+ INHERITED / OVERRIDES
 						  //--------------------------------------
+
+						  onRender: function(){
+
+						    var url = "http://" + hackdash.baseURL + "/collections/" + this.model.get("_id");
+
+						    this.$el.on("click", function(e){
+						      if (!$(e.target).hasClass("add")){
+						        window.location = url;
+						      }
+						    });
+						  },
 
 						  //--------------------------------------
 						  //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -1279,8 +1268,6 @@
 						        window.location = url;
 						      }
 						    });
-
-
 						  },
 
 						  //--------------------------------------
@@ -1985,11 +1972,6 @@
 						        this.ui.pageTitle.text("Search Projects");
 						        break;
 
-						      case "csearch":
-						        showSearch();
-						        this.page.show(new CollectionsHeader());
-						        break;
-
 						      case "dashboards":
 						        showSearch();
 						        this.page.show(new DashboardsHeader());
@@ -2003,6 +1985,11 @@
 						            model: this.model
 						          }));
 						        }
+						        break;
+
+						      case "collections":
+						        showSearch();
+						        this.page.show(new CollectionsHeader());
 						        break;
 
 						      case "collection":

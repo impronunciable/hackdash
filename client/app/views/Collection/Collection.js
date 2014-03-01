@@ -11,14 +11,12 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  id: "collection",
-  className: "row collection",
+  id: "collections",
+  className: "row collections",
   itemView: Collection,
   
   collectionEvents: {
-    "remove": "render",
-    "sort:date": "sortByDate",
-    "sort:name": "sortByName"
+    "remove": "render"
   },
 
   //--------------------------------------
@@ -44,14 +42,6 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
-  sortByName: function(){
-    this.$el.isotope({"sortBy": "name"});
-  },
-
-  sortByDate: function(){
-    this.$el.isotope({"sortBy": "date"});
-  },
-
   isotopeInitialized: false,
   updateIsotope: function(){
     var $collections = this.$el;
@@ -64,16 +54,6 @@ module.exports = Backbone.Marionette.CollectionView.extend({
         itemSelector: ".collection"
       , animationEngine: "jquery"
       , resizable: true
-      , sortAscending: true
-      , getSortData : {
-          "name" : function ( $elem ) {
-            return $elem.data("name").toLowerCase();
-          },
-          "date" : function ( $elem ) {
-            return $elem.data("date");
-          }
-        }
-      , sortBy: "name"
     });
     
     this.isotopeInitialized = true;

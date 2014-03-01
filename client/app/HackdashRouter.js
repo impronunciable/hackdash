@@ -147,14 +147,14 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     app.project.fetch();
   },
 
-  showCSearch: function() {
+  showCollections: function() {
     var app = window.hackdash.app;
-    app.type = "csearch";
+    app.type = "collections";
 
     app.collections = new Collections();
     
     app.header.show(new Header({
-      collection: app.dashboards
+      collection: app.collections
     }));
 
     app.main.show(new CollectionsView({
@@ -165,7 +165,6 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     if (query && query.length > 0){
       app.collections.fetch({ data: $.param({ q: query }) });
     }
-
   },
 
   showProfile: function(userId) {
@@ -215,7 +214,6 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     if (query && query.length > 0){
       app.dashboards.fetch({ data: $.param({ q: query }) });
     }
-
   }
 
 });

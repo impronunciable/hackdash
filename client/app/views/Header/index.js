@@ -56,11 +56,6 @@ module.exports = Backbone.Marionette.Layout.extend({
         this.ui.pageTitle.text("Search Projects");
         break;
 
-      case "csearch":
-        showSearch();
-        this.page.show(new CollectionsHeader());
-        break;
-
       case "dashboards":
         showSearch();
         this.page.show(new DashboardsHeader());
@@ -74,6 +69,11 @@ module.exports = Backbone.Marionette.Layout.extend({
             model: this.model
           }));
         }
+        break;
+
+      case "collections":
+        showSearch();
+        this.page.show(new CollectionsHeader());
         break;
 
       case "collection":

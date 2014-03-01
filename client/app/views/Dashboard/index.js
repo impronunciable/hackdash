@@ -45,8 +45,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
         window.location = url;
       }
     });
-
-
   },
 
   //--------------------------------------

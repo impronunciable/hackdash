@@ -21,6 +21,17 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  onRender: function(){
+
+    var url = "http://" + hackdash.baseURL + "/collections/" + this.model.get("_id");
+
+    this.$el.on("click", function(e){
+      if (!$(e.target).hasClass("add")){
+        window.location = url;
+      }
+    });
+  },
+
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
