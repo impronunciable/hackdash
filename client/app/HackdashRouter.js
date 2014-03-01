@@ -6,6 +6,7 @@ var Dashboard = require("./models/Dashboard")
   , Project = require("./models/Project")
   , Projects = require("./models/Projects")
   , Dashboards = require("./models/Dashboards")
+  , Collection = require("./models/Collection")
   , Collections = require("./models/Collections")
   , Profile = require("./models/Profile")
 
@@ -163,9 +164,39 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
     var query = hackdash.getQueryVariable("q");
     if (query && query.length > 0){
-      app.collections.fetch({ data: $.param({ q: query }) });
+      app.collections.fetch({ data: $.param({ q: query }), parse: true });
     }
   },
+
+  showCollection: function(collectionId) {
+    var app = window.hackdash.app;
+    app.type = "collection";
+
+    app.collection = new Collection({ _id: collectionId });
+    
+    app.collection
+      .fetch({ parse: true })
+      .done(function(){
+        
+        app.header.show(new Header({
+          model: app.collection,
+          collection: app.collection.get("dashboards")
+        }));
+
+        app.main.show(new DashboardsView({
+          hideAdd: true,
+          collection: app.collection.get("dashboards")
+        }));
+
+        var query = hackdash.getQueryVariable("q");
+        if (query && query.length > 0){
+          app.collection.get("dashboards").fetch({ 
+            data: $.param({ q: query }), 
+            parse: true 
+          });
+        }
+      });
+  },  
 
   showProfile: function(userId) {
     var app = window.hackdash.app;

@@ -16,11 +16,13 @@
     </div>
     {{/if}}
 
-    {{#isLoggedIn}}
-    <div class="pull-right add">
-      <a class="btn btn-link add">Add</a>
-    </div>
-    {{/isLoggedIn}}
-  
+    {{#unless hideAdd}}
+      {{#isLoggedIn}}
+      <div class="pull-right add">
+        <a class="btn btn-link add">Add</a>
+      </div>
+      {{/isLoggedIn}}
+    {{/unless}}
+    
   </div>
 </div>

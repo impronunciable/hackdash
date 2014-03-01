@@ -9,6 +9,10 @@ module.exports = Backbone.Model.extend({
 
   idAttribute: "_id",
 
+  urlRoot: function(){
+    return hackdash.apiURL + '/collections'; 
+  },
+
   parse: function(response){
     response.dashboards = new Dashboards(response.dashboards || []);
     return response;

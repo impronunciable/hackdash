@@ -152,6 +152,7 @@
 				  , Project = require("./models/Project")
 				  , Projects = require("./models/Projects")
 				  , Dashboards = require("./models/Dashboards")
+				  , Collection = require("./models/Collection")
 				  , Collections = require("./models/Collections")
 				  , Profile = require("./models/Profile")
 
@@ -309,9 +310,39 @@
 
 				    var query = hackdash.getQueryVariable("q");
 				    if (query && query.length > 0){
-				      app.collections.fetch({ data: $.param({ q: query }) });
+				      app.collections.fetch({ data: $.param({ q: query }), parse: true });
 				    }
 				  },
+
+				  showCollection: function(collectionId) {
+				    var app = window.hackdash.app;
+				    app.type = "collection";
+
+				    app.collection = new Collection({ _id: collectionId });
+				    
+				    app.collection
+				      .fetch({ parse: true })
+				      .done(function(){
+				        
+				        app.header.show(new Header({
+				          model: app.collection,
+				          collection: app.collection.get("dashboards")
+				        }));
+
+				        app.main.show(new DashboardsView({
+				          hideAdd: true,
+				          collection: app.collection.get("dashboards")
+				        }));
+
+				        var query = hackdash.getQueryVariable("q");
+				        if (query && query.length > 0){
+				          app.collection.get("dashboards").fetch({ 
+				            data: $.param({ q: query }), 
+				            parse: true 
+				          });
+				        }
+				      });
+				  },  
 
 				  showProfile: function(userId) {
 				    var app = window.hackdash.app;
@@ -555,6 +586,10 @@
 					module.exports = Backbone.Model.extend({
 
 					  idAttribute: "_id",
+
+					  urlRoot: function(){
+					    return hackdash.apiURL + '/collections'; 
+					  },
 
 					  parse: function(response){
 					    response.dashboards = new Dashboards(response.dashboards || []);
@@ -1178,10 +1213,20 @@
 						  className: "row dashboards",
 						  itemView: Dashboard,
 						  
+						  itemViewOptions: function(){
+						    return {
+						      hideAdd: this.hideAdd
+						    };
+						  },
+
 						  //--------------------------------------
 						  //+ INHERITED / OVERRIDES
 						  //--------------------------------------
 						  
+						  initialize: function(options){
+						    this.hideAdd = (options && options.hideAdd) || false;
+						  },
+
 						  onRender: function(){
 						    var self = this;
 						    _.defer(function(){
@@ -1250,6 +1295,10 @@
 						  //+ INHERITED / OVERRIDES
 						  //--------------------------------------
 
+						  initialize: function(options){
+						    this.hideAdd = (options && options.hideAdd) || false;
+						  },
+
 						  onRender: function(){
 						    this.$el
 						      .attr({
@@ -1268,6 +1317,12 @@
 						        window.location = url;
 						      }
 						    });
+						  },
+
+						  serializeData: function(){
+						    return _.extend({
+						      hideAdd: this.hideAdd
+						    }, this.model.toJSON());
 						  },
 
 						  //--------------------------------------
@@ -1300,7 +1355,7 @@
 							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 							  this.compilerInfo = [4,'>= 1.0.0'];
 							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-							  var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this, blockHelperMissing=helpers.blockHelperMissing;
+							  var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, self=this, blockHelperMissing=helpers.blockHelperMissing, helperMissing=helpers.helperMissing;
 
 							function program1(depth0,data) {
 							  
@@ -1315,8 +1370,20 @@
 
 							function program3(depth0,data) {
 							  
+							  var buffer = "", stack1, options;
+							  buffer += "\n      ";
+							  options = {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data};
+							  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
+							  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += "\n    ";
+							  return buffer;
+							  }
+							function program4(depth0,data) {
 							  
-							  return "\n    <div class=\"pull-right add\">\n      <a class=\"btn btn-link add\">Add</a>\n    </div>\n    ";
+							  
+							  return "\n      <div class=\"pull-right add\">\n        <a class=\"btn btn-link add\">Add</a>\n      </div>\n      ";
 							  }
 
 							  buffer += "<div class=\"well\">\n  <div class=\"well-content\">\n    <h4>";
@@ -1338,12 +1405,9 @@
 							  stack2 = helpers['if'].call(depth0, depth0.link, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
 							  if(stack2 || stack2 === 0) { buffer += stack2; }
 							  buffer += "\n\n    ";
-							  options = {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data};
-							  if (stack2 = helpers.isLoggedIn) { stack2 = stack2.call(depth0, options); }
-							  else { stack2 = depth0.isLoggedIn; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
-							  if (!helpers.isLoggedIn) { stack2 = blockHelperMissing.call(depth0, stack2, options); }
+							  stack2 = helpers.unless.call(depth0, depth0.hideAdd, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
 							  if(stack2 || stack2 === 0) { buffer += stack2; }
-							  buffer += "\n  \n  </div>\n</div>\n";
+							  buffer += "\n    \n  </div>\n</div>\n";
 							  return buffer;
 							  })
 							;
@@ -1539,12 +1603,12 @@
 						  template: template,
 
 						  ui: {
-						    "title": "#dashboard-title",
-						    "description": "#dashboard-description"
+						    "title": "#collection-title",
+						    "description": "#collection-description"
 						  },
 
 						  templateHelpers: {
-						    isLeader: function(){
+						    isAdmin: function(){
 						      var user = hackdash.user;
 						      return (user && this.owner._id === user._id) || false;
 						    }
@@ -1562,9 +1626,9 @@
 						    var user = hackdash.user;
 
 						    if (user){
-						      var isLeader = this.owner._id === user._id;
+						      var isAdmin = this.model.get("owner")._id === user._id;
 						      
-						      if (isLeader){
+						      if (isAdmin){
 						        this.initEditables();
 						      }
 						    }
@@ -2025,10 +2089,60 @@
 							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 							  this.compilerInfo = [4,'>= 1.0.0'];
 							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-							  var buffer = "";
+							  var stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
-
+							function program1(depth0,data) {
+							  
+							  var buffer = "", stack1;
+							  buffer += "\n\n  <h1>\n    <a id=\"collection-title\">";
+							  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "</a>\n  </h1>\n\n  <p class=\"lead collection-lead\">\n    <a id=\"collection-description\">";
+							  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "</a>\n  </p>\n\n";
 							  return buffer;
+							  }
+
+							function program3(depth0,data) {
+							  
+							  var buffer = "", stack1;
+							  buffer += "\n\n  ";
+							  stack1 = helpers['if'].call(depth0, depth0.title, {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += "\n\n  ";
+							  stack1 = helpers['if'].call(depth0, depth0.description, {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += "\n\n";
+							  return buffer;
+							  }
+							function program4(depth0,data) {
+							  
+							  var buffer = "", stack1;
+							  buffer += "\n  <h1>\n    ";
+							  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "\n  </h1>\n  ";
+							  return buffer;
+							  }
+
+							function program6(depth0,data) {
+							  
+							  var buffer = "", stack1;
+							  buffer += "\n  <p class=\"lead\">";
+							  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "</p>\n  ";
+							  return buffer;
+							  }
+
+							  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
+							  if(stack1 || stack1 === 0) { return stack1; }
+							  else { return ''; }
 							  })
 							;
 						},
@@ -2041,7 +2155,7 @@
 							function program1(depth0,data) {
 							  
 							  
-							  return "\n  <a class=\"btn btn-large\" href=\"#\">Create a Collection</a>\n";
+							  return "\n  <a class=\"btn btn-large\" href=\"/dashboards\">Create a Collection</a>\n";
 							  }
 
 							function program3(depth0,data) {
@@ -2118,7 +2232,7 @@
 							  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 							  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)
-							    + "\" target=\"_blank\">site</a>\n    ";
+							    + "\" target=\"_blank\" data-bypass>site</a>\n    ";
 							  return buffer;
 							  }
 

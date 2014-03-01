@@ -15,10 +15,20 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   className: "row dashboards",
   itemView: Dashboard,
   
+  itemViewOptions: function(){
+    return {
+      hideAdd: this.hideAdd
+    };
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
   
+  initialize: function(options){
+    this.hideAdd = (options && options.hideAdd) || false;
+  },
+
   onRender: function(){
     var self = this;
     _.defer(function(){

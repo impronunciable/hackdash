@@ -27,6 +27,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  initialize: function(options){
+    this.hideAdd = (options && options.hideAdd) || false;
+  },
+
   onRender: function(){
     this.$el
       .attr({
@@ -45,6 +49,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
         window.location = url;
       }
     });
+  },
+
+  serializeData: function(){
+    return _.extend({
+      hideAdd: this.hideAdd
+    }, this.model.toJSON());
   },
 
   //--------------------------------------

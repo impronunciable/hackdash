@@ -126,7 +126,7 @@ var updateCollection = function(req, res){
   collection.title = getValue("title");
   collection.description = getValue("description");
   
-  Collection.save(function(err, collection){
+  collection.save(function(err, collection){
     if(err) return res.send(500);
     res.send(204);
   });

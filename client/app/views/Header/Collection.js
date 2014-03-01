@@ -15,12 +15,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
   template: template,
 
   ui: {
-    "title": "#dashboard-title",
-    "description": "#dashboard-description"
+    "title": "#collection-title",
+    "description": "#collection-description"
   },
 
   templateHelpers: {
-    isLeader: function(){
+    isAdmin: function(){
       var user = hackdash.user;
       return (user && this.owner._id === user._id) || false;
     }
@@ -38,9 +38,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var user = hackdash.user;
 
     if (user){
-      var isLeader = this.owner._id === user._id;
+      var isAdmin = this.model.get("owner")._id === user._id;
       
-      if (isLeader){
+      if (isAdmin){
         this.initEditables();
       }
     }
