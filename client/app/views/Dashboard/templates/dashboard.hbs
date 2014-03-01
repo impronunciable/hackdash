@@ -4,11 +4,16 @@
     <h4>{{title}}</h4>
     {{description}}
     <br/>
-    <a href="{{link}}" target="_blank">site</a>
   </div>
   <div class="row-fluid footer-box">
     <div class="aging activity created_at">
       <i rel="tooltip" title="{{timeAgo created_at}}" class="tooltips icon-time icon-1"></i>
     </div>
+
+    {{#if link}}
+    <div class="pull-right demo">
+      <a href="{{link}}" target="_blank" class="btn btn-link">Site</a>
+    </div>
+    {{/if}}
   </div>
 </div>

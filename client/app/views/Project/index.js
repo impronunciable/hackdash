@@ -26,6 +26,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "click .follower a": "onFollow",
     "click .remove a": "onRemove",
 
+    "click .edit a": "stopPropagation",
+
     "click .demo a": "stopPropagation",
     "click .switcher": "stopPropagation",
     "click #contributors a": "stopPropagation"

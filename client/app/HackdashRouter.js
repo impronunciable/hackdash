@@ -12,6 +12,7 @@ var Dashboard = require("./models/Dashboard")
   , Header = require("./views/Header")
   , Footer = require("./views/Footer")
 
+  , LoginView = require("./views/Login")
   , ProfileView = require("./views/Profile")
   , ProjectFullView = require("./views/Project/Full")
   , ProjectEditView = require("./views/Project/Edit")
@@ -24,6 +25,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   routes : {
       "" : "showDashboard"
     
+    , "login" : "showLogin"
     , "projects" : "showProjects"
     , "projects/create" : "showProjectCreate"
     , "projects/:pid/edit" : "showProjectEdit"
@@ -36,6 +38,15 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     
     , "users/profile": "showProfile"
     , "users/:user_id" : "showProfile"
+  },
+
+  showLogin: function(){
+    var providers = window.hackdash.providers;
+    var app = window.hackdash.app;
+
+    app.modals.show(new LoginView({
+      model: new Backbone.Model({ providers: providers.split(',') })
+    }));
   },
 
   showDashboard: function() {

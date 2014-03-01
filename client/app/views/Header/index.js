@@ -3,6 +3,7 @@ var
     template = require('./templates/header.hbs')
   , Search = require('./Search')
   , DashboardHeader = require('./Dashboard')
+  , DashboardsHeader = require('./Dashboards')
   , CollectionsHeader = require('./Collections')
   , CollectionHeader = require('./Collection');
 
@@ -62,7 +63,7 @@ module.exports = Backbone.Marionette.Layout.extend({
 
       case "dashboards":
         showSearch();
-        this.ui.pageTitle.text("Search Instances");
+        this.page.show(new DashboardsHeader());
         break;
 
       case "dashboard":

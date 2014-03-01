@@ -19,31 +19,29 @@ html
     header
     .container#page
       #main
-        block content
-    
+        block content  
     footer
+    #modals-container
 
     script(src="/js/libs/jquery.min.js")
     script(src="/js/libs/bootstrap.min.js")
     script(src="/js/vendor.js?v=" + version)
     script(src='//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/js/bootstrap-editable.min.js')
 
+    script.
+      window.hackdash = { 
+        baseURL: "!{host}",
+        disqus_shortname: "!{disqus_shortname}",
+        statuses: "!{statuses}",
+        providers: "!{providers}"
+      };
+
     if ("undefined" == typeof user)
       script.
-        window.hackdash = { 
-          user: null,
-          baseURL: "!{host}",
-          disqus_shortname: "!{disqus_shortname}",
-          statuses: "!{statuses}"
-        };
+        window.hackdash.user = null;
     else 
       script.
-        window.hackdash = { 
-          user: !{JSON.stringify(user)},
-          baseURL: "!{host}",
-          disqus_shortname: "!{disqus_shortname}",
-          statuses: "!{statuses}"
-        };
+        window.hackdash.user = !{JSON.stringify(user)};      
 
     script(src="/js/hackdashApp.js?v=" + version)
 

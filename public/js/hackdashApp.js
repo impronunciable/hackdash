@@ -102,7 +102,8 @@
 				 *
 				 */
 
-				var HackdashRouter = require('./HackdashRouter');
+				var HackdashRouter = require('./HackdashRouter')
+				  , ModalRegion = require('./views/ModalRegion');
 
 				module.exports = function(){
 
@@ -112,7 +113,8 @@
 				    app.addRegions({
 				      header: "header",
 				      main: "#main",
-				      footer: "footer"
+				      footer: "footer",
+				      modals: ModalRegion
 				    });
 				  }
 
@@ -131,7 +133,7 @@
 				  // unless they have attribute "data-bypass"
 				  $(window.document).on("click", "a:not([data-bypass])", function(evt) {
 				    var href = { prop: $(this).prop("href"), attr: $(this).attr("href") };
-				    var root = window.location.protocol + "//" + window.location.host + app.root;
+				    var root = window.location.protocol + "//" + window.location.host + (app.root || "");
 
 				    if (href.prop && href.prop.slice(0, root.length) === root) {
 				      evt.preventDefault();
@@ -156,6 +158,7 @@
 				  , Header = require("./views/Header")
 				  , Footer = require("./views/Footer")
 
+				  , LoginView = require("./views/Login")
 				  , ProfileView = require("./views/Profile")
 				  , ProjectFullView = require("./views/Project/Full")
 				  , ProjectEditView = require("./views/Project/Edit")
@@ -168,6 +171,7 @@
 				  routes : {
 				      "" : "showDashboard"
 				    
+				    , "login" : "showLogin"
 				    , "projects" : "showProjects"
 				    , "projects/create" : "showProjectCreate"
 				    , "projects/:pid/edit" : "showProjectEdit"
@@ -180,6 +184,15 @@
 				    
 				    , "users/profile": "showProfile"
 				    , "users/:user_id" : "showProfile"
+				  },
+
+				  showLogin: function(){
+				    var providers = window.hackdash.providers;
+				    var app = window.hackdash.app;
+
+				    app.modals.show(new LoginView({
+				      model: new Backbone.Model({ providers: providers.split(',') })
+				    }));
 				  },
 
 				  showDashboard: function() {
@@ -404,6 +417,10 @@
 					 * HELPER: Handlebars Template Helpers
 					 * 
 					 */
+					
+					Handlebars.registerHelper('firstUpper', function(text) {
+					  return text.charAt(0).toUpperCase() + text.slice(1);
+					});
 					
 					Handlebars.registerHelper('markdown', function(md) {
 					  return markdown.toHTML(md);
@@ -1027,6 +1044,11 @@
 						  className: "dashboard span4",
 						  template: template,
 
+						  events: {
+						    "click .demo a": "stopPropagation",
+						    "click .add a": "onAddToCollection"
+						  },
+
 						  //--------------------------------------
 						  //+ INHERITED / OVERRIDES
 						  //--------------------------------------
@@ -1057,6 +1079,21 @@
 						  //+ EVENT HANDLERS
 						  //--------------------------------------
 
+						  stopPropagation: function(e){
+						    e.stopPropagation();
+						  },
+
+						  onAddToCollection: function(e){
+						    if (this.isContributor()){
+						      this.model.leave();
+						    }
+						    else {
+						      this.model.join();
+						    }
+
+						    e.stopPropagation();
+						  },
+
 						  //--------------------------------------
 						  //+ PRIVATE AND PROTECTED METHODS
 						  //--------------------------------------
@@ -1068,8 +1105,18 @@
 							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 							  this.compilerInfo = [4,'>= 1.0.0'];
 							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-							  var buffer = "", stack1, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+							  var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
 
+							function program1(depth0,data) {
+							  
+							  var buffer = "", stack1;
+							  buffer += "\n    <div class=\"pull-right demo\">\n      <a href=\"";
+							  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "\" target=\"_blank\" class=\"btn btn-link\">Site</a>\n    </div>\n    ";
+							  return buffer;
+							  }
 
 							  buffer += "<div class=\"well\">\n  <div class=\"well-content\">\n    <h4>";
 							  if (stack1 = helpers.domain) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
@@ -1083,14 +1130,13 @@
 							  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 							  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)
-							    + "\n    <br/>\n    <a href=\"";
-							  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-							  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-							  buffer += escapeExpression(stack1)
-							    + "\" target=\"_blank\">site</a>\n  </div>\n  <div class=\"row-fluid footer-box\">\n    <div class=\"aging activity created_at\">\n      <i rel=\"tooltip\" title=\"";
+							    + "\n    <br/>\n  </div>\n  <div class=\"row-fluid footer-box\">\n    <div class=\"aging activity created_at\">\n      <i rel=\"tooltip\" title=\"";
 							  options = {hash:{},data:data};
 							  buffer += escapeExpression(((stack1 = helpers.timeAgo || depth0.timeAgo),stack1 ? stack1.call(depth0, depth0.created_at, options) : helperMissing.call(depth0, "timeAgo", depth0.created_at, options)))
-							    + "\" class=\"tooltips icon-time icon-1\"></i>\n    </div>\n  </div>\n</div>\n";
+							    + "\" class=\"tooltips icon-time icon-1\"></i>\n    </div>\n\n    ";
+							  stack2 = helpers['if'].call(depth0, depth0.link, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+							  if(stack2 || stack2 === 0) { buffer += stack2; }
+							  buffer += "\n  </div>\n</div>\n";
 							  return buffer;
 							  })
 							;
@@ -1519,6 +1565,41 @@
 
 						});
 					},
+					"Dashboards.js": function (exports, module, require) {
+						/**
+						 * VIEW: DashboardsHeader Layout
+						 * 
+						 */
+
+						var 
+						    template = require('./templates/dashboards.hbs');
+
+						module.exports = Backbone.Marionette.ItemView.extend({
+
+						  //--------------------------------------
+						  //+ PUBLIC PROPERTIES / CONSTANTS
+						  //--------------------------------------
+
+						  template: template,
+
+						  //--------------------------------------
+						  //+ INHERITED / OVERRIDES
+						  //--------------------------------------
+
+						  //--------------------------------------
+						  //+ PUBLIC METHODS / GETTERS / SETTERS
+						  //--------------------------------------
+
+						  //--------------------------------------
+						  //+ EVENT HANDLERS
+						  //--------------------------------------
+
+						  //--------------------------------------
+						  //+ PRIVATE AND PROTECTED METHODS
+						  //--------------------------------------
+
+						});
+					},
 					"Search.js": function (exports, module, require) {
 						
 						var 
@@ -1631,6 +1712,7 @@
 						    template = require('./templates/header.hbs')
 						  , Search = require('./Search')
 						  , DashboardHeader = require('./Dashboard')
+						  , DashboardsHeader = require('./Dashboards')
 						  , CollectionsHeader = require('./Collections')
 						  , CollectionHeader = require('./Collection');
 
@@ -1690,7 +1772,7 @@
 
 						      case "dashboards":
 						        showSearch();
-						        this.ui.pageTitle.text("Search Instances");
+						        this.page.show(new DashboardsHeader());
 						        break;
 
 						      case "dashboard":
@@ -1752,7 +1834,7 @@
 							function program1(depth0,data) {
 							  
 							  
-							  return "\n  <a class=\"btn btn-large\" href=\"#\">Create a Collection</a>\n  <a class=\"btn btn-large\" href=\"#\">My Collections</a>\n";
+							  return "\n  <a class=\"btn btn-large\" href=\"#\">Create a Collection</a>\n";
 							  }
 
 							function program3(depth0,data) {
@@ -1874,7 +1956,7 @@
 							  buffer += "\n  <div class=\"tooltips dashboard-switcher\"\n    data-placement=\"top\" data-original-title=\"Toggle creation of projects on this Dashboard\">\n    \n    <input type=\"checkbox\" ";
 							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.noop,fn:self.program(15, program15, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += " class=\"switch-large\"\n      data-off-label=\"CLOSE\" data-on-label=\"OPEN\">\n  </div>\n\n  <a class=\"btn export\" href=\"/api/v2/csv\">Export CSV</a>\n  ";
+							  buffer += " class=\"switch-large\"\n      data-off-label=\"CLOSE\" data-on-label=\"OPEN\">\n  </div>\n\n  <a class=\"btn export\" href=\"/api/v2/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n  ";
 							  return buffer;
 							  }
 							function program15(depth0,data) {
@@ -1917,6 +1999,35 @@
 							  })
 							;
 						},
+						"dashboards.hbs.js": function (exports, module, require) {
+							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+							  this.compilerInfo = [4,'>= 1.0.0'];
+							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+							  var buffer = "", stack1, options, self=this, functionType="function", blockHelperMissing=helpers.blockHelperMissing;
+
+							function program1(depth0,data) {
+							  
+							  
+							  return "\n  \n";
+							  }
+
+							function program3(depth0,data) {
+							  
+							  
+							  return "\n  <a class=\"btn btn-large\" href=\"/login\">Login to manage collections</a>\n";
+							  }
+
+							  buffer += "<h1>Search Dashboards</h1>\n\n";
+							  options = {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data};
+							  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
+							  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += "\n";
+							  return buffer;
+							  })
+							;
+						},
 						"header.hbs.js": function (exports, module, require) {
 							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 							  this.compilerInfo = [4,'>= 1.0.0'];
@@ -1929,7 +2040,7 @@
 							  buffer += "\n  <a class=\"btn-profile\" href=\"/users/profile\">\n    <img class=\"avatar tooltips\" src=\"";
 							  options = {hash:{},data:data};
 							  buffer += escapeExpression(((stack1 = helpers.user || depth0.user),stack1 ? stack1.call(depth0, "picture", options) : helperMissing.call(depth0, "user", "picture", options)))
-							    + "\" rel=\"tooltip\" data-placement=\"bottom\" data-original-title=\"Edit profile\">\n  </a>  \n  <a class=\"btn logout\" href=\"/logout\">Logout</a>\n  ";
+							    + "\" rel=\"tooltip\" data-placement=\"bottom\" data-original-title=\"Edit profile\">\n  </a>  \n  <a class=\"btn logout\" href=\"/logout\" data-bypass>Logout</a>\n  ";
 							  return buffer;
 							  }
 
@@ -1971,6 +2082,77 @@
 							;
 						}
 					}
+				},
+				"Login.js": function (exports, module, require) {
+					/**
+					 * VIEW: Login Modal
+					 * 
+					 */
+					 
+					var template = require('./templates/login.hbs');
+
+					module.exports = Backbone.Marionette.ItemView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  className: "modal",
+					  template: template,
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  onClose: function(){
+					    window.history.back();
+					  }
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					});
+				},
+				"ModalRegion.js": function (exports, module, require) {
+					/**
+					 * REGION: ModalRegion
+					 * Used to manage Twitter Bootstrap Modals with Backbone Marionette Views
+					 */
+
+					module.exports = Backbone.Marionette.Region.extend({
+					  el: "#modals-container",
+
+					  constructor: function(){
+					    _.bindAll(this);
+					    Backbone.Marionette.Region.prototype.constructor.apply(this, arguments);
+					    this.on("show", this.showModal, this);
+					  },
+
+					  getEl: function(selector){
+					    var $el = $(selector);
+					    $el.on("hidden", this.close);
+					    return $el;
+					  },
+
+					  showModal: function(view){
+					    view.on("close", this.hideModal, this);
+					    this.$el.modal('show');
+					  },
+
+					  hideModal: function(){
+					    this.$el.modal('hide');
+					  }
+					  
+					});
 				},
 				"Profile": {
 					"Card.js": function (exports, module, require) {
@@ -2794,6 +2976,8 @@
 						    "click .follower a": "onFollow",
 						    "click .remove a": "onRemove",
 
+						    "click .edit a": "stopPropagation",
+
 						    "click .demo a": "stopPropagation",
 						    "click .switcher": "stopPropagation",
 						    "click #contributors a": "stopPropagation"
@@ -3187,7 +3371,7 @@
 							  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 							  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)
-							    + "\" target=\"_blank\" class=\"btn btn-link\">Demo</a>\n    </div>\n    ";
+							    + "\" target=\"_blank\" class=\"btn btn-link\" data-bypass>Demo</a>\n    </div>\n    ";
 							  return buffer;
 							  }
 
@@ -3343,6 +3527,36 @@
 							  })
 							;
 						}
+					}
+				},
+				"templates": {
+					"login.hbs.js": function (exports, module, require) {
+						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+						  this.compilerInfo = [4,'>= 1.0.0'];
+						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+
+						function program1(depth0,data) {
+						  
+						  var buffer = "", stack1, options;
+						  buffer += "\n    <a href=\"/auth/"
+						    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+						    + "\" class=\"btn btn-large signup-btn signup-"
+						    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+						    + "\" data-bypass>\n      <i></i>Access with ";
+						  options = {hash:{},data:data};
+						  buffer += escapeExpression(((stack1 = helpers.firstUpper || depth0.firstUpper),stack1 ? stack1.call(depth0, depth0, options) : helperMissing.call(depth0, "firstUpper", depth0, options)))
+						    + "\n    </a>\n    ";
+						  return buffer;
+						  }
+
+						  buffer += "\n<div class=\"modal-header\">\n  <button type=\"button\" data-dismiss=\"modal\" aria-hidden=\"true\" class=\"close\">×</button>\n  <h3>Log in</h3>\n</div>\n<div class=\"row\">\n  <div class=\"span4 offset1\">\n    ";
+						  stack1 = helpers.each.call(depth0, depth0.providers, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n  </div>\n</div>";
+						  return buffer;
+						  })
+						;
 					}
 				}
 			}

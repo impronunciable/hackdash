@@ -20,15 +20,6 @@ module.exports = function(app) {
     render('live')
   ];
 
-  var dashboardStack = [
-    dashExists,
-    loadUser, 
-    loadProviders,
-    setViewVar('statuses', app.get('statuses')),
-    setViewVar('disqus_shortname', config.disqus_shortname),
-    render('dashboard')
-  ];
-
   var appPort = app.get('config').port;
   var appHost = app.get('config').host + (appPort && appPort !== 80 ? ':' + appPort : '');
 
@@ -88,7 +79,7 @@ module.exports = function(app) {
   app.get('/live', liveStack);
 
   // Login view
-  app.get('/login', dashboardStack);
+  app.get('/login', hackdashFullStack);
   
   // Logout
   app.get('/logout', logout, redirect('/'));

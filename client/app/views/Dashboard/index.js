@@ -17,6 +17,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
   className: "dashboard span4",
   template: template,
 
+  events: {
+    "click .demo a": "stopPropagation",
+    "click .add a": "onAddToCollection"
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
@@ -46,6 +51,21 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  stopPropagation: function(e){
+    e.stopPropagation();
+  },
+
+  onAddToCollection: function(e){
+    if (this.isContributor()){
+      this.model.leave();
+    }
+    else {
+      this.model.join();
+    }
+
+    e.stopPropagation();
+  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS

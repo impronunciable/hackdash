@@ -3,7 +3,8 @@
  *
  */
 
-var HackdashRouter = require('./HackdashRouter');
+var HackdashRouter = require('./HackdashRouter')
+  , ModalRegion = require('./views/ModalRegion');
 
 module.exports = function(){
 
@@ -13,7 +14,8 @@ module.exports = function(){
     app.addRegions({
       header: "header",
       main: "#main",
-      footer: "footer"
+      footer: "footer",
+      modals: ModalRegion
     });
   }
 
@@ -32,7 +34,7 @@ module.exports = function(){
   // unless they have attribute "data-bypass"
   $(window.document).on("click", "a:not([data-bypass])", function(evt) {
     var href = { prop: $(this).prop("href"), attr: $(this).attr("href") };
-    var root = window.location.protocol + "//" + window.location.host + app.root;
+    var root = window.location.protocol + "//" + window.location.host + (app.root || "");
 
     if (href.prop && href.prop.slice(0, root.length) === root) {
       evt.preventDefault();
