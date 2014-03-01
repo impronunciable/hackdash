@@ -1,10 +1,9 @@
 /**
- * VIEW: CollectionsHeader Layout
+ * VIEW: ProfileCard
  * 
  */
-
-var 
-    template = require('./templates/collectionsHeader.hbs');
+ 
+var template = require('./templates/card.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -12,7 +11,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
+  className: "boxxy",
   template: template,
+
+  modelEvents:{
+    "change": "render"
+  },
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES

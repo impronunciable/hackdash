@@ -3,7 +3,7 @@
  * 
  */
  
-var template = require('./templates/profileCardEdit.hbs');
+var template = require('./templates/cardEdit.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 

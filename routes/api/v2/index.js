@@ -8,16 +8,16 @@
 
 var passport = require('passport')
   , mongoose = require('mongoose')
-  , config = require('../config.json');
+  , config = require('../../../config.json');
 
 module.exports = function(app) {
 
   var root = '/api/';
 
-  require('./api.v2.dashboard')(app, root + 'v2', common);
-  require('./api.v2.collections')(app, root + 'v2', common);
-  require('./api.v2.projects')(app, root + 'v2', common);
-  require('./api.v2.users')(app, root + 'v2', common);
+  require('./dashboard')(app, root + 'v2', common);
+  require('./collections')(app, root + 'v2', common);
+  require('./projects')(app, root + 'v2', common);
+  require('./users')(app, root + 'v2', common);
 
 };
 

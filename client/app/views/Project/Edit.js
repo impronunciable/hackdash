@@ -3,7 +3,7 @@
  * 
  */
  
-var template = require('./templates/projectEdit.hbs');
+var template = require('./templates/edit.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 

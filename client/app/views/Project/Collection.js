@@ -3,7 +3,7 @@
  * 
  */
 
-var Project = require('./Project');
+var Project = require('./index');
 
 module.exports = Backbone.Marionette.CollectionView.extend({
 

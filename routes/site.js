@@ -9,10 +9,17 @@ var User = mongoose.model('User')
 
 module.exports = function(app) {
 
-  /*
-   * Dashboard middleware stack
-   */
-/*
+  var liveStack = [
+    isLive(app),
+    loadUser, 
+    loadProviders,
+    dashExists,
+    setViewVar('statuses', app.get('statuses')),
+    setViewVar('disqus_shortname', config.disqus_shortname),
+    setViewVar('live', true),
+    render('live')
+  ];
+
   var dashboardStack = [
     dashExists,
     loadUser, 
@@ -20,56 +27,6 @@ module.exports = function(app) {
     setViewVar('statuses', app.get('statuses')),
     setViewVar('disqus_shortname', config.disqus_shortname),
     render('dashboard')
-  ];
-
-  var homeStack = [
-    loadUser,
-    loadProviders,
-    isHomepage,
-    dashExists,
-    checkProfile,
-    setViewVar('statuses', app.get('statuses')),
-    setViewVar('disqus_shortname', config.disqus_shortname),
-    render('dashboard')
-  ];
-
-  var liveStack = [
-    isLive(app),
-    loadUser, 
-    loadProviders,
-    dashExists,
-    setViewVar('statuses', app.get('statuses')),
-    setViewVar('disqus_shortname', config.disqus_shortname),
-    setViewVar('live', true),
-    render('live')
-  ];
-
-  var hackdashStack = [
-    loadUser, 
-    loadProviders,
-    setViewVar('host', appHost),
-    setViewVar('version', app.get('clientVersion'))
-  ];
-
-  
-
-  var hackdashProfileStack = [
-    loadUser, 
-    loadProviders,
-    setViewVar('host', appHost),
-    setViewVar('version', app.get('clientVersion'))
-  ];
-*/
-
-  var liveStack = [
-    isLive(app),
-    loadUser, 
-    loadProviders,
-    dashExists,
-    setViewVar('statuses', app.get('statuses')),
-    setViewVar('disqus_shortname', config.disqus_shortname),
-    setViewVar('live', true),
-    render('live')
   ];
 
   var appPort = app.get('config').port;
@@ -131,58 +88,17 @@ module.exports = function(app) {
   app.get('/live', liveStack);
 
   // Login view
-  app.get('/login', hackdashFullStack);
+  app.get('/login', dashboardStack);
   
   // Logout
   app.get('/logout', logout, redirect('/'));
 
-  // About
-  app.get('/about', loadUser, render('about'));
-
   app.post('/dashboard/create', isAuth, validateSubdomain, createDashboard(app));
-
 
   //keep previous Projects link working
   app.get('/p/:pid', function(req, res){ 
     res.redirect('/projects/' + req.params.pid);
   });
-
-
-
-/*
-
-  app.get('/', hackdashDashboardStack, setViewVar('app_type', 'dashboard'), render('hackdashApp'));
-  app.get('/search', hackdashDashboardStack, setViewVar('app_type', 'dashboard'), render('hackdashApp'));
-
-  //app.get('/', homeStack); // X
-  app.get('/live', liveStack);
-  app.get('/login', dashboardStack); // X
-  app.get('/sort', dashboardStack); // X
-  app.get('/projects/create', dashboardStack);
-  app.get('/sort/:type', dashboardStack);
-  app.get('/projects/edit/:project_id', dashboardStack);
-  app.get('/p/:project_id', dashboardStack);
-  //app.get('/search', dashboardStack); // X
-  app.get('/logout', logout, redirect('/'));
-  
-  app.get('/about', loadUser, render('about'));
-
-  //app.get('/users/profile', dashboardStack);
-  //app.get('/users/:user_id', dashboardStack);
-
-  app.get('/users/profile', function(req, res){
-    res.redirect('/users/' + req.user._id);
-  });
-
-  app.get('/users/:user_id', hackdashProfileStack, setViewVar('app_type', 'profile'), render('hackdashApp'));
-
-  app.post('/dashboard/create', isAuth, validateSubdomain, createDashboard(app));
-
-  app.get('/isearch', hackdashStack, setViewVar('app_type', 'isearch'), render('hackdashApp'));
-  app.get('/csearch', hackdashStack, setViewVar('app_type', 'csearch'), render('hackdashApp'));
-  app.get('/dashboards', hackdashStack, setViewVar('app_type', 'dashboards'), render('hackdashApp'));
-
-*/
 
 };
 
@@ -207,8 +123,7 @@ var redirect = function(route) {
 
 var checkProfile = function(req, res, next){
   if (req.user && !req.user.email){
-    res.redirect('/users/' + req.user._id);
-    //res.redirect('/users/profile');
+    res.redirect('/users/profile');
   }
 
   next();
@@ -262,24 +177,6 @@ var loadProviders = function(req, res, next) {
   res.locals.providers = req.app.get('providers');
   next();
 };
-
-/*
- * Load specific project
- */
-
-var loadProject = function(req, res, next) {
-  Project.findById(req.params.project_id)
-  .populate('contributors')
-  .populate('pending')
-  .populate('leader')
-  .exec(function(err, project) {
-    if(err || !project) return res.send(500);
-    res.locals.project = project;
-    res.locals.user = req.user;
-    next();
-  });
-};
-
 
 /*
  * Log out current user

@@ -1,9 +1,9 @@
 /**
- * VIEW: ProfileCard
+ * VIEW: Full Project view
  * 
  */
  
-var template = require('./templates/profileCard.hbs');
+var template = require('./templates/full.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -11,16 +11,29 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "boxxy",
+  id: function(){
+    return this.model.get("_id");
+  },
+
+  className: "project tooltips",
   template: template,
 
-  modelEvents:{
+  modelEvents: {
     "change": "render"
   },
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
+
+  onRender: function(){
+    this.$el
+      .addClass(this.model.get("status"))
+      .attr({ "title": this.model.get("status") })
+      .tooltip({});
+
+    $('.tooltips', this.$el).tooltip({});
+  }
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS

@@ -1,9 +1,9 @@
 /**
- * VIEW: Dashboards
+ * VIEW: Collections
  * 
  */
 
-var Dashboard = require('./Dashboard');
+var Collection = require('./index');
 
 module.exports = Backbone.Marionette.CollectionView.extend({
 
@@ -11,10 +11,16 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  id: "dashboards",
-  className: "row dashboards",
-  itemView: Dashboard,
+  id: "collection",
+  className: "row collection",
+  itemView: Collection,
   
+  collectionEvents: {
+    "remove": "render",
+    "sort:date": "sortByDate",
+    "sort:name": "sortByName"
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
@@ -38,18 +44,36 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
+  sortByName: function(){
+    this.$el.isotope({"sortBy": "name"});
+  },
+
+  sortByDate: function(){
+    this.$el.isotope({"sortBy": "date"});
+  },
+
   isotopeInitialized: false,
   updateIsotope: function(){
-    var $dashboards = this.$el;
+    var $collections = this.$el;
 
     if (this.isotopeInitialized){
-      $dashboards.isotope("destroy");
+      $collections.isotope("destroy");
     }
 
-    $dashboards.isotope({
-        itemSelector: ".dashboard"
+    $collections.isotope({
+        itemSelector: ".collection"
       , animationEngine: "jquery"
       , resizable: true
+      , sortAscending: true
+      , getSortData : {
+          "name" : function ( $elem ) {
+            return $elem.data("name").toLowerCase();
+          },
+          "date" : function ( $elem ) {
+            return $elem.data("date");
+          }
+        }
+      , sortBy: "name"
     });
     
     this.isotopeInitialized = true;

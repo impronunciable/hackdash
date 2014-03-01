@@ -1,9 +1,9 @@
 
 var 
     template = require("./templates/profile.hbs")
-  , ProfileCard = require("./ProfileCard")
-  , ProfileCardEdit = require("./ProfileCardEdit")
-  , ProjectList = require("./ProjectList");
+  , ProfileCard = require("./Card")
+  , ProfileCardEdit = require("./CardEdit")
+  , ProjectList = require("../Project/List");
 
 module.exports = Backbone.Marionette.Layout.extend({
 

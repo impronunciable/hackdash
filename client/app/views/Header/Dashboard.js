@@ -4,7 +4,7 @@
  */
 
 var 
-    template = require('./templates/dashboardHeader.hbs');
+    template = require('./templates/dashboard.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 

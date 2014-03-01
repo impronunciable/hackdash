@@ -2,9 +2,9 @@
 var 
     template = require('./templates/header.hbs')
   , Search = require('./Search')
-  , DashboardHeader = require('./DashboardHeader')
-  , CollectionsHeader = require('./CollectionsHeader')
-  , CollectionHeader = require('./CollectionHeader');
+  , DashboardHeader = require('./Dashboard')
+  , CollectionsHeader = require('./Collections')
+  , CollectionHeader = require('./Collection');
 
 module.exports = Backbone.Marionette.Layout.extend({
 

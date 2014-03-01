@@ -8,7 +8,7 @@
 var passport = require('passport')
   , mongoose = require('mongoose')
   , _ = require('underscore')
-  , config = require('../config.json');
+  , config = require('../../../config.json');
 
 var User = mongoose.model('User')
   , Project = mongoose.model('Project');

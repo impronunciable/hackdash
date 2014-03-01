@@ -1,10 +1,10 @@
 /**
- * VIEW: DashboardHeader Layout
+ * VIEW: CollectionHeader Layout
  * 
  */
 
 var 
-    template = require('./templates/collectionHeader.hbs');
+    template = require('./templates/collection.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 

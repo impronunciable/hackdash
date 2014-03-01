@@ -13,11 +13,11 @@ var Dashboard = require("./models/Dashboard")
   , Footer = require("./views/Footer")
 
   , ProfileView = require("./views/Profile")
-  , ProjectFullView = require("./views/ProjectFull")
-  , ProjectEditView = require("./views/ProjectEdit")
-  , ProjectsView = require("./views/Projects")
-  , DashboardsView = require("./views/Dashboards")
-  , CollectionsView = require("./views/Collections");
+  , ProjectFullView = require("./views/Project/Full")
+  , ProjectEditView = require("./views/Project/Edit")
+  , ProjectsView = require("./views/Project/Collection")
+  , DashboardsView = require("./views/Dashboard/Collection")
+  , CollectionsView = require("./views/Collection/Collection");
 
 module.exports = Backbone.Marionette.AppRouter.extend({
   
