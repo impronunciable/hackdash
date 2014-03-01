@@ -527,13 +527,13 @@ h1,h2,h3,h4,h5,h6,p {
 .activity span:hover {
   opacity: 0.5;
 }
-.edit, .remove, .contributor, .follower, .demo {
+.edit, .remove, .contributor, .follower, .demo, .add {
   border-left: 1px solid #EEE;
   text-align: center;
   font-weight: bold;
 }
 
-.edit a, .remove a, .contributor a, .follower a, .demo a {
+.edit a, .remove a, .contributor a, .follower a, .demo a, .add a {
   color:#999;
   font-size: 12px
 }
@@ -810,6 +810,32 @@ footer h4 {
   margin-left: 15px;
 }
 
+.my-collections-modal {
+
+}
+
+.my-collections-modal ul {
+  list-style: none;
+  margin-left: 0;
+}
+
+.my-collections-modal ul>li {
+  font-size: 22px;
+  padding: 10px;
+  margin-top: 5px;
+  background: rgb(243, 243, 243);
+  border-radius: 6px;
+  border: solid 1px rgb(219, 219, 219);
+}
+
+.my-collections-modal ul>li input {
+  margin-top: 5px;
+  margin-right: 10px;
+}
+
+.my-collections-modal ul>li label {
+  font-size: 22px;
+}
 
 /*
 Click on project effect
@@ -1106,3 +1132,9 @@ a.signup-persona:hover {
  
 }
 
+.popover-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  outline: 0;
+}

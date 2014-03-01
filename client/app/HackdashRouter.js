@@ -26,6 +26,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       "" : "showDashboard"
     
     , "login" : "showLogin"
+
     , "projects" : "showProjects"
     , "projects/create" : "showProjectCreate"
     , "projects/:pid/edit" : "showProjectEdit"
@@ -198,6 +199,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     app.type = "dashboards";
 
     app.dashboards = new Dashboards();
+    app.collections = new Collections();
     
     app.header.show(new Header({
       collection: app.dashboards
@@ -206,6 +208,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     app.main.show(new DashboardsView({
       collection: app.dashboards
     }));
+
+    app.collections.fetch();
 
     var query = hackdash.getQueryVariable("q");
     if (query && query.length > 0){

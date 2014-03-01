@@ -15,5 +15,12 @@
       <a href="{{link}}" target="_blank" class="btn btn-link">Site</a>
     </div>
     {{/if}}
+
+    {{#isLoggedIn}}
+    <div class="pull-right add">
+      <a class="btn btn-link add">Add</a>
+    </div>
+    {{/isLoggedIn}}
+  
   </div>
 </div>

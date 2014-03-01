@@ -172,6 +172,7 @@
 				      "" : "showDashboard"
 				    
 				    , "login" : "showLogin"
+
 				    , "projects" : "showProjects"
 				    , "projects/create" : "showProjectCreate"
 				    , "projects/:pid/edit" : "showProjectEdit"
@@ -344,6 +345,7 @@
 				    app.type = "dashboards";
 
 				    app.dashboards = new Dashboards();
+				    app.collections = new Collections();
 				    
 				    app.header.show(new Header({
 				      collection: app.dashboards
@@ -352,6 +354,8 @@
 				    app.main.show(new DashboardsView({
 				      collection: app.dashboards
 				    }));
+
+				    app.collections.fetch();
 
 				    var query = hackdash.getQueryVariable("q");
 				    if (query && query.length > 0){
@@ -899,6 +903,103 @@
 
 						});
 					},
+					"List.js": function (exports, module, require) {
+						/**
+						 * VIEW: User Collections
+						 * 
+						 */
+
+						var template = require('./templates/list.hbs')
+						  , Collection = require('./ListItem');
+
+						module.exports = Backbone.Marionette.CompositeView.extend({
+
+						  //--------------------------------------
+						  //+ PUBLIC PROPERTIES / CONSTANTS
+						  //--------------------------------------
+
+						  className: "modal my-collections-modal",
+						  template: template,
+						  itemView: Collection,
+						  itemViewContainer: ".collections",
+
+						  ui: {
+						    "title": "input[name=title]",
+						    "description": "input[name=description]"
+						  },
+
+						  events: {
+						    "click .close": "close",
+						    "click .add": "add"
+						  },
+
+						  //--------------------------------------
+						  //+ INHERITED / OVERRIDES
+						  //--------------------------------------
+
+
+
+						  //--------------------------------------
+						  //+ PUBLIC METHODS / GETTERS / SETTERS
+						  //--------------------------------------
+
+						  //--------------------------------------
+						  //+ EVENT HANDLERS
+						  //--------------------------------------
+
+						  add: function(){
+						    if (this.ui.title.val()){
+						      this.collection.create({
+						        title: this.ui.title.val(),
+						        description: this.ui.description.val()
+						      }, { wait: true });
+
+						      this.ui.title.val("");
+						      this.ui.description.val("");
+						    }
+						  },
+
+						  //--------------------------------------
+						  //+ PRIVATE AND PROTECTED METHODS
+						  //--------------------------------------
+
+						});
+					},
+					"ListItem.js": function (exports, module, require) {
+						/**
+						 * VIEW: A User Collection
+						 * 
+						 */
+						 
+						var template = require('./templates/listItem.hbs');
+
+						module.exports = Backbone.Marionette.ItemView.extend({
+
+						  //--------------------------------------
+						  //+ PUBLIC PROPERTIES / CONSTANTS
+						  //--------------------------------------
+
+						  tagName: "li",
+						  template: template,
+
+						  //--------------------------------------
+						  //+ INHERITED / OVERRIDES
+						  //--------------------------------------
+
+						  //--------------------------------------
+						  //+ PUBLIC METHODS / GETTERS / SETTERS
+						  //--------------------------------------
+
+						  //--------------------------------------
+						  //+ EVENT HANDLERS
+						  //--------------------------------------
+
+						  //--------------------------------------
+						  //+ PRIVATE AND PROTECTED METHODS
+						  //--------------------------------------
+
+						});
+					},
 					"index.js": function (exports, module, require) {
 						/**
 						 * VIEW: Collection
@@ -957,6 +1058,41 @@
 							  options = {hash:{},data:data};
 							  buffer += escapeExpression(((stack1 = helpers.timeAgo || depth0.timeAgo),stack1 ? stack1.call(depth0, depth0.created_at, options) : helperMissing.call(depth0, "timeAgo", depth0.created_at, options)))
 							    + "\" class=\"tooltips icon-time icon-1\"></i>\n    </div>\n  </div>\n</div>\n";
+							  return buffer;
+							  })
+							;
+						},
+						"list.hbs.js": function (exports, module, require) {
+							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+							  this.compilerInfo = [4,'>= 1.0.0'];
+							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+							  
+
+
+							  return "<div class=\"modal-header\">\n  <button type=\"button\" data-dismiss=\"modal\" aria-hidden=\"true\" class=\"close\">×</button>\n  <h3>My Collections</h3>\n</div>\n<div class=\"modal-body\">\n  <ul class=\"collections\"></ul>\n</div>\n<div class=\"modal-footer\">\n  <form class=\"form-inline\">\n    <input type=\"text\" name=\"title\" placeholder=\"Enter Title\" class=\"input-medium pull-left\" style=\"margin-right: 10px;\">\n    <input type=\"text\" name=\"description\" placeholder=\"Enter Description\" class=\"input-medium pull-left\">\n    <input type=\"button\" class=\"btn primary btn-success pull-right add\" value=\"Add\">\n  </form>\n</div>";
+							  })
+							;
+						},
+						"listItem.hbs.js": function (exports, module, require) {
+							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+							  this.compilerInfo = [4,'>= 1.0.0'];
+							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+							  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+							  buffer += "<input id=\"";
+							  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "\" type=\"checkbox\" value=\"false\" class=\"pull-left\">\n<label for=\"";
+							  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "\">";
+							  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "</label>";
 							  return buffer;
 							  })
 							;
@@ -1030,7 +1166,8 @@
 						 * 
 						 */
 						 
-						var template = require('./templates/dashboard.hbs');
+						var template = require('./templates/dashboard.hbs')
+						  , UserCollectionsView = require('../Collection/List');
 
 						module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -1066,9 +1203,13 @@
 
 						    var url = "http://" + this.model.get("domain") + "." + hackdash.baseURL;
 
-						    this.$el.on("click", function(){
-						      window.location = url;
+						    this.$el.on("click", function(e){
+						      if (!$(e.target).hasClass("add")){
+						        window.location = url;
+						      }
 						    });
+
+
 						  },
 
 						  //--------------------------------------
@@ -1083,15 +1224,11 @@
 						    e.stopPropagation();
 						  },
 
-						  onAddToCollection: function(e){
-						    if (this.isContributor()){
-						      this.model.leave();
-						    }
-						    else {
-						      this.model.join();
-						    }
-
-						    e.stopPropagation();
+						  onAddToCollection: function(){
+						    hackdash.app.modals.show(new UserCollectionsView({
+						      model: this.model,
+						      collection: hackdash.app.collections
+						    }));
 						  },
 
 						  //--------------------------------------
@@ -1105,7 +1242,7 @@
 							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 							  this.compilerInfo = [4,'>= 1.0.0'];
 							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-							  var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+							  var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this, blockHelperMissing=helpers.blockHelperMissing;
 
 							function program1(depth0,data) {
 							  
@@ -1116,6 +1253,12 @@
 							  buffer += escapeExpression(stack1)
 							    + "\" target=\"_blank\" class=\"btn btn-link\">Site</a>\n    </div>\n    ";
 							  return buffer;
+							  }
+
+							function program3(depth0,data) {
+							  
+							  
+							  return "\n    <div class=\"pull-right add\">\n      <a class=\"btn btn-link add\">Add</a>\n    </div>\n    ";
 							  }
 
 							  buffer += "<div class=\"well\">\n  <div class=\"well-content\">\n    <h4>";
@@ -1136,7 +1279,13 @@
 							    + "\" class=\"tooltips icon-time icon-1\"></i>\n    </div>\n\n    ";
 							  stack2 = helpers['if'].call(depth0, depth0.link, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
 							  if(stack2 || stack2 === 0) { buffer += stack2; }
-							  buffer += "\n  </div>\n</div>\n";
+							  buffer += "\n\n    ";
+							  options = {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data};
+							  if (stack2 = helpers.isLoggedIn) { stack2 = stack2.call(depth0, options); }
+							  else { stack2 = depth0.isLoggedIn; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+							  if (!helpers.isLoggedIn) { stack2 = blockHelperMissing.call(depth0, stack2, options); }
+							  if(stack2 || stack2 === 0) { buffer += stack2; }
+							  buffer += "\n  \n  </div>\n</div>\n";
 							  return buffer;
 							  })
 							;

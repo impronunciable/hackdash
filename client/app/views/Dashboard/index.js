@@ -3,7 +3,8 @@
  * 
  */
  
-var template = require('./templates/dashboard.hbs');
+var template = require('./templates/dashboard.hbs')
+  , UserCollectionsView = require('../Collection/List');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -39,9 +40,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     var url = "http://" + this.model.get("domain") + "." + hackdash.baseURL;
 
-    this.$el.on("click", function(){
-      window.location = url;
+    this.$el.on("click", function(e){
+      if (!$(e.target).hasClass("add")){
+        window.location = url;
+      }
     });
+
+
   },
 
   //--------------------------------------
@@ -56,15 +61,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
     e.stopPropagation();
   },
 
-  onAddToCollection: function(e){
-    if (this.isContributor()){
-      this.model.leave();
-    }
-    else {
-      this.model.join();
-    }
-
-    e.stopPropagation();
+  onAddToCollection: function(){
+    hackdash.app.modals.show(new UserCollectionsView({
+      model: this.model,
+      collection: hackdash.app.collections
+    }));
   },
 
   //--------------------------------------
