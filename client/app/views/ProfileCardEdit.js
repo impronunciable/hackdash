@@ -58,7 +58,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   cancel: function(){
-    window.location = "/";
+    hackdash.app.router.navigate("/", { trigger: true, replace: true });
   },
 
   //--------------------------------------

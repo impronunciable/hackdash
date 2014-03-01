@@ -158,6 +158,7 @@
 
 				  , ProfileView = require("./views/Profile")
 				  , ProjectFullView = require("./views/ProjectFull")
+				  , ProjectEditView = require("./views/ProjectEdit")
 				  , ProjectsView = require("./views/Projects")
 				  , DashboardsView = require("./views/Dashboards")
 				  , CollectionsView = require("./views/Collections");
@@ -236,11 +237,31 @@
 				  },
 
 				  showProjectCreate: function(){
+				    var app = window.hackdash.app;
+				    app.type = "project";
 
+				    app.project = new Project();
+				    
+				    app.header.show(new Header());
+
+				    app.main.show(new ProjectEditView({
+				      model: app.project
+				    }));
 				  },
 
-				  showProjectEdit: function(){
+				  showProjectEdit: function(pid){
+				    var app = window.hackdash.app;
+				    app.type = "project";
+
+				    app.project = new Project({ _id: pid });
 				    
+				    app.header.show(new Header());
+
+				    app.main.show(new ProjectEditView({
+				      model: app.project
+				    }));
+
+				    app.project.fetch();
 				  },
 
 				  showProjectFull: function(pid){
@@ -1617,7 +1638,7 @@
 					  },
 
 					  cancel: function(){
-					    window.location = "/";
+					    hackdash.app.router.navigate("/", { trigger: true, replace: true });
 					  },
 
 					  //--------------------------------------
@@ -1814,6 +1835,220 @@
 					    return _.find(arr, function(usr){
 					      return (usr._id === uid);
 					    }) ? true : false;
+					  }
+
+					});
+				},
+				"ProjectEdit.js": function (exports, module, require) {
+					/**
+					 * VIEW: Project
+					 * 
+					 */
+					 
+					var template = require('./templates/projectEdit.hbs');
+
+					module.exports = Backbone.Marionette.ItemView.extend({
+
+					  //--------------------------------------
+					  //+ PUBLIC PROPERTIES / CONSTANTS
+					  //--------------------------------------
+
+					  className: "span6 span-center",
+					  template: template,
+
+					  ui: {
+					    "title": "input[name=title]",
+					    "description": "textarea[name=description]",
+					    "link": "input[name=link]",
+					    "tags": "input[name=tags]",
+					    "status": "select[name=status]",
+					  },
+
+					  events: {
+					    "click #ghImportBtn": "showGhImport",
+					    "click #searchGh": "searchRepo",
+
+					    "click #save": "save",
+					    "click #cancel": "cancel"
+					  },
+
+					  templateHelpers: {
+					    typeForm: function(){
+					      return (this._id ? "Edit Project" : "Create Project" );
+					    },
+					    getTags: function(){
+					      if (this.tags){
+					        return this.tags.join(',');
+					      }
+					    },
+					    statuses: function(){
+					      return window.hackdash.statuses.split(",");
+					    }
+					  },
+
+					  modelEvents: {
+					    "change": "render"
+					  },
+
+					  //--------------------------------------
+					  //+ INHERITED / OVERRIDES
+					  //--------------------------------------
+
+					  onDomRefresh: function(){
+					    this.initSelect2();
+					    this.initImageDrop();
+					  },
+
+					  //--------------------------------------
+					  //+ PUBLIC METHODS / GETTERS / SETTERS
+					  //--------------------------------------
+
+					  //--------------------------------------
+					  //+ EVENT HANDLERS
+					  //--------------------------------------
+
+					  showGhImport: function(e){
+					    $(".gh-import", this.$el).removeClass('hidden');
+					    $(e.currentTarget).remove();
+
+					    e.preventDefault();
+					  },
+
+					  searchRepo: function(e){
+					    var repo = $("#txt-repo", this.$el).val();
+
+					    if(repo.length) {
+					      $.ajax({
+					        url: 'https://api.github.com/repos/' + repo,
+					        dataType: 'json',
+					        contentType: 'json',
+					        context: this
+					      }).done(this.fillGhProjectForm);
+					    }
+
+					    e.preventDefault();
+					  },
+
+					  save: function(){
+
+					    var toSave = {
+					      title: this.ui.title.val(),
+					      description: this.ui.description.val(),
+					      link: this.ui.link.val(),
+					      tags: this.ui.tags.val().split(','),
+					      status: this.ui.status.val(),
+					      cover: this.model.get('cover')
+					    };
+
+					    this.cleanErrors();
+
+					    $("#save", this.$el).button('loading');
+
+					    this.model
+					      .save(toSave, { patch: true, silent: true })
+					      .success(this.redirect.bind(this))
+					      .error(this.showError.bind(this));
+					  },
+
+					  cancel: function(){
+					    this.redirect();
+					  },
+
+					  redirect: function(){
+					    hackdash.app.router.navigate("/", { trigger: true, replace: true });
+					  },
+
+					  //--------------------------------------
+					  //+ PRIVATE AND PROTECTED METHODS
+					  //--------------------------------------
+
+					  //TODO: move to i18n
+					  errors: {
+					    "title_required": "Title is required",
+					    "description_required": "Description is required"
+					  },
+
+					  showError: function(err){
+					    $("#save", this.$el).button('reset');
+
+					    if (err.responseText === "OK"){
+					      this.redirect();
+					      return;
+					    }
+
+					    var error = JSON.parse(err.responseText).error;
+
+					    var ctrl = error.split("_")[0];
+					    this.ui[ctrl].parents('.control-group').addClass('error');
+					    this.ui[ctrl].after('<span class="help-inline">' + this.errors[error] + '</span>');
+					  },
+
+					  cleanErrors: function(){
+					    $(".error", this.$el).removeClass("error");
+					    $("span.help-inline", this.$el).remove();
+					  },
+
+					  initSelect2: function(){
+					    this.ui.status.select2({
+					      minimumResultsForSearch: 10
+					    });
+
+					    this.ui.tags.select2({
+					      tags:[],
+					      formatNoMatches: function(){ return ''; },
+					      maximumInputLength: 20,
+					      tokenSeparators: [","]
+					    });
+					  },
+
+					  initImageDrop: function(){
+					    var self = this;
+					    var $dragdrop = $('#dragdrop', this.$el);
+					    var input = $('#cover_fall', $dragdrop);
+
+					    input.on('click', function(e){
+					      e.stopPropagation();
+					    });
+
+					    $dragdrop.on('click', function(e){
+					      input.click();
+					      e.preventDefault();
+					      return false;
+					    });
+
+					    $dragdrop.filedrop({
+					      fallback_id: 'cover_fall',
+					      url: hackdash.apiURL + '/projects/cover',
+					      paramname: 'cover',
+					      allowedfiletypes: ['image/jpeg','image/png','image/gif'],
+					      maxfiles: 1,
+					      maxfilesize: 3,
+					      dragOver: function () {
+					        $dragdrop.css('background', 'rgb(226, 255, 226)');
+					      },
+					      dragLeave: function () {
+					        $dragdrop.css('background', 'rgb(241, 241, 241)');
+					      },
+					      drop: function () {
+					        $dragdrop.css('background', 'rgb(241, 241, 241)');
+					      },
+					      uploadFinished: function(i, file, res) {
+					        self.model.set({ "cover": res.href }, { silent: true });
+
+					        $dragdrop
+					          .css('background', 'url(' + res.href + ')')
+					          .addClass("project-image")
+					          .children('p').hide();
+					      }
+					    });
+					  },
+
+					  fillGhProjectForm: function(project) {
+					    this.ui.title.val(project.name);
+					    this.ui.description.text(project.description);
+					    this.ui.link.val(project.html_url);
+					    this.ui.tags.select2("data", [{id: project.language, text:project.language}]);
+					    this.ui.status.select2("val", "building");
 					  }
 
 					});
@@ -2719,11 +2954,11 @@
 						function program11(depth0,data) {
 						  
 						  var buffer = "", stack1;
-						  buffer += "\n        <div class=\"pull-right remove\">\n          <a class=\"btn btn-link remove\">Remove</a>\n        </div>\n        <div class=\"pull-right edit\">\n          <a class=\"btn btn-link edit\" href=\"/projects/edit/";
+						  buffer += "\n        <div class=\"pull-right remove\">\n          <a class=\"btn btn-link remove\">Remove</a>\n        </div>\n        <div class=\"pull-right edit\">\n          <a class=\"btn btn-link edit\" href=\"/projects/";
 						  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 						  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 						  buffer += escapeExpression(stack1)
-						    + "\">Edit</a>\n        </div>\n        ";
+						    + "/edit\">Edit</a>\n        </div>\n        ";
 						  return buffer;
 						  }
 
@@ -2840,6 +3075,78 @@
 						  if (!helpers.isLoggedIn) { stack2 = blockHelperMissing.call(depth0, stack2, options); }
 						  if(stack2 || stack2 === 0) { buffer += stack2; }
 						  buffer += "\n</div>\n";
+						  return buffer;
+						  })
+						;
+					},
+					"projectEdit.hbs.js": function (exports, module, require) {
+						module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+						  this.compilerInfo = [4,'>= 1.0.0'];
+						helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+						  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+						function program1(depth0,data) {
+						  
+						  
+						  return "\n        <div id=\"ghImportHolder\">\n          <a id=\"ghImportBtn\" href=\"#\">Import from Github</a>\n\n          <div class=\"gh-import control-group hidden\">\n            <div class=\"controls\">\n              <input id=\"txt-repo\" type=\"text\" placeholder=\"repo user/name\" name=\"repo\" class=\"input-block-level\"/>\n              <button id=\"searchGh\" class=\"btn\">Import</button>\n            </div>\n          </div>\n        </div>\n        ";
+						  }
+
+						function program3(depth0,data) {
+						  
+						  var buffer = "", stack1;
+						  buffer += "style=\"background: url(";
+						  if (stack1 = helpers.cover) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.cover; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + ");\" class=\"project-image\"";
+						  return buffer;
+						  }
+
+						function program5(depth0,data) {
+						  
+						  var buffer = "";
+						  buffer += "\n              <option value=\""
+						    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+						    + "\">"
+						    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+						    + "</option>\n              ";
+						  return buffer;
+						  }
+
+						  buffer += "<div class=\"boxxy\">\n  <h3 class=\"header\">";
+						  if (stack1 = helpers.typeForm) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.typeForm; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</h3>\n  <div>\n    <form>\n      <div class=\"form-content\">\n        ";
+						  stack1 = helpers.unless.call(depth0, depth0._id, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n\n        <div class=\"control-group\">\n          <div class=\"controls\">\n            <input type=\"text\" placeholder=\"Title\" name=\"title\" class=\"input-block-level\" value=\"";
+						  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\"/>\n          </div>\n        </div>\n\n        <div class=\"control-group\">\n          <div class=\"controls\">\n            <textarea id=\"description\" name=\"description\" rows=\"4\" maxlength=\"400\" placeholder=\"Description\" class=\"input-block-level\">";
+						  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "</textarea>\n          </div>\n        </div>\n\n        <div class=\"control-group\">\n          <div class=\"controls\">\n            <div id=\"dragdrop\" ";
+						  stack1 = helpers['if'].call(depth0, depth0.cover, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "> \n              <p>Drag Photo Here\n                <input type=\"file\" name=\"cover_fall\" id=\"cover_fall\"/>\n              </p>\n            </div>\n          </div>\n        </div>\n\n        <div class=\"control-group\">\n          <div class=\"controls\">\n            <input type=\"text\" name=\"link\" id=\"link\" placeholder=\"Link\" class=\"input-block-level\" value=\"";
+						  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\"/>\n          </div>\n        </div>\n\n        <div class=\"control-group\">\n          <div class=\"controls\">\n            <input type=\"text\" name=\"tags\" id=\"tags\" placeholder=\"Tags\" style=\"width: 100%\" class=\"input-block-level\" value=\"";
+						  if (stack1 = helpers.getTags) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.getTags; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\"/>\n          </div>\n        </div>\n\n        <div class=\"control-group\">\n          <div class=\"controls\">\n            <select name=\"status\" id=\"status\" style=\"width: 100%\" class=\"input-block-level\" value=\"";
+						  if (stack1 = helpers.status) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+						  else { stack1 = depth0.status; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+						  buffer += escapeExpression(stack1)
+						    + "\">\n              ";
+						  stack1 = helpers.each.call(depth0, depth0.statuses, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+						  if(stack1 || stack1 === 0) { buffer += stack1; }
+						  buffer += "\n            </select>\n          </div>\n        </div>\n\n      </div>\n\n      <div class=\"form-actions\">\n        <input id=\"save\" type=\"button\" value=\"Save\" class=\"btn primary btn-success pull-left\"/>\n        <a id=\"cancel\" data-dismiss=\"modal\" class=\"cancel btn btn-cancel pull-right\">Cancel</a>\n      </div>\n\n    </form>\n  </div>\n</div>";
 						  return buffer;
 						  })
 						;

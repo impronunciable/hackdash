@@ -84,6 +84,7 @@ module.exports = function(app) {
     checkProfile,
     setViewVar('host', appHost),
     setViewVar('version', app.get('clientVersion')),
+    setViewVar('statuses', app.get('statuses')),
     setViewVar('disqus_shortname', config.disqus_shortname),
     render('hackdashApp')
   ];

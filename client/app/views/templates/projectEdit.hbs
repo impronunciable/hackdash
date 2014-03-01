@@ -1,0 +1,72 @@
+<div class="boxxy">
+  <h3 class="header">{{typeForm}}</h3>
+  <div>
+    <form>
+      <div class="form-content">
+        {{#unless _id}}
+        <div id="ghImportHolder">
+          <a id="ghImportBtn" href="#">Import from Github</a>
+
+          <div class="gh-import control-group hidden">
+            <div class="controls">
+              <input id="txt-repo" type="text" placeholder="repo user/name" name="repo" class="input-block-level"/>
+              <button id="searchGh" class="btn">Import</button>
+            </div>
+          </div>
+        </div>
+        {{/unless}}
+
+        <div class="control-group">
+          <div class="controls">
+            <input type="text" placeholder="Title" name="title" class="input-block-level" value="{{title}}"/>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="controls">
+            <textarea id="description" name="description" rows="4" maxlength="400" placeholder="Description" class="input-block-level">{{description}}</textarea>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="controls">
+            <div id="dragdrop" {{#if cover}}style="background: url({{cover}});" class="project-image"{{/if}}> 
+              <p>Drag Photo Here
+                <input type="file" name="cover_fall" id="cover_fall"/>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="controls">
+            <input type="text" name="link" id="link" placeholder="Link" class="input-block-level" value="{{link}}"/>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="controls">
+            <input type="text" name="tags" id="tags" placeholder="Tags" style="width: 100%" class="input-block-level" value="{{getTags}}"/>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="controls">
+            <select name="status" id="status" style="width: 100%" class="input-block-level" value="{{status}}">
+              {{#each statuses}}
+              <option value="{{.}}">{{.}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <input id="save" type="button" value="Save" class="btn primary btn-success pull-left"/>
+        <a id="cancel" data-dismiss="modal" class="cancel btn btn-cancel pull-right">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>

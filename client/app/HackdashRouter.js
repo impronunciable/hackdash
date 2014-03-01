@@ -14,6 +14,7 @@ var Dashboard = require("./models/Dashboard")
 
   , ProfileView = require("./views/Profile")
   , ProjectFullView = require("./views/ProjectFull")
+  , ProjectEditView = require("./views/ProjectEdit")
   , ProjectsView = require("./views/Projects")
   , DashboardsView = require("./views/Dashboards")
   , CollectionsView = require("./views/Collections");
@@ -92,11 +93,31 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showProjectCreate: function(){
+    var app = window.hackdash.app;
+    app.type = "project";
 
+    app.project = new Project();
+    
+    app.header.show(new Header());
+
+    app.main.show(new ProjectEditView({
+      model: app.project
+    }));
   },
 
-  showProjectEdit: function(){
+  showProjectEdit: function(pid){
+    var app = window.hackdash.app;
+    app.type = "project";
+
+    app.project = new Project({ _id: pid });
     
+    app.header.show(new Header());
+
+    app.main.show(new ProjectEditView({
+      model: app.project
+    }));
+
+    app.project.fetch();
   },
 
   showProjectFull: function(pid){

@@ -33,14 +33,16 @@ html
         window.hackdash = { 
           user: null,
           baseURL: "!{host}",
-          disqus_shortname: "!{disqus_shortname}"
+          disqus_shortname: "!{disqus_shortname}",
+          statuses: "!{statuses}"
         };
     else 
       script.
         window.hackdash = { 
           user: !{JSON.stringify(user)},
           baseURL: "!{host}",
-          disqus_shortname: "!{disqus_shortname}"
+          disqus_shortname: "!{disqus_shortname}",
+          statuses: "!{statuses}"
         };
 
     script(src="/js/hackdashApp.js?v=" + version)

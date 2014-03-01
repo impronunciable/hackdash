@@ -62,6 +62,9 @@ module.exports = function(grunt) {
 
     concat: {
       vendor: {
+        options: {
+          separator: ';',
+        },
         src: [
             '<%= paths.vendor.js %>underscore.min.js'
           , '<%= paths.vendor.js %>backbone.min.js'
