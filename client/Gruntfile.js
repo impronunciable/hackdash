@@ -147,7 +147,9 @@ module.exports = function(grunt) {
             ,moment: true
             ,markdown: true
             ,Placeholders: true
-
+            ,Packery: true
+            ,Draggabilly: true
+            
             ,hackdash: true
           }
         }

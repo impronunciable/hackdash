@@ -65,6 +65,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     }));
 
     app.main.show(new ProjectsView({
+      model: app.dashboard,
       collection: app.projects
     }));
 
@@ -72,15 +73,16 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       model: app.dashboard
     }));
 
-    app.dashboard.fetch();
-
     var query = hackdash.getQueryVariable("q");
+    var fetchData = {};
     if (query && query.length > 0){
-      app.projects.fetch({ data: $.param({ q: query }) });
+      fetchData = { data: $.param({ q: query }) };
     }
-    else {
-      app.projects.fetch(); 
-    }
+
+    $.when( app.dashboard.fetch(), app.projects.fetch(fetchData) )
+      .then(function() {
+        app.projects.buildShowcase(app.dashboard.get("showcase"));
+      });
   },
 
   showProjects: function() {

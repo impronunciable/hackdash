@@ -348,6 +348,7 @@ line-height:                     0;
     display: none;
 	}
 	
+  header .showcase-switcher-ctn,
   header .dashboard-switcher {
     position: static;
     margin-top: 20px;
@@ -454,6 +455,12 @@ line-height:                     0;
 
 .profile-ctn ul>li>a:hover {
   text-decoration: none;
+}
+
+.projects.showcase .project .well {
+  border-bottom: 1px dashed;
+  border-left: 1px dashed;
+  border-right: 1px dashed;
 }
 
 .project .well {
@@ -585,10 +592,23 @@ h1,h2,h3,h4,h5,h6,p {
   color: rgba(255,255,255,0.4)!important;
 }
 
+.showcase-switcher-ctn,
 .dashboard-switcher {
   position: absolute;
   bottom: 0;
   left: 0;
+}
+
+.showcase-switcher-ctn {
+  left: 150px;
+  border: 1px solid rgb(150, 150, 150);
+  border-radius: 6px;
+  padding: 5px;
+}
+
+.showcase-switcher-ctn h5 {
+  color: white;
+  margin-top: 0;
 }
 
 .switcher {
@@ -597,16 +617,19 @@ h1,h2,h3,h4,h5,h6,p {
   right: 10px;
 }
 
+.showcase-switcher .has-switch span.switch-left,
 .dashboard-switcher .has-switch span.switch-left,
 .switcher .has-switch span.switch-left {
   background-color: #5bb75b;
 } 
 
+.showcase-switcher .has-switch span.switch-right,
 .dashboard-switcher .has-switch span.switch-right,
 .switcher .has-switch span.switch-right {
   background-color: #bd362f;
 } 
 
+.showcase-switcher .has-switch span.switch-left,
 .dashboard-switcher .has-switch span.switch-left,
 .dashboard-switcher .has-switch span.switch-right,
 .switcher .has-switch span.switch-left,

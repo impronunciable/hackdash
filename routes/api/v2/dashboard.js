@@ -24,7 +24,6 @@ module.exports = function(app, uri, common) {
   app.del(uri + '/', common.notAllowed);
 
   app.get(uri + '/csv', common.isAuth, getDashboard, isAdminDashboard, sendDashboardCSV);
-
 };
 
 var setQuery = function(req, res, next){
@@ -93,6 +92,11 @@ var updateDashboard = function(req, res, next) {
   dashboard.description = getValue("description");
   dashboard.link = getValue("link");
   dashboard.open = getValue("open");
+
+  var showcase = getValue("showcase");
+  if (Array.isArray(showcase)){
+    dashboard.showcase = showcase;
+  }
   
   dashboard.save(function(err, dashboard){
     if(err) return res.send(500);

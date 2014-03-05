@@ -64,6 +64,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
           "title": this.model.get("status")
         , "data-name": this.model.get("title")
         , "data-date": this.model.get("created_at")
+        , "data-showcase": this.model.get("showcase")
       })
       .tooltip({});
 
@@ -73,7 +74,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
       "/projects/" + this.model.get("_id");
 
     this.$el.on("click", function(){
-      window.location = url;
+      if (!$('.projects').hasClass("showcase")){
+        window.location = url;
+      }
     });
 
     this.initSwitcher();

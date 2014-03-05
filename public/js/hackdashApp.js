@@ -211,6 +211,7 @@
 				    }));
 
 				    app.main.show(new ProjectsView({
+				      model: app.dashboard,
 				      collection: app.projects
 				    }));
 
@@ -218,15 +219,16 @@
 				      model: app.dashboard
 				    }));
 
-				    app.dashboard.fetch();
-
 				    var query = hackdash.getQueryVariable("q");
+				    var fetchData = {};
 				    if (query && query.length > 0){
-				      app.projects.fetch({ data: $.param({ q: query }) });
+				      fetchData = { data: $.param({ q: query }) };
 				    }
-				    else {
-				      app.projects.fetch(); 
-				    }
+
+				    $.when( app.dashboard.fetch(), app.projects.fetch(fetchData) )
+				      .then(function() {
+				        app.projects.buildShowcase(app.dashboard.get("showcase"));
+				      });
 				  },
 
 				  showProjects: function() {
@@ -842,6 +844,17 @@
 					    });
 
 					    return projects;
+					  },
+
+					  buildShowcase: function(showcase){
+					    _.each(showcase, function(id, i){
+					      var found = this.where({ _id: id });
+					      if (found.length > 0){
+					        found[0].set("showcase", i);
+					      }
+					    }, this);
+
+					    this.trigger("reset");
 					  }
 
 					});
@@ -1736,7 +1749,8 @@
 						    "title": "#dashboard-title",
 						    "description": "#dashboard-description",
 						    "link": "#dashboard-link",
-						    "switcher": ".dashboard-switcher input"
+						    "switcher": ".dashboard-switcher input",
+						    "showcase": ".showcase-switcher input"
 						  },
 
 						  templateHelpers: {
@@ -1831,6 +1845,17 @@
 						      .on('switch-change', function (e, data) {
 						        self.model.set({ "open": data.value}, { trigger: false });
 						        self.model.save({ wait: true });
+						      });
+
+						    this.ui.showcase
+						      .bootstrapSwitch()
+						      .on('switch-change', function (e, data) {
+						        if (data.value){
+						          self.model.trigger("edit:showcase");
+						        }
+						        else {
+						          self.model.trigger("end:showcase"); 
+						        }
 						      });
 						  }
 
@@ -2277,7 +2302,7 @@
 							  buffer += "\n  <div class=\"tooltips dashboard-switcher\"\n    data-placement=\"top\" data-original-title=\"Toggle creation of projects on this Dashboard\">\n    \n    <input type=\"checkbox\" ";
 							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.noop,fn:self.program(15, program15, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += " class=\"switch-large\"\n      data-off-label=\"CLOSE\" data-on-label=\"OPEN\">\n  </div>\n\n  <a class=\"btn export\" href=\"/api/v2/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n  ";
+							  buffer += " class=\"switch-large\"\n      data-off-label=\"CLOSE\" data-on-label=\"OPEN\">\n  </div>\n\n  <div class=\"tooltips showcase-switcher-ctn\"\n      data-placement=\"top\" data-original-title=\"Toggle sort edition of projects for showcase\">\n    <h5>Edit Showcase mode</h5>\n    <div class=\"showcase-switcher\">      \n      <input type=\"checkbox\" class=\"switch-large\" data-off-label=\"OFF\" data-on-label=\"ON\">\n    </div>\n  </div>\n\n  <a class=\"btn export\" href=\"/api/v2/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n  ";
 							  return buffer;
 							  }
 							function program15(depth0,data) {
@@ -2389,7 +2414,7 @@
 							function program1(depth0,data) {
 							  
 							  
-							  return "\n<div class=\"orderby\">\n  <div class=\"btn-group\">\n    <button data-option-value=\"name\" class=\"sort btn\">Order by name</button>\n    <button data-option-value=\"date\" class=\"sort btn\">Order by date</button>\n  </div>\n</div>\n";
+							  return "\n<div class=\"orderby\">\n  <div class=\"btn-group\">\n    <button data-option-value=\"name\" class=\"sort btn\">Order by name</button>\n    <button data-option-value=\"date\" class=\"sort btn\">Order by date</button>\n  </div>\n  <br/>\n  <div class=\"btn-group\">\n    <button data-option-value=\"showcase\" class=\"sort btn\" style=\"margin-top: 5px;\">Order for Showcase</button>\n  </div>\n</div>\n";
 							  }
 
 							  buffer += "<i class=\"icon-large icon-search\"></i>\n<input id=\"searchInput\" type=\"text\" class=\"search-query input-large\" placeholder=\"Type here\"/>\n\n";
@@ -2792,7 +2817,13 @@
 						  collectionEvents: {
 						    "remove": "render",
 						    "sort:date": "sortByDate",
-						    "sort:name": "sortByName"
+						    "sort:name": "sortByName",
+						    "sort:showcase": "sortByShowcase"
+						  },
+
+						  modelEvents:{
+						    "edit:showcase": "startSortable",
+						    "end:showcase": "endSortable"
 						  },
 
 						  //--------------------------------------
@@ -2826,8 +2857,17 @@
 						    this.$el.isotope({"sortBy": "date"});
 						  },
 
+						  sortByShowcase: function(){
+						    this.$el.isotope({"sortBy": "showcase"});
+						  },
+
+						  gridSize: {
+						    columnWidth: 300,
+						    rowHeight: 220
+						  },
+
 						  isotopeInitialized: false,
-						  updateIsotope: function(){
+						  updateIsotope: function(sortType){
 						    var $projects = this.$el;
 
 						    if (this.isotopeInitialized){
@@ -2839,18 +2879,75 @@
 						      , animationEngine: "jquery"
 						      , resizable: true
 						      , sortAscending: true
+						      , cellsByColumn: this.gridSize
 						      , getSortData : {
 						          "name" : function ( $elem ) {
-						            return $elem.data("name").toLowerCase();
+						            var name = $elem.data("name");
+						            return name && name.toLowerCase() || "";
 						          },
 						          "date" : function ( $elem ) {
 						            return $elem.data("date");
-						          }
+						          },
+						          "showcase" : function ( $elem ) {
+						            var showcase = $elem.data("showcase");
+						            return (showcase && window.parseInt(showcase)) || 0;
+						          },
 						        }
-						      , sortBy: "name"
+						      , sortBy: sortType || "name"
 						    });
 						    
 						    this.isotopeInitialized = true;
+						  },
+
+						  startSortable: function(){
+						    var $projects = this.$el;
+
+						    $projects.addClass("showcase");
+						    this.sortByShowcase();
+
+						    if (this.pckry){
+						      this.pckry.destroy();
+						    }
+
+						    this.pckry = new Packery( $projects[0], this.gridSize); 
+
+						    var itemElems = this.pckry.getItemElements();
+
+						    for ( var i=0, len = itemElems.length; i < len; i++ ) {
+						      var elem = itemElems[i];
+						      var draggie = new Draggabilly( elem );
+						      this.pckry.bindDraggabillyEvents( draggie );
+						    }
+						  },
+
+						  endSortable: function(){
+						    var $projects = this.$el;
+
+						    this.saveShowcase();
+
+						    this.pckry.destroy();
+						    $projects.removeClass("showcase");
+
+						    this.updateIsotope("showcase");
+						  },
+
+						  saveShowcase: function(){
+						    var itemElems = this.pckry.getItemElements();
+						    var showcase = [];
+
+						    for ( var i=0, len = itemElems.length; i < len; i++ ) {
+						      var elem = itemElems[i];
+						      $(elem).data('showcase', i);
+
+						      var found = this.collection.where({ _id: elem.id });
+						      if (found.length > 0){
+						        found[0].set({ "showcase": i}, { silent: true });
+						      }
+
+						      showcase.push(elem.id);
+						    }
+
+						    this.model.save({ "showcase": showcase });
 						  }
 
 						});
@@ -3335,6 +3432,7 @@
 						          "title": this.model.get("status")
 						        , "data-name": this.model.get("title")
 						        , "data-date": this.model.get("created_at")
+						        , "data-showcase": this.model.get("showcase")
 						      })
 						      .tooltip({});
 
@@ -3344,7 +3442,9 @@
 						      "/projects/" + this.model.get("_id");
 
 						    this.$el.on("click", function(){
-						      window.location = url;
+						      if (!$('.projects').hasClass("showcase")){
+						        window.location = url;
+						      }
 						    });
 
 						    this.initSwitcher();

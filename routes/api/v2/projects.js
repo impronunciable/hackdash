@@ -30,7 +30,7 @@ module.exports = function(app, uri, common) {
 
   app.post(uri + '/projects', common.isAuth, canCreateProject, createProject, sendProject);
   app.post(uri + '/projects/cover', common.isAuth, uploadCover);
-
+  
   app.get(uri + '/projects/:pid', getProject, sendProject);
 
   app.del(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, removeProject);

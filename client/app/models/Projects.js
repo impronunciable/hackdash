@@ -36,6 +36,17 @@ module.exports = Backbone.Collection.extend({
     });
 
     return projects;
+  },
+
+  buildShowcase: function(showcase){
+    _.each(showcase, function(id, i){
+      var found = this.where({ _id: id });
+      if (found.length > 0){
+        found[0].set("showcase", i);
+      }
+    }, this);
+
+    this.trigger("reset");
   }
 
 });
