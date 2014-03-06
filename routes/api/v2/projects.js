@@ -216,8 +216,8 @@ var validate = function(req, res, next){
   var user = req.user;
   var project = req.project;
 
-  if ((project.domain && user.admin_in.indexOf(project.domain) >= 0) || user._id === project.leader.id ){
-    return res.send(406, "Leader or Admins of the project cannot be followers or contributors.");
+  if (user._id === project.leader.id ){
+    return res.send(406, "Leader of the project cannot leave or unfollow.");
   }
 
   next();

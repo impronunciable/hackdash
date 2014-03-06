@@ -39,11 +39,9 @@
 
       {{#isDashboardView}}
         {{#if isAdminOrLeader}}
-          {{#if isLeader}}
-          <div class="pull-right remove">
-            <a class="btn btn-link remove">Remove</a>
-          </div>
-          {{/if}}
+        <div class="pull-right remove">
+          <a class="btn btn-link remove">Remove</a>
+        </div>
         <div class="pull-right edit">
           <a class="btn btn-link edit" href="/projects/{{_id}}/edit">Edit</a>
         </div>
