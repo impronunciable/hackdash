@@ -23,18 +23,24 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   },
 
   modelEvents:{
-    "edit:showcase": "startSortable",
-    "end:showcase": "endSortable"
+    "edit:showcase": "onStartEditShowcase",
+    "end:showcase": "onEndEditShowcase"
   },
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
   
+  showcaseMode: false,
+
   onRender: function(){
     var self = this;
     _.defer(function(){
       self.updateIsotope();
+
+      if (self.showcaseMode){
+        self.startSortable();
+      }
     });
   },
 
@@ -45,6 +51,19 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  onStartEditShowcase: function(){
+    this.collection = hackdash.app.projects.getOnlyActives();
+    this.showcaseMode = true;
+    this.render();
+  },
+
+  onEndEditShowcase: function(){
+    this.saveShowcase();
+    this.collection = hackdash.app.projects;
+    this.showcaseMode = false;
+    this.render();
+  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
@@ -120,7 +139,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       this.pckry.bindDraggabillyEvents( draggie );
     }
   },
-
+/*
   endSortable: function(){
     var $projects = this.$el;
 
@@ -131,7 +150,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
     this.updateIsotope("showcase");
   },
-
+*/
   saveShowcase: function(){
     var itemElems = this.pckry.getItemElements();
     var showcase = [];
@@ -149,6 +168,10 @@ module.exports = Backbone.Marionette.CollectionView.extend({
     }
 
     this.model.save({ "showcase": showcase });
+
+    this.pckry.destroy();
+    this.$el.removeClass("showcase");
+    this.updateIsotope("showcase");
   }
 
 });

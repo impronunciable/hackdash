@@ -294,6 +294,7 @@ var setQuery = function(req, res, next){
 
 var setProjects = function(req, res, next){
   Project.find(req.query || {})
+    .populate('leader')
     .populate('contributors')
     .populate('followers')
     .limit(30)

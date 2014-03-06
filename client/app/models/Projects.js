@@ -6,7 +6,7 @@
 var 
   Project = require('./Project');
 
-module.exports = Backbone.Collection.extend({
+var Projects = module.exports = Backbone.Collection.extend({
 
   model: Project,
 
@@ -24,7 +24,7 @@ module.exports = Backbone.Collection.extend({
 
       if (hackdash.app.type === "dashboard"){
         var user = hackdash.user;
-        var isAdmin = user && (user._id === project.leader || user.admin_in.indexOf(this.domain) >= 0);
+        var isAdmin = user && (user._id === project.leader._id || user.admin_in.indexOf(this.domain) >= 0);
         if (isAdmin || project.active){
           projects.push(project);
         }
@@ -47,6 +47,14 @@ module.exports = Backbone.Collection.extend({
     }, this);
 
     this.trigger("reset");
+  },
+
+  getOnlyActives: function(){
+    return new Projects(
+      this.filter(function(project){
+        return project.get("active");
+      })
+    );
   }
 
 });
