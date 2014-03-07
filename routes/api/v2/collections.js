@@ -70,6 +70,8 @@ var getAllCollections = function(req, res, next){
 
 var getUserCollections = function(req, res, next){
   Collection.find({ "owner": req.user._id })
+    .populate('owner')
+    .populate('dashboards')
     .exec(function(err, collections) {
       if(err) return res.send(500);
       req.collections = collections || [];

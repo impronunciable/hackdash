@@ -283,7 +283,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       collection: app.dashboards
     }));
 
-    app.collections.fetch({ parse: true });
+    app.collections.getMines();
 
     app.dashboards.fetch(this.getSearchQuery());
   }

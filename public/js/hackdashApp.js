@@ -429,7 +429,7 @@
 				      collection: app.dashboards
 				    }));
 
-				    app.collections.fetch({ parse: true });
+				    app.collections.getMines();
 
 				    app.dashboards.fetch(this.getSearchQuery());
 				  }
@@ -680,6 +680,15 @@
 					  
 					  url: function(){
 					    return hackdash.apiURL + '/collections'; 
+					  },
+
+					  getMines: function(){
+					    $.ajax({
+					      url: this.url() + '/own',
+					      context: this
+					    }).done(function(collections){
+					      this.reset(collections, { parse: true });
+					    });
 					  }
 
 					});
