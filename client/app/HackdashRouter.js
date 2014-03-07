@@ -223,25 +223,18 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
     app.collection = new Collection({ _id: collectionId });
     
-    var self = this;
     app.collection
       .fetch({ parse: true })
       .done(function(){
         
         app.header.show(new Header({
-          model: app.collection,
-          collection: app.collection.get("dashboards")
+          model: app.collection
         }));
 
         app.main.show(new DashboardsView({
           hideAdd: true,
           collection: app.collection.get("dashboards")
         }));
-
-        var fdata = self.getSearchQuery();
-        fdata.parse = true;
-
-        app.collection.get("dashboards").fetch(fdata);
       });
   },  
 

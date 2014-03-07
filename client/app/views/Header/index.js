@@ -77,8 +77,6 @@ module.exports = Backbone.Marionette.Layout.extend({
         break;
 
       case "collection":
-        showSearch();
-        
         if (this.model.get("_id")){
           this.page.show(new CollectionHeader({
             model: this.model

@@ -98,7 +98,8 @@ body>header .btn.export {
           overflow: visible!important;
 }
 
-.isotope .project {
+.isotope .project,
+.isotope .dashboard {
   cursor: pointer;
   -webkit-transition-property: -webkit-transform, opacity;
      -moz-transition-property:    -moz-transform, opacity;
