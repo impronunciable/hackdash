@@ -80,8 +80,6 @@ module.exports = function(app) {
   // Logout
   app.get('/logout', logout, redirect('/'));
 
-  app.post('/dashboard/create', isAuth, validateSubdomain, createDashboard(app));
-
   //keep previous Projects link working
   app.get('/p/:pid', function(req, res){ 
     res.redirect('/projects/' + req.params.pid);
@@ -183,37 +181,6 @@ var logout = function(req, res, next) {
   req.logout();
   next();
 };
-
-var validateSubdomain = function(req, res, next) {
-  if(!/^[a-z0-9]{5,10}$/.test(req.body.domain)) return res.send(500);
-  
-  next();
-};
-
-/*
- * Create a new dashboard
- */
-
-var createDashboard =  function(app){
-return function(req, res) {
-  Dashboard.findOne({domain: req.body.domain}, function(err, dashboard){
-    if(err || dashboard) return res.send('The sudbomain is in use.');
-
-    var dash = new Dashboard({ domain: req.body.domain});
-    dash.save(function(err){
-      
-      User.findById(req.user.id, function(err, user) {
-        user.admin_in.push(req.body.domain);
-        user.save(function(){
-          res.redirect('http://' + req.body.domain + '.' + app.get('config').host + ':' + app.get('config').port);
-        });
-      });
-
-    });
-  });
-};
-};
-
 
 var dashExists = function(req, res, next) {
   Dashboard.findOne({ domain: req.subdomains[0] }, function(err, dash) {

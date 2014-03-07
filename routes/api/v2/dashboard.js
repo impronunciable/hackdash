@@ -11,10 +11,12 @@ var passport = require('passport')
   , config = require('../../../config.json');
 
 var Project = mongoose.model('Project')
+  , User = mongoose.model('User')
   , Dashboard = mongoose.model('Dashboard');
 
 module.exports = function(app, uri, common) {
 
+  app.post(uri + '/dashboards', common.isAuth, validateSubdomain, createDashboard(app), sendDashboard);
   app.get(uri + '/dashboards', setQuery, setDashboards, sendDashboards);
 
   app.get(uri + '/', getDashboard, sendDashboard);
@@ -24,6 +26,41 @@ module.exports = function(app, uri, common) {
   app.del(uri + '/', common.notAllowed);
 
   app.get(uri + '/csv', common.isAuth, getDashboard, isAdminDashboard, sendDashboardCSV);
+};
+
+var validateSubdomain = function(req, res, next) {
+  
+  if(!/^[a-z0-9]{5,10}$/.test(req.body.domain)) {
+    return res.json(500, { error: "subdomain_invalid" });
+  }
+
+  next();
+};
+
+var createDashboard =  function(app){
+  return function(req, res, next) {
+
+    Dashboard.findOne({domain: req.body.domain}, function(err, dashboard){
+      if(err || dashboard) {
+        return res.json(409, { error: "subdomain_inuse" });
+      }
+
+      var dash = new Dashboard({ domain: req.body.domain});
+      dash.save(function(err){
+        
+        User.findById(req.user.id, function(err, user) {
+          
+          user.admin_in.push(req.body.domain);
+
+          user.save(function(){
+            req.dashboard = dash;
+            next();
+          });
+        });
+
+      });
+    });
+  };
 };
 
 var setQuery = function(req, res, next){

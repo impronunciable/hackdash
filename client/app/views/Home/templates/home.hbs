@@ -12,15 +12,15 @@
         <p>Upload your project. Add colaborators. Inform status. Share your app.</p>
 
         {{#isLoggedIn}}
-        <form action="/dashboard/create" id="create-dashboard" method="post" name="create-dashboard">
+        <form>
           <p class="control-group">
-            <input class="input-xlarge" id="domain" maxlength="10" name="domain" 
+            <input class="input-xlarge" id="domain" maxlength="10"
               placeholder="Hackathon domain Name (5-10 chars)" type="text">
             <label>(5-10 lowercase letters/numbers)</label>
           </p>
 
           <p>
-            <input class="btn btn-large btn-custom disabled" type="submit" value="Create a Dashboard">
+            <input id="create-dashboard" class="btn btn-large btn-custom disabled" type="button" value="Create a Dashboard">
           </p>
         </form>
         {{else}}
