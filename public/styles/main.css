@@ -847,6 +847,22 @@ footer h4 {
   background: rgb(243, 243, 243);
   border-radius: 6px;
   border: solid 1px rgb(219, 219, 219);
+  height: 22px;
+  cursor: pointer;
+}
+
+.my-collections-modal ul>li.active {
+  background: rgb(205, 241, 205);
+  border: solid 1px rgb(34, 214, 63);
+}
+
+.my-collections-modal ul>li:hover {
+  background: rgb(238, 255, 238);
+}
+
+.my-collections-modal ul>li.active:hover {
+  background: rgb(246, 231, 231);
+  border: solid 1px rgb(236, 148, 148);
 }
 
 .my-collections-modal ul>li input {
@@ -856,6 +872,12 @@ footer h4 {
 
 .my-collections-modal ul>li label {
   font-size: 22px;
+}
+
+.my-collections-modal .btn-add {
+  margin-left: 5px;
+  height: 32px;
+  line-height: 1;
 }
 
 /*

@@ -15,7 +15,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   template: template,
 
   events: {
-    "click input[type=checkbox]": "toggleDashboard"
+    "click .view-collection": "viewCollection"
   },
 
   //--------------------------------------
@@ -24,6 +24,17 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   initialize: function(options){
     this.dashboardId = options.dashboardId;
+  },
+
+  onRender: function(){
+    if (this.hasDashboard()){
+      this.$el.addClass('active');
+    }
+    else {
+      this.$el.removeClass('active'); 
+    }
+
+    this.$el.on("click", this.toggleDashboard.bind(this));
   },
 
   serializeData: function(){
@@ -40,6 +51,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
+  viewCollection: function(e){
+    e.stopPropagation();
+    hackdash.app.modals.close();
+  },
+
   toggleDashboard: function(){
     if (this.hasDashboard()){
       this.model.removeDashboard(this.dashboardId);
@@ -47,6 +63,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     else {
       this.model.addDashboard(this.dashboardId);
     }
+
+    this.render();
   },
 
   //--------------------------------------

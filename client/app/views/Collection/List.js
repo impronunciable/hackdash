@@ -24,7 +24,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
   events: {
     "click .close": "close",
-    "click .add": "add"
+    "click .btn-add": "add"
   },
 
   itemViewOptions: function(){

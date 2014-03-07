@@ -67,6 +67,16 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     app.main.show(new HomeLayout());
   },
 
+  getSearchQuery: function(){
+    var query = hackdash.getQueryVariable("q");
+    var fetchData = {};
+    if (query && query.length > 0){
+      fetchData = { data: $.param({ q: query }) };
+    }
+
+    return fetchData;
+  },
+
   showLogin: function(){
     var providers = window.hackdash.providers;
     var app = window.hackdash.app;
@@ -99,13 +109,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       model: app.dashboard
     }));
 
-    var query = hackdash.getQueryVariable("q");
-    var fetchData = {};
-    if (query && query.length > 0){
-      fetchData = { data: $.param({ q: query }) };
-    }
-
-    $.when( app.dashboard.fetch(), app.projects.fetch(fetchData) )
+    $.when( app.dashboard.fetch(), app.projects.fetch(this.getSearchQuery()) )
       .then(function() {
         app.projects.buildShowcase(app.dashboard.get("showcase"));
       });
@@ -127,11 +131,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       collection: app.projects
     }));
 
-    var query = hackdash.getQueryVariable("q");
-    if (query && query.length > 0){
-      app.projects.fetch({ data: $.param({ q: query }) });
-    }
-
+    app.projects.fetch(this.getSearchQuery());
   },
 
   showProjectCreate: function(){
@@ -199,10 +199,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       collection: app.collections
     }));
 
-    var query = hackdash.getQueryVariable("q");
-    if (query && query.length > 0){
-      app.collections.fetch({ data: $.param({ q: query }), parse: true });
-    }
+    app.collections.fetch(this.getSearchQuery());
   },
 
   showCollection: function(collectionId) {
@@ -227,13 +224,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
           collection: app.collection.get("dashboards")
         }));
 
-        var query = hackdash.getQueryVariable("q");
-        if (query && query.length > 0){
-          app.collection.get("dashboards").fetch({ 
-            data: $.param({ q: query }), 
-            parse: true 
-          });
-        }
+        var fdata = this.getSearchQuery();
+        fdata.parse = true;
+
+        app.collection.get("dashboards").fetch(fdata);
       });
   },  
 
@@ -284,10 +278,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
     app.collections.fetch({ parse: true });
 
-    var query = hackdash.getQueryVariable("q");
-    if (query && query.length > 0){
-      app.dashboards.fetch({ data: $.param({ q: query }) });
-    }
+    app.dashboards.fetch(this.getSearchQuery());
   }
 
 });

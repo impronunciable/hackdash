@@ -213,6 +213,16 @@
 				    app.main.show(new HomeLayout());
 				  },
 
+				  getSearchQuery: function(){
+				    var query = hackdash.getQueryVariable("q");
+				    var fetchData = {};
+				    if (query && query.length > 0){
+				      fetchData = { data: $.param({ q: query }) };
+				    }
+
+				    return fetchData;
+				  },
+
 				  showLogin: function(){
 				    var providers = window.hackdash.providers;
 				    var app = window.hackdash.app;
@@ -245,13 +255,7 @@
 				      model: app.dashboard
 				    }));
 
-				    var query = hackdash.getQueryVariable("q");
-				    var fetchData = {};
-				    if (query && query.length > 0){
-				      fetchData = { data: $.param({ q: query }) };
-				    }
-
-				    $.when( app.dashboard.fetch(), app.projects.fetch(fetchData) )
+				    $.when( app.dashboard.fetch(), app.projects.fetch(this.getSearchQuery()) )
 				      .then(function() {
 				        app.projects.buildShowcase(app.dashboard.get("showcase"));
 				      });
@@ -273,11 +277,7 @@
 				      collection: app.projects
 				    }));
 
-				    var query = hackdash.getQueryVariable("q");
-				    if (query && query.length > 0){
-				      app.projects.fetch({ data: $.param({ q: query }) });
-				    }
-
+				    app.projects.fetch(this.getSearchQuery());
 				  },
 
 				  showProjectCreate: function(){
@@ -345,10 +345,7 @@
 				      collection: app.collections
 				    }));
 
-				    var query = hackdash.getQueryVariable("q");
-				    if (query && query.length > 0){
-				      app.collections.fetch({ data: $.param({ q: query }), parse: true });
-				    }
+				    app.collections.fetch(this.getSearchQuery());
 				  },
 
 				  showCollection: function(collectionId) {
@@ -373,13 +370,10 @@
 				          collection: app.collection.get("dashboards")
 				        }));
 
-				        var query = hackdash.getQueryVariable("q");
-				        if (query && query.length > 0){
-				          app.collection.get("dashboards").fetch({ 
-				            data: $.param({ q: query }), 
-				            parse: true 
-				          });
-				        }
+				        var fdata = this.getSearchQuery();
+				        fdata.parse = true;
+
+				        app.collection.get("dashboards").fetch(fdata);
 				      });
 				  },  
 
@@ -430,10 +424,7 @@
 
 				    app.collections.fetch({ parse: true });
 
-				    var query = hackdash.getQueryVariable("q");
-				    if (query && query.length > 0){
-				      app.dashboards.fetch({ data: $.param({ q: query }) });
-				    }
+				    app.dashboards.fetch(this.getSearchQuery());
 				  }
 
 				});
@@ -1037,7 +1028,7 @@
 
 						  events: {
 						    "click .close": "close",
-						    "click .add": "add"
+						    "click .btn-add": "add"
 						  },
 
 						  itemViewOptions: function(){
@@ -1094,7 +1085,7 @@
 						  template: template,
 
 						  events: {
-						    "click input[type=checkbox]": "toggleDashboard"
+						    "click .view-collection": "viewCollection"
 						  },
 
 						  //--------------------------------------
@@ -1103,6 +1094,17 @@
 
 						  initialize: function(options){
 						    this.dashboardId = options.dashboardId;
+						  },
+
+						  onRender: function(){
+						    if (this.hasDashboard()){
+						      this.$el.addClass('active');
+						    }
+						    else {
+						      this.$el.removeClass('active'); 
+						    }
+
+						    this.$el.on("click", this.toggleDashboard.bind(this));
 						  },
 
 						  serializeData: function(){
@@ -1119,6 +1121,11 @@
 						  //+ EVENT HANDLERS
 						  //--------------------------------------
 
+						  viewCollection: function(e){
+						    e.stopPropagation();
+						    hackdash.app.modals.close();
+						  },
+
 						  toggleDashboard: function(){
 						    if (this.hasDashboard()){
 						      this.model.removeDashboard(this.dashboardId);
@@ -1126,6 +1133,8 @@
 						    else {
 						      this.model.addDashboard(this.dashboardId);
 						    }
+
+						    this.render();
 						  },
 
 						  //--------------------------------------
@@ -1218,7 +1227,7 @@
 							  
 
 
-							  return "<div class=\"modal-header\">\n  <button type=\"button\" data-dismiss=\"modal\" aria-hidden=\"true\" class=\"close\">×</button>\n  <h3>My Collections</h3>\n</div>\n<div class=\"modal-body\">\n  <ul class=\"collections\"></ul>\n</div>\n<div class=\"modal-footer\">\n  <form class=\"form-inline\">\n    <input type=\"text\" name=\"title\" placeholder=\"Enter Title\" class=\"input-medium pull-left\" style=\"margin-right: 10px;\">\n    <input type=\"text\" name=\"description\" placeholder=\"Enter Description\" class=\"input-medium pull-left\">\n    <input type=\"button\" class=\"btn primary btn-success pull-right add\" value=\"Add\">\n  </form>\n</div>";
+							  return "<div class=\"modal-header\">\n  <button type=\"button\" data-dismiss=\"modal\" aria-hidden=\"true\" class=\"close\">×</button>\n  <h3>My Collections</h3>\n</div>\n<div class=\"modal-body\">\n  <ul class=\"collections\"></ul>\n</div>\n<div class=\"modal-footer\">\n  <div class=\"row-fluid\">\n    <div class=\"span12\">\n      <div class=\"span10\">\n        <input type=\"text\" name=\"title\" placeholder=\"Enter Title\" class=\"input-medium pull-left\" style=\"margin-right: 10px;\">\n        <input type=\"text\" name=\"description\" placeholder=\"Enter Description\" class=\"input-medium pull-left\">\n        <input type=\"button\" class=\"btn primary btn-success pull-left btn-add\" value=\"Add\">\n      </div>\n      <div class=\"span2\">\n        <input type=\"button\" class=\"btn primary pull-right\" data-dismiss=\"modal\" value=\"Close\">\n      </div>\n    </div>\n  </div>\n</div>";
 							  })
 							;
 						},
@@ -1226,30 +1235,18 @@
 							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 							  this.compilerInfo = [4,'>= 1.0.0'];
 							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-							  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+							  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
-							function program1(depth0,data) {
-							  
-							  
-							  return "checked";
-							  }
 
-							  buffer += "<input id=\"";
-							  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-							  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-							  buffer += escapeExpression(stack1)
-							    + "\" type=\"checkbox\" value=\"false\" \n  class=\"pull-left\" ";
-							  stack1 = helpers['if'].call(depth0, depth0.hasDash, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += ">\n<label for=\"";
-							  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-							  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-							  buffer += escapeExpression(stack1)
-							    + "\">";
+							  buffer += "<label class=\"pull-left\">\n  ";
 							  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 							  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)
-							    + "</label>";
+							    + "\n</label>\n\n<a class=\"pull-right view-collection\" href=\"/collections/";
+							  if (stack1 = helpers._id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0._id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "\">View</a>";
 							  return buffer;
 							  })
 							;
@@ -1445,7 +1442,7 @@
 							function program4(depth0,data) {
 							  
 							  
-							  return "\n      <div class=\"pull-right add\">\n        <a class=\"btn btn-link add\">Add</a>\n      </div>\n      ";
+							  return "\n      <div class=\"pull-right add\">\n        <a class=\"btn btn-link add\">Add to Collections</a>\n      </div>\n      ";
 							  }
 
 							  buffer += "<div class=\"well\">\n  <div class=\"well-content\">\n    <h4>";
@@ -2449,7 +2446,7 @@
 							  if (stack1 = helpers.hackdashURL) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 							  else { stack1 = depth0.hackdashURL; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)
-							    + "\"></a>\n\n<div class=\"page-ctn\"></div>\n<h1 class=\"page-title\"></h1>";
+							    + "\" data-bypass></a>\n\n<div class=\"page-ctn\"></div>\n<h1 class=\"page-title\"></h1>";
 							  return buffer;
 							  })
 							;
