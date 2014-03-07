@@ -140,13 +140,18 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "project";
 
+    app.dashboard = new Dashboard();
     app.project = new Project();
     
-    app.header.show(new Header());
+    app.header.show(new Header({
+      model: app.dashboard
+    }));
 
     app.main.show(new ProjectEditView({
       model: app.project
     }));
+
+    app.dashboard.fetch();
   },
 
   showProjectEdit: function(pid){
@@ -155,14 +160,18 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "project";
 
+    app.dashboard = new Dashboard();
     app.project = new Project({ _id: pid });
     
-    app.header.show(new Header());
+    app.header.show(new Header({
+      model: app.dashboard
+    }));
 
     app.main.show(new ProjectEditView({
       model: app.project
     }));
 
+    app.dashboard.fetch();
     app.project.fetch();
   },
 

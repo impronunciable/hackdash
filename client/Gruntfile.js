@@ -14,13 +14,16 @@ module.exports = function(grunt) {
         root: "app/"
       },
       vendor: {
-        js: "vendor/scripts/"
+        js: "vendor/scripts/",
+        css: "vendor/styles/"
       },
       dist: {
         root: "dist/",
         appName: "hackdashApp.js",
         vendorName: "vendor.js",
-        export: "../public/js/"
+        vendorCSSName: "vendor.css",
+        exportJS: "../public/js/",
+        exportCSS: "../public/styles/"
       }
     },
 
@@ -61,6 +64,14 @@ module.exports = function(grunt) {
     },
 
     concat: {
+      styles: {
+        src: [
+            '<%= paths.vendor.css %>bootstrap.min.css'
+          , '<%= paths.vendor.css %>bootstrap-responsive.min.css'
+          , '<%= paths.vendor.css %>**/*.css'
+         ],
+        dest: '<%= paths.dist.root %><%= paths.dist.vendorCSSName %>'
+      },
       vendor: {
         options: {
           separator: ';',
@@ -69,6 +80,7 @@ module.exports = function(grunt) {
             '<%= paths.vendor.js %>underscore.min.js'
           , '<%= paths.vendor.js %>backbone.min.js'
           , '<%= paths.vendor.js %>backbone.marionette.min.js'
+          , '<%= paths.vendor.js %>bootstrap.min.js'
           , '<%= paths.vendor.js %>**/*.js'
          ],
         dest: '<%= paths.dist.root %><%= paths.dist.vendorName %>'
@@ -91,10 +103,13 @@ module.exports = function(grunt) {
       dist: {
         cwd: "./", 
         files: {
-          "<%= paths.dist.export %><%= paths.dist.vendorName %>": 
+          "<%= paths.dist.exportCSS %><%= paths.dist.vendorCSSName %>": 
+            "<%= paths.dist.root %><%= paths.dist.vendorCSSName %>",
+
+          "<%= paths.dist.exportJS %><%= paths.dist.vendorName %>": 
             "<%= paths.dist.root %><%= paths.dist.vendorName %>",
 
-          "<%= paths.dist.export %><%= paths.dist.appName %>": 
+          "<%= paths.dist.exportJS %><%= paths.dist.appName %>": 
             "<%= paths.dist.root %><%= paths.dist.appName %>"
         }
       }
