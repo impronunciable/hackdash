@@ -37,6 +37,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  initialize: function(options){
+    this.readOnly = (options && options.readOnly) || false;
+  },
+
   onRender: function(){
     var user = hackdash.user;
 
@@ -50,6 +54,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
     }
 
     $('.tooltips', this.$el).tooltip({});
+  },
+
+  serializeData: function(){
+    return _.extend({
+      readOnly: this.readOnly
+    }, this.model.toJSON() || {});
   },
 
   //--------------------------------------

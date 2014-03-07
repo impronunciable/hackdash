@@ -85,6 +85,15 @@ module.exports = Backbone.Marionette.Layout.extend({
           }));
         }
         break;
+
+      case "project":
+        if (this.model.get("_id")){
+          this.page.show(new DashboardHeader({
+            model: this.model,
+            readOnly: true
+          }));
+        }
+        break;
     }
 
     $('.tooltips', this.$el).tooltip({});

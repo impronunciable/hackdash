@@ -318,14 +318,18 @@
 				    var app = window.hackdash.app;
 				    app.type = "project";
 
+				    app.dashboard = new Dashboard();
 				    app.project = new Project({ _id: pid });
 				    
-				    app.header.show(new Header());
+				    app.header.show(new Header({
+				      model: app.dashboard
+				    }));
 
 				    app.main.show(new ProjectFullView({
 				      model: app.project
 				    }));
 
+				    app.dashboard.fetch();
 				    app.project.fetch();
 				  },
 
@@ -1817,6 +1821,10 @@
 						  //+ INHERITED / OVERRIDES
 						  //--------------------------------------
 
+						  initialize: function(options){
+						    this.readOnly = (options && options.readOnly) || false;
+						  },
+
 						  onRender: function(){
 						    var user = hackdash.user;
 
@@ -1830,6 +1838,12 @@
 						    }
 
 						    $('.tooltips', this.$el).tooltip({});
+						  },
+
+						  serializeData: function(){
+						    return _.extend({
+						      readOnly: this.readOnly
+						    }, this.model.toJSON() || {});
 						  },
 
 						  //--------------------------------------
@@ -2139,6 +2153,15 @@
 						          }));
 						        }
 						        break;
+
+						      case "project":
+						        if (this.model.get("_id")){
+						          this.page.show(new DashboardHeader({
+						            model: this.model,
+						            readOnly: true
+						          }));
+						        }
+						        break;
 						    }
 
 						    $('.tooltips', this.$el).tooltip({});
@@ -2253,144 +2276,165 @@
 							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 							  this.compilerInfo = [4,'>= 1.0.0'];
 							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-							  var buffer = "", stack1, options, functionType="function", escapeExpression=this.escapeExpression, self=this, blockHelperMissing=helpers.blockHelperMissing;
+							  var stack1, functionType="function", escapeExpression=this.escapeExpression, self=this, blockHelperMissing=helpers.blockHelperMissing;
 
 							function program1(depth0,data) {
 							  
 							  var buffer = "", stack1;
-							  buffer += "\n\n  <h1>\n    <a id=\"dashboard-title\">";
-							  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-							  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-							  buffer += escapeExpression(stack1)
-							    + "</a>\n  </h1>\n\n  <p class=\"lead dashboard-lead\">\n    <a id=\"dashboard-description\">";
-							  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-							  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-							  buffer += escapeExpression(stack1)
-							    + "</a>\n  </p>\n\n  <p class=\"dashboard-link\">\n    <a id=\"dashboard-link\">";
-							  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-							  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-							  buffer += escapeExpression(stack1)
-							    + "</a>\n  </p>\n\n";
-							  return buffer;
-							  }
-
-							function program3(depth0,data) {
-							  
-							  var buffer = "", stack1;
-							  buffer += "\n\n  ";
-							  stack1 = helpers['if'].call(depth0, depth0.title, {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
+							  buffer += "\n    \n    ";
+							  stack1 = helpers['if'].call(depth0, depth0.title, {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += "\n\n  ";
-							  stack1 = helpers['if'].call(depth0, depth0.description, {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
+							  buffer += "\n\n    ";
+							  stack1 = helpers['if'].call(depth0, depth0.description, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
 							  buffer += "\n\n";
 							  return buffer;
 							  }
-							function program4(depth0,data) {
+							function program2(depth0,data) {
 							  
 							  var buffer = "", stack1;
-							  buffer += "\n  <h1>\n    ";
+							  buffer += "\n    <h1>\n      ";
 							  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 							  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)
-							    + "\n\n    ";
-							  stack1 = helpers['if'].call(depth0, depth0.link, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+							    + "\n\n      ";
+							  stack1 = helpers['if'].call(depth0, depth0.link, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += "\n  </h1>\n  ";
+							  buffer += "\n    </h1>\n    ";
 							  return buffer;
 							  }
-							function program5(depth0,data) {
+							function program3(depth0,data) {
 							  
 							  var buffer = "", stack1;
-							  buffer += "\n    <a class=\"dashboard-link\" href=\"";
+							  buffer += "\n      <a class=\"dashboard-link\" href=\"";
 							  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 							  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)
-							    + "\" target=\"_blank\" data-bypass>site</a>\n    ";
+							    + "\" target=\"_blank\" data-bypass>site</a>\n      ";
+							  return buffer;
+							  }
+
+							function program5(depth0,data) {
+							  
+							  var buffer = "", stack1;
+							  buffer += "\n    <p class=\"lead\">";
+							  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "</p>\n    ";
 							  return buffer;
 							  }
 
 							function program7(depth0,data) {
 							  
+							  var buffer = "", stack1, options;
+							  buffer += "\n\n  ";
+							  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.program(10, program10, data),fn:self.program(8, program8, data),data:data});
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += "\n\n  ";
+							  options = {hash:{},inverse:self.program(20, program20, data),fn:self.program(12, program12, data),data:data};
+							  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
+							  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += "\n";
+							  return buffer;
+							  }
+							function program8(depth0,data) {
+							  
 							  var buffer = "", stack1;
-							  buffer += "\n  <p class=\"lead\">";
+							  buffer += "\n\n    <h1>\n      <a id=\"dashboard-title\">";
+							  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "</a>\n    </h1>\n\n    <p class=\"lead dashboard-lead\">\n      <a id=\"dashboard-description\">";
 							  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 							  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)
-							    + "</p>\n  ";
+							    + "</a>\n    </p>\n\n    <p class=\"dashboard-link\">\n      <a id=\"dashboard-link\">";
+							  if (stack1 = helpers.link) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0.link; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "</a>\n    </p>\n\n  ";
 							  return buffer;
 							  }
 
-							function program9(depth0,data) {
-							  
-							  var buffer = "", stack1;
-							  buffer += "\n\n  ";
-							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(12, program12, data),fn:self.program(10, program10, data),data:data});
-							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += "\n\n  ";
-							  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.noop,fn:self.program(14, program14, data),data:data});
-							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += "\n\n";
-							  return buffer;
-							  }
 							function program10(depth0,data) {
 							  
-							  
-							  return "\n  <a class=\"btn btn-large\" href=\"/projects/create\">New Project</a>\n  ";
+							  var buffer = "", stack1;
+							  buffer += "\n\n    ";
+							  stack1 = helpers['if'].call(depth0, depth0.title, {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += "\n\n    ";
+							  stack1 = helpers['if'].call(depth0, depth0.description, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += "\n\n  ";
+							  return buffer;
 							  }
 
 							function program12(depth0,data) {
 							  
-							  
-							  return "\n  <h4 class=\"tooltips dashboard-closed\" \n    data-placement=\"bottom\" data-original-title=\"Dashboard closed for creating projects\">Dashboard Closed</h4>\n  ";
-							  }
-
-							function program14(depth0,data) {
-							  
 							  var buffer = "", stack1;
-							  buffer += "\n  <div class=\"tooltips dashboard-switcher\"\n    data-placement=\"top\" data-original-title=\"Toggle creation of projects on this Dashboard\">\n    \n    <input type=\"checkbox\" ";
-							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.noop,fn:self.program(15, program15, data),data:data});
+							  buffer += "\n\n    ";
+							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(15, program15, data),fn:self.program(13, program13, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += " class=\"switch-large\"\n      data-off-label=\"CLOSE\" data-on-label=\"OPEN\">\n  </div>\n\n  <div class=\"tooltips showcase-switcher-ctn\"\n      data-placement=\"top\" data-original-title=\"Toggle sort edition of projects for showcase\">\n    <h5>Edit Showcase mode</h5>\n    <div class=\"showcase-switcher\">      \n      <input type=\"checkbox\" class=\"switch-large\" data-off-label=\"OFF\" data-on-label=\"ON\">\n    </div>\n  </div>\n\n  <a class=\"btn export\" href=\"/api/v2/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n  ";
+							  buffer += "\n\n    ";
+							  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.noop,fn:self.program(17, program17, data),data:data});
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += "\n\n  ";
 							  return buffer;
 							  }
+							function program13(depth0,data) {
+							  
+							  
+							  return "\n    <a class=\"btn btn-large\" href=\"/projects/create\">New Project</a>\n    ";
+							  }
+
 							function program15(depth0,data) {
 							  
 							  
-							  return "checked";
+							  return "\n    <h4 class=\"tooltips dashboard-closed\" \n      data-placement=\"bottom\" data-original-title=\"Dashboard closed for creating projects\">Dashboard Closed</h4>\n    ";
 							  }
 
 							function program17(depth0,data) {
 							  
 							  var buffer = "", stack1;
-							  buffer += "\n\n  ";
-							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(20, program20, data),fn:self.program(18, program18, data),data:data});
+							  buffer += "\n    <div class=\"tooltips dashboard-switcher\"\n      data-placement=\"top\" data-original-title=\"Toggle creation of projects on this Dashboard\">\n      \n      <input type=\"checkbox\" ";
+							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += "\n\n";
+							  buffer += " class=\"switch-large\"\n        data-off-label=\"CLOSE\" data-on-label=\"OPEN\">\n    </div>\n\n    <div class=\"tooltips showcase-switcher-ctn\"\n        data-placement=\"top\" data-original-title=\"Toggle sort edition of projects for showcase\">\n      <h5>Edit Showcase mode</h5>\n      <div class=\"showcase-switcher\">      \n        <input type=\"checkbox\" class=\"switch-large\" data-off-label=\"OFF\" data-on-label=\"ON\">\n      </div>\n    </div>\n\n    <a class=\"btn export\" href=\"/api/v2/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n    ";
 							  return buffer;
 							  }
 							function program18(depth0,data) {
 							  
 							  
-							  return "\n  <a class=\"btn btn-large\" href=\"/login\">Login to create a project</a>\n  ";
+							  return "checked";
 							  }
 
 							function program20(depth0,data) {
 							  
+							  var buffer = "", stack1;
+							  buffer += "\n\n    ";
+							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(23, program23, data),fn:self.program(21, program21, data),data:data});
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += "\n\n  ";
+							  return buffer;
+							  }
+							function program21(depth0,data) {
 							  
-							  return "\n  <a class=\"btn btn-large\" href=\"/login\">Login to join/follow projects</a>\n  ";
+							  
+							  return "\n    <a class=\"btn btn-large\" href=\"/login\">Login to create a project</a>\n    ";
 							  }
 
-							  buffer += "\n";
-							  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
-							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += "\n\n";
-							  options = {hash:{},inverse:self.program(17, program17, data),fn:self.program(9, program9, data),data:data};
-							  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
-							  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-							  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  return buffer;
+							function program23(depth0,data) {
+							  
+							  
+							  return "\n    <a class=\"btn btn-large\" href=\"/login\">Login to join/follow projects</a>\n    ";
+							  }
+
+							  stack1 = helpers['if'].call(depth0, depth0.readOnly, {hash:{},inverse:self.program(7, program7, data),fn:self.program(1, program1, data),data:data});
+							  if(stack1 || stack1 === 0) { return stack1; }
+							  else { return ''; }
 							  })
 							;
 						},
@@ -2649,7 +2693,7 @@
 							  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += "\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <div class=\"span6\">\n      <section class=\"block\">\n        <header>\n          <h3>Find Projects</h3>\n        </header>\n\n        <div class=\"content span12\" style=\"text-align: center;\">\n          <p class=\"control-group\">\n            <input class=\"input-large search-box\" id=\"search-projects\"\n              placeholder=\"name or description\" type=\"text\">\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"search-projects-btn\">Search</button>\n          </p>\n        </div>\n      </section>\n    </div>\n\n    <div class=\"span6\">\n      <section class=\"block\">\n        <header>\n          <h3>Find Collections</h3>\n        </header>\n\n        <div class=\"content span12\" style=\"text-align: center;\">\n          <p class=\"control-group\">\n            <input class=\"input-large search-box\" id=\"search-collections\"\n              placeholder=\"name or description\" type=\"text\">\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"search-collections-btn\">Search</button>\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"create-collections-btn\">Create</button>\n          </p>\n        </div>\n      </section>\n    </div>\n\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>About</h3>\n      </header>\n\n      <div class=\"content span11\">\n        <p>The HackDash was born by accident and by a need.\n        We were looking for platform to track ideas through\n        hackathons in the line to the Hacks/Hackers Media\n        Party organized by @HacksHackersBA where hackers\n        and journalists share ideas. We spread the idea\n        through Twitter and that was the context of the\n        HackDash born. @blejman had an idea and\n        @danzajdband was interested in implement that idea.\n        So we started building the app hoping we can get to\n        the Buenos Aires media party with something that\n        doesn't suck. The Media Party Hackathon day came\n        followed by a grateful surprise. Not only the\n        people liked the HackDash implementation but a\n        couple of coders added the improvement of the\n        HackDash as a Hackaton project. After the Media\n        Party we realized that this small app is filling a\n        real need. The Dashboard has been used now in\n        several ways like Node.js Argentina meetup,\n        HacksHackersBA, La Nación DataFest and\n        HackasHackersCL (using it as a Wordpress theme).\n        Now, the HackDash will be an standard for\n        hackathons through the PinLatAm program, for news\n        innovation in Latin America. Create your own\n        hackathon.</p>\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>Why Hackdash?</h3>\n      </header>\n\n      <div class=\"content\">\n        <div class=\"row-fluid\">\n          <div class=\"span10 offset1 brand-why\">\n            <div class=\"span3\">\n              <div class=\"icon quick\"></div>\n              <h5>Quick and Easy</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon nerds\"></div>\n              <h5>For Nerds</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon fast\"></div>\n              <h5>Fast</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon geeks\"></div>\n              <h5>Love &amp; Geeks</h5>\n            </div>\n          </div>\n        </div>\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>Partners</h3>\n      </header>\n\n      <div class=\"content\">\n        <div class=\"row-fluid\">\n          <div class=\"span10 offset2 partners\">\n            <div class=\"span5 hhba\"></div>\n            <div class=\"span5 nxtp\"></div>\n          </div>\n        </div>\n      </div>\n    </section>\n  </div>\n</div>\n";
+							  buffer += "\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <div class=\"span6\">\n      <section class=\"block\">\n        <header>\n          <h3>Find Projects</h3>\n        </header>\n\n        <div class=\"content span12\">\n          <p class=\"control-group\">\n            <input class=\"input-large search-box\" id=\"search-projects\"\n              placeholder=\"name or description\" type=\"text\">\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"search-projects-btn\">Search</button>\n          </p>\n        </div>\n      </section>\n    </div>\n\n    <div class=\"span6\">\n      <section class=\"block\">\n        <header>\n          <h3>Find Collections</h3>\n        </header>\n\n        <div class=\"content span12\">\n          <p class=\"control-group\">\n            <input class=\"input-large search-box\" id=\"search-collections\"\n              placeholder=\"name or description\" type=\"text\">\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"search-collections-btn\">Search</button>\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"create-collections-btn\">Create</button>\n          </p>\n        </div>\n      </section>\n    </div>\n\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>About</h3>\n      </header>\n\n      <div class=\"content span11\">\n        <p>The HackDash was born by accident and by a need.\n        We were looking for platform to track ideas through\n        hackathons in the line to the Hacks/Hackers Media\n        Party organized by @HacksHackersBA where hackers\n        and journalists share ideas. We spread the idea\n        through Twitter and that was the context of the\n        HackDash born. @blejman had an idea and\n        @danzajdband was interested in implement that idea.\n        So we started building the app hoping we can get to\n        the Buenos Aires media party with something that\n        doesn't suck. The Media Party Hackathon day came\n        followed by a grateful surprise. Not only the\n        people liked the HackDash implementation but a\n        couple of coders added the improvement of the\n        HackDash as a Hackaton project. After the Media\n        Party we realized that this small app is filling a\n        real need. The Dashboard has been used now in\n        several ways like Node.js Argentina meetup,\n        HacksHackersBA, La Nación DataFest and\n        HackasHackersCL (using it as a Wordpress theme).\n        Now, the HackDash will be an standard for\n        hackathons through the PinLatAm program, for news\n        innovation in Latin America. Create your own\n        hackathon.</p>\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>Why Hackdash?</h3>\n      </header>\n\n      <div class=\"content\">\n        <div class=\"row-fluid\">\n          <div class=\"span10 offset1 brand-why\">\n            <div class=\"span3\">\n              <div class=\"icon quick\"></div>\n              <h5>Quick and Easy</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon nerds\"></div>\n              <h5>For Nerds</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon fast\"></div>\n              <h5>Fast</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon geeks\"></div>\n              <h5>Love &amp; Geeks</h5>\n            </div>\n          </div>\n        </div>\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>Partners</h3>\n      </header>\n\n      <div class=\"content\">\n        <div class=\"row-fluid\">\n          <div class=\"span10 offset2 partners\">\n            <div class=\"span5 hhba\"></div>\n            <div class=\"span5 nxtp\"></div>\n          </div>\n        </div>\n      </div>\n    </section>\n  </div>\n</div>\n";
 							  return buffer;
 							  })
 							;

@@ -1207,6 +1207,11 @@ a.signup-persona:hover {
   margin-bottom: 20px;
 }
 
+.homepage .content {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
 .homepage #domain,
 .homepage .search-box {
   padding: 10px 10px !important;
@@ -1216,6 +1221,10 @@ a.signup-persona:hover {
 .homepage .search-btn {
   margin-top: -10px;
   margin-left: 5px;
+}
+
+.homepage .search-box {
+  margin-bottom: 20px;
 }
 
 .homepage .brand {
