@@ -735,6 +735,7 @@
 					  idAttribute: "_id",
 
 					  defaults: {
+					    collections: new Backbone.Collection(),
 					    dashboards: new Backbone.Collection(),
 					    projects: new Projects(),
 					    contributions: new Projects(),
@@ -746,6 +747,8 @@
 					  },
 
 					  parse: function(response){
+
+					    this.get("collections").reset(response.collections);
 
 					    this.get("dashboards").reset( 
 					      _.map(response.admin_in, function(dash){ return { title: dash }; })
@@ -2879,6 +2882,7 @@
 
 						  regions: {
 						    "profileCard": ".profile-card",
+						    "collections": ".collections-ctn",
 						    "dashboards": ".dashboards-ctn",
 						    "projects": ".projects-ctn",
 						    "contributions": ".contributions-ctn",
@@ -2886,6 +2890,7 @@
 						  },
 
 						  ui: {
+						    "collectionsLen": ".coll-length",
 						    "dashboardsLen": ".dash-length",
 						    "projectsLen": ".proj-length",
 						    "contributionsLen": ".contrib-length",
@@ -2909,6 +2914,11 @@
 						      }));
 						    }
 
+						    this.collections.show(new ProjectList({
+						      collection: this.model.get("collections"),
+						      isCollection: true
+						    }));
+
 						    this.dashboards.show(new ProjectList({
 						      collection: this.model.get("dashboards"),
 						      isDashboard: true
@@ -2928,6 +2938,7 @@
 
 						    $('.tooltips', this.$el).tooltip({});
 
+						    this.model.get("collections").on("reset", this.updateCount.bind(this, "collections"));
 						    this.model.get("dashboards").on("reset", this.updateCount.bind(this, "dashboards"));
 						    this.model.get("projects").on("reset", this.updateCount.bind(this, "projects"));
 						    this.model.get("contributions").on("reset", this.updateCount.bind(this, "contributions"));
@@ -3013,7 +3024,7 @@
 							  
 
 
-							  return "<div class=\"span6 span-center\">\n\n  <div class=\"profile-card\"></div>\n\n  <h4>Dashboards (<span class=\"dash-length\">0</span>)</h4>\n  <div class=\"dashboards-ctn\"></div>\n\n  <h4>Projects created (<span class=\"proj-length\">0</span>)</h4>\n  <div class=\"projects-ctn\"></div>\n\n  <h4>Contributions (<span class=\"contrib-length\">0</span>)</h4>\n  <div class=\"contributions-ctn\"></div>\n\n  <h4>Likes (<span class=\"likes-length\">0</span>)</h4>\n  <div class=\"likes-ctn\"></div>\n  \n</div>\n";
+							  return "<div class=\"span6 span-center\">\n\n  <div class=\"profile-card\"></div>\n\n  <h4>My Collections (<span class=\"coll-length\">0</span>)</h4>\n  <div class=\"collections-ctn\"></div>\n\n  <h4>Dashboards (<span class=\"dash-length\">0</span>)</h4>\n  <div class=\"dashboards-ctn\"></div>\n\n  <h4>Projects created (<span class=\"proj-length\">0</span>)</h4>\n  <div class=\"projects-ctn\"></div>\n\n  <h4>Contributions (<span class=\"contrib-length\">0</span>)</h4>\n  <div class=\"contributions-ctn\"></div>\n\n  <h4>Likes (<span class=\"likes-length\">0</span>)</h4>\n  <div class=\"likes-ctn\"></div>\n  \n</div>\n";
 							  })
 							;
 						}
@@ -3484,7 +3495,8 @@
 
 						  itemViewOptions: function() {
 						    return {
-						      isDashboard: this.isDashboard
+						      isDashboard: this.isDashboard,
+						      isCollection: this.isCollection
 						    };
 						  },
 
@@ -3497,6 +3509,7 @@
 						  initialize: function(options){
 						    this.fullList = options.collection;
 						    this.isDashboard = (options && options.isDashboard) || false;
+						    this.isCollection = (options && options.isCollection) || false;
 						  },
 
 						  onBeforeRender: function(){
@@ -3570,6 +3583,7 @@
 
 						  initialize: function(options){
 						    this.isDashboard = (options && options.isDashboard) || false;
+						    this.isCollection = (options && options.isCollection) || false;
 						  },
 
 						  onRender: function(){
@@ -3586,11 +3600,14 @@
 						    var url;
 
 						    if (this.isDashboard){
-						      url = "http://" + this.model.get("title")  + "." + hackdash.baseURL;
+						      url = "http://" + this.model.get("title")  + "." + hackdash.baseURL; 
+						    }
+						    else if(this.isCollection){
+						      url = "/collections/" + this.model.get("_id");
 						    }
 						    else {
 						      url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
-						        "/p/" + this.model.get("_id");
+						        "/projects/" + this.model.get("_id");
 						    }
 
 						    return _.extend({

@@ -16,6 +16,7 @@ module.exports = Backbone.Marionette.Layout.extend({
 
   regions: {
     "profileCard": ".profile-card",
+    "collections": ".collections-ctn",
     "dashboards": ".dashboards-ctn",
     "projects": ".projects-ctn",
     "contributions": ".contributions-ctn",
@@ -23,6 +24,7 @@ module.exports = Backbone.Marionette.Layout.extend({
   },
 
   ui: {
+    "collectionsLen": ".coll-length",
     "dashboardsLen": ".dash-length",
     "projectsLen": ".proj-length",
     "contributionsLen": ".contrib-length",
@@ -46,6 +48,11 @@ module.exports = Backbone.Marionette.Layout.extend({
       }));
     }
 
+    this.collections.show(new ProjectList({
+      collection: this.model.get("collections"),
+      isCollection: true
+    }));
+
     this.dashboards.show(new ProjectList({
       collection: this.model.get("dashboards"),
       isDashboard: true
@@ -65,6 +72,7 @@ module.exports = Backbone.Marionette.Layout.extend({
 
     $('.tooltips', this.$el).tooltip({});
 
+    this.model.get("collections").on("reset", this.updateCount.bind(this, "collections"));
     this.model.get("dashboards").on("reset", this.updateCount.bind(this, "dashboards"));
     this.model.get("projects").on("reset", this.updateCount.bind(this, "projects"));
     this.model.get("contributions").on("reset", this.updateCount.bind(this, "contributions"));

@@ -10,6 +10,7 @@ module.exports = Backbone.Model.extend({
   idAttribute: "_id",
 
   defaults: {
+    collections: new Backbone.Collection(),
     dashboards: new Backbone.Collection(),
     projects: new Projects(),
     contributions: new Projects(),
@@ -21,6 +22,8 @@ module.exports = Backbone.Model.extend({
   },
 
   parse: function(response){
+
+    this.get("collections").reset(response.collections);
 
     this.get("dashboards").reset( 
       _.map(response.admin_in, function(dash){ return { title: dash }; })

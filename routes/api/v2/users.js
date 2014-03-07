@@ -11,14 +11,15 @@ var passport = require('passport')
   , config = require('../../../config.json');
 
 var User = mongoose.model('User')
-  , Project = mongoose.model('Project');
+  , Project = mongoose.model('Project')
+  , Collection = mongoose.model('Collection');
 
 module.exports = function(app, uri, common) {
 
   app.get(uri + '/admins', getInstanceAdmins, sendUsers);
   app.get(uri + '/users/:uid', getUser, sendUser);
 
-  app.get(uri + '/profiles/:uid', getUser, setProjects, setContributions, setLikes, sendUser);
+  app.get(uri + '/profiles/:uid', getUser, setCollections, setProjects, setContributions, setLikes, sendUser);
   app.put(uri + '/profiles/:uid', common.isAuth, getUser, canUpdate, updateUser);
 
 };
@@ -82,6 +83,16 @@ var updateUser = function(req, res){
     
     res.send(200);
   });
+};
+
+var setCollections = function(req, res, next){
+
+  Collection
+    .find({ "owner": req.user_profile._id }, function(err, collections) {
+      if(err) return res.send(500);
+      req.user_profile.collections = collections || [];
+      next();
+    });
 };
 
 var setProjects = function(req, res, next){

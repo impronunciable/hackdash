@@ -20,6 +20,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   initialize: function(options){
     this.isDashboard = (options && options.isDashboard) || false;
+    this.isCollection = (options && options.isCollection) || false;
   },
 
   onRender: function(){
@@ -36,11 +37,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var url;
 
     if (this.isDashboard){
-      url = "http://" + this.model.get("title")  + "." + hackdash.baseURL;
+      url = "http://" + this.model.get("title")  + "." + hackdash.baseURL; 
+    }
+    else if(this.isCollection){
+      url = "/collections/" + this.model.get("_id");
     }
     else {
       url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
-        "/p/" + this.model.get("_id");
+        "/projects/" + this.model.get("_id");
     }
 
     return _.extend({

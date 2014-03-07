@@ -16,7 +16,8 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
   itemViewOptions: function() {
     return {
-      isDashboard: this.isDashboard
+      isDashboard: this.isDashboard,
+      isCollection: this.isCollection
     };
   },
 
@@ -29,6 +30,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   initialize: function(options){
     this.fullList = options.collection;
     this.isDashboard = (options && options.isDashboard) || false;
+    this.isCollection = (options && options.isCollection) || false;
   },
 
   onBeforeRender: function(){
