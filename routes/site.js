@@ -23,12 +23,10 @@ module.exports = function(app) {
   var appPort = app.get('config').port;
   var appHost = app.get('config').host + (appPort && appPort !== 80 ? ':' + appPort : '');
 
-  var hackdashUserStack = [
+  var hackdashFullStack = [
     loadUser, 
-    loadProviders
-  ];
-
-  var hackasdAppStack = [
+    loadProviders,
+    setSubdomain,
     checkProfile,
     setViewVar('host', appHost),
     setViewVar('version', app.get('clientVersion')),
@@ -37,11 +35,9 @@ module.exports = function(app) {
     render('hackdashApp')
   ];
 
-  var hackdashFullStack = hackdashUserStack.concat(hackasdAppStack);
-
   // home page if no subdomain
   // dashboard if subdomain
-  app.get('/', hackdashUserStack, isHomepage, hackasdAppStack);
+  app.get('/', hackdashFullStack);
 
   // Search all projects if no subdomain
   // Search projects inside dashboard if subdomain
@@ -112,6 +108,16 @@ var redirect = function(route) {
   };
 };
 
+var setSubdomain = function(req, res, next){
+  res.locals.subdomain = null;
+
+  if (req.subdomains.length){
+    res.locals.subdomain = req.subdomains[0]; 
+  }
+
+  next();
+};
+
 var checkProfile = function(req, res, next){
   if (req.user && !req.user.email){
     res.redirect('/users/profile');
@@ -176,18 +182,6 @@ var loadProviders = function(req, res, next) {
 var logout = function(req, res, next) {
   req.logout();
   next();
-};
-
-var isHomepage = function(req, res, next) {
-  var url = config.host + (config.port === 80 ? "" : ":" + config.port);
-
-  if(!req.subdomains.length) {
-    Dashboard.find({}).sort('domain').exec(function(err, dashboards){
-       res.render('homepage', {dashboards: dashboards, baseHost: url });
-    });
-  } else {
-    next();
-  }
 };
 
 var validateSubdomain = function(req, res, next) {

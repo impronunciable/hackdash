@@ -159,6 +159,7 @@
 				  , Header = require("./views/Header")
 				  , Footer = require("./views/Footer")
 
+				  , HomeLayout = require("./views/Home")
 				  , LoginView = require("./views/Login")
 				  , ProfileView = require("./views/Profile")
 				  , ProjectFullView = require("./views/Project/Full")
@@ -170,7 +171,7 @@
 				module.exports = Backbone.Marionette.AppRouter.extend({
 				  
 				  routes : {
-				      "" : "showDashboard"
+				      "" : "index"
 				    
 				    , "login" : "showLogin"
 
@@ -188,6 +189,30 @@
 				    , "users/:user_id" : "showProfile"
 				  },
 
+				  index: function(){
+				    if (hackdash.subdomain){
+				      this.showDashboard();
+				    }
+				    else {
+				      this.showHome();
+				    }
+				  },
+
+				  removeHomeLayout: function(){
+				    $('body').removeClass("homepage");
+				    $('header').add('footer').show();
+				    $('#page').addClass('container');
+				  },
+
+				  showHome: function(){
+				    $('body').addClass("homepage");
+				    $('header').add('footer').hide();
+				    $('#page').removeClass('container');
+
+				    var app = window.hackdash.app;
+				    app.main.show(new HomeLayout());
+				  },
+
 				  showLogin: function(){
 				    var providers = window.hackdash.providers;
 				    var app = window.hackdash.app;
@@ -198,6 +223,7 @@
 				  },
 
 				  showDashboard: function() {
+				    this.removeHomeLayout();
 
 				    var app = window.hackdash.app;
 				    app.type = "dashboard";
@@ -232,7 +258,8 @@
 				  },
 
 				  showProjects: function() {
-
+				    this.removeHomeLayout();
+				    
 				    var app = window.hackdash.app;
 				    app.type = "isearch";
 
@@ -254,6 +281,8 @@
 				  },
 
 				  showProjectCreate: function(){
+				    this.removeHomeLayout();
+				    
 				    var app = window.hackdash.app;
 				    app.type = "project";
 
@@ -267,6 +296,8 @@
 				  },
 
 				  showProjectEdit: function(pid){
+				    this.removeHomeLayout();
+				    
 				    var app = window.hackdash.app;
 				    app.type = "project";
 
@@ -282,6 +313,8 @@
 				  },
 
 				  showProjectFull: function(pid){
+				    this.removeHomeLayout();
+				    
 				    var app = window.hackdash.app;
 				    app.type = "project";
 
@@ -297,6 +330,8 @@
 				  },
 
 				  showCollections: function() {
+				    this.removeHomeLayout();
+				    
 				    var app = window.hackdash.app;
 				    app.type = "collections";
 
@@ -317,6 +352,8 @@
 				  },
 
 				  showCollection: function(collectionId) {
+				    this.removeHomeLayout();
+				    
 				    var app = window.hackdash.app;
 				    app.type = "collection";
 
@@ -347,6 +384,8 @@
 				  },  
 
 				  showProfile: function(userId) {
+				    this.removeHomeLayout();
+				    
 				    var app = window.hackdash.app;
 				    app.type = "profile";
 
@@ -373,6 +412,8 @@
 				  },
 
 				  showDashboards: function() {
+				    this.removeHomeLayout();
+				    
 				    var app = window.hackdash.app;
 				    app.type = "dashboards";
 
@@ -2431,6 +2472,136 @@
 							  else { stack1 = depth0.isDashboardView; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  if (!helpers.isDashboardView) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  return buffer;
+							  })
+							;
+						}
+					}
+				},
+				"Home": {
+					"index.js": function (exports, module, require) {
+						
+						var 
+						    template = require("./templates/home.hbs");
+
+						module.exports = Backbone.Marionette.Layout.extend({
+
+						  //--------------------------------------
+						  //+ PUBLIC PROPERTIES / CONSTANTS
+						  //--------------------------------------
+
+						  className: "container-fluid",
+						  template: template,
+
+						  ui: {
+						    "domain": "#domain",
+						    "create": "input[type=submit]",
+						    "projects": "#search-projects",
+						    "collections": "#search-collections"
+						  },
+
+						  events: {
+						    "keyup #domain": "validateDomain",
+
+						    "keyup #search-projects": "checkSearchProjects",
+						    "click #search-projects-btn": "searchProjects",
+
+						    "keyup #search-collections": "checkSearchCollections",
+						    "click #search-collections-btn": "searchCollections",
+
+						    "click #create-collections-btn": "createCollections"
+						  },
+
+						  //--------------------------------------
+						  //+ INHERITED / OVERRIDES
+						  //--------------------------------------
+
+						  //--------------------------------------
+						  //+ PUBLIC METHODS / GETTERS / SETTERS
+						  //--------------------------------------
+
+						  //--------------------------------------
+						  //+ EVENT HANDLERS
+						  //--------------------------------------
+
+						  validateDomain: function(){
+						    var name = this.ui.domain.val();
+						    if(/^[a-z0-9]{5,10}$/.test(name)) {
+						      this.ui.domain.parent().addClass('success').removeClass('error');
+						      this.ui.create.removeClass('disabled');
+						    } else {
+						      this.ui.domain.parent().addClass('error').removeClass('success');
+						      this.ui.create.addClass('disabled');
+						    }
+						  },
+
+						  checkSearchProjects: function(e){
+						    if (this.isEnterKey(e)){
+						      this.searchProjects();
+						    }
+						  },
+
+						  checkSearchCollections: function(e){
+						    if (this.isEnterKey(e)){
+						      this.searchCollections();
+						    }
+						  },
+
+						  searchProjects: function(){
+						    var q = this.ui.projects.val();
+						    q = q ? "?q=" + q : "";
+						    
+						    window.location = "/projects" + q;
+						  },
+
+						  searchCollections: function(){
+						    var q = this.ui.collections.val();
+						    q = q ? "?q=" + q : "";
+
+						    window.location = "/collections" + q;
+						  },
+
+						  createCollections: function(){
+						    window.location = "/dashboards";
+						  },
+
+						  //--------------------------------------
+						  //+ PRIVATE AND PROTECTED METHODS
+						  //--------------------------------------
+
+						  isEnterKey: function(e){
+						    var key = e.keyCode || e.which;
+						    return (key === 13);
+						  }
+
+						});
+					},
+					"templates": {
+						"home.hbs.js": function (exports, module, require) {
+							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+							  this.compilerInfo = [4,'>= 1.0.0'];
+							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+							  var buffer = "", stack1, options, self=this, functionType="function", blockHelperMissing=helpers.blockHelperMissing;
+
+							function program1(depth0,data) {
+							  
+							  
+							  return "\n        <form action=\"/dashboard/create\" id=\"create-dashboard\" method=\"post\" name=\"create-dashboard\">\n          <p class=\"control-group\">\n            <input class=\"input-xlarge\" id=\"domain\" maxlength=\"10\" name=\"domain\" \n              placeholder=\"Hackathon domain Name (5-10 chars)\" type=\"text\">\n            <label>(5-10 lowercase letters/numbers)</label>\n          </p>\n\n          <p>\n            <input class=\"btn btn-large btn-custom disabled\" type=\"submit\" value=\"Create a Dashboard\">\n          </p>\n        </form>\n        ";
+							  }
+
+							function program3(depth0,data) {
+							  
+							  
+							  return "\n        <p>\n          <a class=\"btn btn-large btn-custom\" href=\"/login\">Log in to create a Hackathon</a>\n        </p>\n        ";
+							  }
+
+							  buffer += "\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n      \n    <section class=\"brand\">\n      <header>\n        <h1><a href=\"#\">HackDash</a></h1>\n      </header>\n\n      <div class=\"content\">\n        <h2>Ideas for a hackathon</h2>\n        <p>Upload your project. Add colaborators. Inform status. Share your app.</p>\n\n        ";
+							  options = {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data};
+							  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
+							  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += "\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <div class=\"span6\">\n      <section class=\"block\">\n        <header>\n          <h3>Find Projects</h3>\n        </header>\n\n        <div class=\"content span12\" style=\"text-align: center;\">\n          <p class=\"control-group\">\n            <input class=\"input-large search-box\" id=\"search-projects\"\n              placeholder=\"name or description\" type=\"text\">\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"search-projects-btn\">Search</button>\n          </p>\n        </div>\n      </section>\n    </div>\n\n    <div class=\"span6\">\n      <section class=\"block\">\n        <header>\n          <h3>Find Collections</h3>\n        </header>\n\n        <div class=\"content span12\" style=\"text-align: center;\">\n          <p class=\"control-group\">\n            <input class=\"input-large search-box\" id=\"search-collections\"\n              placeholder=\"name or description\" type=\"text\">\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"search-collections-btn\">Search</button>\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"create-collections-btn\">Create</button>\n          </p>\n        </div>\n      </section>\n    </div>\n\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>About</h3>\n      </header>\n\n      <div class=\"content span11\">\n        <p>The HackDash was born by accident and by a need.\n        We were looking for platform to track ideas through\n        hackathons in the line to the Hacks/Hackers Media\n        Party organized by @HacksHackersBA where hackers\n        and journalists share ideas. We spread the idea\n        through Twitter and that was the context of the\n        HackDash born. @blejman had an idea and\n        @danzajdband was interested in implement that idea.\n        So we started building the app hoping we can get to\n        the Buenos Aires media party with something that\n        doesn't suck. The Media Party Hackathon day came\n        followed by a grateful surprise. Not only the\n        people liked the HackDash implementation but a\n        couple of coders added the improvement of the\n        HackDash as a Hackaton project. After the Media\n        Party we realized that this small app is filling a\n        real need. The Dashboard has been used now in\n        several ways like Node.js Argentina meetup,\n        HacksHackersBA, La Nación DataFest and\n        HackasHackersCL (using it as a Wordpress theme).\n        Now, the HackDash will be an standard for\n        hackathons through the PinLatAm program, for news\n        innovation in Latin America. Create your own\n        hackathon.</p>\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>Why Hackdash?</h3>\n      </header>\n\n      <div class=\"content\">\n        <div class=\"row-fluid\">\n          <div class=\"span10 offset1 brand-why\">\n            <div class=\"span3\">\n              <div class=\"icon quick\"></div>\n              <h5>Quick and Easy</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon nerds\"></div>\n              <h5>For Nerds</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon fast\"></div>\n              <h5>Fast</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon geeks\"></div>\n              <h5>Love &amp; Geeks</h5>\n            </div>\n          </div>\n        </div>\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>Partners</h3>\n      </header>\n\n      <div class=\"content\">\n        <div class=\"row-fluid\">\n          <div class=\"span10 offset2 partners\">\n            <div class=\"span5 hhba\"></div>\n            <div class=\"span5 nxtp\"></div>\n          </div>\n        </div>\n      </div>\n    </section>\n  </div>\n</div>\n";
 							  return buffer;
 							  })
 							;

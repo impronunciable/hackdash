@@ -13,6 +13,7 @@ var Dashboard = require("./models/Dashboard")
   , Header = require("./views/Header")
   , Footer = require("./views/Footer")
 
+  , HomeLayout = require("./views/Home")
   , LoginView = require("./views/Login")
   , ProfileView = require("./views/Profile")
   , ProjectFullView = require("./views/Project/Full")
@@ -24,7 +25,7 @@ var Dashboard = require("./models/Dashboard")
 module.exports = Backbone.Marionette.AppRouter.extend({
   
   routes : {
-      "" : "showDashboard"
+      "" : "index"
     
     , "login" : "showLogin"
 
@@ -42,6 +43,30 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     , "users/:user_id" : "showProfile"
   },
 
+  index: function(){
+    if (hackdash.subdomain){
+      this.showDashboard();
+    }
+    else {
+      this.showHome();
+    }
+  },
+
+  removeHomeLayout: function(){
+    $('body').removeClass("homepage");
+    $('header').add('footer').show();
+    $('#page').addClass('container');
+  },
+
+  showHome: function(){
+    $('body').addClass("homepage");
+    $('header').add('footer').hide();
+    $('#page').removeClass('container');
+
+    var app = window.hackdash.app;
+    app.main.show(new HomeLayout());
+  },
+
   showLogin: function(){
     var providers = window.hackdash.providers;
     var app = window.hackdash.app;
@@ -52,6 +77,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showDashboard: function() {
+    this.removeHomeLayout();
 
     var app = window.hackdash.app;
     app.type = "dashboard";
@@ -86,7 +112,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showProjects: function() {
-
+    this.removeHomeLayout();
+    
     var app = window.hackdash.app;
     app.type = "isearch";
 
@@ -108,6 +135,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showProjectCreate: function(){
+    this.removeHomeLayout();
+    
     var app = window.hackdash.app;
     app.type = "project";
 
@@ -121,6 +150,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showProjectEdit: function(pid){
+    this.removeHomeLayout();
+    
     var app = window.hackdash.app;
     app.type = "project";
 
@@ -136,6 +167,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showProjectFull: function(pid){
+    this.removeHomeLayout();
+    
     var app = window.hackdash.app;
     app.type = "project";
 
@@ -151,6 +184,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showCollections: function() {
+    this.removeHomeLayout();
+    
     var app = window.hackdash.app;
     app.type = "collections";
 
@@ -171,6 +206,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showCollection: function(collectionId) {
+    this.removeHomeLayout();
+    
     var app = window.hackdash.app;
     app.type = "collection";
 
@@ -201,6 +238,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },  
 
   showProfile: function(userId) {
+    this.removeHomeLayout();
+    
     var app = window.hackdash.app;
     app.type = "profile";
 
@@ -227,6 +266,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showDashboards: function() {
+    this.removeHomeLayout();
+    
     var app = window.hackdash.app;
     app.type = "dashboards";
 

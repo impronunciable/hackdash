@@ -1,0 +1,164 @@
+
+<div class="row-fluid">
+  <div class="span12">
+      
+    <section class="brand">
+      <header>
+        <h1><a href="#">HackDash</a></h1>
+      </header>
+
+      <div class="content">
+        <h2>Ideas for a hackathon</h2>
+        <p>Upload your project. Add colaborators. Inform status. Share your app.</p>
+
+        {{#isLoggedIn}}
+        <form action="/dashboard/create" id="create-dashboard" method="post" name="create-dashboard">
+          <p class="control-group">
+            <input class="input-xlarge" id="domain" maxlength="10" name="domain" 
+              placeholder="Hackathon domain Name (5-10 chars)" type="text">
+            <label>(5-10 lowercase letters/numbers)</label>
+          </p>
+
+          <p>
+            <input class="btn btn-large btn-custom disabled" type="submit" value="Create a Dashboard">
+          </p>
+        </form>
+        {{else}}
+        <p>
+          <a class="btn btn-large btn-custom" href="/login">Log in to create a Hackathon</a>
+        </p>
+        {{/isLoggedIn}}
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span12">
+    <div class="span6">
+      <section class="block">
+        <header>
+          <h3>Find Projects</h3>
+        </header>
+
+        <div class="content span12" style="text-align: center;">
+          <p class="control-group">
+            <input class="input-large search-box" id="search-projects"
+              placeholder="name or description" type="text">
+            <button class="btn btn-large btn-custom disabled search-btn" id="search-projects-btn">Search</button>
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <div class="span6">
+      <section class="block">
+        <header>
+          <h3>Find Collections</h3>
+        </header>
+
+        <div class="content span12" style="text-align: center;">
+          <p class="control-group">
+            <input class="input-large search-box" id="search-collections"
+              placeholder="name or description" type="text">
+            <button class="btn btn-large btn-custom disabled search-btn" id="search-collections-btn">Search</button>
+            <button class="btn btn-large btn-custom disabled search-btn" id="create-collections-btn">Create</button>
+          </p>
+        </div>
+      </section>
+    </div>
+
+  </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span12">
+    <section class="block">
+      <header>
+        <h3>About</h3>
+      </header>
+
+      <div class="content span11">
+        <p>The HackDash was born by accident and by a need.
+        We were looking for platform to track ideas through
+        hackathons in the line to the Hacks/Hackers Media
+        Party organized by @HacksHackersBA where hackers
+        and journalists share ideas. We spread the idea
+        through Twitter and that was the context of the
+        HackDash born. @blejman had an idea and
+        @danzajdband was interested in implement that idea.
+        So we started building the app hoping we can get to
+        the Buenos Aires media party with something that
+        doesn't suck. The Media Party Hackathon day came
+        followed by a grateful surprise. Not only the
+        people liked the HackDash implementation but a
+        couple of coders added the improvement of the
+        HackDash as a Hackaton project. After the Media
+        Party we realized that this small app is filling a
+        real need. The Dashboard has been used now in
+        several ways like Node.js Argentina meetup,
+        HacksHackersBA, La Nación DataFest and
+        HackasHackersCL (using it as a Wordpress theme).
+        Now, the HackDash will be an standard for
+        hackathons through the PinLatAm program, for news
+        innovation in Latin America. Create your own
+        hackathon.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span12">
+    <section class="block">
+      <header>
+        <h3>Why Hackdash?</h3>
+      </header>
+
+      <div class="content">
+        <div class="row-fluid">
+          <div class="span10 offset1 brand-why">
+            <div class="span3">
+              <div class="icon quick"></div>
+              <h5>Quick and Easy</h5>
+            </div>
+
+            <div class="span3">
+              <div class="icon nerds"></div>
+              <h5>For Nerds</h5>
+            </div>
+
+            <div class="span3">
+              <div class="icon fast"></div>
+              <h5>Fast</h5>
+            </div>
+
+            <div class="span3">
+              <div class="icon geeks"></div>
+              <h5>Love &amp; Geeks</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span12">
+    <section class="block">
+      <header>
+        <h3>Partners</h3>
+      </header>
+
+      <div class="content">
+        <div class="row-fluid">
+          <div class="span10 offset2 partners">
+            <div class="span5 hhba"></div>
+            <div class="span5 nxtp"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
