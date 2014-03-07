@@ -369,6 +369,7 @@
 
 				    app.collection = new Collection({ _id: collectionId });
 				    
+				    var self = this;
 				    app.collection
 				      .fetch({ parse: true })
 				      .done(function(){
@@ -383,7 +384,7 @@
 				          collection: app.collection.get("dashboards")
 				        }));
 
-				        var fdata = this.getSearchQuery();
+				        var fdata = self.getSearchQuery();
 				        fdata.parse = true;
 
 				        app.collection.get("dashboards").fetch(fdata);
