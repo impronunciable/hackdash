@@ -43,17 +43,18 @@ module.exports = Backbone.Marionette.Layout.extend({
     var type = window.hackdash.app.type;
     
     var self = this;
-    function showSearch(){
+    function showSearch(placeholder){
       self.search.show(new Search({
         showSort: type === "dashboard",
+        placeholder: placeholder,
         collection: self.collection
       }));
     }
 
     switch(type){
       case "isearch":
-        showSearch();
-        this.ui.pageTitle.text("Search Projects");
+        showSearch("Type here to search projects");
+        this.ui.pageTitle.text("Projects");
         break;
 
       case "dashboards":
@@ -72,7 +73,7 @@ module.exports = Backbone.Marionette.Layout.extend({
         break;
 
       case "collections":
-        showSearch();
+        showSearch("Type here to search collections");
         this.page.show(new CollectionsHeader());
         break;
 

@@ -27,16 +27,16 @@ font-style: normal;
 }
 
 body>header { 
-  padding: 40px 0 60px 0; 
+  padding: 30px 0 30px 0;
   background: #1e1d22;
-  margin:0 0 50px 0;
+  margin: 0 0 30px 0;
   text-align: center;
 }
 
 body>header h1 {
   margin: 0;
   color: #FFF;
-  font-size: 70px;
+  font-size: 60px;
   line-height: 1.3em;
 }
 
@@ -71,6 +71,10 @@ body>header .btn {
   background: transparent; color:#FFF; text-shadow: none;
   padding: 0.8em 1.2em;font-weight: bold;font-size: 26px;
   font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body>header .btn.sort {
+  padding: 0.8em 0.8em;
 }
 
 body>header .btn:hover {
@@ -810,7 +814,6 @@ vertical-align: top;
 footer { 
   padding: 18px 0 17px 0;
   background: #000;
-  margin: 100px 0 0 0;
 }
 
 footer h4 {
@@ -873,6 +876,25 @@ footer h4 {
 
 .my-collections-modal ul>li label {
   font-size: 22px;
+}
+
+.my-collections-modal ul.events {
+  height: 15px;
+}
+
+.my-collections-modal ul.events>li {
+  background: none;
+  border: none;
+  margin: 0;
+  font-size: 16px;
+  cursor: default;
+  padding: 5px 0;
+  color: rgb(122, 122, 122);
+  float: right;
+}
+
+.my-collections-modal ul.events>li span {
+  font-weight: bold;
 }
 
 .my-collections-modal .btn-add {

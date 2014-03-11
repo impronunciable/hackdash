@@ -1,15 +1,12 @@
 <i class="icon-large icon-search"></i>
-<input id="searchInput" type="text" class="search-query input-large" placeholder="Type here"/>
+<input id="searchInput" type="text" class="search-query input-large" placeholder="{{placeholder}}"/>
 
 {{#isDashboardView}}
 <div class="orderby">
   <div class="btn-group">
-    <button data-option-value="name" class="sort btn">Order by name</button>
-    <button data-option-value="date" class="sort btn">Order by date</button>
-  </div>
-  <br/>
-  <div class="btn-group">
-    <button data-option-value="showcase" class="sort btn" style="margin-top: 5px;">Order for Showcase</button>
+    <button data-option-value="name" class="sort btn">By Name</button>
+    <button data-option-value="date" class="sort btn">By Date</button>
+    <button data-option-value="showcase" class="sort btn">Showcase</button>
   </div>
 </div>
 {{/isDashboardView}}

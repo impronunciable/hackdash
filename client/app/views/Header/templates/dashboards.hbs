@@ -1,7 +1,10 @@
-<h1>Search Dashboards</h1>
+<h1>Create collections</h1>
+<p class="lead">
+  Search through dashboards and add them to Collections
+</p>
 
 {{#isLoggedIn}}
-  
+  <a class="btn btn-large" href="/collections">View Collections</a>
 {{else}}
-  <a class="btn btn-large" href="/login">Login to manage collections</a>
+  <a class="btn btn-large" href="/login">Login to create collections</a>
 {{/isLoggedIn}}

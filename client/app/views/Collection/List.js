@@ -19,7 +19,8 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
   ui: {
     "title": "input[name=title]",
-    "description": "input[name=description]"
+    "description": "input[name=description]",
+    "events": ".events"
   },
 
   events: {
@@ -41,6 +42,14 @@ module.exports = Backbone.Marionette.CompositeView.extend({
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
 
+  addedCollection: function(title){
+    this.showAction("add", title);
+  },
+
+  removedCollection: function(title){
+    this.showAction("remove", title);
+  },
+
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
@@ -60,5 +69,22 @@ module.exports = Backbone.Marionette.CompositeView.extend({
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
+
+  timer: null,
+  showAction: function(type, title){
+    var msg = (type === 'add' ? ' has been added to ' : ' has been removed from ');
+    var dash = this.model.get("domain");
+
+    this.ui.events.empty();
+    window.clearTimeout(this.timer);
+    
+    var li = $('<li><span>' + dash + '</span>' + msg + '<span>' + title + '</span></li>');
+    li.appendTo(this.ui.events);
+
+    var self = this;
+    this.timer = window.setTimeout(function(){
+      self.ui.events.empty();
+    }, 50000);
+  }
 
 });

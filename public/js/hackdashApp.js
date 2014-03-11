@@ -1042,7 +1042,8 @@
 
 						  ui: {
 						    "title": "input[name=title]",
-						    "description": "input[name=description]"
+						    "description": "input[name=description]",
+						    "events": ".events"
 						  },
 
 						  events: {
@@ -1064,6 +1065,14 @@
 						  //+ PUBLIC METHODS / GETTERS / SETTERS
 						  //--------------------------------------
 
+						  addedCollection: function(title){
+						    this.showAction("add", title);
+						  },
+
+						  removedCollection: function(title){
+						    this.showAction("remove", title);
+						  },
+
 						  //--------------------------------------
 						  //+ EVENT HANDLERS
 						  //--------------------------------------
@@ -1084,6 +1093,23 @@
 						  //+ PRIVATE AND PROTECTED METHODS
 						  //--------------------------------------
 
+						  timer: null,
+						  showAction: function(type, title){
+						    var msg = (type === 'add' ? ' has been added to ' : ' has been removed from ');
+						    var dash = this.model.get("domain");
+
+						    this.ui.events.empty();
+						    window.clearTimeout(this.timer);
+						    
+						    var li = $('<li><span>' + dash + '</span>' + msg + '<span>' + title + '</span></li>');
+						    li.appendTo(this.ui.events);
+
+						    var self = this;
+						    this.timer = window.setTimeout(function(){
+						      self.ui.events.empty();
+						    }, 50000);
+						  }
+
 						});
 					},
 					"ListItem.js": function (exports, module, require) {
@@ -1103,10 +1129,6 @@
 						  tagName: "li",
 						  template: template,
 
-						  events: {
-						    "click .view-collection": "viewCollection"
-						  },
-
 						  //--------------------------------------
 						  //+ INHERITED / OVERRIDES
 						  //--------------------------------------
@@ -1123,7 +1145,7 @@
 						      this.$el.removeClass('active'); 
 						    }
 
-						    this.$el.on("click", this.toggleDashboard.bind(this));
+						    this.$el.off("click").on("click", this.toggleDashboard.bind(this));
 						  },
 
 						  serializeData: function(){
@@ -1140,17 +1162,24 @@
 						  //+ EVENT HANDLERS
 						  //--------------------------------------
 
-						  viewCollection: function(e){
-						    e.stopPropagation();
+						  viewCollection: function(){
+						    this.$el.off("click");
 						    hackdash.app.modals.close();
 						  },
 
-						  toggleDashboard: function(){
+						  toggleDashboard: function(e){
+						    if ($(e.target).hasClass("view-collection")){
+						      this.viewCollection();
+						      return;
+						    }
+
 						    if (this.hasDashboard()){
 						      this.model.removeDashboard(this.dashboardId);
+						      hackdash.app.modals.currentView.removedCollection(this.model.get("title"));
 						    }
 						    else {
 						      this.model.addDashboard(this.dashboardId);
+						      hackdash.app.modals.currentView.addedCollection(this.model.get("title"));
 						    }
 
 						    this.render();
@@ -1243,10 +1272,15 @@
 							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 							  this.compilerInfo = [4,'>= 1.0.0'];
 							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-							  
+							  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-							  return "<div class=\"modal-header\">\n  <button type=\"button\" data-dismiss=\"modal\" aria-hidden=\"true\" class=\"close\">×</button>\n  <h3>My Collections</h3>\n</div>\n<div class=\"modal-body\">\n  <ul class=\"collections\"></ul>\n</div>\n<div class=\"modal-footer\">\n  <div class=\"row-fluid\">\n    <div class=\"span12\">\n      <div class=\"span10\">\n        <input type=\"text\" name=\"title\" placeholder=\"Enter Title\" class=\"input-medium pull-left\" style=\"margin-right: 10px;\">\n        <input type=\"text\" name=\"description\" placeholder=\"Enter Description\" class=\"input-medium pull-left\">\n        <input type=\"button\" class=\"btn primary btn-success pull-left btn-add\" value=\"Add\">\n      </div>\n      <div class=\"span2\">\n        <input type=\"button\" class=\"btn primary pull-right\" data-dismiss=\"modal\" value=\"Close\">\n      </div>\n    </div>\n  </div>\n</div>";
+							  buffer += "<div class=\"modal-header\">\n  <button type=\"button\" data-dismiss=\"modal\" aria-hidden=\"true\" class=\"close\">×</button>\n  <h3>My Collections: adding ";
+							  if (stack1 = helpers.domain) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0.domain; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "</h3>\n  <ul class=\"events\"></ul>\n</div>\n<div class=\"modal-body\">\n  <ul class=\"collections\"></ul>\n</div>\n<div class=\"modal-footer\">\n  <div class=\"row-fluid\">\n    <div class=\"span12\">\n      <div class=\"span10\">\n        <input type=\"text\" name=\"title\" placeholder=\"Enter Title\" class=\"input-medium pull-left\" style=\"margin-right: 10px;\">\n        <input type=\"text\" name=\"description\" placeholder=\"Enter Description\" class=\"input-medium pull-left\">\n        <input type=\"button\" class=\"btn primary btn-success pull-left btn-add\" value=\"Add\">\n      </div>\n      <div class=\"span2\">\n        <input type=\"button\" class=\"btn primary pull-right\" data-dismiss=\"modal\" value=\"Close\">\n      </div>\n    </div>\n  </div>\n</div>";
+							  return buffer;
 							  })
 							;
 						},
@@ -2004,6 +2038,7 @@
 						  initialize: function(options){
 						    this.showSort = (options && options.showSort) || false;
 						    this.collection = options && options.collection;
+						    this.placeholder = (options && options.placeholder) || "Type here";
 						  },
 
 						  onRender: function(){
@@ -2016,7 +2051,8 @@
 
 						  serializeData: function(){
 						    return {
-						      showSort: this.showSort
+						      showSort: this.showSort,
+						      placeholder: this.placeholder
 						    };
 						  },
 
@@ -2123,17 +2159,18 @@
 						    var type = window.hackdash.app.type;
 						    
 						    var self = this;
-						    function showSearch(){
+						    function showSearch(placeholder){
 						      self.search.show(new Search({
 						        showSort: type === "dashboard",
+						        placeholder: placeholder,
 						        collection: self.collection
 						      }));
 						    }
 
 						    switch(type){
 						      case "isearch":
-						        showSearch();
-						        this.ui.pageTitle.text("Search Projects");
+						        showSearch("Type here to search projects");
+						        this.ui.pageTitle.text("Projects");
 						        break;
 
 						      case "dashboards":
@@ -2152,7 +2189,7 @@
 						        break;
 
 						      case "collections":
-						        showSearch();
+						        showSearch("Type here to search collections");
 						        this.page.show(new CollectionsHeader());
 						        break;
 
@@ -2271,7 +2308,7 @@
 							  return "\n  <a class=\"btn btn-large\" href=\"/login\">Login to manage collections</a>\n";
 							  }
 
-							  buffer += "<h1>Search Collections</h1>\n\n";
+							  buffer += "<h1>Collections</h1>\n\n";
 							  options = {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data};
 							  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
 							  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
@@ -2457,16 +2494,16 @@
 							function program1(depth0,data) {
 							  
 							  
-							  return "\n  \n";
+							  return "\n  <a class=\"btn btn-large\" href=\"/collections\">View Collections</a>\n";
 							  }
 
 							function program3(depth0,data) {
 							  
 							  
-							  return "\n  <a class=\"btn btn-large\" href=\"/login\">Login to manage collections</a>\n";
+							  return "\n  <a class=\"btn btn-large\" href=\"/login\">Login to create collections</a>\n";
 							  }
 
-							  buffer += "<h1>Search Dashboards</h1>\n\n";
+							  buffer += "<h1>Create collections</h1>\n<p class=\"lead\">\n  Search through dashboards and add them to Collections\n</p>\n\n";
 							  options = {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data};
 							  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
 							  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
@@ -2512,15 +2549,19 @@
 							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 							  this.compilerInfo = [4,'>= 1.0.0'];
 							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-							  var buffer = "", stack1, options, self=this, functionType="function", blockHelperMissing=helpers.blockHelperMissing;
+							  var buffer = "", stack1, options, functionType="function", escapeExpression=this.escapeExpression, self=this, blockHelperMissing=helpers.blockHelperMissing;
 
 							function program1(depth0,data) {
 							  
 							  
-							  return "\n<div class=\"orderby\">\n  <div class=\"btn-group\">\n    <button data-option-value=\"name\" class=\"sort btn\">Order by name</button>\n    <button data-option-value=\"date\" class=\"sort btn\">Order by date</button>\n  </div>\n  <br/>\n  <div class=\"btn-group\">\n    <button data-option-value=\"showcase\" class=\"sort btn\" style=\"margin-top: 5px;\">Order for Showcase</button>\n  </div>\n</div>\n";
+							  return "\n<div class=\"orderby\">\n  <div class=\"btn-group\">\n    <button data-option-value=\"name\" class=\"sort btn\">By Name</button>\n    <button data-option-value=\"date\" class=\"sort btn\">By Date</button>\n    <button data-option-value=\"showcase\" class=\"sort btn\">Showcase</button>\n  </div>\n</div>\n";
 							  }
 
-							  buffer += "<i class=\"icon-large icon-search\"></i>\n<input id=\"searchInput\" type=\"text\" class=\"search-query input-large\" placeholder=\"Type here\"/>\n\n";
+							  buffer += "<i class=\"icon-large icon-search\"></i>\n<input id=\"searchInput\" type=\"text\" class=\"search-query input-large\" placeholder=\"";
+							  if (stack1 = helpers.placeholder) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0.placeholder; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "\"/>\n\n";
 							  options = {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data};
 							  if (stack1 = helpers.isDashboardView) { stack1 = stack1.call(depth0, options); }
 							  else { stack1 = depth0.isDashboardView; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
@@ -2703,7 +2744,7 @@
 							  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += "\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <div class=\"span6\">\n      <section class=\"block\">\n        <header>\n          <h3>Find Projects</h3>\n        </header>\n\n        <div class=\"content span12\">\n          <p class=\"control-group\">\n            <input class=\"input-large search-box\" id=\"search-projects\"\n              placeholder=\"name or description\" type=\"text\">\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"search-projects-btn\">Search</button>\n          </p>\n        </div>\n      </section>\n    </div>\n\n    <div class=\"span6\">\n      <section class=\"block\">\n        <header>\n          <h3>Find Collections</h3>\n        </header>\n\n        <div class=\"content span12\">\n          <p class=\"control-group\">\n            <input class=\"input-large search-box\" id=\"search-collections\"\n              placeholder=\"name or description\" type=\"text\">\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"search-collections-btn\">Search</button>\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"create-collections-btn\">Create</button>\n          </p>\n        </div>\n      </section>\n    </div>\n\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>About</h3>\n      </header>\n\n      <div class=\"content span11\">\n        <p>The HackDash was born by accident and by a need.\n        We were looking for platform to track ideas through\n        hackathons in the line to the Hacks/Hackers Media\n        Party organized by @HacksHackersBA where hackers\n        and journalists share ideas. We spread the idea\n        through Twitter and that was the context of the\n        HackDash born. @blejman had an idea and\n        @danzajdband was interested in implement that idea.\n        So we started building the app hoping we can get to\n        the Buenos Aires media party with something that\n        doesn't suck. The Media Party Hackathon day came\n        followed by a grateful surprise. Not only the\n        people liked the HackDash implementation but a\n        couple of coders added the improvement of the\n        HackDash as a Hackaton project. After the Media\n        Party we realized that this small app is filling a\n        real need. The Dashboard has been used now in\n        several ways like Node.js Argentina meetup,\n        HacksHackersBA, La Nación DataFest and\n        HackasHackersCL (using it as a Wordpress theme).\n        Now, the HackDash will be an standard for\n        hackathons through the PinLatAm program, for news\n        innovation in Latin America. Create your own\n        hackathon.</p>\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>Why Hackdash?</h3>\n      </header>\n\n      <div class=\"content\">\n        <div class=\"row-fluid\">\n          <div class=\"span10 offset1 brand-why\">\n            <div class=\"span3\">\n              <div class=\"icon quick\"></div>\n              <h5>Quick and Easy</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon nerds\"></div>\n              <h5>For Nerds</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon fast\"></div>\n              <h5>Fast</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon geeks\"></div>\n              <h5>Love &amp; Geeks</h5>\n            </div>\n          </div>\n        </div>\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>Partners</h3>\n      </header>\n\n      <div class=\"content\">\n        <div class=\"row-fluid\">\n          <div class=\"span10 offset2 partners\">\n            <div class=\"span5 hhba\"></div>\n            <div class=\"span5 nxtp\"></div>\n          </div>\n        </div>\n      </div>\n    </section>\n  </div>\n</div>\n";
+							  buffer += "\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <div class=\"span6\">\n      <section class=\"block\">\n        <header>\n          <h3>Find Projects</h3>\n          <p>Search hackathon projects all over the world in one place.</p>\n        </header>\n\n        <div class=\"content span12\">\n          <p class=\"control-group\">\n            <input class=\"input-large search-box\" id=\"search-projects\"\n              placeholder=\"name or description\" type=\"text\">\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"search-projects-btn\">Search</button>\n          </p>\n        </div>\n      </section>\n    </div>\n\n    <div class=\"span6\">\n      <section class=\"block\">\n        <header>\n          <h3>Find Collections</h3>\n          <p>Search and organize groups of dashboards with \"Collections\".</p>\n        </header>\n\n        <div class=\"content span12\">\n          <p class=\"control-group\">\n            <input class=\"input-large search-box\" id=\"search-collections\"\n              placeholder=\"name or description\" type=\"text\">\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"search-collections-btn\">Search</button>\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"create-collections-btn\">Create</button>\n          </p>\n        </div>\n      </section>\n    </div>\n\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>About</h3>\n      </header>\n\n      <div class=\"content span11\">\n        <p>The HackDash was born by accident and by a need.\n        We were looking for platform to track ideas through\n        hackathons in the line to the Hacks/Hackers Media\n        Party organized by @HacksHackersBA where hackers\n        and journalists share ideas. We spread the idea\n        through Twitter and that was the context of the\n        HackDash born. @blejman had an idea and\n        @danzajdband was interested in implement that idea.\n        So we started building the app hoping we can get to\n        the Buenos Aires media party with something that\n        doesn't suck. The Media Party Hackathon day came\n        followed by a grateful surprise. Not only the\n        people liked the HackDash implementation but a\n        couple of coders added the improvement of the\n        HackDash as a Hackaton project. After the Media\n        Party we realized that this small app is filling a\n        real need. The Dashboard has been used now in\n        several ways like Node.js Argentina meetup,\n        HacksHackersBA, La Nación DataFest and\n        HackasHackersCL (using it as a Wordpress theme).\n        Now, the HackDash will be an standard for\n        hackathons through the PinLatAm program, for news\n        innovation in Latin America. Create your own\n        hackathon.</p>\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>Why Hackdash?</h3>\n      </header>\n\n      <div class=\"content\">\n        <div class=\"row-fluid\">\n          <div class=\"span10 offset1 brand-why\">\n            <div class=\"span3\">\n              <div class=\"icon quick\"></div>\n              <h5>Quick and Easy</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon nerds\"></div>\n              <h5>For Nerds</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon fast\"></div>\n              <h5>Fast</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon geeks\"></div>\n              <h5>Love &amp; Geeks</h5>\n            </div>\n          </div>\n        </div>\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>Partners</h3>\n      </header>\n\n      <div class=\"content\">\n        <div class=\"row-fluid\">\n          <div class=\"span10 offset2 partners\">\n            <div class=\"span5 hhba\"></div>\n            <div class=\"span5 nxtp\"></div>\n          </div>\n        </div>\n      </div>\n    </section>\n  </div>\n</div>\n";
 							  return buffer;
 							  })
 							;
