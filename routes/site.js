@@ -35,6 +35,11 @@ module.exports = function(app) {
     render('hackdashApp')
   ];
 
+  //TODO: hack to remove "checkProfile" and avoid redirect loop
+  // when user has no email set
+  var hackdashProfileStack = hackdashFullStack.slice(0);
+  hackdashProfileStack.splice(3, 1);
+
   // home page if no subdomain
   // dashboard if subdomain
   app.get('/', hackdashFullStack);
@@ -66,7 +71,7 @@ module.exports = function(app) {
   app.get('/collections/:cid', hackdashFullStack);
 
   // User Profile's View
-  app.get('/users/profile', hackdashFullStack);
+  app.get('/users/profile', hackdashProfileStack);
 
   // Users Profile's card and entities
   app.get('/users/:user_id', hackdashFullStack);
