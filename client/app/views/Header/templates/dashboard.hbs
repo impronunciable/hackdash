@@ -58,12 +58,6 @@
     {{/if}}
 
     {{#if isAdmin}}
-    <div class="tooltips dashboard-switcher"
-      data-placement="top" data-original-title="Toggle creation of projects on this Dashboard">
-      
-      <input type="checkbox" {{#if open}}checked{{/if}} class="switch-large"
-        data-off-label="CLOSE" data-on-label="OPEN">
-    </div>
 
     <div class="tooltips showcase-switcher-ctn"
         data-placement="top" data-original-title="Toggle sort edition of projects for showcase">
@@ -73,7 +67,6 @@
       </div>
     </div>
 
-    <a class="btn export" href="/api/v2/csv" target="_blank" data-bypass>Export CSV</a>
     {{/if}}
 
   {{else}}

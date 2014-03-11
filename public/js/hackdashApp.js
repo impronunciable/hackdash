@@ -1620,23 +1620,59 @@
 						    "admins": ".admins-ctn"
 						  },
 
+						  ui: {
+						    "switcher": ".dashboard-btn"
+						  },
+
+						  events: {
+						    "click .dashboard-btn": "onClickSwitcher"
+						  },
+
+						  templateHelpers: {
+						    isAdmin: function(){
+						      var user = hackdash.user;
+						      return user && user.admin_in.indexOf(this.domain) >= 0 || false;
+						    }
+						  },
+
+						  modelEvents: {
+						    "change": "render"
+						  },
+
 						  //--------------------------------------
 						  //+ INHERITED / OVERRIDES
 						  //--------------------------------------
+
+						  initialize: function(){
+						    var isDashboard = (hackdash.app.type === "dashboard" ? true : false);
+
+						    if (isDashboard){
+						      this.model.get("admins").fetch();
+						    } 
+						  },
 
 						  onRender: function(){
 						    var isDashboard = (hackdash.app.type === "dashboard" ? true : false);
 						    
 						    if (isDashboard){
-
 						      this.admins.show(new Users({
 						        collection: this.model.get("admins")
 						      }));
-
-						      this.model.get("admins").fetch();
 						    }
 
 						    $('.tooltips', this.$el).tooltip({});
+						  },
+
+						  serializeData: function(){
+						    var msg = "This Dashboard is open: click to close";
+
+						    if (!this.model.get("open")) {
+						      msg = "This Dashboard is closed: click to reopen";
+						    }
+
+						    return _.extend({
+						      switcherMsg: msg
+						    }, this.model.toJSON());
 						  },
 
 						  //--------------------------------------
@@ -1646,6 +1682,19 @@
 						  //--------------------------------------
 						  //+ EVENT HANDLERS
 						  //--------------------------------------
+
+						  onClickSwitcher:function(){
+						    var open = true;
+
+						    if (this.ui.switcher.hasClass("dash-open")){
+						      open = false;
+						    }
+						    
+						    $('.tooltips', this.$el).tooltip('hide');
+
+						    this.model.set({ "open": open }, { trigger: false });
+						    this.model.save({ wait: true });
+						  },
 
 						  //--------------------------------------
 						  //+ PRIVATE AND PROTECTED METHODS
@@ -1659,10 +1708,52 @@
 							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 							  this.compilerInfo = [4,'>= 1.0.0'];
 							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+							  var buffer = "", stack1, self=this, functionType="function", escapeExpression=this.escapeExpression;
+
+							function program1(depth0,data) {
 							  
+							  var buffer = "", stack1;
+							  buffer += "\n<a class=\"tooltips btn dashboard-btn ";
+							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data});
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += " pull-right\"\n  data-placement=\"top\" data-original-title=\"";
+							  if (stack1 = helpers.switcherMsg) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0.switcherMsg; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "\">\n  ";
+							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data});
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  buffer += "\n</a>\n\n<a class=\"btn pull-right\" href=\"/api/v2/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n";
+							  return buffer;
+							  }
+							function program2(depth0,data) {
+							  
+							  
+							  return "dash-open";
+							  }
 
+							function program4(depth0,data) {
+							  
+							  
+							  return "dash-close";
+							  }
 
-							  return "<h4>Admins</h4>\n<div class=\"well-content admins-ctn\"></div>";
+							function program6(depth0,data) {
+							  
+							  
+							  return "Close Dashboard";
+							  }
+
+							function program8(depth0,data) {
+							  
+							  
+							  return "Open Dashboard";
+							  }
+
+							  buffer += "<h4>Admins</h4>\n<div class=\"well-content admins-ctn\"></div>\n\n";
+							  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
+							  return buffer;
 							  })
 							;
 						},
@@ -1848,7 +1939,6 @@
 						    "title": "#dashboard-title",
 						    "description": "#dashboard-description",
 						    "link": "#dashboard-link",
-						    "switcher": ".dashboard-switcher input",
 						    "showcase": ".showcase-switcher input"
 						  },
 
@@ -1948,13 +2038,6 @@
 
 						  initSwitcher: function(){
 						    var self = this;
-
-						    this.ui.switcher
-						      .bootstrapSwitch()
-						      .on('switch-change', function (e, data) {
-						        self.model.set({ "open": data.value}, { trigger: false });
-						        self.model.save({ wait: true });
-						      });
 
 						    this.ui.showcase
 						      .bootstrapSwitch()
@@ -2379,7 +2462,7 @@
 							  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.program(10, program10, data),fn:self.program(8, program8, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
 							  buffer += "\n\n  ";
-							  options = {hash:{},inverse:self.program(20, program20, data),fn:self.program(12, program12, data),data:data};
+							  options = {hash:{},inverse:self.program(19, program19, data),fn:self.program(12, program12, data),data:data};
 							  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
 							  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
@@ -2445,35 +2528,26 @@
 
 							function program17(depth0,data) {
 							  
-							  var buffer = "", stack1;
-							  buffer += "\n    <div class=\"tooltips dashboard-switcher\"\n      data-placement=\"top\" data-original-title=\"Toggle creation of projects on this Dashboard\">\n      \n      <input type=\"checkbox\" ";
-							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
-							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += " class=\"switch-large\"\n        data-off-label=\"CLOSE\" data-on-label=\"OPEN\">\n    </div>\n\n    <div class=\"tooltips showcase-switcher-ctn\"\n        data-placement=\"top\" data-original-title=\"Toggle sort edition of projects for showcase\">\n      <h5>Edit Showcase mode</h5>\n      <div class=\"showcase-switcher\">      \n        <input type=\"checkbox\" class=\"switch-large\" data-off-label=\"OFF\" data-on-label=\"ON\">\n      </div>\n    </div>\n\n    <a class=\"btn export\" href=\"/api/v2/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n    ";
-							  return buffer;
-							  }
-							function program18(depth0,data) {
 							  
-							  
-							  return "checked";
+							  return "\n\n    <div class=\"tooltips showcase-switcher-ctn\"\n        data-placement=\"top\" data-original-title=\"Toggle sort edition of projects for showcase\">\n      <h5>Edit Showcase mode</h5>\n      <div class=\"showcase-switcher\">      \n        <input type=\"checkbox\" class=\"switch-large\" data-off-label=\"OFF\" data-on-label=\"ON\">\n      </div>\n    </div>\n\n    ";
 							  }
 
-							function program20(depth0,data) {
+							function program19(depth0,data) {
 							  
 							  var buffer = "", stack1;
 							  buffer += "\n\n    ";
-							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(23, program23, data),fn:self.program(21, program21, data),data:data});
+							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(22, program22, data),fn:self.program(20, program20, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
 							  buffer += "\n\n  ";
 							  return buffer;
 							  }
-							function program21(depth0,data) {
+							function program20(depth0,data) {
 							  
 							  
 							  return "\n    <a class=\"btn btn-large\" href=\"/login\">Login to create a project</a>\n    ";
 							  }
 
-							function program23(depth0,data) {
+							function program22(depth0,data) {
 							  
 							  
 							  return "\n    <a class=\"btn btn-large\" href=\"/login\">Login to join/follow projects</a>\n    ";

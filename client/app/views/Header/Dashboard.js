@@ -18,7 +18,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "title": "#dashboard-title",
     "description": "#dashboard-description",
     "link": "#dashboard-link",
-    "switcher": ".dashboard-switcher input",
     "showcase": ".showcase-switcher input"
   },
 
@@ -118,13 +117,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   initSwitcher: function(){
     var self = this;
-
-    this.ui.switcher
-      .bootstrapSwitch()
-      .on('switch-change', function (e, data) {
-        self.model.set({ "open": data.value}, { trigger: false });
-        self.model.save({ wait: true });
-      });
 
     this.ui.showcase
       .bootstrapSwitch()

@@ -16,23 +16,59 @@ module.exports = Backbone.Marionette.Layout.extend({
     "admins": ".admins-ctn"
   },
 
+  ui: {
+    "switcher": ".dashboard-btn"
+  },
+
+  events: {
+    "click .dashboard-btn": "onClickSwitcher"
+  },
+
+  templateHelpers: {
+    isAdmin: function(){
+      var user = hackdash.user;
+      return user && user.admin_in.indexOf(this.domain) >= 0 || false;
+    }
+  },
+
+  modelEvents: {
+    "change": "render"
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
+
+  initialize: function(){
+    var isDashboard = (hackdash.app.type === "dashboard" ? true : false);
+
+    if (isDashboard){
+      this.model.get("admins").fetch();
+    } 
+  },
 
   onRender: function(){
     var isDashboard = (hackdash.app.type === "dashboard" ? true : false);
     
     if (isDashboard){
-
       this.admins.show(new Users({
         collection: this.model.get("admins")
       }));
-
-      this.model.get("admins").fetch();
     }
 
     $('.tooltips', this.$el).tooltip({});
+  },
+
+  serializeData: function(){
+    var msg = "This Dashboard is open: click to close";
+
+    if (!this.model.get("open")) {
+      msg = "This Dashboard is closed: click to reopen";
+    }
+
+    return _.extend({
+      switcherMsg: msg
+    }, this.model.toJSON());
   },
 
   //--------------------------------------
@@ -42,6 +78,19 @@ module.exports = Backbone.Marionette.Layout.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  onClickSwitcher:function(){
+    var open = true;
+
+    if (this.ui.switcher.hasClass("dash-open")){
+      open = false;
+    }
+    
+    $('.tooltips', this.$el).tooltip('hide');
+
+    this.model.set({ "open": open }, { trigger: false });
+    this.model.save({ wait: true });
+  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS

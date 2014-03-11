@@ -1,2 +1,11 @@
 <h4>Admins</h4>
 <div class="well-content admins-ctn"></div>
+
+{{#if isAdmin}}
+<a class="tooltips btn dashboard-btn {{#if open}}dash-open{{else}}dash-close{{/if}} pull-right"
+  data-placement="top" data-original-title="{{switcherMsg}}">
+  {{#if open}}Close Dashboard{{else}}Open Dashboard{{/if}}
+</a>
+
+<a class="btn pull-right" href="/api/v2/csv" target="_blank" data-bypass>Export CSV</a>
+{{/if}}

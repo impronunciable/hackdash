@@ -81,13 +81,6 @@ body>header .btn:hover {
   background: #FFF; color:#000; 
 }
 
-body>header .btn.export {
-  position: absolute;
-  right: 0;
-  padding: 10px;
-  bottom: 0;
-  font-size: 20px;
-}
 
 .kindafixed-top {
   top: 90px;
@@ -169,11 +162,12 @@ body>header .btn.export {
   background-size: cover!important;
 }
 
-#projects .well:hover {
+#projects .well:hover,
+#dashboards .well:hover,
+#collections .well:hover {
   box-shadow: 0 2px 3px rgba(0,0,0,0.3);
   cursor: pointer;
-    top:-2px;
-
+  top:-2px;
 }
 
 .well .avatar {
@@ -351,8 +345,7 @@ line-height:                     0;
     display: none;
 	}
 	
-  header .showcase-switcher-ctn,
-  header .dashboard-switcher {
+  header .showcase-switcher-ctn {
     position: static;
     margin-top: 20px;
   }
@@ -595,8 +588,7 @@ h1,h2,h3,h4,h5,h6,p {
   color: rgba(255,255,255,0.4)!important;
 }
 
-.showcase-switcher-ctn,
-.dashboard-switcher {
+.showcase-switcher-ctn {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -621,20 +613,16 @@ h1,h2,h3,h4,h5,h6,p {
 }
 
 .showcase-switcher .has-switch span.switch-left,
-.dashboard-switcher .has-switch span.switch-left,
 .switcher .has-switch span.switch-left {
   background-color: #5bb75b;
 } 
 
 .showcase-switcher .has-switch span.switch-right,
-.dashboard-switcher .has-switch span.switch-right,
 .switcher .has-switch span.switch-right {
   background-color: #bd362f;
 } 
 
 .showcase-switcher .has-switch span.switch-left,
-.dashboard-switcher .has-switch span.switch-left,
-.dashboard-switcher .has-switch span.switch-right,
 .switcher .has-switch span.switch-left,
 .switcher .has-switch span.switch-right {
   background-image: none;
@@ -720,6 +708,7 @@ header .orderby {
 
 #page {
   min-height: 600px;
+  overflow-x: hidden;
 }
 
 #newProject {
@@ -819,6 +808,20 @@ footer {
 footer h4 {
   color: white;
   float: left;
+}
+
+footer .dashboard-btn {
+  margin: 0 10px;
+}
+
+footer .dashboard-btn.dash-open { 
+  color: rgb(255, 92, 92);
+  border-color: red;
+}
+
+footer .dashboard-btn.dash-close { 
+  color: rgb(144, 255, 92);
+  border-color: rgb(20, 255, 0);
 }
 
 .admins-ctn {
@@ -1242,7 +1245,7 @@ a.signup-persona:hover {
 }
 
 .homepage .search-btn {
-  margin-top: -10px;
+  margin-top: -20px;
   margin-left: 5px;
 }
 
