@@ -3698,7 +3698,7 @@
 						      url = "http://" + this.model.get("title")  + "." + hackdash.baseURL; 
 						    }
 						    else if(this.isCollection){
-						      url = "/collections/" + this.model.get("_id");
+						      url = "http://" + hackdash.baseURL + "/collections/" + this.model.get("_id");
 						    }
 						    else {
 						      url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
@@ -4080,7 +4080,7 @@
 							  if (stack1 = helpers.url) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 							  else { stack1 = depth0.url; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)
-							    + "\">\n  <div class=\"well\">\n    ";
+							    + "\" data-bypass>\n  <div class=\"well\">\n    ";
 							  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 							  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)

@@ -40,7 +40,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
       url = "http://" + this.model.get("title")  + "." + hackdash.baseURL; 
     }
     else if(this.isCollection){
-      url = "/collections/" + this.model.get("_id");
+      url = "http://" + hackdash.baseURL + "/collections/" + this.model.get("_id");
     }
     else {
       url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
