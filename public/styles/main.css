@@ -36,8 +36,8 @@ body>header {
 body>header h1 {
   margin: 0;
   color: #FFF;
-  font-size: 60px;
-  line-height: 1.3em;
+  font-size: 50px;
+  line-height: 1em;
 }
 
 body>header  a.logo {
@@ -81,6 +81,14 @@ body>header .btn:hover {
   background: #FFF; color:#000; 
 }
 
+.admin-label {
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 10px 5px;
+  float: right;
+  font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 
 .kindafixed-top {
   top: 90px;

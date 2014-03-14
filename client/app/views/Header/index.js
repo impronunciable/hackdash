@@ -33,6 +33,12 @@ module.exports = Backbone.Marionette.Layout.extend({
     hackdashURL: function(){
       return "http://" + hackdash.baseURL;
     },
+    isDashboardAdmin: function(){
+      var isDashboard = (hackdash.app.type === "dashboard" ? true : false);
+
+      var user = hackdash.user;
+      return isDashboard && user && user.admin_in.indexOf(this.domain) >= 0 || false;
+    }
   },
 
   //--------------------------------------

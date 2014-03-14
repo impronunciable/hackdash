@@ -6,6 +6,14 @@
     <img class="avatar tooltips" src="{{user "picture"}}" rel="tooltip" data-placement="bottom" data-original-title="Edit profile">
   </a>  
   <a class="btn logout" href="/logout" data-bypass>Logout</a>
+
+    {{#isDashboardView}}
+      {{#if isDashboardAdmin}}
+      <br/>
+      <span class="admin-label">Admin</span>
+      {{/if}}
+    {{/isDashboardView}}
+
   {{/isLoggedIn}}
 </div>
 
