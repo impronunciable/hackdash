@@ -164,7 +164,7 @@
 				  , ProfileView = require("./views/Profile")
 				  , ProjectFullView = require("./views/Project/Full")
 				  , ProjectEditView = require("./views/Project/Edit")
-				  , ProjectsView = require("./views/Project/Collection")
+				  , ProjectsView = require("./views/Project/Layout")
 				  , DashboardsView = require("./views/Dashboard/Collection")
 				  , CollectionsView = require("./views/Collection/Collection");
 
@@ -918,10 +918,18 @@
 					    this.trigger("reset");
 					  },
 
-					  getOnlyActives: function(){
+					  getActives: function(){
 					    return new Projects(
 					      this.filter(function(project){
 					        return project.get("active");
+					      })
+					    );
+					  },
+
+					  getInactives: function(){
+					    return new Projects(
+					      this.filter(function(project){
+					        return !project.get("active");
 					      })
 					    );
 					  }
@@ -2107,7 +2115,13 @@
 						    "title": "#dashboard-title",
 						    "description": "#dashboard-description",
 						    "link": "#dashboard-link",
-						    "showcase": ".showcase-switcher input"
+						    "showcaseMode": ".btn-showcase-mode",
+						    "showcaseSave": ".btn-showcase-save"
+						  },
+
+						  events: {
+						    "click .btn-showcase-mode": "changeShowcaseMode",
+						    "click .btn-showcase-save": "saveShowcase",
 						  },
 
 						  templateHelpers: {
@@ -2137,7 +2151,6 @@
 						      
 						      if (isAdmin){
 						        this.initEditables();
-						        this.initSwitcher();
 						      }
 						    }
 
@@ -2157,6 +2170,27 @@
 						  //--------------------------------------
 						  //+ EVENT HANDLERS
 						  //--------------------------------------
+
+						  changeShowcaseMode: function(){
+						    if (this.ui.showcaseMode.hasClass("on")){
+						      this.model.isShowcaseMode = false;
+						      this.model.trigger("end:showcase");
+						      
+						      this.ui.showcaseSave.addClass('hide');
+						      this.ui.showcaseMode.removeClass("on");
+						    }
+						    else {
+						      this.model.isShowcaseMode = true;
+						      this.model.trigger("edit:showcase");
+
+						      this.ui.showcaseSave.removeClass('hide');
+						      this.ui.showcaseMode.addClass("on");
+						    }
+						  },
+
+						  saveShowcase: function(){
+
+						  },
 
 						  //--------------------------------------
 						  //+ PRIVATE AND PROTECTED METHODS
@@ -2203,21 +2237,6 @@
 						      }
 						    });
 						  },
-
-						  initSwitcher: function(){
-						    var self = this;
-
-						    this.ui.showcase
-						      .bootstrapSwitch()
-						      .on('switch-change', function (e, data) {
-						        if (data.value){
-						          self.model.trigger("edit:showcase");
-						        }
-						        else {
-						          self.model.trigger("end:showcase"); 
-						        }
-						      });
-						  }
 
 						});
 					},
@@ -2703,7 +2722,7 @@
 							function program17(depth0,data) {
 							  
 							  
-							  return "\n\n    <div class=\"tooltips showcase-switcher-ctn\"\n        data-placement=\"top\" data-original-title=\"Toggle sort edition of projects for showcase\">\n      <h5>Edit Showcase mode</h5>\n      <div class=\"showcase-switcher\">      \n        <input type=\"checkbox\" class=\"switch-large\" data-off-label=\"OFF\" data-on-label=\"ON\">\n      </div>\n    </div>\n\n    ";
+							  return "\n    <a class=\"btn btn-large btn-showcase-mode\">Showcase</a>\n    <a class=\"btn btn-large btn-showcase-save hide\">Save</a>\n    ";
 							  }
 
 							function program19(depth0,data) {
@@ -3419,16 +3438,13 @@
 						    "sort:showcase": "sortByShowcase"
 						  },
 
-						  modelEvents:{
-						    "edit:showcase": "onStartEditShowcase",
-						    "end:showcase": "onEndEditShowcase"
-						  },
-
 						  //--------------------------------------
 						  //+ INHERITED / OVERRIDES
 						  //--------------------------------------
 						  
-						  showcaseMode: false,
+						  initialize: function(options){
+						    this.showcaseMode = (options && options.showcaseMode) || false;
+						  },
 
 						  onRender: function(){
 						    var self = this;
@@ -3448,19 +3464,6 @@
 						  //--------------------------------------
 						  //+ EVENT HANDLERS
 						  //--------------------------------------
-
-						  onStartEditShowcase: function(){
-						    this.collection = hackdash.app.projects.getOnlyActives();
-						    this.showcaseMode = true;
-						    this.render();
-						  },
-
-						  onEndEditShowcase: function(){
-						    this.saveShowcase();
-						    this.collection = hackdash.app.projects;
-						    this.showcaseMode = false;
-						    this.render();
-						  },
 
 						  //--------------------------------------
 						  //+ PRIVATE AND PROTECTED METHODS
@@ -3536,18 +3539,7 @@
 						      this.pckry.bindDraggabillyEvents( draggie );
 						    }
 						  },
-						/*
-						  endSortable: function(){
-						    var $projects = this.$el;
 
-						    this.saveShowcase();
-
-						    this.pckry.destroy();
-						    $projects.removeClass("showcase");
-
-						    this.updateIsotope("showcase");
-						  },
-						*/
 						  saveShowcase: function(){
 						    var itemElems = this.pckry.getItemElements();
 						    var showcase = [];
@@ -3839,6 +3831,195 @@
 
 						});
 					},
+					"Layout.js": function (exports, module, require) {
+						/**
+						 * VIEW: Dashboard Projects Layout
+						 * 
+						 */
+
+						var template = require('./templates/layout.hbs')
+						  , ProjectsView = require('./Collection');
+
+						module.exports = Backbone.Marionette.Layout.extend({
+
+						  //--------------------------------------
+						  //+ PUBLIC PROPERTIES / CONSTANTS
+						  //--------------------------------------
+
+						  template: template,
+
+						  ui: {
+						    inactiveCtn: ".inactive-ctn"
+						  },
+
+						  regions: {
+						    "dashboard": "#dashboard-projects",
+						    "inactives": "#inactive-projects"
+						  },
+						  
+						  modelEvents:{
+						    "edit:showcase": "onStartEditShowcase",
+						    "end:showcase": "onEndEditShowcase"
+						  },
+
+						  //--------------------------------------
+						  //+ INHERITED / OVERRIDES
+						  //--------------------------------------
+						  
+						  showcaseMode: false,
+
+						  onRender: function(){
+
+						    if (this.showcaseMode){
+						      this.dashboard.show(new ProjectsView({
+						        model: this.model,
+						        collection: hackdash.app.projects.getActives(),
+						        showcaseMode: true
+						      }));
+
+						      this.ui.inactiveCtn.removeClass("hide");
+
+						      this.inactives.show(new ProjectsView({
+						        model: this.model,
+						        collection: hackdash.app.projects.getInactives()
+						      }));
+
+						      var self = this;
+						      hackdash.app.projects.off("change:active").on("change:active", function(){
+						        self.dashboard.currentView.collection = hackdash.app.projects.getActives();
+						        self.dashboard.currentView.render();
+						        self.inactives.currentView.collection = hackdash.app.projects.getInactives();
+						        self.inactives.currentView.render();
+						      });
+						    }
+						    else {
+						      this.ui.inactiveCtn.addClass("hide");
+
+						      this.dashboard.show(new ProjectsView({
+						        model: this.model,
+						        collection: hackdash.app.projects
+						      }));
+						    }
+						  },
+
+						  //--------------------------------------
+						  //+ PUBLIC METHODS / GETTERS / SETTERS
+						  //--------------------------------------
+
+						  //--------------------------------------
+						  //+ EVENT HANDLERS
+						  //--------------------------------------
+
+						  onStartEditShowcase: function(){
+						    this.showcaseMode = true;
+						    this.render();
+						  },
+
+						  onEndEditShowcase: function(){
+						    this.showcaseMode = false;
+						    this.render();
+						  },
+
+						  //--------------------------------------
+						  //+ PRIVATE AND PROTECTED METHODS
+						  //--------------------------------------
+						/*
+						  sortByName: function(){
+						    this.$el.isotope({"sortBy": "name"});
+						  },
+
+						  sortByDate: function(){
+						    this.$el.isotope({"sortBy": "date"});
+						  },
+
+						  sortByShowcase: function(){
+						    this.$el.isotope({"sortBy": "showcase"});
+						  },
+
+						  gridSize: {
+						    columnWidth: 300,
+						    rowHeight: 220
+						  },
+
+						  isotopeInitialized: false,
+						  updateIsotope: function(sortType){
+						    var $projects = this.$el;
+
+						    if (this.isotopeInitialized){
+						      $projects.isotope("destroy");
+						    }
+
+						    $projects.isotope({
+						        itemSelector: ".project"
+						      , animationEngine: "jquery"
+						      , resizable: true
+						      , sortAscending: true
+						      , cellsByColumn: this.gridSize
+						      , getSortData : {
+						          "name" : function ( $elem ) {
+						            var name = $elem.data("name");
+						            return name && name.toLowerCase() || "";
+						          },
+						          "date" : function ( $elem ) {
+						            return $elem.data("date");
+						          },
+						          "showcase" : function ( $elem ) {
+						            var showcase = $elem.data("showcase");
+						            return (showcase && window.parseInt(showcase)) || 0;
+						          },
+						        }
+						      , sortBy: sortType || "name"
+						    });
+						    
+						    this.isotopeInitialized = true;
+						  },
+
+						  startSortable: function(){
+						    var $projects = this.$el;
+
+						    $projects.addClass("showcase");
+						    this.sortByShowcase();
+
+						    if (this.pckry){
+						      this.pckry.destroy();
+						    }
+
+						    this.pckry = new Packery( $projects[0], this.gridSize); 
+
+						    var itemElems = this.pckry.getItemElements();
+
+						    for ( var i=0, len = itemElems.length; i < len; i++ ) {
+						      var elem = itemElems[i];
+						      var draggie = new Draggabilly( elem );
+						      this.pckry.bindDraggabillyEvents( draggie );
+						    }
+						  },
+
+						  saveShowcase: function(){
+						    var itemElems = this.pckry.getItemElements();
+						    var showcase = [];
+
+						    for ( var i=0, len = itemElems.length; i < len; i++ ) {
+						      var elem = itemElems[i];
+						      $(elem).data('showcase', i);
+
+						      var found = this.collection.where({ _id: elem.id });
+						      if (found.length > 0){
+						        found[0].set({ "showcase": i}, { silent: true });
+						      }
+
+						      showcase.push(elem.id);
+						    }
+
+						    this.model.save({ "showcase": showcase });
+
+						    this.pckry.destroy();
+						    this.$el.removeClass("showcase");
+						    this.updateIsotope("showcase");
+						  }
+						*/
+						});
+					},
 					"List.js": function (exports, module, require) {
 						/**
 						 * VIEW: Projects of an Instance
@@ -4038,9 +4219,6 @@
 						    isAdminOrLeader: function(){
 						      var user = hackdash.user;
 						      return user._id === this.leader._id || user.admin_in.indexOf(this.domain) >= 0;
-						    },
-						    isDashboardAdmin: function(){
-						      return hackdash.user && hackdash.user.admin_in.indexOf(this.domain) >= 0;
 						    }
 						  },
 
@@ -4079,6 +4257,7 @@
 
 						  serializeData: function(){
 						    return _.extend({
+						      isShowcaseMode: hackdash.app.dashboard && hackdash.app.dashboard.isShowcaseMode,
 						      contributing: this.isContributor(),
 						      following: this.isFollower()
 						    }, this.model.toJSON());
@@ -4337,6 +4516,17 @@
 							  })
 							;
 						},
+						"layout.hbs.js": function (exports, module, require) {
+							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+							  this.compilerInfo = [4,'>= 1.0.0'];
+							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+							  
+
+
+							  return "<div id=\"dashboard-projects\"></div>\n<div id=\"inactive-projects\" class=\"hide inactive-ctn\"></div>";
+							  })
+							;
+						},
 						"listItem.hbs.js": function (exports, module, require) {
 							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 							  this.compilerInfo = [4,'>= 1.0.0'];
@@ -4510,7 +4700,7 @@
 							  
 							  var buffer = "", stack1;
 							  buffer += "\n      ";
-							  stack1 = helpers['if'].call(depth0, depth0.isDashboardAdmin, {hash:{},inverse:self.noop,fn:self.program(24, program24, data),data:data});
+							  stack1 = helpers['if'].call(depth0, depth0.isShowcaseMode, {hash:{},inverse:self.noop,fn:self.program(24, program24, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
 							  buffer += "\n    ";
 							  return buffer;

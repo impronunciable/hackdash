@@ -81,6 +81,28 @@ body>header .btn:hover {
   background: #FFF; color:#000; 
 }
 
+body>header .btn-showcase-mode {
+  margin-top: 20px;
+  font-size: 20px;
+  padding: 0.5em 1em;
+  float: left;
+  margin-right: -125px;
+}
+
+body>header .btn-showcase-mode.on {
+  background: #FFF; 
+  color:#000; 
+}
+
+body>header .btn-showcase-save {
+  margin-top: 20px;
+  font-size: 20px;
+  padding: 0.5em 1em;
+  float: left; 
+  margin-left: 130px;
+  margin-right: -225px;
+}
+
 .admin-label {
   color: white;
   font-weight: bold;
@@ -181,10 +203,7 @@ body>header .btn:hover {
 .well .avatar {
   width:32px;
   height: 32px;
-
 }
-
-
 
 .modal .well {
   margin: 0
@@ -348,14 +367,23 @@ line-height:                     0;
     width: 90%;
   }
 
-
-	header div.createProject a.logout {
+  header div.createProject a.logout {
     display: none;
-	}
-	
-  header .showcase-switcher-ctn {
-    position: static;
-    margin-top: 20px;
+  }
+
+  body>header .btn-showcase-mode {
+    clear: left;
+    margin-right: 0;
+    display: inline-block;
+    float: none;
+  }
+
+  body>header .btn-showcase-save {
+    clear: left;
+    margin-right: 0;
+    margin-left: 0;
+    display: inline-block;
+    float: none;
   }
 
   header .btn.export {
@@ -476,6 +504,19 @@ line-height:                     0;
 .project.wireframing .well { border-top-color:#55c5ff;}
 .project.researching .well { border-top-color:red;}
 .project.brainstorming .well { border-top-color:#ff5a00;}
+
+
+.inactive-ctn {
+  padding-top: 25px;
+  border-top: 5px dashed silver;
+}
+
+.inactive-ctn .projects .project .well {
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  background-color: transparent !important;
+}
 
 .profile-ctn li .well {
   border-left:10px solid #000;
@@ -716,12 +757,11 @@ header .orderby {
 
 #page {
   min-height: 600px;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 #newProject {
   font-family: 'Lato', sans-serif;
-  /*margin: -250px 0 0 -158px;*/
 }
 
 #newProject legend {

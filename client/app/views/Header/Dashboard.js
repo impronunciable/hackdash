@@ -18,7 +18,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "title": "#dashboard-title",
     "description": "#dashboard-description",
     "link": "#dashboard-link",
-    "showcase": ".showcase-switcher input"
+    "showcaseMode": ".btn-showcase-mode",
+    "showcaseSave": ".btn-showcase-save"
+  },
+
+  events: {
+    "click .btn-showcase-mode": "changeShowcaseMode",
+    "click .btn-showcase-save": "saveShowcase",
   },
 
   templateHelpers: {
@@ -48,7 +54,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
       
       if (isAdmin){
         this.initEditables();
-        this.initSwitcher();
       }
     }
 
@@ -68,6 +73,27 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  changeShowcaseMode: function(){
+    if (this.ui.showcaseMode.hasClass("on")){
+      this.model.isShowcaseMode = false;
+      this.model.trigger("end:showcase");
+      
+      this.ui.showcaseSave.addClass('hide');
+      this.ui.showcaseMode.removeClass("on");
+    }
+    else {
+      this.model.isShowcaseMode = true;
+      this.model.trigger("edit:showcase");
+
+      this.ui.showcaseSave.removeClass('hide');
+      this.ui.showcaseMode.addClass("on");
+    }
+  },
+
+  saveShowcase: function(){
+
+  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
@@ -114,20 +140,5 @@ module.exports = Backbone.Marionette.ItemView.extend({
       }
     });
   },
-
-  initSwitcher: function(){
-    var self = this;
-
-    this.ui.showcase
-      .bootstrapSwitch()
-      .on('switch-change', function (e, data) {
-        if (data.value){
-          self.model.trigger("edit:showcase");
-        }
-        else {
-          self.model.trigger("end:showcase"); 
-        }
-      });
-  }
 
 });

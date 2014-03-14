@@ -18,7 +18,7 @@ var Dashboard = require("./models/Dashboard")
   , ProfileView = require("./views/Profile")
   , ProjectFullView = require("./views/Project/Full")
   , ProjectEditView = require("./views/Project/Edit")
-  , ProjectsView = require("./views/Project/Collection")
+  , ProjectsView = require("./views/Project/Layout")
   , DashboardsView = require("./views/Dashboard/Collection")
   , CollectionsView = require("./views/Collection/Collection");
 

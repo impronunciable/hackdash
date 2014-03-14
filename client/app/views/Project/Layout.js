@@ -1,44 +1,71 @@
 /**
- * VIEW: Projects of an Instance
+ * VIEW: Dashboard Projects Layout
  * 
  */
 
-var Project = require('./index');
+var template = require('./templates/layout.hbs')
+  , ProjectsView = require('./Collection');
 
-module.exports = Backbone.Marionette.CollectionView.extend({
+module.exports = Backbone.Marionette.Layout.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  id: "projects",
-  className: "row projects",
-  itemView: Project,
+  template: template,
+
+  ui: {
+    inactiveCtn: ".inactive-ctn"
+  },
+
+  regions: {
+    "dashboard": "#dashboard-projects",
+    "inactives": "#inactive-projects"
+  },
   
-  collectionEvents: {
-    "remove": "render",
-    "sort:date": "sortByDate",
-    "sort:name": "sortByName",
-    "sort:showcase": "sortByShowcase"
+  modelEvents:{
+    "edit:showcase": "onStartEditShowcase",
+    "end:showcase": "onEndEditShowcase"
   },
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
   
-  initialize: function(options){
-    this.showcaseMode = (options && options.showcaseMode) || false;
-  },
+  showcaseMode: false,
 
   onRender: function(){
-    var self = this;
-    _.defer(function(){
-      self.updateIsotope();
 
-      if (self.showcaseMode){
-        self.startSortable();
-      }
-    });
+    if (this.showcaseMode){
+      this.dashboard.show(new ProjectsView({
+        model: this.model,
+        collection: hackdash.app.projects.getActives(),
+        showcaseMode: true
+      }));
+
+      this.ui.inactiveCtn.removeClass("hide");
+
+      this.inactives.show(new ProjectsView({
+        model: this.model,
+        collection: hackdash.app.projects.getInactives()
+      }));
+
+      var self = this;
+      hackdash.app.projects.off("change:active").on("change:active", function(){
+        self.dashboard.currentView.collection = hackdash.app.projects.getActives();
+        self.dashboard.currentView.render();
+        self.inactives.currentView.collection = hackdash.app.projects.getInactives();
+        self.inactives.currentView.render();
+      });
+    }
+    else {
+      this.ui.inactiveCtn.addClass("hide");
+
+      this.dashboard.show(new ProjectsView({
+        model: this.model,
+        collection: hackdash.app.projects
+      }));
+    }
   },
 
   //--------------------------------------
@@ -49,10 +76,20 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
+  onStartEditShowcase: function(){
+    this.showcaseMode = true;
+    this.render();
+  },
+
+  onEndEditShowcase: function(){
+    this.showcaseMode = false;
+    this.render();
+  },
+
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
-
+/*
   sortByName: function(){
     this.$el.isotope({"sortBy": "name"});
   },
@@ -146,5 +183,5 @@ module.exports = Backbone.Marionette.CollectionView.extend({
     this.$el.removeClass("showcase");
     this.updateIsotope("showcase");
   }
-
+*/
 });

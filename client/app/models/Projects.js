@@ -49,10 +49,18 @@ var Projects = module.exports = Backbone.Collection.extend({
     this.trigger("reset");
   },
 
-  getOnlyActives: function(){
+  getActives: function(){
     return new Projects(
       this.filter(function(project){
         return project.get("active");
+      })
+    );
+  },
+
+  getInactives: function(){
+    return new Projects(
+      this.filter(function(project){
+        return !project.get("active");
       })
     );
   }

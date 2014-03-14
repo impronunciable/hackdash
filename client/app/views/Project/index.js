@@ -43,9 +43,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     isAdminOrLeader: function(){
       var user = hackdash.user;
       return user._id === this.leader._id || user.admin_in.indexOf(this.domain) >= 0;
-    },
-    isDashboardAdmin: function(){
-      return hackdash.user && hackdash.user.admin_in.indexOf(this.domain) >= 0;
     }
   },
 
@@ -84,6 +81,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   serializeData: function(){
     return _.extend({
+      isShowcaseMode: hackdash.app.dashboard && hackdash.app.dashboard.isShowcaseMode,
       contributing: this.isContributor(),
       following: this.isFollower()
     }, this.model.toJSON());
