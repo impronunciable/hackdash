@@ -287,7 +287,7 @@ var setQuery = function(req, res, next){
   }
 
   var regex = new RegExp(query, 'i');
-  req.query.$or = [ { title: regex }, { description: regex } ];
+  req.query.$or = [ { title: regex }, { description: regex }, { tags: regex } ];
 
   next();
 };
