@@ -613,6 +613,16 @@
 					    return hackdash.apiURL + '/admins'; 
 					  },
 
+					  addAdmin: function(userId){
+					    $.ajax({
+					      url: this.url() + '/' + userId,
+					      type: "POST",
+					      context: this
+					    }).done(function(user){
+					      this.add(user);
+					    });
+					  },
+
 					});
 
 				},
@@ -1527,6 +1537,111 @@
 					}
 				},
 				"Footer": {
+					"AddAdmin.js": function (exports, module, require) {
+						/**
+						 * VIEW: A User Collection
+						 * 
+						 */
+						 
+						var template = require('./templates/addAdmin.hbs')
+						  , Users = require('../../models/Users');
+
+						module.exports = Backbone.Marionette.ItemView.extend({
+
+						  //--------------------------------------
+						  //+ PUBLIC PROPERTIES / CONSTANTS
+						  //--------------------------------------
+
+						  className: "modal add-admins-modal",
+						  template: template,
+
+						  ui: {
+						    "txtUser": "#txtUser",
+						    "addOn": ".add-on"
+						  },
+
+						  events: {
+						    "click #save": "saveAdmin"
+						  },
+
+						  //--------------------------------------
+						  //+ INHERITED / OVERRIDES
+						  //--------------------------------------
+
+						  initialize: function(){
+						    this.users = new Users();
+						  },
+
+						  onRender: function(){
+						    this.initTypehead();
+						  },
+
+						  //--------------------------------------
+						  //+ PUBLIC METHODS / GETTERS / SETTERS
+						  //--------------------------------------
+
+						  //--------------------------------------
+						  //+ EVENT HANDLERS
+						  //--------------------------------------
+
+						  saveAdmin: function(){
+						    var selected = this.users.find(function(user){
+						      return user.get('selected');
+						    });
+
+						    if (selected){
+						      this.collection.addAdmin(selected.get("_id"));
+						      this.close();
+						    }
+						  },
+
+						  //--------------------------------------
+						  //+ PRIVATE AND PROTECTED METHODS
+						  //--------------------------------------
+
+						  initTypehead: function(){
+						    var users = this.users,
+						      self = this,
+						      MIN_CHARS_FOR_SERVER_SEARCH = 3;
+
+						    this.ui.txtUser.typeahead({
+						      source: function(query, process){
+						        if (query.length >= MIN_CHARS_FOR_SERVER_SEARCH){
+						          users.fetch({ 
+						            data: $.param({ q: query }),
+						            success: function(){
+						              var usersIds = users.map(function(user){ return user.get('_id').toString(); });
+						              process(usersIds);
+						            }
+						          });
+						        }
+						        else {
+						          process([]);
+						        }
+						      },
+						      matcher: function(){
+						        return true;
+						      },
+						      highlighter: function(uid){
+						        var user = users.get(uid),
+						          template = _.template('<img class="avatar" src="<%= picture %>" /> <%= name %>');
+
+						        return template({
+						          picture: user.get('picture'),
+						          name: user.get('name')
+						        });
+						      },
+						      updater: function(uid) {
+						        var selectedUser = users.get(uid);
+						        selectedUser.set('selected', true);
+						        self.ui.addOn.empty().append('<img class="avatar" src="' + selectedUser.get("picture") + '" />');
+						        return selectedUser.get('name');
+						      }
+						    });
+						  }
+
+						});
+					},
 					"User.js": function (exports, module, require) {
 						/**
 						 * VIEW: User
@@ -1572,17 +1687,33 @@
 						 * 
 						 */
 
-						var User = require('./User');
+						var template = require('./templates/users.hbs')
+						  , User = require('./User')
+						  , AddAdmin = require('./AddAdmin');
 
-						module.exports = Backbone.Marionette.CollectionView.extend({
+						module.exports = Backbone.Marionette.CompositeView.extend({
 
 						  //--------------------------------------
 						  //+ PUBLIC PROPERTIES / CONSTANTS
 						  //--------------------------------------
 
-						  tagName: "ul",
-						  itemView: User
+						  template: template,
 						  
+						  tagName: "div",
+						  itemViewContainer: "ul",
+						  itemView: User,
+						  
+						  events: {
+						    "click a.add-admins": "showAddAdmins"
+						  },
+
+						  templateHelpers: {
+						    isAdmin: function(){
+						      var user = hackdash.user;
+						      return user && user.admin_in.indexOf(this.domain) >= 0 || false;
+						    }
+						  },
+
 						  //--------------------------------------
 						  //+ INHERITED / OVERRIDES
 						  //--------------------------------------
@@ -1594,6 +1725,12 @@
 						  //--------------------------------------
 						  //+ EVENT HANDLERS
 						  //--------------------------------------
+
+						  showAddAdmins: function(){
+						    hackdash.app.modals.show(new AddAdmin({
+						      collection: this.collection
+						    }));
+						  }
 
 						  //--------------------------------------
 						  //+ PRIVATE AND PROTECTED METHODS
@@ -1656,6 +1793,7 @@
 						    
 						    if (isDashboard){
 						      this.admins.show(new Users({
+						        model: this.model,
 						        collection: this.model.get("admins")
 						      }));
 						    }
@@ -1704,6 +1842,17 @@
 						});
 					},
 					"templates": {
+						"addAdmin.hbs.js": function (exports, module, require) {
+							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+							  this.compilerInfo = [4,'>= 1.0.0'];
+							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+							  
+
+
+							  return "<div class=\"modal-header\">\n  <button type=\"button\" data-dismiss=\"modal\" aria-hidden=\"true\" class=\"close\">×</button>\n  <h3>Add Dashboard Admin</h3>\n</div>\n<div class=\"modal-body\">\n  <div class=\"input-prepend\">\n    <span class=\"add-on\" style=\"padding: 10px;\">\n      <i class=\"icon-user\"></i>\n    </span>\n    <input id=\"txtUser\" type=\"text\" class=\"input-xlarge\" placeholder=\"type name or username\" autocomplete=\"off\" style=\"padding: 10px;\">\n  </div>\n</div>\n<div class=\"modal-footer\">\n  <input id=\"save\" type=\"button\" class=\"btn primary btn-success pull-right\" style=\"margin-left: 10px;\" value=\"Save\">\n  <input type=\"button\" class=\"btn primary pull-right\" data-dismiss=\"modal\" value=\"Cancel\">\n</div>";
+							  })
+							;
+						},
 						"footer.hbs.js": function (exports, module, require) {
 							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
 							  this.compilerInfo = [4,'>= 1.0.0'];
@@ -1781,6 +1930,25 @@
 							  else { stack1 = depth0.name; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)
 							    + "\">\n</a>";
+							  return buffer;
+							  })
+							;
+						},
+						"users.hbs.js": function (exports, module, require) {
+							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+							  this.compilerInfo = [4,'>= 1.0.0'];
+							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+							  var buffer = "", stack1, self=this;
+
+							function program1(depth0,data) {
+							  
+							  
+							  return "\n<a class=\"add-admins\">\n  <i class=\"icon-plus\"></i>\n</a>\n";
+							  }
+
+							  buffer += "<ul></ul>\n";
+							  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+							  if(stack1 || stack1 === 0) { buffer += stack1; }
 							  return buffer;
 							  })
 							;

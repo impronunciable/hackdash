@@ -52,6 +52,7 @@ module.exports = Backbone.Marionette.Layout.extend({
     
     if (isDashboard){
       this.admins.show(new Users({
+        model: this.model,
         collection: this.model.get("admins")
       }));
     }
