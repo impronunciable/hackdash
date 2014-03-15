@@ -147,7 +147,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
       .bootstrapSwitch()
       .on('switch-change', function (e, data) {
         self.model.set("active", data.value);
-        self.model.save({ silent: true });
       });
   },
 

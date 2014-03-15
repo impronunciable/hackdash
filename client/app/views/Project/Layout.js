@@ -57,6 +57,8 @@ module.exports = Backbone.Marionette.Layout.extend({
         self.dashboard.currentView.collection = hackdash.app.projects.getActives();
         self.inactives.currentView.collection = hackdash.app.projects.getInactives();
 
+        self.model.isDirty = true;
+
         self.dashboard.currentView.render();
         self.inactives.currentView.render();
       });
@@ -90,12 +92,11 @@ module.exports = Backbone.Marionette.Layout.extend({
     var showcase = this.dashboard.currentView.updateShowcaseOrder();
     this.model.save({ "showcase": showcase });
 
+    this.model.isDirty = false;
     this.onEndEditShowcase();
   },
 
   onEndEditShowcase: function(){
-    //TODO: check if it is dirty
-
     this.model.isShowcaseMode = false;
     this.model.trigger("change");
 

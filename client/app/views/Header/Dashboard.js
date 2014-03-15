@@ -19,7 +19,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "description": "#dashboard-description",
     "link": "#dashboard-link",
     "showcaseMode": ".btn-showcase-mode",
-    "showcaseSave": ".btn-showcase-save"
+    "showcaseSave": ".btn-showcase-save",
+    "createShowcase": ".btn-new-project"
   },
 
   events: {
@@ -74,6 +75,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.model.isShowcaseMode = false;
     this.ui.showcaseSave.addClass('hide');
     this.ui.showcaseMode.removeClass("on");
+
+    this.ui.createShowcase.removeClass("hide");
   },
 
   //--------------------------------------
@@ -82,8 +85,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   changeShowcaseMode: function(){
     if (this.ui.showcaseMode.hasClass("on")){
-      this.model.trigger("end:showcase");
-      
+      if (this.model.isDirty){
+        window.alert("Save Showcase before exit");
+        return;
+      }
+
+      this.model.trigger("end:showcase");      
       this.exitShowcaseMode();
     }
     else {
@@ -92,6 +99,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
       this.ui.showcaseSave.removeClass('hide');
       this.ui.showcaseMode.addClass("on");
+      this.ui.createShowcase.addClass("hide");
     }
   },
 

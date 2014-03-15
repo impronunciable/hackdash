@@ -2134,7 +2134,8 @@
 						    "description": "#dashboard-description",
 						    "link": "#dashboard-link",
 						    "showcaseMode": ".btn-showcase-mode",
-						    "showcaseSave": ".btn-showcase-save"
+						    "showcaseSave": ".btn-showcase-save",
+						    "createShowcase": ".btn-new-project"
 						  },
 
 						  events: {
@@ -2189,6 +2190,8 @@
 						    this.model.isShowcaseMode = false;
 						    this.ui.showcaseSave.addClass('hide');
 						    this.ui.showcaseMode.removeClass("on");
+
+						    this.ui.createShowcase.removeClass("hide");
 						  },
 
 						  //--------------------------------------
@@ -2197,8 +2200,12 @@
 
 						  changeShowcaseMode: function(){
 						    if (this.ui.showcaseMode.hasClass("on")){
-						      this.model.trigger("end:showcase");
-						      
+						      if (this.model.isDirty){
+						        window.alert("Save Showcase before exit");
+						        return;
+						      }
+
+						      this.model.trigger("end:showcase");      
 						      this.exitShowcaseMode();
 						    }
 						    else {
@@ -2207,6 +2214,7 @@
 
 						      this.ui.showcaseSave.removeClass('hide');
 						      this.ui.showcaseMode.addClass("on");
+						      this.ui.createShowcase.addClass("hide");
 						    }
 						  },
 
@@ -2732,7 +2740,7 @@
 							function program13(depth0,data) {
 							  
 							  
-							  return "\n    <a class=\"btn btn-large\" href=\"/projects/create\">New Project</a>\n    ";
+							  return "\n    <a class=\"btn btn-large btn-new-project\" href=\"/projects/create\">New Project</a>\n    ";
 							  }
 
 							function program15(depth0,data) {
@@ -3596,6 +3604,11 @@
 						      var draggie = new Draggabilly( elem );
 						      this.pckry.bindDraggabillyEvents( draggie );
 						    }
+
+						    var self = this;
+						    this.pckry.on( 'dragItemPositioned', function() { 
+						      self.model.isDirty = true;
+						    });
 						  }
 
 						});
@@ -3928,6 +3941,8 @@
 						        self.dashboard.currentView.collection = hackdash.app.projects.getActives();
 						        self.inactives.currentView.collection = hackdash.app.projects.getInactives();
 
+						        self.model.isDirty = true;
+
 						        self.dashboard.currentView.render();
 						        self.inactives.currentView.render();
 						      });
@@ -3961,12 +3976,11 @@
 						    var showcase = this.dashboard.currentView.updateShowcaseOrder();
 						    this.model.save({ "showcase": showcase });
 
+						    this.model.isDirty = false;
 						    this.onEndEditShowcase();
 						  },
 
 						  onEndEditShowcase: function(){
-						    //TODO: check if it is dirty
-
 						    this.model.isShowcaseMode = false;
 						    this.model.trigger("change");
 
@@ -4284,7 +4298,6 @@
 						      .bootstrapSwitch()
 						      .on('switch-change', function (e, data) {
 						        self.model.set("active", data.value);
-						        self.model.save({ silent: true });
 						      });
 						  },
 

@@ -158,6 +158,11 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       var draggie = new Draggabilly( elem );
       this.pckry.bindDraggabillyEvents( draggie );
     }
+
+    var self = this;
+    this.pckry.on( 'dragItemPositioned', function() { 
+      self.model.isDirty = true;
+    });
   }
 
 });
