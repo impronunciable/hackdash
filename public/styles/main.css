@@ -370,7 +370,7 @@ line-height:                     0;
 
   .isotope .project,
   .isotope .dashboard {
-    position: static ! important;
+    /*position: static ! important;*/
     -webkit-transform: translate(0px, 0px) ! important;
        -moz-transform: translate(0px, 0px) ! important;
             transform: translate(0px, 0px) ! important;
