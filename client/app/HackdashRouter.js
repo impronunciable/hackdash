@@ -109,10 +109,15 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       model: app.dashboard
     }));
 
-    $.when( app.dashboard.fetch(), app.projects.fetch(this.getSearchQuery()) )
-      .then(function() {
-        app.projects.buildShowcase(app.dashboard.get("showcase"));
-      });
+    var self = this;
+    app.dashboard.fetch()
+    .done(function(){
+      app.projects.fetch(self.getSearchQuery(), { parse: true })
+        .done(function(){
+          app.projects.buildShowcase(app.dashboard.get("showcase"));  
+        });
+    });
+
   },
 
   showProjects: function() {

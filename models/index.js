@@ -30,7 +30,6 @@ module.exports = function(app) {
     , "cover": String
     , "link": String
     , "tags": [String]
-    , "active": { type: Boolean, default: true }
     , "created_at": { type: Date, default: Date.now }
   });
 

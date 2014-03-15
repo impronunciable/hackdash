@@ -70,17 +70,21 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
 
+  exitShowcaseMode: function(){
+    this.model.isShowcaseMode = false;
+    this.ui.showcaseSave.addClass('hide');
+    this.ui.showcaseMode.removeClass("on");
+  },
+
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
 
   changeShowcaseMode: function(){
     if (this.ui.showcaseMode.hasClass("on")){
-      this.model.isShowcaseMode = false;
       this.model.trigger("end:showcase");
       
-      this.ui.showcaseSave.addClass('hide');
-      this.ui.showcaseMode.removeClass("on");
+      this.exitShowcaseMode();
     }
     else {
       this.model.isShowcaseMode = true;
@@ -92,7 +96,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   saveShowcase: function(){
-
+    this.model.trigger("save:showcase");
   },
 
   //--------------------------------------

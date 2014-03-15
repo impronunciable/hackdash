@@ -17,30 +17,39 @@ var Projects = module.exports = Backbone.Collection.extend({
   },
 
   parse: function(response){
-    var projects = [];
 
-    // only parse projects actives if no user or user not admin of dash
+    if (hackdash.app.type !== "dashboard"){
+      //it is not a dashboard so all projects active
+      return response;
+    }
+
+    var dashboard = hackdash.app.dashboard;
+
+    var showcase = (dashboard && dashboard.get("showcase")) || [];
+    if (showcase.length === 0){
+      //no showcase defined: all projects are active
+      return response;
+    }
+
+    // set active property of a project from showcase mode 
+    // (only projects at showcase array are active ones)
     _.each(response, function(project){
-
-      if (hackdash.app.type === "dashboard"){
-        var user = hackdash.user;
-        var isAdmin = user && (user._id === project.leader._id || user.admin_in.indexOf(this.domain) >= 0);
-        if (isAdmin || project.active){
-          projects.push(project);
-        }
+      
+      if (showcase.indexOf(project._id) >= 0){
+        project.active = true;
       }
-      else if (project.active) {
-        projects.push(project);
+      else {
+        project.active = false; 
       }
 
     });
 
-    return projects;
+    return response;
   },
 
   buildShowcase: function(showcase){
     _.each(showcase, function(id, i){
-      var found = this.where({ _id: id });
+      var found = this.where({ _id: id, active: true });
       if (found.length > 0){
         found[0].set("showcase", i);
       }

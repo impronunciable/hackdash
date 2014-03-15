@@ -255,10 +255,15 @@
 				      model: app.dashboard
 				    }));
 
-				    $.when( app.dashboard.fetch(), app.projects.fetch(this.getSearchQuery()) )
-				      .then(function() {
-				        app.projects.buildShowcase(app.dashboard.get("showcase"));
-				      });
+				    var self = this;
+				    app.dashboard.fetch()
+				    .done(function(){
+				      app.projects.fetch(self.getSearchQuery(), { parse: true })
+				        .done(function(){
+				          app.projects.buildShowcase(app.dashboard.get("showcase"));  
+				        });
+				    });
+
 				  },
 
 				  showProjects: function() {
@@ -799,6 +804,10 @@
 
 					  idAttribute: "_id",
 
+					  defaults: {
+					    active: true
+					  },
+
 					  urlRoot: function(){
 					    return hackdash.apiURL + '/projects'; 
 					  },
@@ -886,30 +895,39 @@
 					  },
 
 					  parse: function(response){
-					    var projects = [];
 
-					    // only parse projects actives if no user or user not admin of dash
+					    if (hackdash.app.type !== "dashboard"){
+					      //it is not a dashboard so all projects active
+					      return response;
+					    }
+
+					    var dashboard = hackdash.app.dashboard;
+
+					    var showcase = (dashboard && dashboard.get("showcase")) || [];
+					    if (showcase.length === 0){
+					      //no showcase defined: all projects are active
+					      return response;
+					    }
+
+					    // set active property of a project from showcase mode 
+					    // (only projects at showcase array are active ones)
 					    _.each(response, function(project){
-
-					      if (hackdash.app.type === "dashboard"){
-					        var user = hackdash.user;
-					        var isAdmin = user && (user._id === project.leader._id || user.admin_in.indexOf(this.domain) >= 0);
-					        if (isAdmin || project.active){
-					          projects.push(project);
-					        }
+					      
+					      if (showcase.indexOf(project._id) >= 0){
+					        project.active = true;
 					      }
-					      else if (project.active) {
-					        projects.push(project);
+					      else {
+					        project.active = false; 
 					      }
 
 					    });
 
-					    return projects;
+					    return response;
 					  },
 
 					  buildShowcase: function(showcase){
 					    _.each(showcase, function(id, i){
-					      var found = this.where({ _id: id });
+					      var found = this.where({ _id: id, active: true });
 					      if (found.length > 0){
 					        found[0].set("showcase", i);
 					      }
@@ -2167,17 +2185,21 @@
 						  //+ PUBLIC METHODS / GETTERS / SETTERS
 						  //--------------------------------------
 
+						  exitShowcaseMode: function(){
+						    this.model.isShowcaseMode = false;
+						    this.ui.showcaseSave.addClass('hide');
+						    this.ui.showcaseMode.removeClass("on");
+						  },
+
 						  //--------------------------------------
 						  //+ EVENT HANDLERS
 						  //--------------------------------------
 
 						  changeShowcaseMode: function(){
 						    if (this.ui.showcaseMode.hasClass("on")){
-						      this.model.isShowcaseMode = false;
 						      this.model.trigger("end:showcase");
 						      
-						      this.ui.showcaseSave.addClass('hide');
-						      this.ui.showcaseMode.removeClass("on");
+						      this.exitShowcaseMode();
 						    }
 						    else {
 						      this.model.isShowcaseMode = true;
@@ -2189,7 +2211,7 @@
 						  },
 
 						  saveShowcase: function(){
-
+						    this.model.trigger("save:showcase");
 						  },
 
 						  //--------------------------------------
@@ -3438,18 +3460,29 @@
 						    "sort:showcase": "sortByShowcase"
 						  },
 
+						  gridSize: {
+						    columnWidth: 300,
+						    rowHeight: 220
+						  },
+
 						  //--------------------------------------
 						  //+ INHERITED / OVERRIDES
 						  //--------------------------------------
 						  
 						  initialize: function(options){
 						    this.showcaseMode = (options && options.showcaseMode) || false;
+						    this.showcaseSort = (options && options.showcaseSort) || false;
 						  },
 
 						  onRender: function(){
 						    var self = this;
 						    _.defer(function(){
-						      self.updateIsotope();
+						      if (self.showcaseSort) {
+						        self.updateIsotope("showcase", ".filter-active");
+						      }
+						      else {
+						        self.updateIsotope();
+						      }
 
 						      if (self.showcaseMode){
 						        self.startSortable();
@@ -3461,33 +3494,57 @@
 						  //+ PUBLIC METHODS / GETTERS / SETTERS
 						  //--------------------------------------
 
+						  updateShowcaseOrder: function(){
+						    var itemElems = this.pckry.getItemElements();
+						    var showcase = [];
+
+						    for ( var i=0, len = itemElems.length; i < len; i++ ) {
+						      var elem = itemElems[i];
+						      $(elem).data('showcase', i);
+
+						      var found = this.collection.where({ _id: elem.id, active: true });
+						      if (found.length > 0){
+						        found[0].set({ 
+						          "showcase": i
+						        }, { silent: true });
+						      }
+
+						      showcase.push(elem.id);
+						    }
+
+						    this.pckry.destroy();
+
+						    return showcase;
+						  },
+
 						  //--------------------------------------
 						  //+ EVENT HANDLERS
 						  //--------------------------------------
+
+						  sortByName: function(){
+						    this.$el
+						      .isotope({"filter": ""})
+						      .isotope({"sortBy": "name"});
+						  },
+
+						  sortByDate: function(){
+						    this.$el
+						      .isotope({"filter": ""})
+						      .isotope({"sortBy": "date"});
+						  },
+
+						  sortByShowcase: function(){
+						    this.$el
+						      .isotope({"filter": ".filter-active"})
+						      .isotope({"sortBy": "showcase"});
+						  },
 
 						  //--------------------------------------
 						  //+ PRIVATE AND PROTECTED METHODS
 						  //--------------------------------------
 
-						  sortByName: function(){
-						    this.$el.isotope({"sortBy": "name"});
-						  },
-
-						  sortByDate: function(){
-						    this.$el.isotope({"sortBy": "date"});
-						  },
-
-						  sortByShowcase: function(){
-						    this.$el.isotope({"sortBy": "showcase"});
-						  },
-
-						  gridSize: {
-						    columnWidth: 300,
-						    rowHeight: 220
-						  },
-
 						  isotopeInitialized: false,
-						  updateIsotope: function(sortType){
+						  updateIsotope: function(sortType, filterType){
 						    var $projects = this.$el;
 
 						    if (this.isotopeInitialized){
@@ -3514,6 +3571,7 @@
 						          },
 						        }
 						      , sortBy: sortType || "name"
+						      , filter: filterType || ""
 						    });
 						    
 						    this.isotopeInitialized = true;
@@ -3538,29 +3596,6 @@
 						      var draggie = new Draggabilly( elem );
 						      this.pckry.bindDraggabillyEvents( draggie );
 						    }
-						  },
-
-						  saveShowcase: function(){
-						    var itemElems = this.pckry.getItemElements();
-						    var showcase = [];
-
-						    for ( var i=0, len = itemElems.length; i < len; i++ ) {
-						      var elem = itemElems[i];
-						      $(elem).data('showcase', i);
-
-						      var found = this.collection.where({ _id: elem.id });
-						      if (found.length > 0){
-						        found[0].set({ "showcase": i}, { silent: true });
-						      }
-
-						      showcase.push(elem.id);
-						    }
-
-						    this.model.save({ "showcase": showcase });
-
-						    this.pckry.destroy();
-						    this.$el.removeClass("showcase");
-						    this.updateIsotope("showcase");
 						  }
 
 						});
@@ -3861,7 +3896,8 @@
 						  
 						  modelEvents:{
 						    "edit:showcase": "onStartEditShowcase",
-						    "end:showcase": "onEndEditShowcase"
+						    "end:showcase": "onEndEditShowcase",
+						    "save:showcase": "onSaveEditShowcase"
 						  },
 
 						  //--------------------------------------
@@ -3869,6 +3905,7 @@
 						  //--------------------------------------
 						  
 						  showcaseMode: false,
+						  showcaseSort: false,
 
 						  onRender: function(){
 
@@ -3889,8 +3926,9 @@
 						      var self = this;
 						      hackdash.app.projects.off("change:active").on("change:active", function(){
 						        self.dashboard.currentView.collection = hackdash.app.projects.getActives();
-						        self.dashboard.currentView.render();
 						        self.inactives.currentView.collection = hackdash.app.projects.getInactives();
+
+						        self.dashboard.currentView.render();
 						        self.inactives.currentView.render();
 						      });
 						    }
@@ -3899,7 +3937,9 @@
 
 						      this.dashboard.show(new ProjectsView({
 						        model: this.model,
-						        collection: hackdash.app.projects
+						        collection: hackdash.app.projects,
+						        showcaseMode: false,
+						        showcaseSort: this.showcaseSort
 						      }));
 						    }
 						  },
@@ -3917,7 +3957,20 @@
 						    this.render();
 						  },
 
+						  onSaveEditShowcase: function(){
+						    var showcase = this.dashboard.currentView.updateShowcaseOrder();
+						    this.model.save({ "showcase": showcase });
+
+						    this.onEndEditShowcase();
+						  },
+
 						  onEndEditShowcase: function(){
+						    //TODO: check if it is dirty
+
+						    this.model.isShowcaseMode = false;
+						    this.model.trigger("change");
+
+						    this.showcaseSort = true;
 						    this.showcaseMode = false;
 						    this.render();
 						  },
@@ -3925,101 +3978,7 @@
 						  //--------------------------------------
 						  //+ PRIVATE AND PROTECTED METHODS
 						  //--------------------------------------
-						/*
-						  sortByName: function(){
-						    this.$el.isotope({"sortBy": "name"});
-						  },
 
-						  sortByDate: function(){
-						    this.$el.isotope({"sortBy": "date"});
-						  },
-
-						  sortByShowcase: function(){
-						    this.$el.isotope({"sortBy": "showcase"});
-						  },
-
-						  gridSize: {
-						    columnWidth: 300,
-						    rowHeight: 220
-						  },
-
-						  isotopeInitialized: false,
-						  updateIsotope: function(sortType){
-						    var $projects = this.$el;
-
-						    if (this.isotopeInitialized){
-						      $projects.isotope("destroy");
-						    }
-
-						    $projects.isotope({
-						        itemSelector: ".project"
-						      , animationEngine: "jquery"
-						      , resizable: true
-						      , sortAscending: true
-						      , cellsByColumn: this.gridSize
-						      , getSortData : {
-						          "name" : function ( $elem ) {
-						            var name = $elem.data("name");
-						            return name && name.toLowerCase() || "";
-						          },
-						          "date" : function ( $elem ) {
-						            return $elem.data("date");
-						          },
-						          "showcase" : function ( $elem ) {
-						            var showcase = $elem.data("showcase");
-						            return (showcase && window.parseInt(showcase)) || 0;
-						          },
-						        }
-						      , sortBy: sortType || "name"
-						    });
-						    
-						    this.isotopeInitialized = true;
-						  },
-
-						  startSortable: function(){
-						    var $projects = this.$el;
-
-						    $projects.addClass("showcase");
-						    this.sortByShowcase();
-
-						    if (this.pckry){
-						      this.pckry.destroy();
-						    }
-
-						    this.pckry = new Packery( $projects[0], this.gridSize); 
-
-						    var itemElems = this.pckry.getItemElements();
-
-						    for ( var i=0, len = itemElems.length; i < len; i++ ) {
-						      var elem = itemElems[i];
-						      var draggie = new Draggabilly( elem );
-						      this.pckry.bindDraggabillyEvents( draggie );
-						    }
-						  },
-
-						  saveShowcase: function(){
-						    var itemElems = this.pckry.getItemElements();
-						    var showcase = [];
-
-						    for ( var i=0, len = itemElems.length; i < len; i++ ) {
-						      var elem = itemElems[i];
-						      $(elem).data('showcase', i);
-
-						      var found = this.collection.where({ _id: elem.id });
-						      if (found.length > 0){
-						        found[0].set({ "showcase": i}, { silent: true });
-						      }
-
-						      showcase.push(elem.id);
-						    }
-
-						    this.model.save({ "showcase": showcase });
-
-						    this.pckry.destroy();
-						    this.$el.removeClass("showcase");
-						    this.updateIsotope("showcase");
-						  }
-						*/
 						});
 					},
 					"List.js": function (exports, module, require) {
@@ -4242,6 +4201,13 @@
 						        , "data-showcase": this.model.get("showcase")
 						      })
 						      .tooltip({});
+
+						    if (this.model.get("active")){
+						      this.$el.addClass('filter-active');
+						    }
+						    else {
+						      this.$el.removeClass('filter-active');
+						    }
 
 						    $('.tooltips', this.$el).tooltip({});
 

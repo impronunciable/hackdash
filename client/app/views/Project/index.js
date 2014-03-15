@@ -65,6 +65,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
       })
       .tooltip({});
 
+    if (this.model.get("active")){
+      this.$el.addClass('filter-active');
+    }
+    else {
+      this.$el.removeClass('filter-active');
+    }
+
     $('.tooltips', this.$el).tooltip({});
 
     var url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 

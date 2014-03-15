@@ -188,12 +188,6 @@ var updateProject = function(req, res, next) {
     return res.json(500, { error: "description_required" });
   }
 
-  var isAdmin = (req.project.domain && req.user.admin_in.indexOf(req.project.domain) >= 0);
-  if (isAdmin){ 
-    //only update active state if is the dashboard admin
-    project.active = getValue("active");
-  }
-  
   project.save(function(err, project){
     if(err) return res.send(500);
     req.project = project;
