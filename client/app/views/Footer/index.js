@@ -1,7 +1,8 @@
 
 var 
     template = require('./templates/footer.hbs')
-  , Users = require('./Users');
+  , Users = require('./Users')
+  , Embed = require('./Embed');
 
 module.exports = Backbone.Marionette.Layout.extend({
 
@@ -21,7 +22,8 @@ module.exports = Backbone.Marionette.Layout.extend({
   },
 
   events: {
-    "click .dashboard-btn": "onClickSwitcher"
+    "click .dashboard-btn": "onClickSwitcher",
+    "click .embed-btn": "showEmbedModal"
   },
 
   templateHelpers: {
@@ -92,6 +94,10 @@ module.exports = Backbone.Marionette.Layout.extend({
     this.model.set({ "open": open }, { trigger: false });
     this.model.save({ wait: true });
   },
+
+  showEmbedModal: function(){
+    hackdash.app.modals.show(new Embed());
+  }
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS

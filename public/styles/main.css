@@ -862,7 +862,8 @@ footer h4 {
   float: left;
 }
 
-footer .dashboard-btn {
+footer .dashboard-btn,
+footer .embed-btn {
   margin: 0 10px;
 }
 

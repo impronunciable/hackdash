@@ -499,6 +499,15 @@
 					 * 
 					 */
 					
+					Handlebars.registerHelper('embedCode', function() {
+					  var embedUrl = window.location.protocol + "//" + window.location.host;
+					  var template = _.template('<iframe src="<%= embedUrl %>" width="100%" height="500" frameborder="0" allowtransparency="true" title="Hackdash"></iframe>');
+					
+					  return template({ 
+					    embedUrl: embedUrl
+					  });
+					});
+					
 					Handlebars.registerHelper('firstUpper', function(text) {
 					  return text.charAt(0).toUpperCase() + text.slice(1);
 					});
@@ -1668,6 +1677,52 @@
 
 						});
 					},
+					"Embed.js": function (exports, module, require) {
+						/**
+						 * VIEW: A Embed code
+						 * 
+						 */
+						 
+						var template = require('./templates/embed.hbs');
+
+						module.exports = Backbone.Marionette.ItemView.extend({
+
+						  //--------------------------------------
+						  //+ PUBLIC PROPERTIES / CONSTANTS
+						  //--------------------------------------
+
+						  className: "modal",
+						  template: template,
+
+						  ui: {
+						    embedCode: "textarea"
+						  },
+
+						  //--------------------------------------
+						  //+ INHERITED / OVERRIDES
+						  //--------------------------------------
+
+						  onRender: function(){
+						    var self = this;
+						    _.defer(function(){
+						      self.ui.embedCode.select();
+						    });
+						  },
+
+						  //--------------------------------------
+						  //+ PUBLIC METHODS / GETTERS / SETTERS
+						  //--------------------------------------
+
+						  //--------------------------------------
+						  //+ EVENT HANDLERS
+						  //--------------------------------------
+
+						  //--------------------------------------
+						  //+ PRIVATE AND PROTECTED METHODS
+						  //--------------------------------------
+
+						});
+					},
 					"User.js": function (exports, module, require) {
 						/**
 						 * VIEW: User
@@ -1768,7 +1823,8 @@
 						
 						var 
 						    template = require('./templates/footer.hbs')
-						  , Users = require('./Users');
+						  , Users = require('./Users')
+						  , Embed = require('./Embed');
 
 						module.exports = Backbone.Marionette.Layout.extend({
 
@@ -1788,7 +1844,8 @@
 						  },
 
 						  events: {
-						    "click .dashboard-btn": "onClickSwitcher"
+						    "click .dashboard-btn": "onClickSwitcher",
+						    "click .embed-btn": "showEmbedModal"
 						  },
 
 						  templateHelpers: {
@@ -1860,6 +1917,10 @@
 						    this.model.save({ wait: true });
 						  },
 
+						  showEmbedModal: function(){
+						    hackdash.app.modals.show(new Embed());
+						  }
+
 						  //--------------------------------------
 						  //+ PRIVATE AND PROTECTED METHODS
 						  //--------------------------------------
@@ -1876,6 +1937,22 @@
 
 
 							  return "<div class=\"modal-header\">\n  <button type=\"button\" data-dismiss=\"modal\" aria-hidden=\"true\" class=\"close\">×</button>\n  <h3>Add Dashboard Admin</h3>\n</div>\n<div class=\"modal-body\">\n  <div class=\"input-prepend\">\n    <span class=\"add-on\" style=\"padding: 10px;\">\n      <i class=\"icon-user\"></i>\n    </span>\n    <input id=\"txtUser\" type=\"text\" class=\"input-xlarge\" placeholder=\"type name or username\" autocomplete=\"off\" style=\"padding: 10px;\">\n  </div>\n</div>\n<div class=\"modal-footer\">\n  <input id=\"save\" type=\"button\" class=\"btn primary btn-success pull-right\" style=\"margin-left: 10px;\" value=\"Save\">\n  <input type=\"button\" class=\"btn primary pull-right\" data-dismiss=\"modal\" value=\"Cancel\">\n</div>";
+							  })
+							;
+						},
+						"embed.hbs.js": function (exports, module, require) {
+							module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+							  this.compilerInfo = [4,'>= 1.0.0'];
+							helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+							  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+							  buffer += "<div class=\"modal-header\">\n  <button type=\"button\" data-dismiss=\"modal\" aria-hidden=\"true\" class=\"close\">×</button>\n  <h3>Embed code</h3>\n</div>\n<div class=\"modal-body\">\n  <textarea rows=\"2\" style=\"width:90%;\">";
+							  if (stack1 = helpers.embedCode) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+							  else { stack1 = depth0.embedCode; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+							  buffer += escapeExpression(stack1)
+							    + "</textarea>\n</div>\n<div class=\"modal-footer\">\n  <input type=\"button\" class=\"btn primary pull-right\" data-dismiss=\"modal\" value=\"Cancel\">\n</div>";
+							  return buffer;
 							  })
 							;
 						},
@@ -1898,7 +1975,7 @@
 							    + "\">\n  ";
 							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += "\n</a>\n\n<a class=\"btn pull-right\" href=\"/api/v2/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n";
+							  buffer += "\n</a>\n\n<a class=\"btn pull-right\" href=\"/api/v2/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n<a class=\"btn pull-right embed-btn\">Embed code</a>\n";
 							  return buffer;
 							  }
 							function program2(depth0,data) {

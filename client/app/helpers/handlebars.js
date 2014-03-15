@@ -3,6 +3,15 @@
  * 
  */
 
+Handlebars.registerHelper('embedCode', function() {
+  var embedUrl = window.location.protocol + "//" + window.location.host;
+  var template = _.template('<iframe src="<%= embedUrl %>" width="100%" height="500" frameborder="0" allowtransparency="true" title="Hackdash"></iframe>');
+
+  return template({ 
+    embedUrl: embedUrl
+  });
+});
+
 Handlebars.registerHelper('firstUpper', function(text) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 });
