@@ -27,7 +27,7 @@ font-style: normal;
 }
 
 body>header { 
-  padding: 30px 0 30px 0;
+  padding: 30px 0 10px 0;
   background: #1e1d22;
   margin: 0 0 30px 0;
   text-align: center;
@@ -49,11 +49,11 @@ body>header  a.logo {
 }
 
 body>header p.lead {
-  margin-bottom: 0;
   font-size: 20px;
   font-weight: regular;
   color: rgba(255,255,255,0.4);
-  margin-top:-5px; margin-bottom: 30px
+  margin-top:-5px; 
+  margin-bottom: 10px
 }
 
 body>header .createProject {
