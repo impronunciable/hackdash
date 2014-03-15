@@ -732,6 +732,10 @@ header .orderby {
   border: none;
 }
 
+#ghImportBtn {
+  cursor: pointer;
+}
+
 .well-header {
   padding: 15px;
   background:#F8F8F8;

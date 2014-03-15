@@ -3727,6 +3727,8 @@
 						      minimumResultsForSearch: 10
 						    });
 
+						    $('a.select2-choice').attr('href', null);
+
 						    this.ui.tags.select2({
 						      tags:[],
 						      formatNoMatches: function(){ return ''; },
@@ -4173,7 +4175,7 @@
 							function program1(depth0,data) {
 							  
 							  
-							  return "\n        <div id=\"ghImportHolder\">\n          <a id=\"ghImportBtn\" href=\"#\">Import from Github</a>\n\n          <div class=\"gh-import control-group hidden\">\n            <div class=\"controls\">\n              <input id=\"txt-repo\" type=\"text\" placeholder=\"repo user/name\" name=\"repo\" class=\"input-block-level\"/>\n              <button id=\"searchGh\" class=\"btn\">Import</button>\n            </div>\n          </div>\n        </div>\n        ";
+							  return "\n        <div id=\"ghImportHolder\">\n          <a id=\"ghImportBtn\">Import from Github</a>\n\n          <div class=\"gh-import control-group hidden\">\n            <div class=\"controls\">\n              <input id=\"txt-repo\" type=\"text\" placeholder=\"repo user/name\" name=\"repo\" class=\"input-block-level\"/>\n              <button id=\"searchGh\" class=\"btn\">Import</button>\n            </div>\n          </div>\n        </div>\n        ";
 							  }
 
 							function program3(depth0,data) {

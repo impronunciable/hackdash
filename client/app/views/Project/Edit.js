@@ -151,6 +151,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
       minimumResultsForSearch: 10
     });
 
+    $('a.select2-choice').attr('href', null);
+
     this.ui.tags.select2({
       tags:[],
       formatNoMatches: function(){ return ''; },
