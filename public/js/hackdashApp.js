@@ -2900,13 +2900,13 @@
 							  buffer += "\n  <a class=\"btn-profile\" href=\"/users/profile\">\n    <img class=\"avatar tooltips\" src=\"";
 							  options = {hash:{},data:data};
 							  buffer += escapeExpression(((stack1 = helpers.user || depth0.user),stack1 ? stack1.call(depth0, "picture", options) : helperMissing.call(depth0, "user", "picture", options)))
-							    + "\" rel=\"tooltip\" data-placement=\"bottom\" data-original-title=\"Edit profile\">\n  </a>  \n  <a class=\"btn logout\" href=\"/logout\" data-bypass>Logout</a>\n\n    ";
+							    + "\" rel=\"tooltip\" data-placement=\"bottom\" data-original-title=\"Edit profile\">\n\n    ";
 							  options = {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data};
 							  if (stack2 = helpers.isDashboardView) { stack2 = stack2.call(depth0, options); }
 							  else { stack2 = depth0.isDashboardView; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
 							  if (!helpers.isDashboardView) { stack2 = blockHelperMissing.call(depth0, stack2, options); }
 							  if(stack2 || stack2 === 0) { buffer += stack2; }
-							  buffer += "\n\n  ";
+							  buffer += "\n  </a>  \n  <a class=\"btn logout\" href=\"/logout\" data-bypass>Logout</a>\n  ";
 							  return buffer;
 							  }
 							function program2(depth0,data) {
@@ -2921,7 +2921,7 @@
 							function program3(depth0,data) {
 							  
 							  
-							  return "\n      <br/>\n      <span class=\"admin-label\">Admin</span>\n      ";
+							  return "\n      <span class=\"admin-label\">Admin</span>\n      ";
 							  }
 
 							  buffer += "<div class=\"search-ctn\"></div>\n\n<div class=\"createProject pull-right btn-group\">\n  ";

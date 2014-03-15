@@ -36,7 +36,7 @@ body>header {
 body>header h1 {
   margin: 0;
   color: #FFF;
-  font-size: 50px;
+  font-size: 40px;
   line-height: 1em;
 }
 
@@ -61,8 +61,9 @@ body>header .createProject {
 }
 
 body>header div.createProject .logout {
-  height: 20px;
-  padding: 13px;
+  height: 26px;
+  padding: 12px;
+  line-height: 1.8em;
   margin-left: 10px;
 }
 
@@ -103,13 +104,12 @@ body>header .btn-showcase-save {
   margin-right: -225px;
 }
 
-.admin-label {
-  color: white;
-  font-weight: bold;
-  font-size: 20px;
-  padding: 10px 5px;
-  float: right;
-  font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
+body>header .btn-new-project {
+  position: absolute;
+  right: 0;
+  top: 60px;
+  font-size: 16px;
+  padding: 10px 20px;
 }
 
 .kindafixed-top {
@@ -386,6 +386,12 @@ line-height:                     0;
     float: none;
   }
 
+  header .btn-new-project {
+    position: static!important;
+    padding: 0.8em 1.2em!important;
+    font-size: 26px!important;
+  }
+
   header .btn.export {
     position: static;
     margin-top: 20px;
@@ -456,6 +462,7 @@ line-height:                     0;
   box-shadow: none;
   font-weight: bolder;
   margin-left: 5px;
+  position: relative;
       /* Firefox */
   -moz-transition: all 0.2s ease-in-out;
   /* WebKit */
@@ -470,6 +477,7 @@ line-height:                     0;
 .btn-profile img {
   width: 50px;
   height: 50px;
+  border: 2px solid white;
 }
 
 .profile-ctn ul {
@@ -487,6 +495,18 @@ line-height:                     0;
 
 .profile-ctn ul>li>a:hover {
   text-decoration: none;
+}
+
+.admin-label {
+  color: white;
+  font-size: 12px;
+  font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  position: absolute;
+  left: 1px;
+  top: 6px;
+  background: rgba(0,0,0,0.5);
+  width: 50px;
+  border: 1px solid white;
 }
 
 .projects.showcase .project .well {
