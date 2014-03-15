@@ -18,12 +18,16 @@ module.exports = Backbone.Marionette.Layout.extend({
   },
 
   ui: {
-    "switcher": ".dashboard-btn"
+    "switcher": ".dashboard-btn",
+    "showcaseMode": ".btn-showcase-mode",
+    "createShowcase": ".btn-new-project",
+    "footerToggle": ".footer-toggle-ctn"
   },
 
   events: {
     "click .dashboard-btn": "onClickSwitcher",
-    "click .embed-btn": "showEmbedModal"
+    "click .embed-btn": "showEmbedModal",
+    "click .btn-showcase-mode": "changeShowcaseMode"
   },
 
   templateHelpers: {
@@ -97,11 +101,38 @@ module.exports = Backbone.Marionette.Layout.extend({
 
   showEmbedModal: function(){
     hackdash.app.modals.show(new Embed());
-  }
+  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
+  changeShowcaseMode: function(){
+    if (this.ui.showcaseMode.hasClass("on")){
+
+      this.model.trigger("save:showcase");
+      this.model.trigger("end:showcase");
+      
+      this.model.isShowcaseMode = false;
+    
+      this.ui.showcaseMode
+        .text("Edit Showcase")
+        .removeClass("on");
+
+      this.ui.createShowcase.removeClass("hide");
+      this.ui.footerToggle.removeClass("hide");
+    }
+    else {
+      this.model.isShowcaseMode = true;
+      this.model.trigger("edit:showcase");
+
+      this.ui.showcaseMode
+        .text("Save Showcase")
+        .addClass("on");
+
+      this.ui.createShowcase.addClass("hide");
+      this.ui.footerToggle.addClass("hide");
+    }
+  }
 
 });

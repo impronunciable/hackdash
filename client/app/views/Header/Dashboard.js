@@ -17,15 +17,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   ui: {
     "title": "#dashboard-title",
     "description": "#dashboard-description",
-    "link": "#dashboard-link",
-    "showcaseMode": ".btn-showcase-mode",
-    "showcaseSave": ".btn-showcase-save",
-    "createShowcase": ".btn-new-project"
-  },
-
-  events: {
-    "click .btn-showcase-mode": "changeShowcaseMode",
-    "click .btn-showcase-save": "saveShowcase",
+    "link": "#dashboard-link"
   },
 
   templateHelpers: {
@@ -71,41 +63,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
 
-  exitShowcaseMode: function(){
-    this.model.isShowcaseMode = false;
-    this.ui.showcaseSave.addClass('hide');
-    this.ui.showcaseMode.removeClass("on");
-
-    this.ui.createShowcase.removeClass("hide");
-  },
-
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
-
-  changeShowcaseMode: function(){
-    if (this.ui.showcaseMode.hasClass("on")){
-      if (this.model.isDirty){
-        window.alert("Save Showcase before exit");
-        return;
-      }
-
-      this.model.trigger("end:showcase");      
-      this.exitShowcaseMode();
-    }
-    else {
-      this.model.isShowcaseMode = true;
-      this.model.trigger("edit:showcase");
-
-      this.ui.showcaseSave.removeClass('hide');
-      this.ui.showcaseMode.addClass("on");
-      this.ui.createShowcase.addClass("hide");
-    }
-  },
-
-  saveShowcase: function(){
-    this.model.trigger("save:showcase");
-  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS

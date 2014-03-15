@@ -1840,12 +1840,16 @@
 						  },
 
 						  ui: {
-						    "switcher": ".dashboard-btn"
+						    "switcher": ".dashboard-btn",
+						    "showcaseMode": ".btn-showcase-mode",
+						    "createShowcase": ".btn-new-project",
+						    "footerToggle": ".footer-toggle-ctn"
 						  },
 
 						  events: {
 						    "click .dashboard-btn": "onClickSwitcher",
-						    "click .embed-btn": "showEmbedModal"
+						    "click .embed-btn": "showEmbedModal",
+						    "click .btn-showcase-mode": "changeShowcaseMode"
 						  },
 
 						  templateHelpers: {
@@ -1919,12 +1923,39 @@
 
 						  showEmbedModal: function(){
 						    hackdash.app.modals.show(new Embed());
-						  }
+						  },
 
 						  //--------------------------------------
 						  //+ PRIVATE AND PROTECTED METHODS
 						  //--------------------------------------
 
+						  changeShowcaseMode: function(){
+						    if (this.ui.showcaseMode.hasClass("on")){
+
+						      this.model.trigger("save:showcase");
+						      this.model.trigger("end:showcase");
+						      
+						      this.model.isShowcaseMode = false;
+						    
+						      this.ui.showcaseMode
+						        .text("Edit Showcase")
+						        .removeClass("on");
+
+						      this.ui.createShowcase.removeClass("hide");
+						      this.ui.footerToggle.removeClass("hide");
+						    }
+						    else {
+						      this.model.isShowcaseMode = true;
+						      this.model.trigger("edit:showcase");
+
+						      this.ui.showcaseMode
+						        .text("Save Showcase")
+						        .addClass("on");
+
+						      this.ui.createShowcase.addClass("hide");
+						      this.ui.footerToggle.addClass("hide");
+						    }
+						  }
 
 						});
 					},
@@ -1965,17 +1996,17 @@
 							function program1(depth0,data) {
 							  
 							  var buffer = "", stack1;
-							  buffer += "\n<a class=\"tooltips btn dashboard-btn ";
+							  buffer += "\n<div class=\"footer-toggle-ctn\">\n  <a class=\"tooltips btn dashboard-btn ";
 							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += " pull-right\"\n  data-placement=\"top\" data-original-title=\"";
+							  buffer += " pull-right\"\n    data-placement=\"top\" data-original-title=\"";
 							  if (stack1 = helpers.switcherMsg) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
 							  else { stack1 = depth0.switcherMsg; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  buffer += escapeExpression(stack1)
-							    + "\">\n  ";
+							    + "\">\n    ";
 							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += "\n</a>\n\n<a class=\"btn pull-right\" href=\"/api/v2/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n<a class=\"btn pull-right embed-btn\">Embed code</a>\n";
+							  buffer += "\n  </a>\n\n  <a class=\"btn pull-right\" href=\"/api/v2/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n  <a class=\"btn pull-right embed-btn\">Embed code</a>\n</div>\n<a class=\"btn btn-large pull-right btn-showcase-mode\">Edit Showcase</a>\n";
 							  return buffer;
 							  }
 							function program2(depth0,data) {
@@ -2209,15 +2240,7 @@
 						  ui: {
 						    "title": "#dashboard-title",
 						    "description": "#dashboard-description",
-						    "link": "#dashboard-link",
-						    "showcaseMode": ".btn-showcase-mode",
-						    "showcaseSave": ".btn-showcase-save",
-						    "createShowcase": ".btn-new-project"
-						  },
-
-						  events: {
-						    "click .btn-showcase-mode": "changeShowcaseMode",
-						    "click .btn-showcase-save": "saveShowcase",
+						    "link": "#dashboard-link"
 						  },
 
 						  templateHelpers: {
@@ -2263,41 +2286,9 @@
 						  //+ PUBLIC METHODS / GETTERS / SETTERS
 						  //--------------------------------------
 
-						  exitShowcaseMode: function(){
-						    this.model.isShowcaseMode = false;
-						    this.ui.showcaseSave.addClass('hide');
-						    this.ui.showcaseMode.removeClass("on");
-
-						    this.ui.createShowcase.removeClass("hide");
-						  },
-
 						  //--------------------------------------
 						  //+ EVENT HANDLERS
 						  //--------------------------------------
-
-						  changeShowcaseMode: function(){
-						    if (this.ui.showcaseMode.hasClass("on")){
-						      if (this.model.isDirty){
-						        window.alert("Save Showcase before exit");
-						        return;
-						      }
-
-						      this.model.trigger("end:showcase");      
-						      this.exitShowcaseMode();
-						    }
-						    else {
-						      this.model.isShowcaseMode = true;
-						      this.model.trigger("edit:showcase");
-
-						      this.ui.showcaseSave.removeClass('hide');
-						      this.ui.showcaseMode.addClass("on");
-						      this.ui.createShowcase.addClass("hide");
-						    }
-						  },
-
-						  saveShowcase: function(){
-						    this.model.trigger("save:showcase");
-						  },
 
 						  //--------------------------------------
 						  //+ PRIVATE AND PROTECTED METHODS
@@ -2762,7 +2753,7 @@
 							  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.program(10, program10, data),fn:self.program(8, program8, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
 							  buffer += "\n\n  ";
-							  options = {hash:{},inverse:self.program(19, program19, data),fn:self.program(12, program12, data),data:data};
+							  options = {hash:{},inverse:self.program(17, program17, data),fn:self.program(12, program12, data),data:data};
 							  if (stack1 = helpers.isLoggedIn) { stack1 = stack1.call(depth0, options); }
 							  else { stack1 = depth0.isLoggedIn; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
 							  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
@@ -2808,9 +2799,6 @@
 							  buffer += "\n\n    ";
 							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(15, program15, data),fn:self.program(13, program13, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
-							  buffer += "\n\n    ";
-							  stack1 = helpers['if'].call(depth0, depth0.isAdmin, {hash:{},inverse:self.noop,fn:self.program(17, program17, data),data:data});
-							  if(stack1 || stack1 === 0) { buffer += stack1; }
 							  buffer += "\n\n  ";
 							  return buffer;
 							  }
@@ -2828,26 +2816,20 @@
 
 							function program17(depth0,data) {
 							  
-							  
-							  return "\n    <a class=\"btn btn-large btn-showcase-mode\">Showcase</a>\n    <a class=\"btn btn-large btn-showcase-save hide\">Save</a>\n    ";
-							  }
-
-							function program19(depth0,data) {
-							  
 							  var buffer = "", stack1;
 							  buffer += "\n\n    ";
-							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(22, program22, data),fn:self.program(20, program20, data),data:data});
+							  stack1 = helpers['if'].call(depth0, depth0.open, {hash:{},inverse:self.program(20, program20, data),fn:self.program(18, program18, data),data:data});
 							  if(stack1 || stack1 === 0) { buffer += stack1; }
 							  buffer += "\n\n  ";
 							  return buffer;
 							  }
-							function program20(depth0,data) {
+							function program18(depth0,data) {
 							  
 							  
 							  return "\n    <a class=\"btn btn-large\" href=\"/login\">Login to create a project</a>\n    ";
 							  }
 
-							function program22(depth0,data) {
+							function program20(depth0,data) {
 							  
 							  
 							  return "\n    <a class=\"btn btn-large\" href=\"/login\">Login to join/follow projects</a>\n    ";
