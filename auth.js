@@ -79,7 +79,7 @@ user){
 
           setPicture();
           
-          user.name = profile.displayName;
+          user.name = profile.displayName || '';
           user.username = profile.username || profile.displayName;
           user.save(function(err, user){  
             done(null, user);
