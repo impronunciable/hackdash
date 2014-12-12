@@ -35,15 +35,22 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.limit('3.5mb'));
   app.use(express.methodOverride());
+  
+  var prerender = app.get('config').prerender;
+  if (prerender && prerender.enabled){
+    app.use(require('prerender-node').set('prerenderServiceUrl', prerender.url));
+  }
+  
   app.use(express.cookieParser(app.get('config').session));
   app.use(express.session({
       secret: app.get('config').session
-    , store: new MongoStore({db: app.get('config').db.name, url:
-app.get('config').db.url}) 
+    , store: new MongoStore({db: app.get('config').db.name, url: app.get('config').db.url}) 
     , cookie: { maxAge: 365 * 24 * 60 * 60 * 1000, path: '/', domain: '.' + app.get('config').host }
   }));
+  
   app.use(passport.initialize());
   app.use(passport.session());
+
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
   

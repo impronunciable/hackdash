@@ -10,5 +10,9 @@
   "disqus_shortname": null,
 	"title": "hackdash",
 	"live": true,
-	"mailer": null
+	"mailer": null,
+  "prerender": {
+    "enabled": false,
+    "url": "http://localhost:4000" 
+  }
 }
