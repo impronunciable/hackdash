@@ -61,10 +61,12 @@ module.exports = Backbone.Marionette.Layout.extend({
       case "isearch":
         showSearch("Type here to search projects");
         this.ui.pageTitle.text("Projects");
+        this.setHeaders('Find Projects', 'Search projects at HackDash');
         break;
 
       case "dashboards":
         showSearch();
+        this.setHeaders('Create collections', 'Create your collection at HackDash');
         this.page.show(new DashboardsHeader());
         break;
 
@@ -72,6 +74,11 @@ module.exports = Backbone.Marionette.Layout.extend({
         showSearch();
         
         if (this.model.get("_id")){
+          
+          this.setHeaders(
+            this.model.get('title'), 
+            this.model.get('description'));
+
           this.page.show(new DashboardHeader({
             model: this.model
           }));
@@ -80,11 +87,17 @@ module.exports = Backbone.Marionette.Layout.extend({
 
       case "collections":
         showSearch("Type here to search collections");
+        this.setHeaders('Collections', 'Search collections at HackDash');
         this.page.show(new CollectionsHeader());
         break;
 
       case "collection":
         if (this.model.get("_id")){
+           
+          this.setHeaders(
+            this.model.get('title'), 
+            this.model.get('description'));
+
           this.page.show(new CollectionHeader({
             model: this.model
           }));
@@ -115,5 +128,9 @@ module.exports = Backbone.Marionette.Layout.extend({
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
+
+  setHeaders: function(title, desc){
+    window.hackdash.seo.title(title).desc(desc);    
+  }
 
 });

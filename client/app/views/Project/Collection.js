@@ -37,6 +37,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   },
 
   onRender: function(){
+
     var self = this;
     _.defer(function(){
       if (self.showcaseSort) {
