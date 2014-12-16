@@ -26,6 +26,8 @@ module.exports = function(app, uri, common) {
     });
   };
 
+  app.get(uri + '/:domain/projects', setQuery, setProjects, sendProjects);
+
   app.get(uri + '/projects', setQuery, setProjects, sendProjects);
 
   app.post(uri + '/projects', common.isAuth, canCreateProject, createProject, sendProject);
@@ -274,6 +276,9 @@ var setQuery = function(req, res, next){
 
   if (req.subdomains.length > 0) {
     req.query = { domain: req.subdomains[0] };
+  }
+  else if (req.params.domain) {
+    req.query = { domain: req.params.domain };
   }
 
   if (query.length === 0){

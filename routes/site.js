@@ -62,6 +62,9 @@ module.exports = function(app) {
   // ?q=[query]
   app.get('/dashboards', hackdashFullStack);
 
+  // Dashboards by domain
+  app.get('/dashboards/:dashboard', hackdashFullStack);
+
   // Collections search - ONLY without subdomain - redirects if any
   // ?q=[query]
   app.get('/collections', hackdashFullStack);

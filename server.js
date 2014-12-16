@@ -58,12 +58,15 @@ app.configure(function(){
      res.status(400);
      res.render('404');
   });
+
   app.use(function(error, req, res, next) {
     console.log(error);
      res.status(500);
      res.render('500');
   });
-  app.set('statuses',['brainstorming','wireframing','building','researching','prototyping','releasing']);
+
+  app.set('statuses', require('./models/statuses'));
+  
 	app.locals.title = config.title;
 });
 
