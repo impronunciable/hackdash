@@ -32,6 +32,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
       .attr({ "title": this.model.get("status") })
       .tooltip({});
 
+    window.hackdash.seo
+      .title(this.model.get('title'))
+      .desc(this.model.get('description'));
+
     $('.tooltips', this.$el).tooltip({});
   }
 

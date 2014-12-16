@@ -37,7 +37,7 @@ module.exports = Backbone.Marionette.Layout.extend({
   showcaseSort: false,
 
   onRender: function(){
-
+    
     if (this.showcaseMode){
       this.dashboard.show(new ProjectsView({
         model: this.model,

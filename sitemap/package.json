@@ -1,0 +1,21 @@
+{
+  "name": "hackdash",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node index",
+    "test": "make test"
+  },
+  "dependencies": {
+    "async": "^0.9.0",
+    "mongoose": "~3.6.13",
+    "sitemap": "^0.7.4",
+    "underscore": "^1.7.0",
+    "cron": "^1.0.5"
+  },
+  "devDependencies": { },
+  "engines": {
+    "node": "0.8.x",
+    "npm": "1.1.x"
+  }
+}

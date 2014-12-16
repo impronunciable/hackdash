@@ -13,6 +13,9 @@ var Projects = module.exports = Backbone.Collection.extend({
   idAttribute: "_id",
   
   url: function(){
+    if (this.domain){
+      return hackdash.apiURL + '/' + this.domain + '/projects';   
+    }
     return hackdash.apiURL + '/projects'; 
   },
 

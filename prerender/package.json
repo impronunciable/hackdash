@@ -1,0 +1,25 @@
+{
+  "name": "hackdash-prerender",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node index"
+  },
+  "dependencies": {
+    "cache-manager": "^0.14.0",
+    "mongodb": "^1.4.23",
+    "prerender": "^3.11.7"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "grunt": "^0.4.5",
+    "grunt-express-server": "^0.4.19",
+    "grunt-mocha-cov": "^0.3.0",
+    "mocha": "^2.0.1",
+    "request": "^2.51.0"
+  },
+  "engines": {
+    "node": "0.8.x",
+    "npm": "1.1.x"
+  }
+}

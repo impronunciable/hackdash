@@ -1,0 +1,7 @@
+{
+  "MONGO_URI": "mongodb://localhost/prerender",
+  "PORT": 4000,
+  "INTERVAL_DAYS": 15,
+  "WORKERS": 2,
+  "ITERATIONS": 200
+}
