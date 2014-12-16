@@ -1,4 +1,4 @@
-# Prerenderer
+# Prerender
 
 Module responsible of creating and managing a Client Cached version of each page crawled by a Serch Engine (like, google, bing, yahoo, etc)
 
