@@ -35,6 +35,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     , "projects/:pid" : "showProjectFull"
 
     , "dashboards" : "showDashboards"
+    , "dashboards/:dash": "showDashboard"
     
     , "collections" : "showCollections"
     , "collections/:cid" : "showCollection"
@@ -86,14 +87,19 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     }));
   },
 
-  showDashboard: function() {
+  showDashboard: function(dash) {
     this.removeHomeLayout();
 
     var app = window.hackdash.app;
     app.type = "dashboard";
 
-    app.dashboard = new Dashboard();
+    app.dashboard = new Dashboard(); 
     app.projects = new Projects();
+
+    if (dash){
+      app.dashboard.set('domain', dash);
+      app.projects.domain = dash;
+    }
 
     app.header.show(new Header({
       model: app.dashboard,
@@ -110,11 +116,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     }));
 
     var self = this;
-    app.dashboard.fetch()
-    .done(function(){
+    app.dashboard.fetch().done(function(){
       app.projects.fetch(self.getSearchQuery(), { parse: true })
         .done(function(){
-          app.projects.buildShowcase(app.dashboard.get("showcase"));  
+          app.projects.buildShowcase(app.dashboard.get("showcase"));
         });
     });
 

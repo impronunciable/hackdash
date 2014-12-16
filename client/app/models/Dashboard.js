@@ -11,11 +11,11 @@ module.exports = Backbone.Model.extend({
     admins: null
   },
 
-  url: function(){
-    return hackdash.apiURL + "/"; 
+  urlRoot: function(){
+    return hackdash.apiURL + '/dashboards'; 
   },
 
-  idAttribute: "_id", 
+  idAttribute: "domain", 
 
   initialize: function(){
     this.set("admins", new Admins());

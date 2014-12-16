@@ -18,8 +18,10 @@ module.exports = function(app, uri, common) {
 
   app.post(uri + '/dashboards', common.isAuth, validateSubdomain, createDashboard(app), sendDashboard);
   app.get(uri + '/dashboards', setQuery, setDashboards, sendDashboards);
-
+  
+  app.get(uri + '/dashboards/:domain', getDashboard, sendDashboard);
   app.get(uri + '/', getDashboard, sendDashboard);
+
   app.put(uri + '/', common.isAuth, getDashboard, isAdminDashboard, updateDashboard, sendDashboard);
 
   app.post(uri + '/', common.notAllowed);
@@ -90,18 +92,38 @@ var setDashboards = function(req, res, next){
 }
 
 var getDashboard = function(req, res, next){
+  var domain;
+
   if (req.subdomains.length > 0) {
-    Dashboard.findOne({ domain: req.subdomains[0] })
-      .exec(function(err, dashboard) {
-        if(err) return res.send(500);
-        if(!dashboard) return res.send(404);
-        req.dashboard = dashboard;
-        next();
-      });
+    domain = req.subdomains[0];
   }
   else {
+    domain = req.
     res.send(400, "Expected to be called at a subdomain");
   } 
+}
+
+var getDashboard = function(req, res, next){
+  var domain;
+
+  if (req.subdomains.length > 0) {
+    domain = req.subdomains[0];
+  }
+  else if (req.params.domain) {
+    domain = req.params.domain;
+  }
+  else {
+    return res.send(400, "Expected a dashboard name");
+  }
+
+  Dashboard
+    .findOne({ domain: domain })
+    .exec(function(err, dashboard) {
+      if(err) return res.send(500);
+      if(!dashboard) return res.send(404);
+      req.dashboard = dashboard;
+      next();
+    });
 }
 
 var isAdminDashboard = function(req, res, next){

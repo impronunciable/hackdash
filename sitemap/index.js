@@ -1,5 +1,6 @@
 
 var mongoose = require('mongoose'),
+  Schema = mongoose.Schema,
   sm = require('sitemap'),
   fs = require('fs'),
   url = require('url'),
@@ -7,11 +8,14 @@ var mongoose = require('mongoose'),
   _ = require('underscore');
 
 var config = require('../config.json');
-mongoose.connect(config.db.url || ('mongodb://' + config.db.host + '/'+ config.db.name));
+var configSM = require('./config.json');
 
-require('./models')({
-  get: function(){ return ['brainstorming','wireframing','building','researching','prototyping','releasing']; }
-});
+mongoose.connect(config.db.url || 
+  ('mongodb://' + config.db.host + '/'+ config.db.name));
+
+mongoose.model('Project', new Schema(require('../models/Project')) );
+mongoose.model('Dashboard', new Schema(require('../models/Dashboard')) );
+mongoose.model('Collection', new Schema(require('../models/Collection')) );
 
 function createSiteMap(urls) {
 
@@ -23,10 +27,16 @@ function createSiteMap(urls) {
   });
 
   fs.writeFile("../public/sitemap.xml", sitemap.toString(), function(err) {
+    
     if(err) {
-      return console.log(err);
+      console.log("Sitemap NOT updated");
+      console.log(err);
+      process.exit(1);
+      return;
     }
-    console.log("Sitemap ready!");
+
+    console.log("Sitemap updated - %s Resources", urls.length);
+    process.exit(0);
   }); 
 }
 
@@ -36,11 +46,9 @@ async.parallel({
     Project.find({}, function(err, projects){
 
       done(null, _.map(projects || [], function(p){
-        return { 
-          url: '/projects/' + p._id, 
-          changefreq: 'daily', 
-          priority: 0.3 
-        };
+        var cfg = _.clone(configSM.projects);
+        cfg.url = cfg.url.replace(/:id/ig, p._id);
+        return cfg;
       }));
 
     });
@@ -50,12 +58,10 @@ async.parallel({
 
     Dashboard.find({}, function(err, dashboards){
 
-      done(null, _.map(dashboards || [], function(dash){
-        return { 
-          url: '/dashboards/' + dash.domain, 
-          changefreq: 'daily', 
-          priority: 0.5 
-        };
+      done(null, _.map(dashboards || [], function(d){
+        var cfg = _.clone(configSM.dashboards);
+        cfg.url = cfg.url.replace(/:id/ig, d.domain);
+        return cfg;
       }));
 
     });
@@ -65,17 +71,20 @@ async.parallel({
 
     Collection.find({}, function(err, collections){
 
-      done(null, _.map(collections || [], function(coll){
-        return { 
-          url: '/collections/' + coll._id, 
-          changefreq: 'daily', 
-          priority: 0.6 
-        };
+      done(null, _.map(collections || [], function(c){
+        var cfg = _.clone(configSM.collections);
+        cfg.url = cfg.url.replace(/:id/ig, c._id);
+        return cfg;
       }));
 
     });
   }
 }, function(err, urls){
+
+  console.log("Writing Sitemap");
+  console.log(" %s Projects", urls.projects.length);
+  console.log(" %s Dashboards", urls.dashboards.length);
+  console.log(" %s Collections", urls.collections.length);
 
   createSiteMap(
     urls.projects.concat(
