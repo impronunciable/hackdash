@@ -25,6 +25,9 @@ In your `config.json`:
 * `title`: Instance title used in the html title tag and other headings.
 * `live`: Boolean (true, false) that enable/disable the live feed feature in yourdomain.com/live.
 * `mailer`: SMTP mail info to enable email notifications using nodemailer. Check out the [options](https://github.com/andris9/Nodemailer#setting-up-smtp)
+* `prerender`: 
+	+ `enabled`: Boolean (true, false). Where the website would use the SEO Prerender 
+	+ `url`: The url of the runing Service on your local (i.e.: http://localhost:4000). [More Info here](https://github.com/danzajdband/hackdash/tree/master/prerender)
 
 Running instances
 =================
