@@ -1,5 +1,5 @@
 /*! 
-* Hackdash - v0.6.0
+* Hackdash - v0.6.1
 * Copyright (c) 2014 Hackdash 
 *  
 */ 
@@ -678,7 +678,12 @@ module.exports = Backbone.Model.extend({
   },
 
   urlRoot: function(){
-    return hackdash.apiURL + '/dashboards'; 
+    if (this.get('domain')){
+      return hackdash.apiURL + '/dashboards'; 
+    }
+    else {
+      return hackdash.apiURL + '/';
+    }
   },
 
   idAttribute: "domain", 
