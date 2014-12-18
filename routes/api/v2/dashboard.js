@@ -89,19 +89,7 @@ var setDashboards = function(req, res, next){
       req.dashboards = dashboards || [];
       next();
     });
-}
-
-var getDashboard = function(req, res, next){
-  var domain;
-
-  if (req.subdomains.length > 0) {
-    domain = req.subdomains[0];
-  }
-  else {
-    domain = req.
-    res.send(400, "Expected to be called at a subdomain");
-  } 
-}
+};
 
 var getDashboard = function(req, res, next){
   var domain;
@@ -124,7 +112,7 @@ var getDashboard = function(req, res, next){
       req.dashboard = dashboard;
       next();
     });
-}
+};
 
 var isAdminDashboard = function(req, res, next){
   var isAdmin = (req.user.admin_in.indexOf(req.dashboard.domain) >= 0);
