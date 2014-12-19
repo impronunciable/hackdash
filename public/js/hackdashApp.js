@@ -3448,9 +3448,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   initSelect2: function(){
+    if (this.model.get('status')){
+      this.ui.status.val(this.model.get('status'));
+    }
+    
     this.ui.status.select2({
       minimumResultsForSearch: 10
     });
+
 
     $('a.select2-choice').attr('href', null);
 
