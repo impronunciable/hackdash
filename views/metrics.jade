@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title= Metrics
+    link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
+    link(rel="icon", href="/favicon.ico", type="image/x-icon")
+    link(rel='stylesheet', href='/styles/metrics.css')
+
+  body
+    .header
+      .logo
+      h1 Metrics
+    .container#page
+
+    script.
+      window.metrics = !{JSON.stringify(metrics)};
+
+    script(src="/js/libs/Chart.min.js")
+    script(src="/js/metrics.js")
