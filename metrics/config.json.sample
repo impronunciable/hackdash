@@ -1,0 +1,5 @@
+{
+  "cronTime": "00 00 11 * * 1-5",
+  "filename": "metrics.json",
+  "code": "some_secret_code_or_blank_for_none"
+}
