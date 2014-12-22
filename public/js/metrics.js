@@ -57,6 +57,13 @@ function sumByYear(){
         });
       }
 
+      if (!years[years.length-1]){
+        years.push({
+          year: item.date.year,
+          sum: 0
+        }); 
+      }
+      
       years[years.length-1].sum += item.count;
     });
 
