@@ -1,5 +1,5 @@
 /*! 
-* Hackdash - v0.6.1
+* Hackdash - v0.6.2
 * Copyright (c) 2014 Hackdash 
 *  
 */ 
@@ -3448,9 +3448,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   initSelect2: function(){
+    if (this.model.get('status')){
+      this.ui.status.val(this.model.get('status'));
+    }
+    
     this.ui.status.select2({
       minimumResultsForSearch: 10
     });
+
 
     $('a.select2-choice').attr('href', null);
 

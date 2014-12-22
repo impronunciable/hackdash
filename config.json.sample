@@ -13,6 +13,6 @@
   "mailer": null,
   "prerender": {
     "enabled": false,
-    "url": "http://localhost:4000" 
+    "db": "mongodb://localhost/prerender"
   }
 }

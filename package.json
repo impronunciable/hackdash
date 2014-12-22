@@ -1,6 +1,6 @@
 {
   "name": "hackdash",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "private": true,
   "scripts": {
     "start": "node server",
@@ -24,12 +24,13 @@
     "prerender-node": "^1.1.1",
     "socket.io": "~0.9.14",
     "superagent": "~0.10.0",
-    "underscore": "~1.4.4"
+    "underscore": "~1.4.4",
+    "mongodb": "^1.4.26"
   },
   "devDependencies": {
     "mocha": "~1.7.4",
-    "should": "~1.2.1",
-    "passport-http": "~0.2.1"
+    "passport-http": "~0.2.1",
+    "should": "~1.2.1"
   },
   "engines": {
     "node": "0.8.x",

@@ -36,11 +36,11 @@ app.configure(function(){
   app.use(express.limit('3.5mb'));
   app.use(express.methodOverride());
   
-  var prerender = app.get('config').prerender;
-  if (prerender && prerender.enabled){
-    app.use(require('prerender-node').set('prerenderServiceUrl', prerender.url));
+  var prCfg = app.get('config').prerender;
+  if (prCfg && prCfg.enabled){
+    app.use(require('./seo')(app));
   }
-  
+
   app.use(express.cookieParser(app.get('config').session));
   app.use(express.session({
       secret: app.get('config').session
