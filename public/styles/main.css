@@ -184,6 +184,11 @@ body>header .btn-new-project {
   height: 32px;
 }
 
+.well.full-project .avatar {
+  width:48px;
+  height: 48px; 
+}
+
 .modal .well {
   margin: 0
 }
@@ -1092,6 +1097,10 @@ h3.header {
   padding: 15px;
   margin:0;
   border-bottom: 1px solid #EEE
+}
+
+h3.header .avatar {
+  margin-right: 10px;
 }
 
 .span-center {

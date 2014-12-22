@@ -549,6 +549,31 @@ Handlebars.registerHelper('timeFromSeconds', function(seconds) {
   return "-";
 });
 
+Handlebars.registerHelper('getProfileImage', function(user) {
+
+  if (!user){
+    return '';
+  }
+
+  var img = new window.Image();
+
+  $(img)
+    .load(function () { })
+    .error(function () {
+      $('.' + this.id).attr('src', 'http://avatars.io/' + user.provider + '/' + user.username);
+    })
+    .prop({
+      id: 'pic-' + user._id,
+      src: user.picture,
+      'data-id': user._id,
+      title: user.name,
+      class: 'avatar tooltips pic-' + user._id,
+      rel: 'tooltip'
+    });
+
+  return new Handlebars.SafeString(img.outerHTML);
+});
+
 },{"hbsfy/runtime":80}],7:[function(require,module,exports){
 jQuery(function() {
   require('./Initializer')();
@@ -3095,10 +3120,10 @@ module.exports = Backbone.Marionette.Layout.extend({
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "<h3 class=\"header\">\n  <img src=\""
-    + escapeExpression(((helper = (helper = helpers.picture || (depth0 != null ? depth0.picture : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"picture","hash":{},"data":data}) : helper)))
-    + "\" style=\"margin-right: 10px;\" class=\"avatar\">\n  "
+  var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function";
+  return "<h3 class=\"header\">\n  "
+    + escapeExpression(((helpers.getProfileImage || (depth0 && depth0.getProfileImage) || helperMissing).call(depth0, depth0, {"name":"getProfileImage","hash":{},"data":data})))
+    + "\n  "
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
     + "\n</h3>\n<div class=\"profileInfo\">\n  <p><strong>Email: </strong>"
     + escapeExpression(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"email","hash":{},"data":data}) : helper)))
@@ -3536,7 +3561,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     return this.model.get("_id");
   },
 
-  className: "project tooltips",
+  className: "project",
   template: template,
 
   modelEvents: {
@@ -3548,10 +3573,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   onRender: function(){
-    this.$el
-      .addClass(this.model.get("status"))
-      .attr({ "title": this.model.get("status") })
-      .tooltip({});
+    this.$el.addClass(this.model.get("status"));
 
     window.hackdash.seo
       .title(this.model.get('title'))
@@ -4072,15 +4094,11 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "            <a href=\"/users/"
     + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
-    + "\">\n              <img class=\"tooltips\" rel=\"tooltip\" \n                src=\""
-    + escapeExpression(((helper = (helper = helpers.picture || (depth0 != null ? depth0.picture : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"picture","hash":{},"data":data}) : helper)))
-    + "\" data-id=\""
-    + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
-    + "\" title=\""
-    + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
-    + "\">\n            </a>\n";
+    + "\">\n              "
+    + escapeExpression(((helpers.getProfileImage || (depth0 && depth0.getProfileImage) || helperMissing).call(depth0, depth0, {"name":"getProfileImage","hash":{},"data":data})))
+    + "\n            </a>\n";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, lambda=this.lambda, buffer = "<div class=\"well\">\n  \n  <div class=\"well-header\">\n    <h3><a href=\"/\">"
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, lambda=this.lambda, buffer = "<div class=\"well full-project\">\n  \n  <div class=\"well-header\">\n    <h3><a href=\"/\">"
     + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
     + "</a></h3>\n    <h3>"
     + escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)))
@@ -4098,11 +4116,9 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   if (stack1 != null) { buffer += stack1; }
   buffer += "      </ul>\n    </div>\n\n    <div class=\"well-content span8\">\n\n      <div class=\"span4\">\n        <h5>Managed by</h5>\n        <a href=\"/users/"
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.leader : depth0)) != null ? stack1._id : stack1), depth0))
-    + "\">\n          <img src=\""
-    + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.leader : depth0)) != null ? stack1.picture : stack1), depth0))
-    + "\" title=\""
-    + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.leader : depth0)) != null ? stack1.name : stack1), depth0))
-    + "\" rel=\"tooltip\" class=\"tooltips\"/>\n        </a>\n      </div>\n\n      <div class=\"span4\">\n        <h5>Contributors</h5>\n";
+    + "\">\n          "
+    + escapeExpression(((helpers.getProfileImage || (depth0 && depth0.getProfileImage) || helperMissing).call(depth0, (depth0 != null ? depth0.leader : depth0), {"name":"getProfileImage","hash":{},"data":data})))
+    + "\n        </a>\n      </div>\n\n      <div class=\"span4\">\n        <h5>Contributors</h5>\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.contributors : depth0), {"name":"each","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "      </div>\n\n      <div class=\"span4\">\n        <h5>"
@@ -4153,13 +4169,9 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "      <a href=\"/users/"
     + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
-    + "\">\n        <img class=\"avatar tooltips\" rel=\"tooltip\" \n          src=\""
-    + escapeExpression(((helper = (helper = helpers.picture || (depth0 != null ? depth0.picture : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"picture","hash":{},"data":data}) : helper)))
-    + "\" data-id=\""
-    + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
-    + "\" title=\""
-    + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
-    + "\">\n      </a>\n";
+    + "\">\n        "
+    + escapeExpression(((helpers.getProfileImage || (depth0 && depth0.getProfileImage) || helperMissing).call(depth0, depth0, {"name":"getProfileImage","hash":{},"data":data})))
+    + "\n      </a>\n";
 },"7":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "    <div class=\"pull-right demo\">\n      <a href=\""

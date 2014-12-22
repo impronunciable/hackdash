@@ -106,3 +106,28 @@ Handlebars.registerHelper('timeFromSeconds', function(seconds) {
   
   return "-";
 });
+
+Handlebars.registerHelper('getProfileImage', function(user) {
+
+  if (!user){
+    return '';
+  }
+
+  var img = new window.Image();
+
+  $(img)
+    .load(function () { })
+    .error(function () {
+      $('.' + this.id).attr('src', 'http://avatars.io/' + user.provider + '/' + user.username);
+    })
+    .prop({
+      id: 'pic-' + user._id,
+      src: user.picture,
+      'data-id': user._id,
+      title: user.name,
+      class: 'avatar tooltips pic-' + user._id,
+      rel: 'tooltip'
+    });
+
+  return new Handlebars.SafeString(img.outerHTML);
+});

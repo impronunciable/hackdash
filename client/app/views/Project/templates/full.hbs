@@ -1,4 +1,4 @@
-<div class="well">
+<div class="well full-project">
   
   <div class="well-header">
     <h3><a href="/">{{domain}}</a></h3>
@@ -27,7 +27,7 @@
       <div class="span4">
         <h5>Managed by</h5>
         <a href="/users/{{leader._id}}">
-          <img src="{{leader.picture}}" title="{{leader.name}}" rel="tooltip" class="tooltips"/>
+          {{getProfileImage leader}}
         </a>
       </div>
 
@@ -35,8 +35,7 @@
         <h5>Contributors</h5>
           {{#each contributors}}
             <a href="/users/{{_id}}">
-              <img class="tooltips" rel="tooltip" 
-                src="{{picture}}" data-id="{{_id}}" title="{{name}}">
+              {{getProfileImage .}}
             </a>
           {{/each}}
       </div>
@@ -45,8 +44,7 @@
         <h5>{{followers.length}} Likes</h5>
           {{#each followers}}
             <a href="/users/{{_id}}">
-              <img class="tooltips" rel="tooltip" 
-                src="{{picture}}" data-id="{{_id}}" title="{{name}}">
+              {{getProfileImage .}}
             </a>
           {{/each}}
       </div>

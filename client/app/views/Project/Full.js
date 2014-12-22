@@ -15,7 +15,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     return this.model.get("_id");
   },
 
-  className: "project tooltips",
+  className: "project",
   template: template,
 
   modelEvents: {
@@ -27,10 +27,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   onRender: function(){
-    this.$el
-      .addClass(this.model.get("status"))
-      .attr({ "title": this.model.get("status") })
-      .tooltip({});
+    this.$el.addClass(this.model.get("status"));
 
     window.hackdash.seo
       .title(this.model.get('title'))
