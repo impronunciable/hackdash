@@ -22,6 +22,7 @@ module.exports = function(app, uri, common) {
   app.get(uri + '/dashboards/:domain', getDashboard, sendDashboard);
   app.get(uri + '/', getDashboard, sendDashboard);
 
+  app.put(uri + '/dashboards/:domain', common.isAuth, getDashboard, isAdminDashboard, updateDashboard, sendDashboard);
   app.put(uri + '/', common.isAuth, getDashboard, isAdminDashboard, updateDashboard, sendDashboard);
 
   app.post(uri + '/', common.notAllowed);
