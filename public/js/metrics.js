@@ -43,34 +43,32 @@ function setMaxYear(){
 }
 
 function sumByYear(){
+
   for (var type in window.metrics){
+
     var data = window.metrics[type].data;
-    var year, years = [], sum;
+    var years = [];
 
-    data.forEach(function(item){
+    for (var i=minYear; i<=maxYear; i++){
+      years.push({
+        year: i,
+        sum: 0
+      });
+    }
 
-      if (item.date.year !== year){
-        year = item.date.year;
-        years.push({
-          year: year,
-          sum: 0
-        });
-      }
+    years.forEach(function(yearData){
 
-      if (!years[years.length-1]){
-        years.push({
-          year: item.date.year,
-          sum: 0
-        }); 
-      }
-      
-      years[years.length-1].sum += item.count;
+      data.forEach(function(item){
+        if (item.date.year === yearData.year){
+          yearData.sum += item.count;
+        }
+      });
+
     });
 
     window.metrics[type].years = years;
   }
-
-  console.log(window.metrics);
+  
 }
 
 function getCounts(type, year){
@@ -82,7 +80,7 @@ function getCounts(type, year){
   
   data.forEach(function(item){
     if (item.date.year === year){
-      result[item.date.month] = item.count;
+      result[item.date.month-1] = item.count;
     }
   });
 
@@ -93,7 +91,7 @@ function createLineChart(type, options){
   var div = document.createElement('div');
 
   var h2 = document.createElement('h2');
-  h2.innerText = titles[type];
+  h2.innerHTML = titles[type];
   div.appendChild(h2);
 
   var canvas = document.createElement('canvas');
