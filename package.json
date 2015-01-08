@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node server",
-    "test": "make test"
+    "test": "grunt test"
   },
   "dependencies": {
     "commander": "~1.1.1",
@@ -14,7 +14,7 @@
     "jade": "~1.1.5",
     "markdown": "~0.4.0",
     "moment": "~1.7.2",
-    "mongoose": "~3.6.13",
+    "mongoose": "~3.8.21",
     "nodemailer": "~0.4.4",
     "passport": "0.1.x",
     "passport-facebook": "0.1.x",
@@ -28,9 +28,13 @@
     "mongodb": "^1.4.26"
   },
   "devDependencies": {
-    "mocha": "~1.7.4",
+    "chai": "^1.10.0",
+    "grunt": "^0.4.5",
+    "grunt-express-server": "^0.4.19",
+    "grunt-mocha-cov": "^0.3.0",
+    "mocha": "^2.1.0",
     "passport-http": "~0.2.1",
-    "should": "~1.2.1"
+    "request": "^2.51.0"
   },
   "engines": {
     "node": "0.8.x",

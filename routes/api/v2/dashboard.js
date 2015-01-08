@@ -19,6 +19,7 @@ module.exports = function(app, uri, common) {
   app.post(uri + '/dashboards', common.isAuth, validateSubdomain, createDashboard(app), sendDashboard);
   app.get(uri + '/dashboards', setQuery, setDashboards, sendDashboards);
   
+  app.get(uri + '/dashboards/:domain.jsonp', setFullOption, getDashboard, sendDashboard);
   app.get(uri + '/dashboards/:domain', getDashboard, sendDashboard);
   app.get(uri + '/', getDashboard, sendDashboard);
 
@@ -105,6 +106,39 @@ var getDashboard = function(req, res, next){
     return res.send(400, "Expected a dashboard name");
   }
 
+  if (req.isFull){
+
+    Dashboard
+      .findOne({ domain: domain })
+      .select('-__v')
+      .lean()
+      .exec(function(err, dashboard) {
+        if(err) return res.send(500);
+        if(!dashboard) return res.send(404);
+
+        req.dashboard = dashboard;
+
+        Project.find({ domain: domain })
+          .select('-__v -leader -tags')
+          .sort('title')
+          .lean()
+          .exec(function(err, projects) {
+
+            projects.forEach(function(p) { 
+              p.cover = p.cover || '';
+              p.contributors = p.contributors.length;
+              p.followers = p.followers.length;
+            });
+
+            req.dashboard.projects = projects;
+
+            next();
+          });
+      });
+
+    return;
+  }
+
   Dashboard
     .findOne({ domain: domain })
     .exec(function(err, dashboard) {
@@ -113,6 +147,12 @@ var getDashboard = function(req, res, next){
       req.dashboard = dashboard;
       next();
     });
+};
+
+var setFullOption = function(req, res, next){
+  // Access support by script tag to get a Dashboard as JSONP
+  req.isFull = true;
+  next();
 };
 
 var isAdminDashboard = function(req, res, next){
@@ -154,7 +194,12 @@ var updateDashboard = function(req, res, next) {
 };
 
 var sendDashboard = function(req, res){
-  res.send(req.dashboard);
+  if (req.isFull){
+    res.jsonp(req.dashboard);
+  }
+  else {
+    res.send(req.dashboard);
+  }
 };
 
 var sendDashboards = function(req, res){

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hackdash Embeds tests</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="vendor/mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+
+    <script src="vendor/mocha.js"></script>
+
+    <script>
+      mocha.setup('bdd');
+    </script>
+
+    <script src="./browserified_tests.js"></script>
+
+    <script>
+      mocha.globals(['hackdashEmbed', 'hdJsonpCallbacks']);
+
+      if (window.mochaPhantomJS) {
+        mochaPhantomJS.run();
+      }
+      else {
+        mocha.run();
+      }
+    </script>
+
+  </body>
+</html>
