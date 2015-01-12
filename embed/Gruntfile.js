@@ -122,11 +122,25 @@ module.exports = function(grunt) {
       }
     },
 
+    // Static Server for Client Tests ------
+
     connect: {
       server: {
         options: {
           port: 8000,
           base: '.',
+        }
+      }
+    },
+
+    // Hackdash SERVER to test Endpoints ---
+
+    express: {
+      test: {
+        options: {
+          script: '../server.js',
+          //node_env: 'test',
+          port: 3000
         }
       }
     }
@@ -141,8 +155,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-jshint");
   //grunt.loadNpmTasks("grunt-contrib-uglify");
   
-  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks("grunt-mocha-phantomjs");
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-express-server');
 
   grunt.registerTask("build", [
     "clean:before",
@@ -154,6 +169,7 @@ module.exports = function(grunt) {
   grunt.registerTask("test", [
     "build",
     "browserify:tests",
+    "express:test",
     "connect",
     "mocha_phantomjs"
   ]);

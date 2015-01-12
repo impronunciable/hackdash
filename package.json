@@ -7,6 +7,7 @@
     "test": "grunt test"
   },
   "dependencies": {
+    "async": "^0.9.0",
     "commander": "~1.1.1",
     "connect-mongo": "0.1.x",
     "express": "3.0.0",
@@ -14,6 +15,7 @@
     "jade": "~1.1.5",
     "markdown": "~0.4.0",
     "moment": "~1.7.2",
+    "mongodb": "^1.4.26",
     "mongoose": "~3.8.21",
     "nodemailer": "~0.4.4",
     "passport": "0.1.x",
@@ -24,8 +26,7 @@
     "prerender-node": "^1.1.1",
     "socket.io": "~0.9.14",
     "superagent": "~0.10.0",
-    "underscore": "~1.4.4",
-    "mongodb": "^1.4.26"
+    "underscore": "~1.4.4"
   },
   "devDependencies": {
     "chai": "^1.10.0",

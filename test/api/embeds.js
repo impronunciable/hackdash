@@ -69,6 +69,7 @@ describe('Embeds', function(){
 
         mustHave(data, [
           '_id',
+          'admins',
           'title',
           'description',
           'link',
@@ -80,7 +81,15 @@ describe('Embeds', function(){
 
         mustNOTHave(data, [ '__v' ]);
 
+        expect(data.admins).to.be.an('array');
         expect(data.projects).to.be.an('array');
+
+        data.admins.forEach(function(admin){
+          mustHave(admin, [ '_id', 'name', 'picture'/*, 'bio'*/ ]);
+          mustNOTHave(admin, [
+           '__v', 'provider', 'provider_id', 'username', 'email', 'admin_in', 'created_at'
+          ]);
+        });
 
         data.projects.forEach(function(p){
 
@@ -93,13 +102,19 @@ describe('Embeds', function(){
             'link',
             'contributors',
             'followers',
+            'leader',
             'created_at'
           ]);
 
-          mustNOTHave(p, [ '__v', 'leader', 'tags' ]);
+          mustNOTHave(p, [ '__v', 'tags' ]);
 
           expect(p.contributors).to.be.a('number');
           expect(p.followers).to.be.a('number');
+
+          mustHave(p.leader, [ '_id', 'name', 'picture', 'bio' ]);
+          mustNOTHave(p.leader, [
+           '__v', 'provider', 'provider_id', 'username', 'email', 'admin_in', 'created_at'
+          ]);
 
         });        
 

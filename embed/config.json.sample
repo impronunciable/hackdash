@@ -1,4 +1,5 @@
 {
-  "baseURI": "http://hackdash.org/api/v2/",
-  "baseURISSL": "https://hackdash.org/api/v2/"
+  "baseURI": "http://hackdash.org/",
+  "baseURISSL": "https://hackdash.org/",
+  "apiURI": "api/v2/"
 }

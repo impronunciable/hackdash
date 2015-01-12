@@ -1,12 +1,13 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-module.exports={
-  "baseURI": "http://local.host:3000/api/v2/",
-  "baseURISSL": "https://local.host:3000/api/v2/"
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/pjnovas/projects/hackdash/embed/config.json":[function(require,module,exports){
+module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
+  "baseURI": "http://local.host:3000/",
+  "baseURISSL": "https://local.host:3000/",
+  "apiURI": "api/v2/"
 }
-},{}],2:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/index.js":[function(require,module,exports){
 module.exports = require('./lib/chai');
 
-},{"./lib/chai":3}],3:[function(require,module,exports){
+},{"./lib/chai":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai.js":[function(require,module,exports){
 /*!
  * chai
  * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
@@ -95,7 +96,7 @@ exports.use(should);
 var assert = require('./chai/interface/assert');
 exports.use(assert);
 
-},{"./chai/assertion":4,"./chai/config":5,"./chai/core/assertions":6,"./chai/interface/assert":7,"./chai/interface/expect":8,"./chai/interface/should":9,"./chai/utils":20,"assertion-error":29}],4:[function(require,module,exports){
+},{"./chai/assertion":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/assertion.js","./chai/config":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/config.js","./chai/core/assertions":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/core/assertions.js","./chai/interface/assert":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/interface/assert.js","./chai/interface/expect":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/interface/expect.js","./chai/interface/should":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/interface/should.js","./chai/utils":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/index.js","assertion-error":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/node_modules/assertion-error/index.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/assertion.js":[function(require,module,exports){
 /*!
  * chai
  * http://chaijs.com
@@ -232,7 +233,7 @@ module.exports = function (_chai, util) {
   });
 };
 
-},{"./config":5}],5:[function(require,module,exports){
+},{"./config":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/config.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/config.js":[function(require,module,exports){
 module.exports = {
 
   /**
@@ -284,7 +285,7 @@ module.exports = {
 
 };
 
-},{}],6:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/core/assertions.js":[function(require,module,exports){
 /*!
  * chai
  * http://chaijs.com
@@ -1645,7 +1646,7 @@ module.exports = function (chai, _) {
   });
 };
 
-},{}],7:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/interface/assert.js":[function(require,module,exports){
 /*!
  * chai
  * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
@@ -2703,7 +2704,7 @@ module.exports = function (chai, util) {
   ('Throw', 'throws');
 };
 
-},{}],8:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/interface/expect.js":[function(require,module,exports){
 /*!
  * chai
  * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
@@ -2717,7 +2718,7 @@ module.exports = function (chai, util) {
 };
 
 
-},{}],9:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/interface/should.js":[function(require,module,exports){
 /*!
  * chai
  * Copyright(c) 2011-2014 Jake Luer <jake@alogicalparadox.com>
@@ -2797,7 +2798,7 @@ module.exports = function (chai, util) {
   chai.Should = loadShould;
 };
 
-},{}],10:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/addChainableMethod.js":[function(require,module,exports){
 /*!
  * Chai - addChainingMethod utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -2910,7 +2911,7 @@ module.exports = function (ctx, name, method, chainingBehavior) {
   });
 };
 
-},{"../config":5,"./flag":13,"./transferFlags":27}],11:[function(require,module,exports){
+},{"../config":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/config.js","./flag":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/flag.js","./transferFlags":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/transferFlags.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/addMethod.js":[function(require,module,exports){
 /*!
  * Chai - addMethod utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -2955,7 +2956,7 @@ module.exports = function (ctx, name, method) {
   };
 };
 
-},{"../config":5,"./flag":13}],12:[function(require,module,exports){
+},{"../config":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/config.js","./flag":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/flag.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/addProperty.js":[function(require,module,exports){
 /*!
  * Chai - addProperty utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -2997,7 +2998,7 @@ module.exports = function (ctx, name, getter) {
   });
 };
 
-},{}],13:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/flag.js":[function(require,module,exports){
 /*!
  * Chai - flag utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -3031,7 +3032,7 @@ module.exports = function (obj, key, value) {
   }
 };
 
-},{}],14:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getActual.js":[function(require,module,exports){
 /*!
  * Chai - getActual utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -3051,7 +3052,7 @@ module.exports = function (obj, args) {
   return args.length > 4 ? args[4] : obj._obj;
 };
 
-},{}],15:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getEnumerableProperties.js":[function(require,module,exports){
 /*!
  * Chai - getEnumerableProperties utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -3078,7 +3079,7 @@ module.exports = function getEnumerableProperties(object) {
   return result;
 };
 
-},{}],16:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getMessage.js":[function(require,module,exports){
 /*!
  * Chai - message composition utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -3130,7 +3131,7 @@ module.exports = function (obj, args) {
   return flagMsg ? flagMsg + ': ' + msg : msg;
 };
 
-},{"./flag":13,"./getActual":14,"./inspect":21,"./objDisplay":22}],17:[function(require,module,exports){
+},{"./flag":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/flag.js","./getActual":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getActual.js","./inspect":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/inspect.js","./objDisplay":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/objDisplay.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getName.js":[function(require,module,exports){
 /*!
  * Chai - getName utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -3152,7 +3153,7 @@ module.exports = function (func) {
   return match && match[1] ? match[1] : "";
 };
 
-},{}],18:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getPathValue.js":[function(require,module,exports){
 /*!
  * Chai - getPathValue utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -3256,7 +3257,7 @@ function _getPathValue (parsed, obj) {
   return res;
 };
 
-},{}],19:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getProperties.js":[function(require,module,exports){
 /*!
  * Chai - getProperties utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -3293,7 +3294,7 @@ module.exports = function getProperties(object) {
   return result;
 };
 
-},{}],20:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/index.js":[function(require,module,exports){
 /*!
  * chai
  * Copyright(c) 2011 Jake Luer <jake@alogicalparadox.com>
@@ -3409,7 +3410,7 @@ exports.addChainableMethod = require('./addChainableMethod');
 exports.overwriteChainableMethod = require('./overwriteChainableMethod');
 
 
-},{"./addChainableMethod":10,"./addMethod":11,"./addProperty":12,"./flag":13,"./getActual":14,"./getMessage":16,"./getName":17,"./getPathValue":18,"./inspect":21,"./objDisplay":22,"./overwriteChainableMethod":23,"./overwriteMethod":24,"./overwriteProperty":25,"./test":26,"./transferFlags":27,"./type":28,"deep-eql":30}],21:[function(require,module,exports){
+},{"./addChainableMethod":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/addChainableMethod.js","./addMethod":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/addMethod.js","./addProperty":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/addProperty.js","./flag":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/flag.js","./getActual":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getActual.js","./getMessage":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getMessage.js","./getName":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getName.js","./getPathValue":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getPathValue.js","./inspect":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/inspect.js","./objDisplay":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/objDisplay.js","./overwriteChainableMethod":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/overwriteChainableMethod.js","./overwriteMethod":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/overwriteMethod.js","./overwriteProperty":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/overwriteProperty.js","./test":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/test.js","./transferFlags":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/transferFlags.js","./type":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/type.js","deep-eql":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/node_modules/deep-eql/index.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/inspect.js":[function(require,module,exports){
 // This is (almost) directly from Node.js utils
 // https://github.com/joyent/node/blob/f8c335d0caf47f16d31413f89aa28eda3878e3aa/lib/util.js
 
@@ -3744,7 +3745,7 @@ function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 
-},{"./getEnumerableProperties":15,"./getName":17,"./getProperties":19}],22:[function(require,module,exports){
+},{"./getEnumerableProperties":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getEnumerableProperties.js","./getName":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getName.js","./getProperties":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/getProperties.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/objDisplay.js":[function(require,module,exports){
 /*!
  * Chai - flag utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -3795,7 +3796,7 @@ module.exports = function (obj) {
   }
 };
 
-},{"../config":5,"./inspect":21}],23:[function(require,module,exports){
+},{"../config":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/config.js","./inspect":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/inspect.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/overwriteChainableMethod.js":[function(require,module,exports){
 /*!
  * Chai - overwriteChainableMethod utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -3850,7 +3851,7 @@ module.exports = function (ctx, name, method, chainingBehavior) {
   };
 };
 
-},{}],24:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/overwriteMethod.js":[function(require,module,exports){
 /*!
  * Chai - overwriteMethod utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -3903,7 +3904,7 @@ module.exports = function (ctx, name, method) {
   }
 };
 
-},{}],25:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/overwriteProperty.js":[function(require,module,exports){
 /*!
  * Chai - overwriteProperty utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -3959,7 +3960,7 @@ module.exports = function (ctx, name, getter) {
   });
 };
 
-},{}],26:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/test.js":[function(require,module,exports){
 /*!
  * Chai - test utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -3987,7 +3988,7 @@ module.exports = function (obj, args) {
   return negate ? !expr : expr;
 };
 
-},{"./flag":13}],27:[function(require,module,exports){
+},{"./flag":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/flag.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/transferFlags.js":[function(require,module,exports){
 /*!
  * Chai - transferFlags utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4033,7 +4034,7 @@ module.exports = function (assertion, object, includeAll) {
   }
 };
 
-},{}],28:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/lib/chai/utils/type.js":[function(require,module,exports){
 /*!
  * Chai - type utility
  * Copyright(c) 2012-2014 Jake Luer <jake@alogicalparadox.com>
@@ -4080,7 +4081,7 @@ module.exports = function (obj) {
   return typeof obj;
 };
 
-},{}],29:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/node_modules/assertion-error/index.js":[function(require,module,exports){
 /*!
  * assertion-error
  * Copyright(c) 2013 Jake Luer <jake@qualiancy.com>
@@ -4192,10 +4193,10 @@ AssertionError.prototype.toJSON = function (stack) {
   return props;
 };
 
-},{}],30:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/node_modules/deep-eql/index.js":[function(require,module,exports){
 module.exports = require('./lib/eql');
 
-},{"./lib/eql":31}],31:[function(require,module,exports){
+},{"./lib/eql":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/node_modules/deep-eql/lib/eql.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/node_modules/deep-eql/lib/eql.js":[function(require,module,exports){
 /*!
  * deep-eql
  * Copyright(c) 2013 Jake Luer <jake@alogicalparadox.com>
@@ -4454,10 +4455,10 @@ function objectEqual(a, b, m) {
   return true;
 }
 
-},{"buffer":34,"type-detect":32}],32:[function(require,module,exports){
+},{"buffer":"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/buffer/index.js","type-detect":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/node_modules/deep-eql/node_modules/type-detect/index.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/node_modules/deep-eql/node_modules/type-detect/index.js":[function(require,module,exports){
 module.exports = require('./lib/type');
 
-},{"./lib/type":33}],33:[function(require,module,exports){
+},{"./lib/type":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/node_modules/deep-eql/node_modules/type-detect/lib/type.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/chai/node_modules/deep-eql/node_modules/type-detect/lib/type.js":[function(require,module,exports){
 /*!
  * type-detect
  * Copyright(c) 2013 jake luer <jake@alogicalparadox.com>
@@ -4601,7 +4602,7 @@ Library.prototype.test = function (obj, type) {
   }
 };
 
-},{}],34:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/buffer/index.js":[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -5655,7 +5656,7 @@ function decodeUtf8Char (str) {
   }
 }
 
-},{"base64-js":35,"ieee754":36,"is-array":37}],35:[function(require,module,exports){
+},{"base64-js":"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib/b64.js","ieee754":"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/buffer/node_modules/ieee754/index.js","is-array":"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/buffer/node_modules/is-array/index.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib/b64.js":[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -5777,7 +5778,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],36:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/buffer/node_modules/ieee754/index.js":[function(require,module,exports){
 exports.read = function(buffer, offset, isLE, mLen, nBytes) {
   var e, m,
       eLen = nBytes * 8 - mLen - 1,
@@ -5863,7 +5864,7 @@ exports.write = function(buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128;
 };
 
-},{}],37:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/buffer/node_modules/is-array/index.js":[function(require,module,exports){
 
 /**
  * isArray
@@ -5898,7 +5899,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],38:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/inherits/inherits_browser.js":[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -5923,7 +5924,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],39:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -6011,14 +6012,14 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],40:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/util/support/isBufferBrowser.js":[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],41:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/util/util.js":[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -6608,7 +6609,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":40,"_process":39,"inherits":38}],42:[function(require,module,exports){
+},{"./support/isBuffer":"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/util/support/isBufferBrowser.js","_process":"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/process/browser.js","inherits":"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/inherits/inherits_browser.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars.runtime.js":[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -6644,7 +6645,7 @@ Handlebars.create = create;
 Handlebars['default'] = Handlebars;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":43,"./handlebars/exception":44,"./handlebars/runtime":45,"./handlebars/safe-string":46,"./handlebars/utils":47}],43:[function(require,module,exports){
+},{"./handlebars/base":"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/base.js","./handlebars/exception":"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/exception.js","./handlebars/runtime":"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/runtime.js","./handlebars/safe-string":"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/safe-string.js","./handlebars/utils":"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/utils.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/base.js":[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -6876,7 +6877,7 @@ var createFrame = function(object) {
   return frame;
 };
 exports.createFrame = createFrame;
-},{"./exception":44,"./utils":47}],44:[function(require,module,exports){
+},{"./exception":"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/exception.js","./utils":"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/utils.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/exception.js":[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -6905,7 +6906,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],45:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/runtime.js":[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -7099,7 +7100,7 @@ exports.noop = noop;function initData(context, data) {
   }
   return data;
 }
-},{"./base":43,"./exception":44,"./utils":47}],46:[function(require,module,exports){
+},{"./base":"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/base.js","./exception":"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/exception.js","./utils":"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/utils.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/safe-string.js":[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -7111,7 +7112,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],47:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/utils.js":[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -7200,15 +7201,15 @@ exports.isEmpty = isEmpty;function appendContextPath(contextPath, id) {
 }
 
 exports.appendContextPath = appendContextPath;
-},{"./safe-string":46}],48:[function(require,module,exports){
+},{"./safe-string":"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars/safe-string.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/runtime.js":[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":42}],49:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/dist/cjs/handlebars.runtime.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/hbsfy/runtime.js":[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":48}],50:[function(require,module,exports){
+},{"handlebars/runtime":"/home/pjnovas/projects/hackdash/embed/node_modules/handlebars/runtime.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon-chai/lib/sinon-chai.js":[function(require,module,exports){
 (function (sinonChai) {
     "use strict";
 
@@ -7341,7 +7342,7 @@ module.exports = require("handlebars/runtime")["default"];
     exceptionalSinonMethod("thrown", "threw", "thrown %1");
 }));
 
-},{}],51:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon.js":[function(require,module,exports){
 /**
  * Sinon core utilities. For internal use only.
  *
@@ -7389,7 +7390,7 @@ var sinon = (function () {
     return sinon;
 }());
 
-},{"./sinon/assert":52,"./sinon/behavior":53,"./sinon/call":54,"./sinon/collection":55,"./sinon/extend":56,"./sinon/format":57,"./sinon/log_error":58,"./sinon/match":59,"./sinon/mock":60,"./sinon/sandbox":61,"./sinon/spy":62,"./sinon/stub":63,"./sinon/test":64,"./sinon/test_case":65,"./sinon/times_in_words":66,"./sinon/typeOf":67,"./sinon/util/core":68}],52:[function(require,module,exports){
+},{"./sinon/assert":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/assert.js","./sinon/behavior":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/behavior.js","./sinon/call":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/call.js","./sinon/collection":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/collection.js","./sinon/extend":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/extend.js","./sinon/format":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/format.js","./sinon/log_error":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/log_error.js","./sinon/match":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/match.js","./sinon/mock":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/mock.js","./sinon/sandbox":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/sandbox.js","./sinon/spy":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/spy.js","./sinon/stub":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/stub.js","./sinon/test":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/test.js","./sinon/test_case":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/test_case.js","./sinon/times_in_words":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/times_in_words.js","./sinon/typeOf":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/typeOf.js","./sinon/util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/assert.js":[function(require,module,exports){
 (function (global){
 /**
  * @depend times_in_words.js
@@ -7601,7 +7602,7 @@ var sinon = (function () {
 }(typeof sinon == "object" && sinon || null, typeof window != "undefined" ? window : (typeof self != "undefined") ? self : global));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./match":59,"./util/core":68}],53:[function(require,module,exports){
+},{"./match":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/match.js","./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/behavior.js":[function(require,module,exports){
 (function (process){
 /**
  * @depend util/core.js
@@ -7941,7 +7942,7 @@ var sinon = (function () {
 }(typeof sinon == "object" && sinon || null));
 
 }).call(this,require('_process'))
-},{"./util/core":68,"_process":39}],54:[function(require,module,exports){
+},{"./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js","_process":"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/process/browser.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/call.js":[function(require,module,exports){
 /**
   * @depend util/core.js
   * @depend match.js
@@ -8153,7 +8154,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./match":59,"./util/core":68}],55:[function(require,module,exports){
+},{"./match":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/match.js","./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/collection.js":[function(require,module,exports){
 /**
  * @depend util/core.js
  * @depend stub.js
@@ -8321,7 +8322,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./mock":60,"./spy":62,"./stub":63,"./util/core":68}],56:[function(require,module,exports){
+},{"./mock":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/mock.js","./spy":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/spy.js","./stub":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/stub.js","./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/extend.js":[function(require,module,exports){
 /**
  * @depend ../sinon.js
  */
@@ -8426,7 +8427,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./util/core":68}],57:[function(require,module,exports){
+},{"./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/format.js":[function(require,module,exports){
 /**
  * @depend ../sinon.js
  */
@@ -8516,7 +8517,7 @@ var sinon = (function () {
     (typeof formatio == "object" && formatio)
 ));
 
-},{"./util/core":68,"formatio":73,"util":41}],58:[function(require,module,exports){
+},{"./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js","formatio":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/node_modules/formatio/lib/formatio.js","util":"/home/pjnovas/projects/hackdash/embed/node_modules/grunt-browserify/node_modules/browserify/node_modules/util/util.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/log_error.js":[function(require,module,exports){
 /**
  * @depend ../sinon.js
  */
@@ -8586,7 +8587,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./util/core":68}],59:[function(require,module,exports){
+},{"./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/match.js":[function(require,module,exports){
 /**
  * @depend util/core.js
  * @depend typeOf.js
@@ -8841,7 +8842,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./util/core":68}],60:[function(require,module,exports){
+},{"./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/mock.js":[function(require,module,exports){
 /**
  * @depend times_in_words.js
  * @depend util/core.js
@@ -9291,7 +9292,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./call":54,"./match":59,"./spy":62,"./util/core":68}],61:[function(require,module,exports){
+},{"./call":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/call.js","./match":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/match.js","./spy":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/spy.js","./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/sandbox.js":[function(require,module,exports){
 /**
  * @depend util/core.js
  * @depend extend.js
@@ -9454,7 +9455,7 @@ var sinon = (function () {
     }
 }());
 
-},{"./collection":55,"./util/core":68,"./util/fake_server":70,"./util/fake_timers":71}],62:[function(require,module,exports){
+},{"./collection":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/collection.js","./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js","./util/fake_server":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/fake_server.js","./util/fake_timers":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/fake_timers.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/spy.js":[function(require,module,exports){
 /**
   * @depend times_in_words.js
   * @depend util/core.js
@@ -9892,7 +9893,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./call":54,"./util/core":68}],63:[function(require,module,exports){
+},{"./call":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/call.js","./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/stub.js":[function(require,module,exports){
 /**
  * @depend util/core.js
  * @depend extend.js
@@ -10059,7 +10060,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./behavior":53,"./spy":62,"./util/core":68}],64:[function(require,module,exports){
+},{"./behavior":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/behavior.js","./spy":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/spy.js","./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/test.js":[function(require,module,exports){
 /**
  * @depend util/core.js
  * @depend stub.js
@@ -10167,7 +10168,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./sandbox":61,"./util/core":68}],65:[function(require,module,exports){
+},{"./sandbox":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/sandbox.js","./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/test_case.js":[function(require,module,exports){
 /**
  * @depend util/core.js
  * @depend test.js
@@ -10272,7 +10273,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./test":64,"./util/core":68}],66:[function(require,module,exports){
+},{"./test":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/test.js","./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/times_in_words.js":[function(require,module,exports){
 /**
  * @depend ../sinon.js
  */
@@ -10317,7 +10318,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./util/core":68}],67:[function(require,module,exports){
+},{"./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/typeOf.js":[function(require,module,exports){
 /**
  * @depend ../sinon.js
  */
@@ -10369,7 +10370,7 @@ var sinon = (function () {
     (typeof formatio == "object" && formatio)
 ));
 
-},{"./util/core":68}],68:[function(require,module,exports){
+},{"./util/core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js":[function(require,module,exports){
 /**
  * @depend ../../sinon.js
  */
@@ -10681,7 +10682,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{}],69:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/event.js":[function(require,module,exports){
 /**
  * Minimal Event interface implementation
  *
@@ -10793,7 +10794,7 @@ if (typeof sinon == "undefined") {
     }
 }());
 
-},{"./core":68}],70:[function(require,module,exports){
+},{"./core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/fake_server.js":[function(require,module,exports){
 /**
  * @depend fake_xml_http_request.js
  * @depend ../format.js
@@ -11026,7 +11027,7 @@ if (typeof sinon == "undefined") {
     }
 }());
 
-},{"./core":68,"./fake_xml_http_request":72}],71:[function(require,module,exports){
+},{"./core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js","./fake_xml_http_request":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/fake_xml_http_request.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/fake_timers.js":[function(require,module,exports){
 (function (global){
 /*global lolex */
 
@@ -11107,7 +11108,7 @@ if (typeof sinon == "undefined") {
 }(typeof global != "undefined" && typeof global !== "function" ? global : this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./core":68,"lolex":75}],72:[function(require,module,exports){
+},{"./core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js","lolex":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/node_modules/lolex/src/lolex.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/fake_xml_http_request.js":[function(require,module,exports){
 /**
  * @depend core.js
  * @depend ../extend.js
@@ -11720,7 +11721,7 @@ if (typeof sinon == "undefined") {
 
 })(typeof self !== "undefined" ? self : this);
 
-},{"./core":68,"./event":69}],73:[function(require,module,exports){
+},{"./core":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/core.js","./event":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon/util/event.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/node_modules/formatio/lib/formatio.js":[function(require,module,exports){
 (function (global){
 ((typeof define === "function" && define.amd && function (m) {
     define("formatio", ["samsam"], m);
@@ -11937,7 +11938,7 @@ if (typeof sinon == "undefined") {
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"samsam":74}],74:[function(require,module,exports){
+},{"samsam":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/node_modules/formatio/node_modules/samsam/lib/samsam.js"}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/node_modules/formatio/node_modules/samsam/lib/samsam.js":[function(require,module,exports){
 ((typeof define === "function" && define.amd && function (m) { define("samsam", m); }) ||
  (typeof module === "object" &&
       function (m) { module.exports = m(); }) || // Node
@@ -12338,7 +12339,7 @@ if (typeof sinon == "undefined") {
     };
 });
 
-},{}],75:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/node_modules/lolex/src/lolex.js":[function(require,module,exports){
 (function (global){
 /*jslint eqeqeq: false, plusplus: false, evil: true, onevar: false, browser: true, forin: false*/
 /*global global*/
@@ -12764,8 +12765,8 @@ exports.install = function install(target, now, toFake) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],76:[function(require,module,exports){
-module.exports={
+},{}],"/home/pjnovas/projects/hackdash/embed/package.json":[function(require,module,exports){
+module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
   "author": "Hackdash",
   "name": "hackdash-embed",
   "description": "",
@@ -12789,6 +12790,7 @@ module.exports={
     "grunt-contrib-uglify": "^0.7.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-mocha-phantomjs": "^0.6.0",
+    "grunt-express-server": "^0.4.19",
     "handlebars": "^2.0.0",
     "hbsfy": "^2.2.1",
     "sinon": "^1.12.2",
@@ -12796,40 +12798,70 @@ module.exports={
   }
 }
 
-},{}],77:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/src/Dashboard.js":[function(require,module,exports){
 
 var template = require('./templates/dashboard.hbs');
 var JSONP = require('./JSONP');
 
-var uriDash = 'dashboards/';
+var Handlebars = require('hbsfy/runtime');
+
+var urls = {
+  dashboards: 'dashboards/',
+  projects: 'projects/',
+  users: 'users/',
+};
+
+Handlebars.registerHelper('getUserUrl', function(_id) {
+  return getBaseURL() + urls.users + _id;
+});
+
+Handlebars.registerHelper('getProjectUrl', function(_id) {
+  return getBaseURL() + urls.projects + _id;
+});
 
 var Dashboard = module.exports = function(options){
   var opts = options || {};
   
   this.container = opts.container;
   this.name = opts.name;
+
+  this.show = opts.show;
 };
 
 Dashboard.prototype.fetch = function(done){
-  var 
-    config = window.hackdashEmbed.config,
-    uri = config.baseURI,
-    uriSSL = config.baseURISSL,
-    useSSL = location.protocol === 'https:' && uriSSL;
-
-  uri = ( useSSL ? uriSSL : uri);
-
-  JSONP.fetch(uri + uriDash + this.name, done);
+  var baseURL = getBaseURL();
+  var apiURI = window.hackdashEmbed.config.apiURI;
+  JSONP.fetch(baseURL + apiURI + urls.dashboards + this.name, done);
 };
 
 Dashboard.prototype.render = function(data){
   data = data || {};
   data.projects = data.projects || [];
 
+  data.show = this.show;
+
+  var baseURL = getBaseURL();
+  data.urls = {
+    dashboards: baseURL + urls.dashboards,
+    projects: baseURL + urls.projects,
+    users: baseURL + urls.users
+  };
+
   this.container.innerHTML = template(data);
 };
 
-},{"./JSONP":78,"./templates/dashboard.hbs":81}],78:[function(require,module,exports){
+function getBaseURL(){
+  var 
+    config = window.hackdashEmbed.config,
+    uri = config.baseURI,
+    uriSSL = config.baseURISSL,
+    useSSL = location.protocol === 'https:' && uriSSL;
+
+  return ( useSSL ? uriSSL : uri );
+}
+
+
+},{"./JSONP":"/home/pjnovas/projects/hackdash/embed/src/JSONP.js","./templates/dashboard.hbs":"/home/pjnovas/projects/hackdash/embed/src/templates/dashboard.hbs","hbsfy/runtime":"/home/pjnovas/projects/hackdash/embed/node_modules/hbsfy/runtime.js"}],"/home/pjnovas/projects/hackdash/embed/src/JSONP.js":[function(require,module,exports){
 
 var callbackIndex = 0;
 
@@ -12855,7 +12887,7 @@ module.exports = {
 
 };
 
-},{}],79:[function(require,module,exports){
+},{}],"/home/pjnovas/projects/hackdash/embed/src/hackdash.js":[function(require,module,exports){
 
 var ctnName = 'hackdash-embed';
 
@@ -12886,7 +12918,10 @@ module.exports = {
 
     var dash = new Dashboard({
       container: container,
-      name: attr(container, dataAttr.dashboard)
+      name: attr(container, dataAttr.dashboard),
+      show: getShow(container, 
+        [ 'title', 'description', 'admins' ], 
+        [ 'leader', 'collaborators', 'followers', 'links' ])
     });
 
     dash.fetch(function(data){
@@ -12911,7 +12946,26 @@ function getContainers() {
 function attr(ele, attr){
   return ele.getAttribute(attr);
 }
-},{"./Dashboard":77}],80:[function(require,module,exports){
+
+function hasAttr(ele, attr){
+  return ele.hasAttribute(attr);
+}
+
+function getShow(container, props, projsProps){
+  var show = {};
+
+  props.forEach(function(prop){
+    show[prop] = hasAttr(container, 'data-' + prop);
+  });
+
+  show.project = {};
+  projsProps.forEach(function(prop){
+    show.project[prop] = hasAttr(container, 'data-' + prop);
+  });
+
+  return show;
+}
+},{"./Dashboard":"/home/pjnovas/projects/hackdash/embed/src/Dashboard.js"}],"/home/pjnovas/projects/hackdash/embed/src/index.js":[function(require,module,exports){
 
 module.exports = (function() {
   
@@ -12931,37 +12985,110 @@ module.exports = (function() {
 })();
 
 
-},{"../config.json":1,"../package.json":76,"./hackdash":79}],81:[function(require,module,exports){
+},{"../config.json":"/home/pjnovas/projects/hackdash/embed/config.json","../package.json":"/home/pjnovas/projects/hackdash/embed/package.json","./hackdash":"/home/pjnovas/projects/hackdash/embed/src/hackdash.js"}],"/home/pjnovas/projects/hackdash/embed/src/templates/dashboard.hbs":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
+  var stack1, buffer = "    <h2 class=\"title\">";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.title : depth0), {"name":"if","hash":{},"fn":this.program(2, data),"inverse":this.program(4, data),"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "</h2>\n";
+},"2":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)));
-  },"3":function(depth0,helpers,partials,data) {
+  },"4":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)));
-  },"5":function(depth0,helpers,partials,data) {
+  },"6":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "    <li class=\""
-    + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
-    + "\"> \n      <div class=\"cover\">\n        <img href=\""
-    + escapeExpression(((helper = (helper = helpers.cover || (depth0 != null ? depth0.cover : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"cover","hash":{},"data":data}) : helper)))
-    + "\">\n      </div>\n      <span class=\"title\">"
-    + escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)))
-    + "</span>\n      <p class=\"description\">"
+  return "    <p class=\"description\">"
     + escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"description","hash":{},"data":data}) : helper)))
-    + "</p>\n    </li>\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "<div>\n  <h2>";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.title : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data});
+    + "</p>\n";
+},"8":function(depth0,helpers,partials,data) {
+  var stack1, buffer = "    <ul class=\"admins\">\n";
+  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.admins : depth0), {"name":"each","hash":{},"fn":this.program(9, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "</h2>\n  <ul>\n";
-  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.projects : depth0), {"name":"each","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data});
+  return buffer + "    </ul>\n";
+},"9":function(depth0,helpers,partials,data) {
+  var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function";
+  return "      <li> \n        <a href=\""
+    + escapeExpression(((helpers.getUserUrl || (depth0 && depth0.getUserUrl) || helperMissing).call(depth0, (depth0 != null ? depth0._id : depth0), {"name":"getUserUrl","hash":{},"data":data})))
+    + "\">\n          <img href=\""
+    + escapeExpression(((helper = (helper = helpers.picture || (depth0 != null ? depth0.picture : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"picture","hash":{},"data":data}) : helper)))
+    + "\">\n          <h4>"
+    + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
+    + "</h4>\n          <p>"
+    + escapeExpression(((helper = (helper = helpers.bio || (depth0 != null ? depth0.bio : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"bio","hash":{},"data":data}) : helper)))
+    + "</p>\n        </a>\n      </li>\n";
+},"11":function(depth0,helpers,partials,data,depths) {
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "    <li class=\""
+    + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
+    + "\"> \n\n      <div class=\"cover\">\n        <img href=\""
+    + escapeExpression(((helper = (helper = helpers.cover || (depth0 != null ? depth0.cover : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"cover","hash":{},"data":data}) : helper)))
+    + "\">\n      </div>\n\n      <h3 class=\"title\">"
+    + escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)))
+    + "</h3>\n      <p class=\"description\">"
+    + escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"description","hash":{},"data":data}) : helper)))
+    + "</p>\n\n      <div class=\"people\">\n        \n";
+  stack1 = helpers['if'].call(depth0, ((stack1 = ((stack1 = (depths[1] != null ? depths[1].show : depths[1])) != null ? stack1.project : stack1)) != null ? stack1.leader : stack1), {"name":"if","hash":{},"fn":this.program(12, data, depths),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "  </ul>\n</div>";
-},"useData":true});
+  buffer += "\n";
+  stack1 = helpers['if'].call(depth0, ((stack1 = ((stack1 = (depths[1] != null ? depths[1].show : depths[1])) != null ? stack1.project : stack1)) != null ? stack1.collaborators : stack1), {"name":"if","hash":{},"fn":this.program(14, data, depths),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n";
+  stack1 = helpers['if'].call(depth0, ((stack1 = ((stack1 = (depths[1] != null ? depths[1].show : depths[1])) != null ? stack1.project : stack1)) != null ? stack1.followers : stack1), {"name":"if","hash":{},"fn":this.program(16, data, depths),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "      </div>\n\n";
+  stack1 = helpers['if'].call(depth0, ((stack1 = ((stack1 = (depths[1] != null ? depths[1].show : depths[1])) != null ? stack1.project : stack1)) != null ? stack1.links : stack1), {"name":"if","hash":{},"fn":this.program(18, data, depths),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "    </li>\n";
+},"12":function(depth0,helpers,partials,data) {
+  var stack1, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, lambda=this.lambda;
+  return "        <a class=\"leader\" href=\""
+    + escapeExpression(((helpers.getUserUrl || (depth0 && depth0.getUserUrl) || helperMissing).call(depth0, ((stack1 = (depth0 != null ? depth0.leader : depth0)) != null ? stack1._id : stack1), {"name":"getUserUrl","hash":{},"data":data})))
+    + "\">\n          <img href=\""
+    + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.leader : depth0)) != null ? stack1.picture : stack1), depth0))
+    + "\">\n          <h4>"
+    + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.leader : depth0)) != null ? stack1.name : stack1), depth0))
+    + "</h4>\n          <p>"
+    + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.leader : depth0)) != null ? stack1.bio : stack1), depth0))
+    + "</p>\n        </a>\n";
+},"14":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "        <div class=\"collaborators\">"
+    + escapeExpression(((helper = (helper = helpers.collaborators || (depth0 != null ? depth0.collaborators : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"collaborators","hash":{},"data":data}) : helper)))
+    + "</div>\n";
+},"16":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "        <div class=\"followers\">"
+    + escapeExpression(((helper = (helper = helpers.followers || (depth0 != null ? depth0.followers : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"followers","hash":{},"data":data}) : helper)))
+    + "</div>\n";
+},"18":function(depth0,helpers,partials,data) {
+  var helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "      <div class=\"links\">\n        <a class=\"follow\" href=\""
+    + escapeExpression(((helpers.getProjectUrl || (depth0 && depth0.getProjectUrl) || helperMissing).call(depth0, (depth0 != null ? depth0._id : depth0), {"name":"getProjectUrl","hash":{},"data":data})))
+    + "\">Follow</a>\n        <a class=\"share\" href=\""
+    + escapeExpression(((helpers.getProjectUrl || (depth0 && depth0.getProjectUrl) || helperMissing).call(depth0, (depth0 != null ? depth0._id : depth0), {"name":"getProjectUrl","hash":{},"data":data})))
+    + "\">Share</a>\n        <a class=\"join\" href=\""
+    + escapeExpression(((helpers.getProjectUrl || (depth0 && depth0.getProjectUrl) || helperMissing).call(depth0, (depth0 != null ? depth0._id : depth0), {"name":"getProjectUrl","hash":{},"data":data})))
+    + "\">Join</a>\n      </div>\n";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data,depths) {
+  var stack1, buffer = "<div>\n  \n  <div class=\"dashboard\">\n\n";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 != null ? depth0.show : depth0)) != null ? stack1.title : stack1), {"name":"if","hash":{},"fn":this.program(1, data, depths),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 != null ? depth0.show : depth0)) != null ? stack1.description : stack1), {"name":"if","hash":{},"fn":this.program(6, data, depths),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 != null ? depth0.show : depth0)) != null ? stack1.admins : stack1), {"name":"if","hash":{},"fn":this.program(8, data, depths),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n  </div>\n\n  <ul class=\"projects\">\n";
+  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.projects : depth0), {"name":"each","hash":{},"fn":this.program(11, data, depths),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "  </ul>\n\n</div>";
+},"useData":true,"useDepths":true});
 
-},{"hbsfy/runtime":49}],82:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/pjnovas/projects/hackdash/embed/node_modules/hbsfy/runtime.js"}],"/home/pjnovas/projects/hackdash/embed/test/specs/dashboard.js":[function(require,module,exports){
 
 var Dashboard = require('../../src/Dashboard');
 
@@ -12973,18 +13100,50 @@ var sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 
 var dash = {
-  title: 'Test Deashboard',
+  title: 'Test Dashboard',
+  description: 'Test Dashboard description',
   domain: 'testadmin',
+
+  admins: [{
+    _id: 'admin-12345',
+    picture: 'http://example.com/images/a1.png',
+    name: 'admin1',
+    bio: 'test test bio admin 1'
+  }, {
+    _id: 'admin-12346',
+    picture: 'http://example.com/images/a2.png',
+    name: 'admin2',
+    bio: 'test test bio admin 2'
+  }],
+
   projects: [{
+    _id: 'project-12345',
     title: 'project1',
     description: 'desc1',
     status: 'building',
-    cover: 'xxx'
+    cover: 'xxx',
+    collaborators: 5,
+    followers: 15,
+    leader: {
+      _id: 'leader-12345',
+      picture: 'http://example.com/images/l1.png',
+      name: 'leader1',
+      bio: 'test test bio 1'
+    }
   }, {
+    _id: 'project-12346',
     title: 'project2',
     description: 'desc2',
     status: 'prototyping',
-    cover: 'yyy'
+    cover: 'yyy',
+    collaborators: 3,
+    followers: 10,
+    leader: {
+      _id: 'leader-12346',
+      picture: 'http://example.com/images/l2.png',
+      name: 'leader2',
+      bio: 'test test bio 2'
+    }
   }]
 };
 
@@ -13020,16 +13179,61 @@ describe('Dashboard', function(){
 
       var dashboard = new Dashboard({
         container: ctn,
-        name: dash.domain
+        name: dash.domain,
+        show: {
+          title: true,
+          description: true,
+          admins: true,
+
+          project: {
+            leader: true,
+            collaborators: true,
+            followers: true,
+            links: true
+          }
+        }
       });
 
       dashboard.render(dash);
 
-      var header = ctn.querySelector('h2');
-      var list = ctn.querySelector('ul');
+      var dashEl = ctn.querySelector('.dashboard');
+
+      var header = dashEl.querySelector('h2.title');
+      var headerDesc = dashEl.querySelector('p.description');
+      var adminsEl = dashEl.querySelector('ul.admins');
+      var list = ctn.querySelector('ul.projects');
 
       expect(header).to.be.ok;
       expect(header.innerHTML).to.be.equal(dash.title);
+
+      expect(headerDesc).to.be.ok;
+      expect(headerDesc.innerHTML).to.be.equal(dash.description);
+
+      // Dashboard Admins -----------------------------------
+
+      expect(adminsEl).to.be.ok;
+      expect(adminsEl.innerHTML.trim().length).to.be.greaterThan(0);
+
+      var admins = adminsEl.querySelectorAll('li');
+      expect(admins.length).to.be.equal(dash.admins.length);
+
+      dash.admins.forEach(function(admin, i){
+
+        var adminEl = admins[i].querySelector('a');
+        var pic = adminEl.querySelector('img');
+        var name = adminEl.querySelector('h4');
+        var bio = adminEl.querySelector('p');
+
+        expect(adminEl.getAttribute('href'))
+          .to.be.equal('http://local.host:3000/users/' + admin._id);
+
+        expect(pic.getAttribute('href')).to.be.equal(admin.picture);
+        expect(name.innerHTML).to.be.equal(admin.name);
+        expect(bio.innerHTML).to.be.equal(admin.bio);
+
+      });
+
+      // Dashboard Projects -----------------------------------
 
       expect(list).to.be.ok;
       expect(list.innerHTML.trim().length).to.be.greaterThan(0);
@@ -13038,6 +13242,9 @@ describe('Dashboard', function(){
       expect(projs.length).to.be.equal(dash.projects.length);
 
       dash.projects.forEach(function(p, i){
+
+        // Project Info -----------------------------------
+
         var status = projs[i].className;
         var cover = projs[i].querySelector('.cover img');
         var title = projs[i].querySelector('.title');
@@ -13047,6 +13254,49 @@ describe('Dashboard', function(){
         expect(cover.getAttribute('href')).to.be.equal(p.cover);
         expect(title.innerHTML).to.be.equal(p.title);
         expect(desc.innerHTML).to.be.equal(p.description);
+
+        // Project People -----------------------------------
+
+        var people = projs[i].querySelector('.people');
+
+        var collaborators = people.querySelector('.collaborators');
+        var followers = people.querySelector('.followers');
+        
+        var leader = people.querySelector('.leader');
+        var pic = leader.querySelector('img');
+        var name = leader.querySelector('h4');
+        var bio = leader.querySelector('p');
+        
+        expect(parseInt(collaborators.innerHTML, 10))
+          .to.be.equal(p.collaborators);
+        expect(parseInt(followers.innerHTML, 10)).to.be.equal(p.followers);
+
+        expect(leader.getAttribute('href'))
+          .to.be.equal('http://local.host:3000/users/' + p.leader._id);
+
+        expect(pic.getAttribute('href')).to.be.equal(p.leader.picture);
+        expect(name.innerHTML).to.be.equal(p.leader.name);
+        expect(bio.innerHTML).to.be.equal(p.leader.bio);
+
+        // Project Links -----------------------------------
+
+        var links = projs[i].querySelector('.links');
+        var follow = links.querySelector('.follow');
+        var share = links.querySelector('.share');
+        var join = links.querySelector('.join');
+
+        expect(follow.getAttribute('href'))
+          .to.be.equal('http://local.host:3000/projects/' + p._id);
+        expect(follow.innerHTML).to.be.equal('Follow');
+
+        expect(share.getAttribute('href'))
+          .to.be.equal('http://local.host:3000/projects/' + p._id);
+        expect(share.innerHTML).to.be.equal('Share');
+
+        expect(join.getAttribute('href'))
+          .to.be.equal('http://local.host:3000/projects/' + p._id);
+        expect(join.innerHTML).to.be.equal('Join');
+
       });
 
       destroyContainer();
@@ -13072,12 +13322,20 @@ function createContainer(){
 
   ctn.setAttribute('data-dashboard', dash.domain);
 
+  ctn.setAttribute('data-title');
+  ctn.setAttribute('data-description');
+  ctn.setAttribute('data-admins');
+
+  ctn.setAttribute('data-leader');
+  ctn.setAttribute('data-collaborators');
+  ctn.setAttribute('data-followers');
+  ctn.setAttribute('data-links');
+
   document.body.appendChild(ctn);
   return ctn;
 }
 
-
-},{"../../src/Dashboard":77,"chai":2,"sinon":51,"sinon-chai":50}],83:[function(require,module,exports){
+},{"../../src/Dashboard":"/home/pjnovas/projects/hackdash/embed/src/Dashboard.js","chai":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/index.js","sinon":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon/lib/sinon.js","sinon-chai":"/home/pjnovas/projects/hackdash/embed/node_modules/sinon-chai/lib/sinon-chai.js"}],"/home/pjnovas/projects/hackdash/embed/test/specs/index.js":[function(require,module,exports){
 
 var expect = require('chai').expect;
 
@@ -13096,7 +13354,7 @@ describe('Hackdash Embeds', function(){
 });
 
 
-},{"../../src":80,"./dashboard":82,"chai":2}],84:[function(require,module,exports){
+},{"../../src":"/home/pjnovas/projects/hackdash/embed/src/index.js","./dashboard":"/home/pjnovas/projects/hackdash/embed/test/specs/dashboard.js","chai":"/home/pjnovas/projects/hackdash/embed/node_modules/chai/index.js"}],"/home/pjnovas/projects/hackdash/embed/test/suite.js":[function(require,module,exports){
 require('./specs');
 
-},{"./specs":83}]},{},[84]);
+},{"./specs":"/home/pjnovas/projects/hackdash/embed/test/specs/index.js"}]},{},["/home/pjnovas/projects/hackdash/embed/test/suite.js"]);

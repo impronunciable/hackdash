@@ -8,7 +8,8 @@
 var passport = require('passport')
   , mongoose = require('mongoose')
   , _ = require('underscore')
-  , config = require('../../../config.json');
+  , config = require('../../../config.json')
+  , async = require('async');
 
 var Project = mongoose.model('Project')
   , User = mongoose.model('User')
@@ -108,32 +109,48 @@ var getDashboard = function(req, res, next){
 
   if (req.isFull){
 
-    Dashboard
-      .findOne({ domain: domain })
-      .select('-__v')
-      .lean()
-      .exec(function(err, dashboard) {
+      async.parallel({
+        dashboard: function(done){
+          Dashboard
+            .findOne({ domain: domain })
+            .select('-__v')
+            .lean()
+            .exec(done);
+        },
+        admins: function(done){
+          User
+            .find({ "admin_in": domain })
+            .select('_id name picture bio')
+            .lean()
+            .exec(done);
+        },
+        projects: function(done){
+          Project
+            .find({ domain: domain })
+            .select('-__v -tags')
+            .populate('leader', '_id name picture bio')
+            .sort('title')
+            .lean()
+            .exec(done);
+        }
+      }, function(err, data){
+
         if(err) return res.send(500);
-        if(!dashboard) return res.send(404);
+        if(!data.dashboard) return res.send(404);
 
-        req.dashboard = dashboard;
+        data.projects = data.projects || [];
 
-        Project.find({ domain: domain })
-          .select('-__v -leader -tags')
-          .sort('title')
-          .lean()
-          .exec(function(err, projects) {
+        data.projects.forEach(function(p) { 
+          p.cover = p.cover || '';
+          p.contributors = p.contributors.length;
+          p.followers = p.followers.length;
+        });
 
-            projects.forEach(function(p) { 
-              p.cover = p.cover || '';
-              p.contributors = p.contributors.length;
-              p.followers = p.followers.length;
-            });
+        req.dashboard = data.dashboard;
+        req.dashboard.projects = data.projects;
+        req.dashboard.admins = data.admins;
 
-            req.dashboard.projects = projects;
-
-            next();
-          });
+        next();
       });
 
     return;
