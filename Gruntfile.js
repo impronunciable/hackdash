@@ -7,8 +7,8 @@ module.exports = function(grunt) {
       test: {
         options: {
           script: './server.js',
-          //node_env: 'test',
-          port: 3000
+          node_env: 'test',
+          port: require('./config.test').port
         }
       }
     },

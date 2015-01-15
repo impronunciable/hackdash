@@ -5,6 +5,7 @@ node_modules
 src/
 keys.json
 config.json
+config.test.json
 public/uploads/*
 
 *.sample

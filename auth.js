@@ -108,7 +108,7 @@ user){
 }
 
 // Anonymous auth for test porpouses 
-
+/*
 if(process.env.NODE_ENV == "test") {
 
   var BasicStrategy = require('passport-http').BasicStrategy;
@@ -126,6 +126,6 @@ if(process.env.NODE_ENV == "test") {
   app.all('*', passport.authenticate('basic'));
 
 }
-
+*/
 };
 

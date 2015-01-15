@@ -78,7 +78,7 @@ app.configure('development', function(){
  * Models
  */
 
-require('./models')(app);
+require('./models')();
 
 /*
  * Auth
