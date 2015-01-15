@@ -1,6 +1,6 @@
 /*! 
 * Hackdash - v0.6.2
-* Copyright (c) 2014 Hackdash 
+* Copyright (c) 2015 Hackdash 
 *  
 */ 
 
