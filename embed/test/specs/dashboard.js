@@ -231,14 +231,14 @@ function createContainer(){
 
   ctn.setAttribute('data-dashboard', dash.domain);
 
-  ctn.setAttribute('data-title');
-  ctn.setAttribute('data-description');
-  ctn.setAttribute('data-admins');
+  ctn.setAttribute('data-title', true);
+  ctn.setAttribute('data-description', true);
+  ctn.setAttribute('data-admins', true);
 
-  ctn.setAttribute('data-leader');
-  ctn.setAttribute('data-collaborators');
-  ctn.setAttribute('data-followers');
-  ctn.setAttribute('data-links');
+  ctn.setAttribute('data-leader', true);
+  ctn.setAttribute('data-collaborators', true);
+  ctn.setAttribute('data-followers', true);
+  ctn.setAttribute('data-links', true);
 
   document.body.appendChild(ctn);
   return ctn;

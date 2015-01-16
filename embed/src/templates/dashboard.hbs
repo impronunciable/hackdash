@@ -1,0 +1,67 @@
+
+<div class="dashboard">
+
+  {{#if show.title}}
+  <h2 class="title">{{#if title}}{{title}}{{else}}{{domain}}{{/if}}</h2>
+  {{/if}}
+
+  {{#if show.description}}
+  <p class="description">{{description}}</p>
+  {{/if}}
+
+
+  {{#if show.admins}}
+  <ul class="admins">
+    {{#each admins}}
+    <li>
+      <a href="{{getUserUrl ./_id}}">
+        <img href="{{picture}}">
+        <h4>{{name}}</h4>
+        <p>{{bio}}</p>
+      </a>
+    </li>
+    {{/each}}
+  </ul>
+  {{/if}}
+
+  <ul class="projects">
+    {{#each projects}}
+    <li class="{{status}}">
+      <div class="cover">
+        <img href="{{cover}}">
+      </div>
+      <h3 class="title">{{title}}</h3>
+      <p class="description">{{description}}</p>
+
+      <div class="people">
+        {{#if ../show.project.leader}}
+        <a class="leader" href="{{getUserUrl leader._id}}">
+          <img href="{{leader.picture}}">
+          <h4>{{leader.name}}</h4>
+          <p>{{leader.bio}}</p>
+        </a>
+        {{/if}}
+
+        {{#if ../show.project.collaborators}}
+          <div class="collaborators">{{collaborators}}</div>
+        {{/if}}
+
+        {{#if ../show.project.followers}}
+          <div class="followers">{{followers}}</div>
+        {{/if}}
+
+      </div>
+
+      {{#if ../show.project.links}}
+        <div class="links">
+          <a class="follow" href="{{getProjectUrl ../_id}}">Follow</a>
+          <a class="share" href="{{getProjectUrl ../_id}}">Share</a>
+          <a class="join" href="{{getProjectUrl ../_id}}">Join</a>
+        </div>
+      {{/if}}
+
+    </li>
+    {{/each}}
+  </ul>
+
+</div>
