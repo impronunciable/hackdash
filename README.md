@@ -37,3 +37,29 @@ Running instances
 * [BAHackaton](http://bahackaton.herokuapp.com): Buenos Aires City hackaton ideas.
 
 Add your own Dashboard!
+
+
+Contribute
+==========
+
+### Install GruntJS
+[GruntJS](http://gruntjs.com/) is required.
+
+```bash
+npm install -g grunt-cli
+```
+
+### Create a configuration file
+Create a `config.test.json` file using the config.json.sample with the configuration of your local for test. (i.e. mongoDB url for tests)
+
+### Running Tests
+```bash
+npm install
+npm test
+```
+
+or 
+
+```bash
+grunt test
+```
