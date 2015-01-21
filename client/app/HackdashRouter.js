@@ -23,10 +23,10 @@ var Dashboard = require("./models/Dashboard")
   , CollectionsView = require("./views/Collection/Collection");
 
 module.exports = Backbone.Marionette.AppRouter.extend({
-  
+
   routes : {
       "" : "index"
-    
+
     , "login" : "showLogin"
 
     , "projects" : "showProjects"
@@ -36,10 +36,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
     , "dashboards" : "showDashboards"
     , "dashboards/:dash": "showDashboard"
-    
+
     , "collections" : "showCollections"
     , "collections/:cid" : "showCollection"
-    
+
     , "users/profile": "showProfile"
     , "users/:user_id" : "showProfile"
   },
@@ -93,7 +93,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "dashboard";
 
-    app.dashboard = new Dashboard(); 
+    app.dashboard = new Dashboard();
     app.projects = new Projects();
 
     if (dash){
@@ -127,12 +127,12 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
   showProjects: function() {
     this.removeHomeLayout();
-    
+
     var app = window.hackdash.app;
     app.type = "isearch";
 
     app.projects = new Projects();
-    
+
     app.header.show(new Header({
       collection: app.projects
     }));
@@ -146,13 +146,13 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
   showProjectCreate: function(){
     this.removeHomeLayout();
-    
+
     var app = window.hackdash.app;
     app.type = "project";
 
     app.dashboard = new Dashboard();
     app.project = new Project();
-    
+
     app.header.show(new Header({
       model: app.dashboard
     }));
@@ -166,13 +166,13 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
   showProjectEdit: function(pid){
     this.removeHomeLayout();
-    
+
     var app = window.hackdash.app;
     app.type = "project";
 
     app.dashboard = new Dashboard();
     app.project = new Project({ _id: pid });
-    
+
     app.header.show(new Header({
       model: app.dashboard
     }));
@@ -187,13 +187,13 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
   showProjectFull: function(pid){
     this.removeHomeLayout();
-    
+
     var app = window.hackdash.app;
     app.type = "project";
 
     app.dashboard = new Dashboard();
     app.project = new Project({ _id: pid });
-    
+
     app.header.show(new Header({
       model: app.dashboard
     }));
@@ -208,12 +208,12 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
   showCollections: function() {
     this.removeHomeLayout();
-    
+
     var app = window.hackdash.app;
     app.type = "collections";
 
     app.collections = new Collections();
-    
+
     app.header.show(new Header({
       collection: app.collections
     }));
@@ -227,16 +227,16 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
   showCollection: function(collectionId) {
     this.removeHomeLayout();
-    
+
     var app = window.hackdash.app;
     app.type = "collection";
 
     app.collection = new Collection({ _id: collectionId });
-    
+
     app.collection
       .fetch({ parse: true })
       .done(function(){
-        
+
         app.header.show(new Header({
           model: app.collection
         }));
@@ -246,11 +246,11 @@ module.exports = Backbone.Marionette.AppRouter.extend({
           collection: app.collection.get("dashboards")
         }));
       });
-  },  
+  },
 
   showProfile: function(userId) {
     this.removeHomeLayout();
-    
+
     var app = window.hackdash.app;
     app.type = "profile";
 
@@ -278,13 +278,13 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
   showDashboards: function() {
     this.removeHomeLayout();
-    
+
     var app = window.hackdash.app;
     app.type = "dashboards";
 
     app.dashboards = new Dashboards();
     app.collections = new Collections();
-    
+
     app.header.show(new Header({
       collection: app.dashboards
     }));

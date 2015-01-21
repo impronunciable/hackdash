@@ -1,5 +1,5 @@
 
-var 
+var
     template = require('./templates/header.hbs')
   , Search = require('./Search')
   , DashboardHeader = require('./Dashboard')
@@ -47,7 +47,7 @@ module.exports = Backbone.Marionette.Layout.extend({
 
   onRender: function(){
     var type = window.hackdash.app.type;
-    
+
     var self = this;
     function showSearch(placeholder){
       self.search.show(new Search({
@@ -61,43 +61,33 @@ module.exports = Backbone.Marionette.Layout.extend({
       case "isearch":
         showSearch("Type here to search projects");
         this.ui.pageTitle.text("Projects");
-        this.setHeaders('Find Projects', 'Search projects at HackDash');
         break;
 
       case "dashboards":
         showSearch();
-        this.setHeaders('Create collections', 'Create your collection at HackDash');
         this.page.show(new DashboardsHeader());
         break;
 
       case "dashboard":
         showSearch();
-        
-        if (this.model.get("_id")){
-          
-          this.setHeaders(
-            this.model.get('title'), 
-            this.model.get('description'));
 
+        if (this.model.get("_id")){
           this.page.show(new DashboardHeader({
             model: this.model
           }));
+
+          // Hack - Remove this after removal of dashboard subdomain
+          window.document.title = (this.model.get('title') || "") + " HackDash";
         }
         break;
 
       case "collections":
         showSearch("Type here to search collections");
-        this.setHeaders('Collections', 'Search collections at HackDash');
         this.page.show(new CollectionsHeader());
         break;
 
       case "collection":
         if (this.model.get("_id")){
-           
-          this.setHeaders(
-            this.model.get('title'), 
-            this.model.get('description'));
-
           this.page.show(new CollectionHeader({
             model: this.model
           }));
@@ -128,9 +118,5 @@ module.exports = Backbone.Marionette.Layout.extend({
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
-
-  setHeaders: function(title, desc){
-    window.hackdash.seo.title(title).desc(desc);    
-  }
 
 });

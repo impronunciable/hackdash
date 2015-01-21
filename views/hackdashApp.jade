@@ -6,15 +6,19 @@ html
 
     title= meta.title
     meta(name="description", content= meta.description)
-
     link(rel='image_src', type='image/png', href= meta.image)
-    meta(property='og:image', content= meta.image)
 
+    meta(property='og:image', content= meta.image)
     meta(property='og:title', content= meta.title)
     meta(property='og:description', content= meta.description)
-    meta(property='og:url', content='//hackdash.org')
+    meta(property='og:url', content='http://hackdash.org')
     meta(property='og:site_name', content='HackDash')
     meta(property='og:type', content='website')
+
+    meta(property='twitter:card', content='summary')
+    meta(property='twitter:title', content= meta.title)
+    meta(property='twitter:description', content= meta.description)
+    meta(property='twitter:image:src', content= meta.image)
 
     link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
     link(rel="icon", href="/favicon.ico", type="image/x-icon")
