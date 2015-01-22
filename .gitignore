@@ -6,5 +6,6 @@ keys.json
 config.json
 config.test.json
 public/uploads/*
+npm-debug.log
 
 *.sample

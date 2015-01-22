@@ -17,3 +17,13 @@ Check out `config.json.sample` for your own `config.json`.
 npm install
 npm start
 ```
+
+## Exporting CSV
+
+* Dashboards
+
+Creates a dashboards.csv at this folder
+
+```bash
+node export_dashboards.js
+```

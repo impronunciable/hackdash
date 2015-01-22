@@ -35,12 +35,6 @@ module.exports = Backbone.Marionette.Layout.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
-  onRender: function(){
-    window.hackdash.seo
-      .title("HackDash: Ideas for a hackathon")
-      .desc("Upload your project. Add colaborators. Inform status. Share your app.");
-  },
-
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------

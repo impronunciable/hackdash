@@ -3,15 +3,14 @@ var passport = require('passport')
   , config = require('../config.json')
   , mongoose = require('mongoose');
 
-var User = mongoose.model('User')
-  , Project = mongoose.model('Project')
-  , Dashboard = mongoose.model('Dashboard');
+var Dashboard = mongoose.model('Dashboard');
 
 module.exports = function(app) {
+  var metas = require('../utils/metas')(app);
 
   var liveStack = [
     isLive(app),
-    loadUser, 
+    loadUser,
     loadProviders,
     dashExists,
     setViewVar('statuses', app.get('statuses')),
@@ -24,7 +23,7 @@ module.exports = function(app) {
   var appHost = app.get('config').host + (appPort && appPort !== 80 ? ':' + appPort : '');
 
   var hackdashFullStack = [
-    loadUser, 
+    loadUser,
     loadProviders,
     setSubdomain,
     checkProfile,
@@ -32,6 +31,7 @@ module.exports = function(app) {
     setViewVar('version', app.get('clientVersion')),
     setViewVar('statuses', app.get('statuses')),
     setViewVar('disqus_shortname', config.disqus_shortname),
+    metas.check(),
     render('hackdashApp')
   ];
 
@@ -42,55 +42,55 @@ module.exports = function(app) {
 
   // home page if no subdomain
   // dashboard if subdomain
-  app.get('/', hackdashFullStack);
+  app.get('/', metas.dashboard, hackdashFullStack);
 
   // Search all projects if no subdomain
   // Search projects inside dashboard if subdomain
   // ?q=[query]
-  app.get('/projects', hackdashFullStack);
+  app.get('/projects', metas.projects, hackdashFullStack);
 
   // Project Create Form for a dashboard - ONLY with a subdomain
   app.get('/projects/create', hackdashFullStack);
 
   // Project View - Always Read Only
-  app.get('/projects/:pid', hackdashFullStack);
+  app.get('/projects/:pid', metas.project, hackdashFullStack);
 
   // Project Edit Form - ONLY with a domain - redirects if not
   app.get('/projects/:pid/edit', hackdashFullStack);
 
   // Dashboards search - ONLY without subdomain - redirects if any
   // ?q=[query]
-  app.get('/dashboards', hackdashFullStack);
+  app.get('/dashboards', metas.dashboards, hackdashFullStack);
 
   // Dashboards by domain
-  app.get('/dashboards/:dashboard', hackdashFullStack);
+  app.get('/dashboards/:dashboard', metas.dashboard, hackdashFullStack);
 
   // Collections search - ONLY without subdomain - redirects if any
   // ?q=[query]
-  app.get('/collections', hackdashFullStack);
+  app.get('/collections', metas.collections, hackdashFullStack);
 
   // Collection View - ONLY without subdomain - redirects if any
   // Shows a list of dashboards - NO SEARCH
-  app.get('/collections/:cid', hackdashFullStack);
+  app.get('/collections/:cid', metas.collection, hackdashFullStack);
 
   // User Profile's View
   app.get('/users/profile', hackdashProfileStack);
 
   // Users Profile's card and entities
-  app.get('/users/:user_id', hackdashFullStack);
+  app.get('/users/:user_id', metas.user, hackdashFullStack);
 
   // Live view of a Dashboard - ONLY with a subomain
-  app.get('/live', liveStack);
+  app.get('/live', metas.dashboard, liveStack);
 
   // Login view
   app.get('/login', hackdashFullStack);
-  
+
   // Logout
   app.get('/logout', logout, redirect('/'));
 
   //keep previous Projects link working
-  app.get('/p/:pid', function(req, res){ 
-    res.redirect('/projects/' + req.params.pid);
+  app.get('/p/:pid', function(req, res){
+    res.redirect(301, '/projects/' + req.params.pid);
   });
 
 };
@@ -118,7 +118,7 @@ var setSubdomain = function(req, res, next){
   res.locals.subdomain = null;
 
   if (req.subdomains.length){
-    res.locals.subdomain = req.subdomains[0]; 
+    res.locals.subdomain = req.subdomains[0];
   }
 
   next();
@@ -170,7 +170,7 @@ var setViewVar = function(key, value) {
     res.locals[key] = value;
     next();
   };
-};  
+};
 
 /*
  * Load app providers

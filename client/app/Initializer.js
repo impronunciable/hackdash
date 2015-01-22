@@ -25,6 +25,5 @@ module.exports = function(){
   Placeholders.init({ live: true, hideOnFocus: true });
   
   window.hackdash.apiURL = "/api/v2";
-  window.hackdash.seo = require('./helpers/SEOHeader')();
   window.hackdash.startApp = require('./HackdashApp');
 };

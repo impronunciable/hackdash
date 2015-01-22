@@ -28,11 +28,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   onRender: function(){
     this.$el.addClass(this.model.get("status"));
-
-    window.hackdash.seo
-      .title(this.model.get('title'))
-      .desc(this.model.get('description'));
-
     $('.tooltips', this.$el).tooltip({});
   }
 
