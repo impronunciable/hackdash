@@ -41,13 +41,13 @@ module.exports = function(base_url, config){
         request.get(base_url + uri + '/testadmin.jsonp?callback=cb'
         , function (error, response, body){
           expect(response.statusCode).to.be.equal(200);
-          
+
           var startPos = body.indexOf('({');
           var endPos = body.indexOf('})');
 
           expect(startPos).to.be.greaterThan(-1);
           expect(endPos).to.be.greaterThan(-1);
-          
+
           expect(function(){
             JSON.parse(body);
           }).to.throw();
@@ -92,7 +92,7 @@ module.exports = function(base_url, config){
           mustNOTHave(data, [ '__v' ]);
 
           expect(data.admins).to.be.an('array');
-          expect(data.projects).to.be.an('array');
+          expect(data.admins.length).to.be.greaterThan(0);
 
           data.admins.forEach(function(admin){
             mustHave(admin, [ '_id', 'name', 'picture'/*, 'bio'*/ ]);
@@ -101,15 +101,18 @@ module.exports = function(base_url, config){
             ]);
           });
 
+          expect(data.projects).to.be.an('array');
+          expect(data.projects.length).to.be.greaterThan(0);
+
           data.projects.forEach(function(p){
 
             mustHave(p, [
-              '_id', 
-              'cover', 
+              '_id',
+              'cover',
               'status',
               'title',
               'description',
-              'link',
+              'domain',
               'contributors',
               'followers',
               'leader',
@@ -126,7 +129,7 @@ module.exports = function(base_url, config){
              '__v', 'provider', 'provider_id', 'username', 'email', 'admin_in', 'created_at'
             ]);
 
-          });        
+          });
 
           done();
         });
@@ -157,7 +160,7 @@ function getJsonFromJsonP(url, callback) {
       }
 
       callback(null, json);
-      
+
     } else {
       callback(error);
     }
@@ -165,56 +168,55 @@ function getJsonFromJsonP(url, callback) {
 };
 
 function createDashboards(done){
+  var dashName = 'testadmin';
 
-  dataBuilder.create('Dashboard', {
-    title: 'Test Dashboard',
-    description: 'Test Dashboard description',
-    domain: 'testadmin',
-/*
-    admins: [{
-      _id: 'admin-12345',
-      picture: 'http://example.com/images/a1.png',
-      name: 'admin1',
-      bio: 'test test bio admin 1'
-    }, {
-      _id: 'admin-12346',
-      picture: 'http://example.com/images/a2.png',
-      name: 'admin2',
-      bio: 'test test bio admin 2'
-    }],
+  dataBuilder.create('User', [{
+    username: 'user1',
+    provider: 'twitter',
+    provider_id: '1',
+    picture: 'http://example.com/images/a1.png',
+    name: 'admin1',
+    bio: 'test test bio admin 1',
+    admin_in: [dashName]
+  }, {
+    username: 'user2',
+    provider: 'twitter',
+    provider_id: '2',
+    picture: 'http://example.com/images/a2.png',
+    name: 'admin2',
+    bio: 'test test bio admin 2',
+    admin_in: [dashName]
+  }], function(err, users){
 
-    projects: [{
-      _id: 'project-12345',
+    dataBuilder.create('Project', [{
+      domain: dashName,
       title: 'project1',
       description: 'desc1',
       status: 'building',
       cover: 'xxx',
-      collaborators: 5,
-      followers: 15,
-      leader: {
-        _id: 'leader-12345',
-        picture: 'http://example.com/images/l1.png',
-        name: 'leader1',
-        bio: 'test test bio 1'
-      }
+      collaborators: [],
+      followers: [],
+      leader: users[0]
     }, {
-      _id: 'project-12346',
+      domain: dashName,
       title: 'project2',
       description: 'desc2',
       status: 'prototyping',
       cover: 'yyy',
       collaborators: 3,
       followers: 10,
-      leader: {
-        _id: 'leader-12346',
-        picture: 'http://example.com/images/l2.png',
-        name: 'leader2',
-        bio: 'test test bio 2'
-      }
-    }]
-*/
-  }, function(err, _dashboards){
-    dashboards = _dashboards;
-    done();
+      leader: users[1]
+    }],function(err, projects){
+
+      dataBuilder.create('Dashboard', {
+        title: 'Test Dashboard',
+        description: 'Test Dashboard description',
+        domain: dashName,
+        link: 'http://example.com'
+      }, done);
+
+    });
+
   });
+
 }

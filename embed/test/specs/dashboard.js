@@ -61,7 +61,7 @@ describe('Dashboard', function(){
   it('must call createDashboard if data-dashboard attribute', function(){
     var ctn = createContainer();
     sinon.spy(hackdashEmbed, 'createDashboard');
-    
+
     hackdashEmbed.build();
     expect(hackdashEmbed.createDashboard).to.have.been.calledOnce;
     expect(hackdashEmbed.createDashboard).to.have.been.calledWith(ctn);
@@ -170,12 +170,12 @@ describe('Dashboard', function(){
 
         var collaborators = people.querySelector('.collaborators');
         var followers = people.querySelector('.followers');
-        
+
         var leader = people.querySelector('.leader');
         var pic = leader.querySelector('img');
         var name = leader.querySelector('h4');
         var bio = leader.querySelector('p');
-        
+
         expect(parseInt(collaborators.innerHTML, 10))
           .to.be.equal(p.collaborators);
         expect(parseInt(followers.innerHTML, 10)).to.be.equal(p.followers);
@@ -224,7 +224,7 @@ function destroyContainer(){
 
 function createContainer(){
   destroyContainer();
-  
+
   var ctn = document.createElement('div');
   ctn.id = 'hd-ctn';
   ctn.className = 'hackdash-embed';

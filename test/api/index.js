@@ -6,7 +6,7 @@ var config = require('../../config.test')
 require('./dataBuilder')(config);
 
 describe('/api', function(){
-  
+
   require('./embeds')(baseURL, config);
-  
+
 });
