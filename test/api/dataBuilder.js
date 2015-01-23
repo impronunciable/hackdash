@@ -20,6 +20,9 @@ module.exports = function(config){
         function(done){ clear('Project', done); },
         function(done){ clear('User', done); }
       ], doneAll);
+    },
+    dropDatabase: function(done){
+      mongoose.connection.db.executeDbCommand({dropDatabase:1}, done);
     }
   };
 

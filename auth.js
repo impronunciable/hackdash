@@ -108,24 +108,22 @@ module.exports = function(app) {
     })(strategy);
 
   }
-/*
+
   // Anonymous auth for test porpouses
   if(process.env.NODE_ENV == "test") {
-    console.log('TEST ENV >>>> ');
+
     var BasicStrategy = require('passport-http').BasicStrategy;
 
-    var u;
-    var user = new User({provider: 'basic', provider_id: 1, username: 'test'});
-    user.save(function(err, usr){ u = usr; });
-
     passport.use(new BasicStrategy({}, function(username, password, done) {
-      process.nextTick(function () {
-        return done(null, u);
+
+      User.findOne({ username: username }, function(err, usr){
+        return done(null, usr);
       });
+
     }));
 
     app.all('*', passport.authenticate('basic'));
   }
-*/
+
 };
 

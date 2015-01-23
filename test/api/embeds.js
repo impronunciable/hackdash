@@ -6,15 +6,15 @@ var chai = require('chai');
 var expect = chai.expect;
 var dashboards;
 
-module.exports = function(base_url, config){
+module.exports = function(base_url, config, testUsers){
+  var user = testUsers[0].auth;
+
   dataBuilder = require('./dataBuilder')();
 
   describe('Embeds', function(){
 
     before(function(done){
-      dataBuilder.clearAll(function(){
-        createDashboards(done);
-      });
+      createDashboards(done);
     });
 
     describe('/dashboards', function(){
@@ -23,7 +23,10 @@ module.exports = function(base_url, config){
 
       it ('must return a json without a content-type', function(done){
 
-        request.get(base_url + uri + '/testadmin', function (error, response, body){
+        request.get({
+          url: base_url + uri + '/testadmin',
+          auth: user
+        }, function (error, response, body){
 
           expect(response.statusCode).to.be.equal(200);
 
@@ -38,8 +41,10 @@ module.exports = function(base_url, config){
 
       it ('must retrieve a jsonp with a content-type of javascript', function(done){
 
-        request.get(base_url + uri + '/testadmin.jsonp?callback=cb'
-        , function (error, response, body){
+        request.get({
+          url: base_url + uri + '/testadmin.jsonp?callback=cb',
+          auth: user
+        }, function (error, response, body){
           expect(response.statusCode).to.be.equal(200);
 
           var startPos = body.indexOf('({');
@@ -75,7 +80,10 @@ module.exports = function(base_url, config){
           });
         }
 
-        getJsonFromJsonP(base_url + uri + '/testadmin.jsonp?callback=cb', function(err, data){
+        getJsonFromJsonP(
+          base_url + uri + '/testadmin.jsonp?callback=cb',
+          user,
+        function(err, data){
 
           mustHave(data, [
             '_id',
@@ -141,9 +149,9 @@ module.exports = function(base_url, config){
 
 };
 
-function getJsonFromJsonP(url, callback) {
+function getJsonFromJsonP(url, usr, callback) {
 
-  request.get(url, function (error, response, body) {
+  request.get({ url: url, auth: usr }, function (error, response, body) {
 
     if (!error && response.statusCode == 200) {
       var jsonpData = body;
