@@ -12,7 +12,7 @@ module.exports = function(base_url, config){
   describe('Embeds', function(){
 
     before(function(done){
-      dataBuilder.clear('Dashboard', function(){
+      dataBuilder.clearAll(function(){
         createDashboards(done);
       });
     });
@@ -196,16 +196,16 @@ function createDashboards(done){
       cover: 'xxx',
       collaborators: [],
       followers: [],
-      leader: users[0]
+      leader: users[0]._id.toString()
     }, {
       domain: dashName,
       title: 'project2',
       description: 'desc2',
       status: 'prototyping',
       cover: 'yyy',
-      collaborators: 3,
-      followers: 10,
-      leader: users[1]
+      collaborators: [],
+      followers: [],
+      leader: users[1]._id.toString()
     }],function(err, projects){
 
       dataBuilder.create('Dashboard', {

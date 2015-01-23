@@ -13,12 +13,21 @@ module.exports = function(config){
 
   return {
     create: create,
-    clear: function(type, done){
-      mongoose.model(type).collection.remove(done);
-    },
+    clear: clear,
+    clearAll: function(doneAll){
+      async.series([
+        function(done){ clear('Dashboard', done); },
+        function(done){ clear('Project', done); },
+        function(done){ clear('User', done); }
+      ], doneAll);
+    }
   };
 
 };
+
+function clear(type, done){
+  mongoose.model(type).collection.remove(done);
+}
 
 function create(type, toCreate, done){
   toCreate = Array.isArray(toCreate) ? toCreate : [ toCreate ];
