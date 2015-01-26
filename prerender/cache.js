@@ -32,6 +32,10 @@ module.exports = function(config){
       cache.get(req.url, function (err, result) {
         if (!err && result) {
 
+          if (result.pending === true){
+            return cache.del(req.url, function(err){ next(); });
+          }
+
           var date = new Date();
           date.setDate(date.getDate() - interval);
 
@@ -41,7 +45,7 @@ module.exports = function(config){
 
           return res.send(200, result);
         }
-        
+
         next();
       });
     },
@@ -69,15 +73,16 @@ var mongo_cache = {
   set: function(key, value, callback) {
 
     database.collection('pages', function(err, collection) {
-      if (err) { 
-        console.log(err); 
+      if (err) {
+        console.log(err);
         return callback(err);
       }
 
-      collection.insert({ 
-        key: key, 
-        value: value, 
-        created: new Date() 
+      collection.insert({
+        key: key,
+        value: value,
+        created: new Date(),
+        pending: false
       }, function(err){
         callback && callback(err);
       });
