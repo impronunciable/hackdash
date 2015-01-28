@@ -6,7 +6,7 @@ if (!process.env.PORT && config.PORT){
   process.env.PORT = config.PORT;
 }
 
-require('./prerender')(config);
+require('./prerender');
 
 require('./fetcher')(config, function(err, fetcher){
 
@@ -18,4 +18,3 @@ require('./fetcher')(config, function(err, fetcher){
     kill(process.pid, 'SIGKILL');
   });
 });
-

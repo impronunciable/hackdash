@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     express: {
       test: {
         options: {
-          script: './index.js',
+          script: './prerender.js',
           port: 4001
         }
       },

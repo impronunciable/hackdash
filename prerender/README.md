@@ -27,7 +27,7 @@ And go to [http://localhost:4000/http://hackdash.org](http://localhost:4000/http
 
 ## Run tests
 ```
-grunt test
+grunt
 ```
 
 
