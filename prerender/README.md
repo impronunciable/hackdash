@@ -5,7 +5,7 @@ Module responsible of creating and managing a Client Cached version of each page
 ## How it works
 Hackdash webserver sets a `pending` value on each page asked by a Crawler. This process goes throw every url set as `pending` or `created` older than `INTERVAL_DAYS` and creates a client cached version, then next time Crawler asks for that url it will response the cached one using [Prerender Service](https://github.com/prerender/prerender).  
 
-*The process uses PhantomJS 1.9 for render, as it has some memory leaks it is not ready for production use, so use with caution.*
+**The process uses PhantomJS 1.9 for render, as it has some memory leaks it is not ready for production use, so use with caution.**
 
 ## Config
 
