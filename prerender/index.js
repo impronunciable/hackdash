@@ -6,15 +6,25 @@ if (!process.env.PORT && config.PORT){
   process.env.PORT = config.PORT;
 }
 
+console.log('Starting Prerender..');
+
 require('./prerender');
 
-require('./fetcher')(config, function(err, fetcher){
+console.log('Starting Fetcher..');
 
-  fetcher.fetch(function(err, result){
-    if (err) console.log('fetcher error: ' + err);
-    else console.log('fetcher urls cached: ' + result.urls.length);
+setTimeout(function(){
+  require('./fetcher')(config, function(err, fetcher){
 
-    // Kill this process and all children
-    kill(process.pid, 'SIGKILL');
+    fetcher.fetch(function(err, result){
+      if (err) console.log('fetcher error: ' + err);
+      else console.log('fetcher urls cached: ' + result.urls.length);
+
+      console.log('Killing tree..');
+
+      setTimeout(function(){
+        // Kill this process and all children
+        kill(process.pid, 'SIGKILL');
+      }, 2000);
+    });
   });
-});
+}, 2000);

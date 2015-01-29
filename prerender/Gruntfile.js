@@ -22,7 +22,8 @@ module.exports = function(grunt) {
       options: {
         files: 'test/index.js',
         ui: 'bdd',
-        colors: true
+        colors: true,
+        timeout: 3000
       },
       unit: {
         options: {
