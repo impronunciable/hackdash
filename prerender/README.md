@@ -1,10 +1,11 @@
 # Prerender
 
-Module responsible of creating and managing a Client Cached version of each page crawled by a Serch Engine (like, google, bing, yahoo, etc)
+Module responsible of creating and managing a Client Cached version of each page crawled by a Serch Engine (like, google, bing, yahoo, etc). 
 
 ## How it works
-Run in background as a service for HackDash at a defined port. It expose a url to fetch web pages already renederer by PhantomJS from a Search Engine Crawler. Hackdash proxies all request from a crawler to this service.  
-All this magic is done thanks to [Prerender Service](https://github.com/prerender/prerender)
+Hackdash webserver sets a `pending` value on each page asked by a Crawler. This process goes throw every url set as `pending` or `created` older than `INTERVAL_DAYS` and creates a client cached version, then next time Crawler asks for that url it will response the cached one using [Prerender Service](https://github.com/prerender/prerender).  
+
+*The process uses PhantomJS 1.9 for render, as it has some memory leaks it is not ready for production use, so use with caution.*
 
 ## Config
 
@@ -18,12 +19,13 @@ In your `config.json` file:
 
 Check out `config.json.sample` for your own `config.json`.
 
-## Start Service
+## Run the process
 ```bash
 npm install
-npm start
+node index
 ```
-And go to [http://localhost:4000/http://hackdash.org](http://localhost:4000/http://hackdash.org)
+
+If is run with `npm start` will throw some errors because it's killing the entire tree on finsih. Ignore them.
 
 ## Run tests
 ```
