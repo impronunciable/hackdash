@@ -137,6 +137,7 @@ function checkUser(user, expected){
   expect(user.picture).to.be.equal(expected.picture);
   expect(user.name).to.be.equal(expected.name);
   expect(user.bio).to.be.equal(expected.bio);
+  expect(new Date(user.created_at).toString()).to.be.equal(expected.created_at.toString());
 }
 
 function createTestUsers(done){

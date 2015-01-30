@@ -15,6 +15,9 @@ module.exports = function(config){
     create: create,
     count: count,
     clear: clear,
+    getById: function(type, id, done){
+      mongoose.model(type).findById(id, done);
+    },
     getFakeId: function(){
       return mongoose.Types.ObjectId();
     },

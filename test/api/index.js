@@ -23,6 +23,7 @@ describe('/api', function(){
 
   require('./embeds')(baseAPI, config, [ userAuthA, userAuthB ]);
   require('./users')(baseAPI, config, [ userAuthA, userAuthB ]);
+  require('./profiles')(baseAPI, config, [ userAuthA, userAuthB ]);
 
 });
 
