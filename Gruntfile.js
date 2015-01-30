@@ -2,7 +2,7 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
-  
+
     express: {
       test: {
         options: {
@@ -24,12 +24,23 @@ module.exports = function(grunt) {
           reporter: 'spec'
         }
       },
+    },
+
+    watch: {
+      test: {
+        files: ["models/**/*", "routes/api/**/*", "test/api/**/*"],
+        tasks: ['test'],
+        options: {
+          atBegin: true
+        }
+      }
     }
 
   });
-  
+
   grunt.loadNpmTasks('grunt-express-server');
   grunt.loadNpmTasks('grunt-mocha-cov');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask("test", ['express:test', 'mochacov:unit']);
   grunt.registerTask("default", 'test');

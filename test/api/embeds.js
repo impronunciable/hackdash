@@ -5,6 +5,7 @@ var dataBuilder;
 var chai = require('chai');
 var expect = chai.expect;
 var dashboards;
+var users;
 
 module.exports = function(base_url, config, testUsers){
   var user = testUsers[0].auth;
@@ -17,9 +18,18 @@ module.exports = function(base_url, config, testUsers){
       createDashboards(done);
     });
 
+    after(function(done){
+      dataBuilder.clear('Project', function(){
+        dataBuilder.clear('Dashboard', function(){
+          var ids = users.map(function(u){ return u._id; });
+          dataBuilder.clear('User', ids, done);
+        });
+      });
+    });
+
     describe('/dashboards', function(){
 
-      var uri = '/api/v2/dashboards';
+      var uri = '/dashboards';
 
       it ('must return a json without a content-type', function(done){
 
@@ -194,7 +204,8 @@ function createDashboards(done){
     name: 'admin2',
     bio: 'test test bio admin 2',
     admin_in: [dashName]
-  }], function(err, users){
+  }], function(err, _users){
+    users = _users;
 
     dataBuilder.create('Project', [{
       domain: dashName,
@@ -204,7 +215,7 @@ function createDashboards(done){
       cover: 'xxx',
       collaborators: [],
       followers: [],
-      leader: users[0]._id.toString()
+      leader: _users[0]._id.toString()
     }, {
       domain: dashName,
       title: 'project2',
@@ -213,7 +224,7 @@ function createDashboards(done){
       cover: 'yyy',
       collaborators: [],
       followers: [],
-      leader: users[1]._id.toString()
+      leader: _users[1]._id.toString()
     }],function(err, projects){
 
       dataBuilder.create('Dashboard', {

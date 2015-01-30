@@ -63,3 +63,9 @@ or
 ```bash
 grunt test
 ```
+
+Using a watcher while you develop
+
+```bash
+grunt watch
+```

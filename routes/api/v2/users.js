@@ -71,6 +71,7 @@ var getUser = function(req, res, next){
   User
     .findById(req.params.uid, function(err, user){
       if(err) return res.send(500);
+      if(!user) return res.send(404);
       req.user_profile = user.toObject();
       next();
     });
@@ -80,7 +81,7 @@ var getUsers = function(req, res, next){
   User
     .find(req.query || {})
     .limit(10)
-    .sort( { "name" : 1 }, { "username" : 1 } )
+    .sort("name username")
     .exec(function(err, users) {
       if(err) return res.send(500);
       req.users = users;

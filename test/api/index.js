@@ -1,6 +1,7 @@
 
 var config = require('../../config.test')
   , baseURL = "http://" + config.host + ":" + config.port
+  , baseAPI = baseURL + "/api/v2"
   , request = require('request');
 
 var dataBuilder = require('./dataBuilder')(config);
@@ -20,7 +21,8 @@ describe('/api', function(){
     dataBuilder.dropDatabase(done);
   });
 
-  require('./embeds')(baseURL, config, [ userAuthA, userAuthB ]);
+  require('./embeds')(baseAPI, config, [ userAuthA, userAuthB ]);
+  require('./users')(baseAPI, config, [ userAuthA, userAuthB ]);
 
 });
 
