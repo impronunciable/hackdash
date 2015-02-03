@@ -10,11 +10,14 @@ module.exports = function(app){
 
   var config = app.get('config');
   var hdTitle = config.title || "HackDash";
+  var hdDomain = config.host;
+  var baseURL = 'http://' + hdDomain;
 
   return {
 
     projects: function(req, res, next){
       res.locals.meta = {
+        url: baseURL + '/projects/',
         title: "Find Projects",
         description: "Search projects at " + hdTitle
       };
@@ -30,6 +33,7 @@ module.exports = function(app){
         // TODO: NotFound
 
         res.locals.meta = {
+          url: baseURL + '/projects/' + project._id,
           title: project.title,
           description: project.description,
           image: project.cover
@@ -48,6 +52,7 @@ module.exports = function(app){
 
     dashboards: function(req, res, next){
       res.locals.meta = {
+        url: baseURL,
         title: "Create collections",
         description: "Create your collection at " + hdTitle
       };
@@ -62,6 +67,7 @@ module.exports = function(app){
         // Home Page
 
         res.locals.meta = {
+          url: baseURL,
           title: "HackDash: Ideas for a hackathon",
           description: "Ideas for a hackathon. Upload your project. Add colaborators. Inform status. Share your app."
         };
@@ -72,17 +78,31 @@ module.exports = function(app){
       Dashboard.findOne({ domain: domain }, function(err, dashboard) {
         if(err || !dashboard) return next();
         // TODO: NotFound
+
         res.locals.meta = {
+          url: 'http://' + domain + '.' + hdDomain,
           title: dashboard.title,
           description: dashboard.description
         };
 
-        next();
+        if (!dashboard.description){
+          Project.findOne({ domain: domain }, function(err, project) {
+            if (project && project.description){
+              res.locals.meta.description = project.description;
+            }
+            next();
+          });
+        }
+        else {
+          next();
+        }
+
       });
     },
 
     collections: function(req, res, next){
       res.locals.meta = {
+        url: baseURL + '/collections/',
         title: "Collections",
         description: "Search collections at " + hdTitle
       };
@@ -96,6 +116,7 @@ module.exports = function(app){
         // TODO: NotFound
 
         res.locals.meta = {
+          url: baseURL + '/collections/' + collection._id,
           title: collection.title,
           description: collection.description
         };
@@ -110,6 +131,7 @@ module.exports = function(app){
         // TODO: NotFound
 
         res.locals.meta = {
+          url: baseURL + '/users/' + user._id,
           title: user.name,
           description: user.bio
         };
@@ -138,8 +160,12 @@ module.exports = function(app){
           metas.image = "/images/logohack.png";
         }
 
+        if (!metas.url){
+          metas.url = baseURL;
+        }
+
         metas.title += hdTitle;
-        metas.image =  "http://" + app.get('config').host + metas.image;
+        metas.image =  baseURL + metas.image;
 
         next();
       };
