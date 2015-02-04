@@ -14,8 +14,8 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
   className: "modal my-collections-modal",
   template: template,
-  itemView: Collection,
-  itemViewContainer: ".collections",
+  childView: Collection,
+  childViewContainer: ".collections",
 
   ui: {
     "title": "input[name=title]",
@@ -28,7 +28,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     "click .btn-add": "add"
   },
 
-  itemViewOptions: function(){
+  childViewOptions: function(){
     return {
       dashboardId: this.model.get("_id")
     };

@@ -13,7 +13,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
   id: "projects",
   className: "row projects",
-  itemView: Project,
+  childView: Project,
   
   collectionEvents: {
     "remove": "render",
@@ -122,14 +122,14 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       , cellsByColumn: this.gridSize
       , getSortData : {
           "name" : function ( $elem ) {
-            var name = $elem.data("name");
+            var name = $($elem).data("name");
             return name && name.toLowerCase() || "";
           },
           "date" : function ( $elem ) {
-            return $elem.data("date");
+            return $($elem).data("date");
           },
           "showcase" : function ( $elem ) {
-            var showcase = $elem.data("showcase");
+            var showcase = $($elem).data("showcase");
             return (showcase && window.parseInt(showcase)) || 0;
           },
         }

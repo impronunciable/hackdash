@@ -8,6 +8,16 @@ var Dashboard = mongoose.model('Dashboard');
 module.exports = function(app) {
   var metas = require('../utils/metas')(app);
 
+  function renderHDStack(req, res){
+    var dash = metas.getDashboardName(req);
+    if (dash){
+      res.render('hackdashApp');
+    }
+    else {
+      res.render('landing');
+    }
+  };
+
   var liveStack = [
     isLive(app),
     loadUser,
@@ -32,7 +42,8 @@ module.exports = function(app) {
     setViewVar('statuses', app.get('statuses')),
     setViewVar('disqus_shortname', config.disqus_shortname),
     metas.check(),
-    render('hackdashApp')
+    //render('hackdashApp')
+    renderHDStack
   ];
 
   //TODO: hack to remove "checkProfile" and avoid redirect loop

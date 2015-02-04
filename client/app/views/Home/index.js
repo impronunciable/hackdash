@@ -2,7 +2,7 @@
 var template = require("./templates/home.hbs")
   , Dashboards = require("../../models/Dashboards");
 
-module.exports = Backbone.Marionette.Layout.extend({
+module.exports = Backbone.Marionette.LayoutView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS

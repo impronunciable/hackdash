@@ -956,7 +956,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
   id: "collections",
   className: "row collections",
-  itemView: Collection,
+  childView: Collection,
   
   collectionEvents: {
     "remove": "render"
@@ -1020,8 +1020,8 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
   className: "modal my-collections-modal",
   template: template,
-  itemView: Collection,
-  itemViewContainer: ".collections",
+  childView: Collection,
+  childViewContainer: ".collections",
 
   ui: {
     "title": "input[name=title]",
@@ -1034,7 +1034,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     "click .btn-add": "add"
   },
 
-  itemViewOptions: function(){
+  childViewOptions: function(){
     return {
       dashboardId: this.model.get("_id")
     };
@@ -1276,9 +1276,9 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
   id: "dashboards",
   className: "row dashboards",
-  itemView: Dashboard,
+  childView: Dashboard,
   
-  itemViewOptions: function(){
+  childViewOptions: function(){
     return {
       hideAdd: this.hideAdd
     };
@@ -1653,8 +1653,8 @@ module.exports = Backbone.Marionette.CompositeView.extend({
   template: template,
   
   tagName: "div",
-  itemViewContainer: "ul",
-  itemView: User,
+  childViewContainer: "ul",
+  childView: User,
   
   events: {
     "click a.add-admins": "showAddAdmins"
@@ -1697,7 +1697,7 @@ var
   , Users = require('./Users')
   , Embed = require('./Embed');
 
-module.exports = Backbone.Marionette.Layout.extend({
+module.exports = Backbone.Marionette.LayoutView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
@@ -1964,31 +1964,35 @@ module.exports = Backbone.Marionette.ItemView.extend({
   initEditables: function(){
     var self = this;
 
-    this.ui.title.editable({
-      type: 'text',
-      title: 'Enter title',
-      emptytext: "Enter a title",
-      inputclass: 'dashboard-edit-title',
-      tpl: '<input type="text" maxlength="30">',
+    if (this.ui.title.length > 0){
+      this.ui.title.editable({
+        type: 'text',
+        title: 'Enter title',
+        emptytext: "Enter a title",
+        inputclass: 'dashboard-edit-title',
+        tpl: '<input type="text" maxlength="30">',
 
-      success: function(response, newValue) {
-        self.model.set('title', newValue);
-        self.model.save();
-      }
-    });
+        success: function(response, newValue) {
+          self.model.set('title', newValue);
+          self.model.save();
+        }
+      });
+    }
 
-    this.ui.description.editable({
-      type: 'textarea',
-      title: 'Enter description',
-      emptytext: "Enter a description",
-      inputclass: "dashboard-edit-desc",
-      tpl: '<textarea maxlength="250" cols="50"></textarea>',
+    if (this.ui.description.length > 0){
+      this.ui.description.editable({
+        type: 'textarea',
+        title: 'Enter description',
+        emptytext: "Enter a description",
+        inputclass: "dashboard-edit-desc",
+        tpl: '<textarea maxlength="250" cols="50"></textarea>',
 
-      success: function(response, newValue) {
-        self.model.set('description', newValue);
-        self.model.save();
-      }
-    });
+        success: function(response, newValue) {
+          self.model.set('description', newValue);
+          self.model.save();
+        }
+      });
+    }
   },
 
 });
@@ -2103,43 +2107,49 @@ module.exports = Backbone.Marionette.ItemView.extend({
   initEditables: function(){
     var self = this;
 
-    this.ui.title.editable({
-      type: 'text',
-      title: 'Enter title',
-      emptytext: "Enter a title",
-      inputclass: 'dashboard-edit-title',
-      tpl: '<input type="text" maxlength="30">',
+    if (this.ui.title.length > 0){
+      this.ui.title.editable({
+        type: 'text',
+        title: 'Enter title',
+        emptytext: "Enter a title",
+        inputclass: 'dashboard-edit-title',
+        tpl: '<input type="text" maxlength="30">',
 
-      success: function(response, newValue) {
-        self.model.set('title', newValue);
-        self.model.save();
-      }
-    });
+        success: function(response, newValue) {
+          self.model.set('title', newValue);
+          self.model.save();
+        }
+      });
+    }
 
-    this.ui.description.editable({
-      type: 'textarea',
-      title: 'Enter description',
-      emptytext: "Enter a description",
-      inputclass: "dashboard-edit-desc",
-      tpl: '<textarea maxlength="250" cols="50"></textarea>',
+    if (this.ui.description.length > 0){
+      this.ui.description.editable({
+        type: 'textarea',
+        title: 'Enter description',
+        emptytext: "Enter a description",
+        inputclass: "dashboard-edit-desc",
+        tpl: '<textarea maxlength="250" cols="50"></textarea>',
 
-      success: function(response, newValue) {
-        self.model.set('description', newValue);
-        self.model.save();
-      }
-    });
+        success: function(response, newValue) {
+          self.model.set('description', newValue);
+          self.model.save();
+        }
+      });
+    }
 
-    this.ui.link.editable({
-      type: 'text',
-      title: 'Enter a link',
-      emptytext: "Enter a link",
-      inputclass: "dashboard-edit-link",
+    if (this.ui.description.length > 0){
+      this.ui.link.editable({
+        type: 'text',
+        title: 'Enter a link',
+        emptytext: "Enter a link",
+        inputclass: "dashboard-edit-link",
 
-      success: function(response, newValue) {
-        self.model.set('link', newValue);
-        self.model.save();
-      }
-    });
+        success: function(response, newValue) {
+          self.model.set('link', newValue);
+          self.model.save();
+        }
+      });
+    }
   },
 
 });
@@ -2294,7 +2304,7 @@ var
   , CollectionsHeader = require('./Collections')
   , CollectionHeader = require('./Collection');
 
-module.exports = Backbone.Marionette.Layout.extend({
+module.exports = Backbone.Marionette.LayoutView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
@@ -2599,7 +2609,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 var template = require("./templates/home.hbs")
   , Dashboards = require("../../models/Dashboards");
 
-module.exports = Backbone.Marionette.Layout.extend({
+module.exports = Backbone.Marionette.LayoutView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
@@ -2801,26 +2811,25 @@ module.exports = Backbone.Marionette.Region.extend({
   el: "#modals-container",
 
   constructor: function(){
-    _.bindAll(this);
     Backbone.Marionette.Region.prototype.constructor.apply(this, arguments);
     this.on("show", this.showModal, this);
   },
 
   getEl: function(selector){
     var $el = $(selector);
-    $el.on("hidden", this.close);
+    $el.on("hidden", this.destroy);
     return $el;
   },
 
   showModal: function(view){
-    view.on("close", this.hideModal, this);
-    this.$el.modal('show');
+    view.on("destroy", this.hideModal, this);
+    this.$el.parents('.modal').modal('show');
   },
 
   hideModal: function(){
-    this.$el.modal('hide');
+    this.$el.parents('.modal').modal('hide');
   }
-  
+
 });
 
 },{}],53:[function(require,module,exports){
@@ -2964,7 +2973,7 @@ var
   , ProfileCardEdit = require("./CardEdit")
   , ProjectList = require("../Project/List");
 
-module.exports = Backbone.Marionette.Layout.extend({
+module.exports = Backbone.Marionette.LayoutView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
@@ -3109,7 +3118,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
   id: "projects",
   className: "row projects",
-  itemView: Project,
+  childView: Project,
   
   collectionEvents: {
     "remove": "render",
@@ -3218,14 +3227,14 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       , cellsByColumn: this.gridSize
       , getSortData : {
           "name" : function ( $elem ) {
-            var name = $elem.data("name");
+            var name = $($elem).data("name");
             return name && name.toLowerCase() || "";
           },
           "date" : function ( $elem ) {
-            return $elem.data("date");
+            return $($elem).data("date");
           },
           "showcase" : function ( $elem ) {
-            var showcase = $elem.data("showcase");
+            var showcase = $($elem).data("showcase");
             return (showcase && window.parseInt(showcase)) || 0;
           },
         }
@@ -3539,7 +3548,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 var template = require('./templates/layout.hbs')
   , ProjectsView = require('./Collection');
 
-module.exports = Backbone.Marionette.Layout.extend({
+module.exports = Backbone.Marionette.LayoutView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
@@ -3658,9 +3667,9 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
 
   tagName: "ul",
-  itemView: Project,
+  childView: Project,
 
-  itemViewOptions: function() {
+  childViewOptions: function() {
     return {
       isDashboard: this.isDashboard,
       isCollection: this.isCollection
@@ -3940,11 +3949,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
   initSwitcher: function(){
     var self = this;
 
-    this.ui.switcher
-      .bootstrapSwitch()
-      .on('switch-change', function (e, data) {
-        self.model.set("active", data.value);
-      });
+    if (this.ui.switcher.length > 0){
+      this.ui.switcher
+        .bootstrapSwitch()
+        .on('switch-change', function (e, data) {
+          self.model.set("active", data.value);
+        });
+    }
   },
 
   isContributor: function(){

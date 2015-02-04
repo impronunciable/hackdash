@@ -143,11 +143,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
   initSwitcher: function(){
     var self = this;
 
-    this.ui.switcher
-      .bootstrapSwitch()
-      .on('switch-change', function (e, data) {
-        self.model.set("active", data.value);
-      });
+    if (this.ui.switcher.length > 0){
+      this.ui.switcher
+        .bootstrapSwitch()
+        .on('switch-change', function (e, data) {
+          self.model.set("active", data.value);
+        });
+    }
   },
 
   isContributor: function(){

@@ -6,7 +6,7 @@
 var template = require('./templates/layout.hbs')
   , ProjectsView = require('./Collection');
 
-module.exports = Backbone.Marionette.Layout.extend({
+module.exports = Backbone.Marionette.LayoutView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS

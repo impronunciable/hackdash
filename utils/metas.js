@@ -143,12 +143,13 @@ module.exports = function(app){
 
         next();
       };
-    }
-
+    },
+    getDashboardName: getDashboardName
   };
 };
 
-var getDashboardName = function(req){
+function getDashboardName(req){
+
   if (req.subdomains.length > 0) {
     return req.subdomains[0];
   }

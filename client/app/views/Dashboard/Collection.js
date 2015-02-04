@@ -13,9 +13,9 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
   id: "dashboards",
   className: "row dashboards",
-  itemView: Dashboard,
+  childView: Dashboard,
   
-  itemViewOptions: function(){
+  childViewOptions: function(){
     return {
       hideAdd: this.hideAdd
     };

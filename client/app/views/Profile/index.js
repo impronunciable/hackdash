@@ -5,7 +5,7 @@ var
   , ProfileCardEdit = require("./CardEdit")
   , ProjectList = require("../Project/List");
 
-module.exports = Backbone.Marionette.Layout.extend({
+module.exports = Backbone.Marionette.LayoutView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS

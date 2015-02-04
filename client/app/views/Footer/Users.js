@@ -16,8 +16,8 @@ module.exports = Backbone.Marionette.CompositeView.extend({
   template: template,
   
   tagName: "div",
-  itemViewContainer: "ul",
-  itemView: User,
+  childViewContainer: "ul",
+  childView: User,
   
   events: {
     "click a.add-admins": "showAddAdmins"

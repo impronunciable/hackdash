@@ -63,31 +63,35 @@ module.exports = Backbone.Marionette.ItemView.extend({
   initEditables: function(){
     var self = this;
 
-    this.ui.title.editable({
-      type: 'text',
-      title: 'Enter title',
-      emptytext: "Enter a title",
-      inputclass: 'dashboard-edit-title',
-      tpl: '<input type="text" maxlength="30">',
+    if (this.ui.title.length > 0){
+      this.ui.title.editable({
+        type: 'text',
+        title: 'Enter title',
+        emptytext: "Enter a title",
+        inputclass: 'dashboard-edit-title',
+        tpl: '<input type="text" maxlength="30">',
 
-      success: function(response, newValue) {
-        self.model.set('title', newValue);
-        self.model.save();
-      }
-    });
+        success: function(response, newValue) {
+          self.model.set('title', newValue);
+          self.model.save();
+        }
+      });
+    }
 
-    this.ui.description.editable({
-      type: 'textarea',
-      title: 'Enter description',
-      emptytext: "Enter a description",
-      inputclass: "dashboard-edit-desc",
-      tpl: '<textarea maxlength="250" cols="50"></textarea>',
+    if (this.ui.description.length > 0){
+      this.ui.description.editable({
+        type: 'textarea',
+        title: 'Enter description',
+        emptytext: "Enter a description",
+        inputclass: "dashboard-edit-desc",
+        tpl: '<textarea maxlength="250" cols="50"></textarea>',
 
-      success: function(response, newValue) {
-        self.model.set('description', newValue);
-        self.model.save();
-      }
-    });
+        success: function(response, newValue) {
+          self.model.set('description', newValue);
+          self.model.save();
+        }
+      });
+    }
   },
 
 });

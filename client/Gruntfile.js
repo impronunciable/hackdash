@@ -14,8 +14,8 @@ module.exports = function(grunt) {
         root: "app/"
       },
       vendor: {
-        js: "vendor/scripts/",
-        css: "vendor/styles/"
+        js: "vendor/scriptsV2/",
+        css: "vendor/stylesV2/"
       },
       dist: {
         root: "dist/",
@@ -30,16 +30,10 @@ module.exports = function(grunt) {
     clean: {
       before: {
         src: [
-          "<%= paths.app.root %>views/**/*.hbs.js", 
           "<%= paths.dist.root %>*",
           "!<%= paths.dist.root %>.gitignore"
         ],
-      },
-      after: {
-        src: [
-          "<%= paths.app.root %>views/**/*.hbs.js"
-        ]
-      } 
+      }
     },
 
     browserify: {
@@ -84,7 +78,7 @@ module.exports = function(grunt) {
           banner: '<%= banner %>',
         },
         files: {
-          '<%= paths.dist.root %><%= paths.dist.appName %>': 
+          '<%= paths.dist.root %><%= paths.dist.appName %>':
             [ '<%= paths.dist.root %><%= paths.dist.appName %>' ]
         }
       }
@@ -92,15 +86,15 @@ module.exports = function(grunt) {
 
     copy: {
       dist: {
-        cwd: "./", 
+        cwd: "./",
         files: {
-          "<%= paths.dist.exportCSS %><%= paths.dist.vendorCSSName %>": 
+          "<%= paths.dist.exportCSS %><%= paths.dist.vendorCSSName %>":
             "<%= paths.dist.root %><%= paths.dist.vendorCSSName %>",
 
-          "<%= paths.dist.exportJS %><%= paths.dist.vendorName %>": 
+          "<%= paths.dist.exportJS %><%= paths.dist.vendorName %>":
             "<%= paths.dist.root %><%= paths.dist.vendorName %>",
 
-          "<%= paths.dist.exportJS %><%= paths.dist.appName %>": 
+          "<%= paths.dist.exportJS %><%= paths.dist.appName %>":
             "<%= paths.dist.root %><%= paths.dist.appName %>"
         }
       }
@@ -109,14 +103,11 @@ module.exports = function(grunt) {
 
     watch: {
       local: {
-        files: ["<%= paths.app.root %>**/*",
-          "!<%= paths.app.root %>views/**/*.hbs.js"],
-        tasks: ['default']
-      },
-      stage: {
-        files: ["<%= paths.app.root %>**/*",
-          "!<%= paths.app.root %>views/**/*.hbs.js"],
-        tasks: ['stage']
+        files: ["<%= paths.app.root %>**/*"],
+        tasks: ['default'],
+        options: {
+          atBegin: true
+        }
       }
     },
 
@@ -155,7 +146,7 @@ module.exports = function(grunt) {
             ,Placeholders: true
             ,Packery: true
             ,Draggabilly: true
-            
+
             ,hackdash: true
           }
         }
@@ -171,13 +162,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
 
   grunt.registerTask("default", [
-    "clean:before", 
-    "jshint:all", 
+    "clean:before",
+    "jshint:all",
     "browserify",
-    "concat", 
-    "clean:after",
+    "concat",
     "copy"
   ]);
 
-  grunt.registerTask("w", ["default", "watch:local"]);
 };

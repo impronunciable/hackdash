@@ -4,7 +4,7 @@ var
   , Users = require('./Users')
   , Embed = require('./Embed');
 
-module.exports = Backbone.Marionette.Layout.extend({
+module.exports = Backbone.Marionette.LayoutView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS

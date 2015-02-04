@@ -7,7 +7,7 @@ var
   , CollectionsHeader = require('./Collections')
   , CollectionHeader = require('./Collection');
 
-module.exports = Backbone.Marionette.Layout.extend({
+module.exports = Backbone.Marionette.LayoutView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS

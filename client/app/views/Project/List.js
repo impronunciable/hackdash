@@ -12,9 +12,9 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
 
   tagName: "ul",
-  itemView: Project,
+  childView: Project,
 
-  itemViewOptions: function() {
+  childViewOptions: function() {
     return {
       isDashboard: this.isDashboard,
       isCollection: this.isCollection

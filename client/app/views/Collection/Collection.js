@@ -13,7 +13,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
   id: "collections",
   className: "row collections",
-  itemView: Collection,
+  childView: Collection,
   
   collectionEvents: {
     "remove": "render"
