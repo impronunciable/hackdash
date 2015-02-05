@@ -1,9 +1,0 @@
-.modal-header
-    button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-    h3 Log in to create a project
-.row
- .span4.offset1
-   each provider in providers
-    a(class="btn btn-large signup-btn signup-" + provider, href="/auth/" + provider)
-      i
-      | Access with #{provider.charAt(0).toUpperCase() + provider.slice(1)}

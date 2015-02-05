@@ -8,6 +8,7 @@ var express = require('express')
   , mongoose = require('mongoose')
   , MongoStore = require('connect-mongo')(express)
   , http = require('http')
+  , path = require('path')
   , clientVersion = require('./client/package.json').version;
 
 var app = exports.app = express();
@@ -41,6 +42,7 @@ app.configure(function(){
   app.set('port', process.env.PORT || app.get('config').port);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+  app.use(require('less-middleware')(path.join(__dirname, 'public')));
   app.use(express.favicon(__dirname + '/public/favicon.ico'));
   app.use(express.logger('dev'));
   app.use(express.compress());

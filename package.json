@@ -34,6 +34,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-express-server": "^0.4.19",
     "grunt-mocha-cov": "^0.3.0",
+    "less-middleware": "^1.0.4",
     "mocha": "^2.1.0",
     "passport-http": "~0.2.1",
     "request": "^2.51.0"
