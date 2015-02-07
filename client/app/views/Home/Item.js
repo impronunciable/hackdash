@@ -1,14 +1,11 @@
 /**
- * VIEW: HOME Tab Layout (Search header + collection)
+ * VIEW: An Item of HOME Search
  *
  */
 
-var template = require("./templates/tabContent.hbs");
+var template = require('./templates/project.hbs');
 
-var Search = require("./Search");
-var EntityList = require("./EntityList");
-
-module.exports = Backbone.Marionette.LayoutView.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
@@ -16,29 +13,9 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   template: template,
 
-  regions: {
-    "header": ".header",
-    "content": ".content"
-  },
-
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
-
-  onRender: function(){
-
-    if (!this.header.currentView){
-
-      this.header.show(new Search({
-        collection: this.collection
-      }));
-
-      this.content.show(new EntityList({
-        collection: this.collection
-      }));
-    }
-
-  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS

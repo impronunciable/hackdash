@@ -1,7 +1,13 @@
 
 var template = require("./templates/home.hbs")
   , Dashboards = require("../../models/Dashboards")
-  , TabContent = require("./TabContent");
+  , TabContent = require("./TabContent")
+
+  // Collections
+  , Dashboards = require("../../models/Dashboards")
+  , Projects = require("../../models/Projects")
+  , Users = require("../../models/Users")
+  , Collections = require("../../models/Collections");
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
@@ -47,6 +53,13 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 */
   },
 
+  lists: {
+    projects: null,
+    dashboards: null,
+    users: null,
+    collections: null
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
@@ -56,6 +69,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   },
 
   onRender: function(){
+
     this.changeTab();
 
     if (!this.ui[this.section].hasClass("active")){
@@ -63,8 +77,27 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     }
   },
 
+  getNewList: function(type){
+    switch(type){
+      case "dashboards": return new Dashboards();
+      case "projects": return new Projects();
+      case "users": return new Users();
+      case "collections": return new Collections();
+    }
+  },
+
   changeTab: function(){
-    this[this.section].show(new TabContent());
+
+    if (!this[this.section].currentView){
+
+      this.lists[this.section] =
+        this.lists[this.section] || this.getNewList(this.section);
+
+      this[this.section].show(new TabContent({
+        collection: this.lists[this.section]
+      }));
+    }
+
     this.ui[this.section].tab("show");
   },
 

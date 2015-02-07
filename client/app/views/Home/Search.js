@@ -12,11 +12,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
   template: template,
 
   ui: {
-    searchbox: "#searchInput"
+    searchbox: "#search"
   },
 
   events: {
-    "keyup #searchInput": "search",
+    "keyup #search": "search",
     "click .sort": "sort"
   },
 
@@ -26,10 +26,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   lastSearch: "",
 
-  initialize: function(options){
-    this.showSort = (options && options.showSort) || false;
-    this.collection = options && options.collection;
-    this.placeholder = (options && options.placeholder) || "Type here";
+  initialize: function(/*options*/){
+    //this.showSort = (options && options.showSort) || false;
+    //this.collection = options && options.collection;
+    //this.placeholder = (options && options.placeholder) || "Type here";
   },
 
   onRender: function(){
@@ -84,12 +84,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
           self.collection.fetch(opts);
         }
         else {
+          /*
           if (hackdash.app.type === "isearch"){
             self.collection.reset();
           }
           else {
+          */
             self.collection.fetch();
-          }
+          //}
 
           hackdash.app.router.navigate(fragment, { trigger: true, replace: true });
         }
