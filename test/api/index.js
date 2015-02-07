@@ -13,7 +13,10 @@ describe('/api', function(){
 
   before(function(done){
     dataBuilder.clearAll(function(){
-      createUsers(done);
+      createUsers(function(){
+        // give time to start Express Server
+        setTimeout(done, 500);
+      });
     });
   });
 
@@ -21,9 +24,12 @@ describe('/api', function(){
     dataBuilder.dropDatabase(done);
   });
 
-  require('./embeds')(baseAPI, config, [ userAuthA, userAuthB ]);
+  //require('./embeds')(baseAPI, config, [ userAuthA, userAuthB ]);
   require('./users')(baseAPI, config, [ userAuthA, userAuthB ]);
   require('./profiles')(baseAPI, config, [ userAuthA, userAuthB ]);
+  require('./projects')(baseAPI, config, [ userAuthA, userAuthB ]);
+  require('./dashboards')(baseAPI, config, [ userAuthA, userAuthB ]);
+  require('./collections')(baseAPI, config, [ userAuthA, userAuthB ]);
 
 });
 

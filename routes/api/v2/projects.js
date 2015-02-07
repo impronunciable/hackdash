@@ -1,7 +1,7 @@
 /*
  * RESTfull API: Project Resources
- * 
- * 
+ *
+ *
  */
 
 
@@ -19,8 +19,8 @@ module.exports = function(app, uri, common) {
 
   notify = function(type, req) {
     app.emit('post', {
-      type: type, 
-      project: req.project, 
+      type: type,
+      project: req.project,
       user: req.user,
       domain: req.project.domain
     });
@@ -32,12 +32,12 @@ module.exports = function(app, uri, common) {
 
   app.post(uri + '/projects', common.isAuth, canCreateProject, createProject, sendProject);
   app.post(uri + '/projects/cover', common.isAuth, uploadCover);
-  
+
   app.get(uri + '/projects/:pid', getProject, sendProject);
 
   app.del(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, removeProject);
   app.put(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, updateProject, sendProject);
-  
+
   app.post(uri + '/projects/:pid/followers', common.isAuth, getProject, validate, addFollower);
   app.del(uri + '/projects/:pid/followers', common.isAuth, getProject, validate, removeFollower);
 
@@ -72,17 +72,17 @@ var canChangeProject = function(req, res, next){
   next();
 };
 
-// TODO: get dashboard from dashboards controllers 
+// TODO: get dashboard from dashboards controllers
 var canCreateProject = function(req, res, next){
 
   if (req.subdomains.length > 0) {
-  
+
     Dashboard.findOne({ domain: req.subdomains[0] })
       .exec(function(err, dashboard) {
         if(err) return res.send(500);
         if(!dashboard) return res.send(404);
-        
-        if (!dashboard.open) 
+
+        if (!dashboard.open)
           return res.send(403, "Dashboard is closed for creating projects");
 
         next();
@@ -128,7 +128,7 @@ var createProject = function(req, res, next){
   }
 
   project.save(function(err, project){
-    if(err) return res.send(500); 
+    if(err) return res.send(500);
     req.project = project;
 
     notify('project_created', req);
@@ -139,7 +139,7 @@ var createProject = function(req, res, next){
 };
 
 var uploadCover = function(req, res, next) {
-  var cover = (req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1 
+  var cover = (req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1
     && '/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop());
 
   if(req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1) {
@@ -160,7 +160,7 @@ var updateProject = function(req, res, next) {
   var project = req.project;
 
   function getValue(prop){
-    return req.body.hasOwnProperty(prop) ? req.body[prop] : project[prop];    
+    return req.body.hasOwnProperty(prop) ? req.body[prop] : project[prop];
   }
 
   var link = getValue("link");
@@ -228,7 +228,7 @@ var addFollower = function(req, res){
 
     notify('project_follow', req);
     res.send(200);
-  });  
+  });
 };
 
 var removeFollower = function(req, res){
@@ -237,7 +237,7 @@ var removeFollower = function(req, res){
 
   Project.update({_id: projectId}, { $pull : { 'followers': userId }}, function(err){
     if(err) return res.send(500);
-    
+
     notify('project_unfollow', req);
     res.send(200);
   });
@@ -249,7 +249,7 @@ var addContributor = function(req, res){
 
   Project.update({_id: projectId}, { $addToSet : { 'contributors': userId }}, function(err){
     if(err) return res.send(500);
-    
+
     notify('project_join', req);
     res.send(200);
   });
@@ -262,7 +262,7 @@ var removeContributor = function(req, res){
 
   Project.update({_id: projectId}, { $pull : { 'contributors': userId }}, function(err){
     if(err) return res.send(500);
-    
+
     notify('project_leave', req);
     res.send(200);
   });
@@ -286,7 +286,12 @@ var setQuery = function(req, res, next){
   }
 
   var regex = new RegExp(query, 'i');
-  req.query.$or = [ { title: regex }, { description: regex }, { tags: regex } ];
+  req.query.$or = [
+    { title: regex },
+    { description: regex },
+    { tags: regex },
+    { domain: regex }
+  ];
 
   next();
 };
