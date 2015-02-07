@@ -29,6 +29,12 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
     , "login" : "showLogin"
 
+    , "dashboards" : "showLandingDashboards"
+    , "projects" : "showLandingProjects"
+    , "users" : "showLandingUsers"
+    , "collections" : "showLandingCollections"
+
+    /*
     , "projects" : "showProjects"
     , "projects/create" : "showProjectCreate"
     , "projects/:pid/edit" : "showProjectEdit"
@@ -42,6 +48,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
     , "users/profile": "showProfile"
     , "users/:user_id" : "showProfile"
+    */
   },
 
   index: function(){
@@ -60,12 +67,15 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showHome: function(){
+    /*
     $('body').addClass("homepage");
     $('header').add('footer').hide();
     $('#page').removeClass('container');
+*/
 
+    this.homeView = new HomeLayout();
     var app = window.hackdash.app;
-    app.main.show(new HomeLayout());
+    app.main.show(this.homeView);
   },
 
   getSearchQuery: function(){
@@ -86,6 +96,39 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       model: new Backbone.Model({ providers: providers.split(',') })
     }));
   },
+
+  showHomeSection: function(section){
+    if (this.homeView){
+      this.homeView.setSection(section);
+    }
+    else {
+      var main = hackdash.app.main;
+      this.homeView = new HomeLayout({
+        section: section
+      });
+
+      main.show(this.homeView);
+    }
+  },
+
+  showLandingDashboards: function(){
+    this.showHomeSection("dashboards");
+  },
+
+  showLandingProjects: function(){
+    this.showHomeSection("projects");
+  },
+
+  showLandingUsers: function(){
+    this.showHomeSection("users");
+  },
+
+  showLandingCollections: function(){
+    this.showHomeSection("collections");
+  },
+
+
+
 
   showDashboard: function(dash) {
     this.removeHomeLayout();

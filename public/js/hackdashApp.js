@@ -50,7 +50,7 @@ module.exports = function(){
   });
 
 };
-},{"./HackdashRouter":2,"./views/ModalRegion":52}],2:[function(require,module,exports){
+},{"./HackdashRouter":2,"./views/ModalRegion":56}],2:[function(require,module,exports){
 /*
  * Hackdash Router
  */
@@ -82,6 +82,12 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
     , "login" : "showLogin"
 
+    , "dashboards" : "showLandingDashboards"
+    , "projects" : "showLandingProjects"
+    , "users" : "showLandingUsers"
+    , "collections" : "showLandingCollections"
+
+    /*
     , "projects" : "showProjects"
     , "projects/create" : "showProjectCreate"
     , "projects/:pid/edit" : "showProjectEdit"
@@ -95,6 +101,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
     , "users/profile": "showProfile"
     , "users/:user_id" : "showProfile"
+    */
   },
 
   index: function(){
@@ -113,12 +120,15 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showHome: function(){
+    /*
     $('body').addClass("homepage");
     $('header').add('footer').hide();
     $('#page').removeClass('container');
+*/
 
+    this.homeView = new HomeLayout();
     var app = window.hackdash.app;
-    app.main.show(new HomeLayout());
+    app.main.show(this.homeView);
   },
 
   getSearchQuery: function(){
@@ -139,6 +149,39 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       model: new Backbone.Model({ providers: providers.split(',') })
     }));
   },
+
+  showHomeSection: function(section){
+    if (this.homeView){
+      this.homeView.setSection(section);
+    }
+    else {
+      var main = hackdash.app.main;
+      this.homeView = new HomeLayout({
+        section: section
+      });
+
+      main.show(this.homeView);
+    }
+  },
+
+  showLandingDashboards: function(){
+    this.showHomeSection("dashboards");
+  },
+
+  showLandingProjects: function(){
+    this.showHomeSection("projects");
+  },
+
+  showLandingUsers: function(){
+    this.showHomeSection("users");
+  },
+
+  showLandingCollections: function(){
+    this.showHomeSection("collections");
+  },
+
+
+
 
   showDashboard: function(dash) {
     this.removeHomeLayout();
@@ -353,7 +396,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
 });
 
-},{"./models/Collection":8,"./models/Collections":9,"./models/Dashboard":10,"./models/Dashboards":11,"./models/Profile":12,"./models/Project":13,"./models/Projects":14,"./views/Collection/Collection":17,"./views/Dashboard/Collection":24,"./views/Footer":31,"./views/Header":42,"./views/Home":49,"./views/Login":51,"./views/Profile":55,"./views/Project/Edit":60,"./views/Project/Full":61,"./views/Project/Layout":62}],3:[function(require,module,exports){
+},{"./models/Collection":8,"./models/Collections":9,"./models/Dashboard":10,"./models/Dashboards":11,"./models/Profile":12,"./models/Project":13,"./models/Projects":14,"./views/Collection/Collection":17,"./views/Dashboard/Collection":24,"./views/Footer":31,"./views/Header":42,"./views/Home":51,"./views/Login":55,"./views/Profile":59,"./views/Project/Edit":64,"./views/Project/Full":65,"./views/Project/Layout":66}],3:[function(require,module,exports){
 
 module.exports = function(){
 
@@ -538,7 +581,7 @@ Handlebars.registerHelper('getProfileImage', function(user) {
   return new Handlebars.SafeString(img.outerHTML);
 });
 
-},{"hbsfy/runtime":79}],6:[function(require,module,exports){
+},{"hbsfy/runtime":83}],6:[function(require,module,exports){
 jQuery(function() {
   require('./Initializer')();
 });
@@ -1238,7 +1281,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "\" class=\"tooltips icon-time icon-1\"></i>\n    </div>\n  </div>\n</div>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],22:[function(require,module,exports){
+},{"hbsfy/runtime":83}],22:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -1248,7 +1291,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</h3>\n  <ul class=\"events\"></ul>\n</div>\n<div class=\"modal-body\">\n  <ul class=\"collections\"></ul>\n</div>\n<div class=\"modal-footer\">\n  <div class=\"row-fluid\">\n    <div class=\"span12\">\n      <div class=\"span10\">\n        <input type=\"text\" name=\"title\" placeholder=\"Enter Title\" class=\"input-medium pull-left\" style=\"margin-right: 10px;\">\n        <input type=\"text\" name=\"description\" placeholder=\"Enter Description\" class=\"input-medium pull-left\">\n        <input type=\"button\" class=\"btn primary btn-success pull-left btn-add\" value=\"Add\">\n      </div>\n      <div class=\"span2\">\n        <input type=\"button\" class=\"btn primary pull-right\" data-dismiss=\"modal\" value=\"Close\">\n      </div>\n    </div>\n  </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],23:[function(require,module,exports){
+},{"hbsfy/runtime":83}],23:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -1260,7 +1303,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "\">View</a>";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],24:[function(require,module,exports){
+},{"hbsfy/runtime":83}],24:[function(require,module,exports){
 /**
  * VIEW: Dashboards
  * 
@@ -1447,7 +1490,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer + "    \n  </div>\n</div>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],27:[function(require,module,exports){
+},{"hbsfy/runtime":83}],27:[function(require,module,exports){
 /**
  * VIEW: A User Collection
  * 
@@ -1836,7 +1879,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
   return "<div class=\"modal-header\">\n  <button type=\"button\" data-dismiss=\"modal\" aria-hidden=\"true\" class=\"close\">×</button>\n  <h3>Add Dashboard Admin</h3>\n</div>\n<div class=\"modal-body\">\n  <div class=\"input-prepend\">\n    <span class=\"add-on\" style=\"padding: 10px;\">\n      <i class=\"icon-user\"></i>\n    </span>\n    <input id=\"txtUser\" type=\"text\" class=\"input-xlarge\" placeholder=\"type name or username\" autocomplete=\"off\" style=\"padding: 10px;\">\n  </div>\n</div>\n<div class=\"modal-footer\">\n  <input id=\"save\" type=\"button\" class=\"btn primary btn-success pull-right\" style=\"margin-left: 10px;\" value=\"Save\">\n  <input type=\"button\" class=\"btn primary pull-right\" data-dismiss=\"modal\" value=\"Cancel\">\n</div>";
   },"useData":true});
 
-},{"hbsfy/runtime":79}],33:[function(require,module,exports){
+},{"hbsfy/runtime":83}],33:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -1846,7 +1889,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</textarea>\n</div>\n<div class=\"modal-footer\">\n  <input type=\"button\" class=\"btn primary pull-right\" data-dismiss=\"modal\" value=\"Cancel\">\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],34:[function(require,module,exports){
+},{"hbsfy/runtime":83}],34:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -1874,7 +1917,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer;
 },"useData":true});
 
-},{"hbsfy/runtime":79}],35:[function(require,module,exports){
+},{"hbsfy/runtime":83}],35:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -1886,7 +1929,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "\n</a>";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],36:[function(require,module,exports){
+},{"hbsfy/runtime":83}],36:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -1898,7 +1941,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer;
 },"useData":true});
 
-},{"hbsfy/runtime":79}],37:[function(require,module,exports){
+},{"hbsfy/runtime":83}],37:[function(require,module,exports){
 /**
  * VIEW: CollectionHeader Layout
  * 
@@ -2452,7 +2495,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   else { return ''; }
   },"useData":true});
 
-},{"hbsfy/runtime":79}],44:[function(require,module,exports){
+},{"hbsfy/runtime":83}],44:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -2467,7 +2510,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer;
 },"useData":true});
 
-},{"hbsfy/runtime":79}],45:[function(require,module,exports){
+},{"hbsfy/runtime":83}],45:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -2546,7 +2589,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   else { return ''; }
   },"useData":true});
 
-},{"hbsfy/runtime":79}],46:[function(require,module,exports){
+},{"hbsfy/runtime":83}],46:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -2561,7 +2604,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer;
 },"useData":true});
 
-},{"hbsfy/runtime":79}],47:[function(require,module,exports){
+},{"hbsfy/runtime":83}],47:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -2589,7 +2632,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "\" data-bypass></a>\n\n<div class=\"page-ctn\"></div>\n<h1 class=\"page-title\"></h1>";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],48:[function(require,module,exports){
+},{"hbsfy/runtime":83}],48:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -2604,10 +2647,121 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer;
 },"useData":true});
 
-},{"hbsfy/runtime":79}],49:[function(require,module,exports){
+},{"hbsfy/runtime":83}],49:[function(require,module,exports){
 
-var template = require("./templates/home.hbs")
-  , Dashboards = require("../../models/Dashboards");
+var
+  template = require('./templates/search.hbs');
+
+module.exports = Backbone.Marionette.ItemView.extend({
+
+  //--------------------------------------
+  //+ PUBLIC PROPERTIES / CONSTANTS
+  //--------------------------------------
+
+  className: "landing-search",
+  template: template,
+
+  ui: {
+    searchbox: "#searchInput"
+  },
+
+  events: {
+    "keyup #searchInput": "search",
+    "click .sort": "sort"
+  },
+
+  //--------------------------------------
+  //+ INHERITED / OVERRIDES
+  //--------------------------------------
+
+  lastSearch: "",
+
+  initialize: function(options){
+    this.showSort = (options && options.showSort) || false;
+    this.collection = options && options.collection;
+    this.placeholder = (options && options.placeholder) || "Type here";
+  },
+
+  onRender: function(){
+    var query = hackdash.getQueryVariable("q");
+    if (query && query.length > 0){
+      this.ui.searchbox.val(query);
+      this.lastSearch = query;
+    }
+  },
+
+  serializeData: function(){
+    return {
+      showSort: this.showSort,
+      placeholder: this.placeholder
+    };
+  },
+
+  //--------------------------------------
+  //+ PUBLIC METHODS / GETTERS / SETTERS
+  //--------------------------------------
+
+  //--------------------------------------
+  //+ EVENT HANDLERS
+  //--------------------------------------
+
+  sort: function(e){
+    e.preventDefault();
+    var val = $(e.currentTarget).data("option-value");
+    this.collection.trigger("sort:" + val);
+  },
+
+  search: function(){
+    var self = this;
+    window.clearTimeout(this.timer);
+
+    this.timer = window.setTimeout(function(){
+      var keyword = self.ui.searchbox.val();
+      var fragment = Backbone.history.fragment.replace(Backbone.history.location.search, "");
+
+      if (keyword !== self.lastSearch) {
+        self.lastSearch = keyword;
+
+        var opts = {
+          reset: true
+        };
+
+        if (keyword.length > 0) {
+          opts.data = $.param({ q: keyword });
+
+          hackdash.app.router.navigate(fragment + "?q=" + keyword, { trigger: true });
+
+          self.collection.fetch(opts);
+        }
+        else {
+          if (hackdash.app.type === "isearch"){
+            self.collection.reset();
+          }
+          else {
+            self.collection.fetch();
+          }
+
+          hackdash.app.router.navigate(fragment, { trigger: true, replace: true });
+        }
+      }
+
+    }, 300);
+  }
+
+  //--------------------------------------
+  //+ PRIVATE AND PROTECTED METHODS
+  //--------------------------------------
+
+});
+},{"./templates/search.hbs":53}],50:[function(require,module,exports){
+/**
+ * VIEW: Dashboards
+ *
+ */
+
+var template = require("./templates/tabContent.hbs");
+
+var Search = require("./Search");
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
@@ -2615,20 +2769,84 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "container-fluid",
   template: template,
+
+  regions: {
+    "header": ".header",
+    "content": ".content"
+  },
+
+  //--------------------------------------
+  //+ INHERITED / OVERRIDES
+  //--------------------------------------
+
+  initialize: function(){
+
+  },
+
+  onRender: function(){
+    this.header.show(new Search());
+
+/*
+    this.content.show(new CollectionType({
+      model: this.model
+    }));
+*/
+  },
+
+  //--------------------------------------
+  //+ PUBLIC METHODS / GETTERS / SETTERS
+  //--------------------------------------
+
+  //--------------------------------------
+  //+ EVENT HANDLERS
+  //--------------------------------------
+
+  //--------------------------------------
+  //+ PRIVATE AND PROTECTED METHODS
+  //--------------------------------------
+
+});
+},{"./Search":49,"./templates/tabContent.hbs":54}],51:[function(require,module,exports){
+
+var template = require("./templates/home.hbs")
+  , Dashboards = require("../../models/Dashboards")
+  , TabContent = require("./TabContent");
+
+module.exports = Backbone.Marionette.LayoutView.extend({
+
+  //--------------------------------------
+  //+ PUBLIC PROPERTIES / CONSTANTS
+  //--------------------------------------
+
+  //className: "container-fluid",
+  template: template,
+
+  regions:{
+    "dashboards": "#dashboards",
+    "projects": "#projects",
+    "users": "#users",
+    "collections": "#collections",
+  },
 
   ui: {
     "domain": "#domain",
     "create": "#create-dashboard",
+
+    "dashboards": "#dashboards",
+    "projects": "#projects",
+    "users": "#users",
+    "collections": "#collections",
+/*
     "projects": "#search-projects",
     "collections": "#search-collections"
+*/
   },
 
   events: {
     "keyup #domain": "validateDomain",
     "click #create-dashboard": "createDashboard",
-
+/*
     "keyup #search-projects": "checkSearchProjects",
     "click #search-projects-btn": "searchProjects",
 
@@ -2636,15 +2854,38 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "click #search-collections-btn": "searchCollections",
 
     "click #create-collections-btn": "createCollections"
+*/
   },
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  initialize: function(options){
+    this.section = (options && options.section) || "dashboards";
+  },
+
+  onRender: function(){
+    this.changeTab();
+
+    if (!this.ui[this.section].hasClass("active")){
+      this.ui[this.section].addClass("active");
+    }
+  },
+
+  changeTab: function(){
+    this[this.section].show(new TabContent());
+    this.ui[this.section].tab("show");
+  },
+
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
+
+  setSection: function(section){
+    this.section = section;
+    this.changeTab();
+  },
 
   //TODO: move to i18n
   errors: {
@@ -2700,7 +2941,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   searchProjects: function(){
     var q = this.ui.projects.val();
     q = q ? "?q=" + q : "";
-    
+
     window.location = "/projects" + q;
   },
 
@@ -2748,7 +2989,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   }
 
 });
-},{"../../models/Dashboards":11,"./templates/home.hbs":50}],50:[function(require,module,exports){
+},{"../../models/Dashboards":11,"./TabContent":50,"./templates/home.hbs":52}],52:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -2756,14 +2997,28 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   },"3":function(depth0,helpers,partials,data) {
   return "        <p>\n          <a class=\"btn btn-large btn-custom\" href=\"/login\">Log in to create a Hackathon</a>\n        </p>\n";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, buffer = "\n<div class=\"row landing-header\">\n\n  <div class=\"col-md-12 text-center\">\n    <div class=\"logo\"></div>\n  </div>\n\n  <div class=\"col-md-12 text-center call-action\">\n    <h1>Ideas for a <span class=\"highlight\">hackathon</span></h1>\n    <h2>Create your dashboard!</h2>\n    <div class=\"row\">\n\n      <div class=\"hidden-xs col-sm-2 col-md-3\">\n        <div class=\"pull-right arrow text-right\">\n          <i class=\"fa fa-long-arrow-right\"></i>\n        </div>\n      </div>\n\n      <div class=\"col-xs-12 col-sm-8 col-md-6\">\n        <div class=\"input-group\">\n          <input type=\"text\" class=\"form-control\" placeholder=\"enter your hackathon name\">\n          <span class=\"input-group-btn\">\n            <button class=\"btn btn-primary\" type=\"button\">create now</button>\n          </span>\n        </div>\n      </div>\n\n      <div class=\"hidden-xs col-sm-2 col-md-3\">\n        <div class=\"pull-left arrow text-left\">\n          <i class=\"fa fa-long-arrow-left\"></i>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!--\n  <div class=\"span12\">\n\n    <section class=\"brand\">\n      <header>\n        <h1>Ideas for a Hackathon</a></h1>\n      </header>\n\n      <div class=\"content\">\n        <h2>Ideas for a hackathon</h2>\n        <p>Upload your project. Add colaborators. Inform status. Share your app.</p>\n\n";
+  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, buffer = "\n<div class=\"container-fluid\">\n  <div class=\"row landing-header\">\n\n    <div class=\"col-md-12 text-center\">\n      <div class=\"logo\"></div>\n    </div>\n\n    <div class=\"col-md-12 text-center call-action\">\n      <h1>Ideas for a <span class=\"highlight\">hackathon</span></h1>\n      <h2>Create your dashboard!</h2>\n\n      <div class=\"row\">\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-right arrow text-right\">\n            <i class=\"fa fa-long-arrow-right\"></i>\n          </div>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-8 col-md-6\">\n          <div class=\"input-group\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"enter your hackathon name\">\n            <span class=\"input-group-btn\">\n              <button class=\"btn btn-primary\" type=\"button\">create now</button>\n            </span>\n          </div>\n        </div>\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-left arrow text-left\">\n            <i class=\"fa fa-long-arrow-left\"></i>\n          </div>\n        </div>\n\n      </div>\n\n    </div>\n\n  </div>\n\n  <div class=\"col-md-12 text-center\" style=\"margin-top: -61px;\">\n\n    <ul class=\"nav nav-tabs landing\" role=\"tablist\">\n\n      <li class=\"dashboard active\">\n        <a href=\"#dashboards\" role=\"tab\" data-toggle=\"tab\">Dashboards</a>\n      </li>\n      <li class=\"project\">\n        <a href=\"#projects\" role=\"tab\" data-toggle=\"tab\">Projects</a>\n      </li>\n      <li class=\"user\">\n        <a href=\"#users\" role=\"tab\" data-toggle=\"tab\">People</a>\n      </li>\n      <li class=\"collection\">\n        <a href=\"#collections\" role=\"tab\" data-toggle=\"tab\">Collections</a>\n      </li>\n\n    </ul>\n\n  </div>\n</div>\n\n<div class=\"tab-content\">\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"dashboards\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"projects\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"users\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"collections\"></div>\n</div>\n\n  <!--\n  <div class=\"span12\">\n\n    <section class=\"brand\">\n      <header>\n        <h1>Ideas for a Hackathon</a></h1>\n      </header>\n\n      <div class=\"content\">\n        <h2>Ideas for a hackathon</h2>\n        <p>Upload your project. Add colaborators. Inform status. Share your app.</p>\n\n";
   stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
   return buffer + "      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <div class=\"span6\">\n      <section class=\"block\">\n        <header>\n          <h3>Find Projects</h3>\n          <p>Search hackathon projects all over the world in one place.</p>\n        </header>\n\n        <div class=\"content span12\">\n          <p class=\"control-group\">\n            <input class=\"input-large search-box\" id=\"search-projects\"\n              placeholder=\"name or description\" type=\"text\">\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"search-projects-btn\">Search</button>\n          </p>\n        </div>\n      </section>\n    </div>\n\n    <div class=\"span6\">\n      <section class=\"block\">\n        <header>\n          <h3>Find Collections</h3>\n          <p>Search and organize groups of dashboards with \"Collections\".</p>\n        </header>\n\n        <div class=\"content span12\">\n          <p class=\"control-group\">\n            <input class=\"input-large search-box\" id=\"search-collections\"\n              placeholder=\"name or description\" type=\"text\">\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"search-collections-btn\">Search</button>\n            <button class=\"btn btn-large btn-custom disabled search-btn\" id=\"create-collections-btn\">Create</button>\n          </p>\n        </div>\n      </section>\n    </div>\n\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>About</h3>\n      </header>\n\n      <div class=\"content span11\">\n        <p>The HackDash was born by accident and by a need.\n        We were looking for platform to track ideas through\n        hackathons in the line to the Hacks/Hackers Media\n        Party organized by @HacksHackersBA where hackers\n        and journalists share ideas. We spread the idea\n        through Twitter and that was the context of the\n        HackDash born. @blejman had an idea and\n        @danzajdband was interested in implement that idea.\n        So we started building the app hoping we can get to\n        the Buenos Aires media party with something that\n        doesn't suck. The Media Party Hackathon day came\n        followed by a grateful surprise. Not only the\n        people liked the HackDash implementation but a\n        couple of coders added the improvement of the\n        HackDash as a Hackaton project. After the Media\n        Party we realized that this small app is filling a\n        real need. The Dashboard has been used now in\n        several ways like Node.js Argentina meetup,\n        HacksHackersBA, La Nación DataFest and\n        HackasHackersCL (using it as a Wordpress theme).\n        Now, the HackDash will be an standard for\n        hackathons through the PinLatAm program, for news\n        innovation in Latin America. Create your own\n        hackathon.</p>\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>Why Hackdash?</h3>\n      </header>\n\n      <div class=\"content\">\n        <div class=\"row-fluid\">\n          <div class=\"span10 offset1 brand-why\">\n            <div class=\"span3\">\n              <div class=\"icon quick\"></div>\n              <h5>Quick and Easy</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon nerds\"></div>\n              <h5>For Nerds</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon fast\"></div>\n              <h5>Fast</h5>\n            </div>\n\n            <div class=\"span3\">\n              <div class=\"icon geeks\"></div>\n              <h5>Love &amp; Geeks</h5>\n            </div>\n          </div>\n        </div>\n      </div>\n    </section>\n  </div>\n</div>\n\n<div class=\"row-fluid\">\n  <div class=\"span12\">\n    <section class=\"block\">\n      <header>\n        <h3>Partners</h3>\n      </header>\n\n      <div class=\"content\">\n        <div class=\"row-fluid\">\n          <div class=\"span10 offset2 partners\">\n            <div class=\"span5 hhba\"></div>\n            <div class=\"span5 nxtp\"></div>\n          </div>\n        </div>\n      </div>\n    </section>\n  </div>\n</div>\n-->";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],51:[function(require,module,exports){
+},{"hbsfy/runtime":83}],53:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var HandlebarsCompiler = require('hbsfy/runtime');
+module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+  return "<div class=\"row\">\n\n  <div class=\"hidden-xs col-sm-2 col-md-4\">\n\n    <div class=\"col-sm-12 col-md-6\">\n\n      <div class=\"media\">\n        <div class=\"media-left\">\n          <i class=\"fa fa-tasks\"></i>\n        </div>\n        <div class=\"media-body\">\n          Inform Progress to community.\n        </div>\n      </div>\n\n    </div>\n    <div class=\"col-sm-12 col-md-6\">\n\n      <div class=\"media\">\n        <div class=\"media-left\">\n          <i class=\"fa fa-cloud-upload\"></i>\n        </div>\n        <div class=\"media-body\">\n          Upload your project to the platform.\n        </div>\n      </div>\n\n    </div>\n\n  </div>\n\n  <div class=\"col-xs-12 col-sm-8 col-md-4\">\n    <div class=\"input-group\">\n      <input type=\"text\" class=\"form-control\" placeholder=\"enter keywords\">\n      <span class=\"input-group-btn\">\n        <button class=\"btn btn-primary\" type=\"button\">find it</button>\n      </span>\n    </div>\n  </div>\n\n  <div class=\"hidden-xs col-sm-2 col-md-4\">\n\n    <div class=\"col-sm-12 col-md-6\">\n\n      <div class=\"media\">\n        <div class=\"media-left\">\n          <i class=\"fa fa-user-plus\"></i>\n        </div>\n        <div class=\"media-body\">\n          Add Collaborators to your projects.\n        </div>\n      </div>\n\n    </div>\n    <div class=\"col-sm-12 col-md-6\">\n\n      <div class=\"media\">\n        <div class=\"media-left\">\n          <i class=\"fa fa-share-alt\"></i>\n        </div>\n        <div class=\"media-body\">\n          Share your app to the world.\n        </div>\n      </div>\n\n    </div>\n\n  </div>\n\n</div>";
+  },"useData":true});
+
+},{"hbsfy/runtime":83}],54:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var HandlebarsCompiler = require('hbsfy/runtime');
+module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+  return "<div class=\"container-fluid header\">HEAD</div>\n<div class=\"content\">CONTENT</div>";
+  },"useData":true});
+
+},{"hbsfy/runtime":83}],55:[function(require,module,exports){
 /**
  * VIEW: Login Modal
  * 
@@ -2801,7 +3056,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
 });
-},{"./templates/login.hbs":71}],52:[function(require,module,exports){
+},{"./templates/login.hbs":75}],56:[function(require,module,exports){
 /**
  * REGION: ModalRegion
  * Used to manage Twitter Bootstrap Modals with Backbone Marionette Views
@@ -2832,7 +3087,7 @@ module.exports = Backbone.Marionette.Region.extend({
 
 });
 
-},{}],53:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 /**
  * VIEW: ProfileCard
  * 
@@ -2870,7 +3125,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
 });
-},{"./templates/card.hbs":56}],54:[function(require,module,exports){
+},{"./templates/card.hbs":60}],58:[function(require,module,exports){
 /**
  * VIEW: ProfileCard Edit
  * 
@@ -2965,7 +3220,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 
 });
-},{"./templates/cardEdit.hbs":57}],55:[function(require,module,exports){
+},{"./templates/cardEdit.hbs":61}],59:[function(require,module,exports){
 
 var 
     template = require("./templates/profile.hbs")
@@ -3065,7 +3320,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
 
 });
-},{"../Project/List":63,"./Card":53,"./CardEdit":54,"./templates/profile.hbs":58}],56:[function(require,module,exports){
+},{"../Project/List":67,"./Card":57,"./CardEdit":58,"./templates/profile.hbs":62}],60:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -3081,7 +3336,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</p>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],57:[function(require,module,exports){
+},{"hbsfy/runtime":83}],61:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -3095,14 +3350,14 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</textarea>\n        </div>\n      </div>\n    </div>\n    <div class=\"form-actions\">\n      <input id=\"save\" type=\"button\" data-loading-text=\"saving..\" value=\"Save profile\" class=\"btn primary btn-success pull-left\"/>\n      <a id=\"cancel\" class=\"cancel btn btn-cancel pull-right\">Cancel</a>\n    </div>\n  </form>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],58:[function(require,module,exports){
+},{"hbsfy/runtime":83}],62:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   return "<div class=\"span6 span-center\">\n\n  <div class=\"profile-card\"></div>\n\n  <h4>My Collections (<span class=\"coll-length\">0</span>)</h4>\n  <div class=\"collections-ctn\"></div>\n\n  <h4>Dashboards (<span class=\"dash-length\">0</span>)</h4>\n  <div class=\"dashboards-ctn\"></div>\n\n  <h4>Projects created (<span class=\"proj-length\">0</span>)</h4>\n  <div class=\"projects-ctn\"></div>\n\n  <h4>Contributions (<span class=\"contrib-length\">0</span>)</h4>\n  <div class=\"contributions-ctn\"></div>\n\n  <h4>Likes (<span class=\"likes-length\">0</span>)</h4>\n  <div class=\"likes-ctn\"></div>\n  \n</div>\n";
   },"useData":true});
 
-},{"hbsfy/runtime":79}],59:[function(require,module,exports){
+},{"hbsfy/runtime":83}],63:[function(require,module,exports){
 /**
  * VIEW: Projects of an Instance
  * 
@@ -3272,7 +3527,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   }
 
 });
-},{"./index":65}],60:[function(require,module,exports){
+},{"./index":69}],64:[function(require,module,exports){
 /**
  * VIEW: Project
  * 
@@ -3492,7 +3747,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 
 });
-},{"./templates/edit.hbs":66}],61:[function(require,module,exports){
+},{"./templates/edit.hbs":70}],65:[function(require,module,exports){
 /**
  * VIEW: Full Project view
  * 
@@ -3539,7 +3794,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
 });
-},{"./templates/full.hbs":67}],62:[function(require,module,exports){
+},{"./templates/full.hbs":71}],66:[function(require,module,exports){
 /**
  * VIEW: Dashboard Projects Layout
  * 
@@ -3652,7 +3907,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
 
 });
-},{"./Collection":59,"./templates/layout.hbs":68}],63:[function(require,module,exports){
+},{"./Collection":63,"./templates/layout.hbs":72}],67:[function(require,module,exports){
 /**
  * VIEW: Projects of an Instance
  * 
@@ -3735,7 +3990,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
 
 });
-},{"./ListItem":64}],64:[function(require,module,exports){
+},{"./ListItem":68}],68:[function(require,module,exports){
 /**
  * VIEW: Project
  * 
@@ -3803,7 +4058,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
 });
-},{"./templates/listItem.hbs":69}],65:[function(require,module,exports){
+},{"./templates/listItem.hbs":73}],69:[function(require,module,exports){
 /**
  * VIEW: Project
  * 
@@ -3979,7 +4234,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 
 });
-},{"./templates/project.hbs":70}],66:[function(require,module,exports){
+},{"./templates/project.hbs":74}],70:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -4021,7 +4276,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer + "            </select>\n          </div>\n        </div>\n\n      </div>\n\n      <div class=\"form-actions\">\n        <input id=\"save\" type=\"button\" value=\"Save\" class=\"btn primary btn-success pull-left\"/>\n        <a id=\"cancel\" data-dismiss=\"modal\" class=\"cancel btn btn-cancel pull-right\">Cancel</a>\n      </div>\n\n    </form>\n  </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],67:[function(require,module,exports){
+},{"hbsfy/runtime":83}],71:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -4077,14 +4332,14 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "\"></script>\n    \n  </div>\n</div>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],68:[function(require,module,exports){
+},{"hbsfy/runtime":83}],72:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   return "<div id=\"dashboard-projects\"></div>\n<div id=\"inactive-projects\" class=\"hide inactive-ctn\"></div>";
   },"useData":true});
 
-},{"hbsfy/runtime":79}],69:[function(require,module,exports){
+},{"hbsfy/runtime":83}],73:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -4096,7 +4351,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "\n  </div>\n</a>";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],70:[function(require,module,exports){
+},{"hbsfy/runtime":83}],74:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -4210,7 +4465,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer + "</div>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],71:[function(require,module,exports){
+},{"hbsfy/runtime":83}],75:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -4229,7 +4484,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer + "  </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":79}],72:[function(require,module,exports){
+},{"hbsfy/runtime":83}],76:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -4265,7 +4520,7 @@ Handlebars.create = create;
 Handlebars['default'] = Handlebars;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":73,"./handlebars/exception":74,"./handlebars/runtime":75,"./handlebars/safe-string":76,"./handlebars/utils":77}],73:[function(require,module,exports){
+},{"./handlebars/base":77,"./handlebars/exception":78,"./handlebars/runtime":79,"./handlebars/safe-string":80,"./handlebars/utils":81}],77:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -4497,7 +4752,7 @@ var createFrame = function(object) {
   return frame;
 };
 exports.createFrame = createFrame;
-},{"./exception":74,"./utils":77}],74:[function(require,module,exports){
+},{"./exception":78,"./utils":81}],78:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -4526,7 +4781,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],75:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -4720,7 +4975,7 @@ exports.noop = noop;function initData(context, data) {
   }
   return data;
 }
-},{"./base":73,"./exception":74,"./utils":77}],76:[function(require,module,exports){
+},{"./base":77,"./exception":78,"./utils":81}],80:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -4732,7 +4987,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],77:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -4821,12 +5076,12 @@ exports.isEmpty = isEmpty;function appendContextPath(contextPath, id) {
 }
 
 exports.appendContextPath = appendContextPath;
-},{"./safe-string":76}],78:[function(require,module,exports){
+},{"./safe-string":80}],82:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":72}],79:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":76}],83:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":78}]},{},[6]);
+},{"handlebars/runtime":82}]},{},[6]);

@@ -1,6 +1,7 @@
 
 var template = require("./templates/home.hbs")
-  , Dashboards = require("../../models/Dashboards");
+  , Dashboards = require("../../models/Dashboards")
+  , TabContent = require("./TabContent");
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
@@ -8,20 +9,34 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "container-fluid",
+  //className: "container-fluid",
   template: template,
+
+  regions:{
+    "dashboards": "#dashboards",
+    "projects": "#projects",
+    "users": "#users",
+    "collections": "#collections",
+  },
 
   ui: {
     "domain": "#domain",
     "create": "#create-dashboard",
+
+    "dashboards": "#dashboards",
+    "projects": "#projects",
+    "users": "#users",
+    "collections": "#collections",
+/*
     "projects": "#search-projects",
     "collections": "#search-collections"
+*/
   },
 
   events: {
     "keyup #domain": "validateDomain",
     "click #create-dashboard": "createDashboard",
-
+/*
     "keyup #search-projects": "checkSearchProjects",
     "click #search-projects-btn": "searchProjects",
 
@@ -29,15 +44,38 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "click #search-collections-btn": "searchCollections",
 
     "click #create-collections-btn": "createCollections"
+*/
   },
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  initialize: function(options){
+    this.section = (options && options.section) || "dashboards";
+  },
+
+  onRender: function(){
+    this.changeTab();
+
+    if (!this.ui[this.section].hasClass("active")){
+      this.ui[this.section].addClass("active");
+    }
+  },
+
+  changeTab: function(){
+    this[this.section].show(new TabContent());
+    this.ui[this.section].tab("show");
+  },
+
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
+
+  setSection: function(section){
+    this.section = section;
+    this.changeTab();
+  },
 
   //TODO: move to i18n
   errors: {
@@ -93,7 +131,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   searchProjects: function(){
     var q = this.ui.projects.val();
     q = q ? "?q=" + q : "";
-    
+
     window.location = "/projects" + q;
   },
 

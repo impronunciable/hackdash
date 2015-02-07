@@ -37,7 +37,9 @@
 @fsize-17: 17/@em;
 @fsize-20: 20/@em;
 @fsize-25: 25/@em;
+@fsize-32: 32/@em;
 @fsize-35: 35/@em;
+@fsize-40: 40/@em;
 @fsize-65: 65/@em;
 @fsize-70: 70/@em;
 @fsize-130: 130/@em;
@@ -91,15 +93,17 @@ h6 { font-size: @fsize-12; }
  */
 
 .landing-header {
-  height: 700px;
   background: url(@landing-photo-url) no-repeat;
   background-size: 100%;
+  padding-bottom: 50px;
 
   .call-action {
     background-color: @color-blackB;
     width: 100%;
     color: @color-white;
-    padding: 4%;
+    padding-top: 4%;
+    padding-bottom: 4%;
+    margin-bottom: 5%;
 
     h1 {
       font-size: @fsize-70;
@@ -167,6 +171,191 @@ h6 { font-size: @fsize-12; }
   background: url(@logo-url) no-repeat;
   width: 120px;
   height: 145px;
-  margin: 1% auto;
+  margin: 2% auto;
   background-size: 100%;
+  display: inline-block;
+}
+
+.landing-tab(@color) {
+  background-color: @color;
+  border: 1px solid @color;
+
+  &:hover, a:hover, a:focus {
+    background-color: darken(@color, 6.5%);
+    border: 1px solid darken(@color, 6.5%);
+  }
+
+  &.active {
+    &:hover, a, a:hover, a:focus {
+      color: @color-white;
+      background-color: @color;
+      border: 1px solid @color;
+    }
+  }
+}
+
+.nav-tabs.landing {
+  border-bottom: none;
+
+  li {
+    float:none;
+    display:inline-block;
+    font-family: @secondary-font;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+
+    a {
+      text-transform: uppercase;
+      font-size: @fsize-25;
+      color: @color-white;
+      min-height: 60px;
+      min-width: 180px;
+      text-align: center;
+
+      &:hover {
+        cursor: pointer;
+        background-color: transparent;
+      }
+    }
+
+    &.active {
+      a:hover {
+        cursor: default;
+      }
+    }
+
+    &.dashboard {
+      .landing-tab(@color-dashboard);
+    }
+
+    &.project {
+      .landing-tab(@color-project);
+    }
+
+    &.user {
+      .landing-tab(@color-user);
+    }
+
+    &.collection {
+      .landing-tab(@color-collection);
+      position: absolute;
+      right: 2%;
+    }
+
+  }
+}
+
+.tab-content {
+
+  .tab-pane {
+    min-height: 400px;
+  }
+
+  .header {
+    padding-top: 2%;
+    padding-bottom: 2%;
+
+    .input-group {
+
+      font-family: @secondary-font;
+
+      .form-control,
+      .btn {
+        text-transform: uppercase;
+        font-size: @fsize-20;
+      }
+
+      .form-control {
+        font-size: @fsize-20;
+        height: 50px;
+      }
+
+      .input-group-btn {
+        font-size: inherit;
+
+        .btn-primary {
+          height: 50px;
+          z-index: 2;
+        }
+      }
+    }
+
+  }
+
+  #dashboards {
+    .header {
+      background-color: @color-dashboard;
+    }
+  }
+
+  #projects {
+    .header {
+      background-color: @color-project;
+    }
+  }
+
+  #users {
+    .header {
+      background-color: @color-user;
+    }
+  }
+
+  #collections {
+    .header {
+      background-color: @color-collection;
+    }
+  }
+}
+
+.landing-search {
+
+  .media {
+
+    .fa {
+      color: @color-white;
+      font-size: @fsize-32;
+      border-radius: 50%;
+      padding: 7px 7px;
+
+      &.fa-tasks {
+        background-color: @color-project;
+      }
+
+      &.fa-cloud-upload {
+        background-color: @color-collection;
+      }
+
+      &.fa-user-plus {
+        background-color: @color-user;
+      }
+
+      &.fa-share-alt {
+        background-color: @color-action;
+        padding: 7px 9px;
+      }
+
+    }
+
+    .media-body {
+      color: @color-white;
+      font-size: @fsize-12;
+      vertical-align: middle;
+    }
+  }
+
+}
+
+@media (max-width: 980px) {
+
+  .nav-tabs.landing {
+
+    li {
+
+      &.collection {
+        position: inherit;
+      }
+
+    }
+  }
+
 }

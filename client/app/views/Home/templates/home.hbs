@@ -1,37 +1,72 @@
 
-<div class="row landing-header">
+<div class="container-fluid">
+  <div class="row landing-header">
 
-  <div class="col-md-12 text-center">
-    <div class="logo"></div>
-  </div>
-
-  <div class="col-md-12 text-center call-action">
-    <h1>Ideas for a <span class="highlight">hackathon</span></h1>
-    <h2>Create your dashboard!</h2>
-    <div class="row">
-
-      <div class="hidden-xs col-sm-2 col-md-3">
-        <div class="pull-right arrow text-right">
-          <i class="fa fa-long-arrow-right"></i>
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-8 col-md-6">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="enter your hackathon name">
-          <span class="input-group-btn">
-            <button class="btn btn-primary" type="button">create now</button>
-          </span>
-        </div>
-      </div>
-
-      <div class="hidden-xs col-sm-2 col-md-3">
-        <div class="pull-left arrow text-left">
-          <i class="fa fa-long-arrow-left"></i>
-        </div>
-      </div>
+    <div class="col-md-12 text-center">
+      <div class="logo"></div>
     </div>
+
+    <div class="col-md-12 text-center call-action">
+      <h1>Ideas for a <span class="highlight">hackathon</span></h1>
+      <h2>Create your dashboard!</h2>
+
+      <div class="row">
+
+        <div class="hidden-xs col-sm-2 col-md-3">
+          <div class="pull-right arrow text-right">
+            <i class="fa fa-long-arrow-right"></i>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-8 col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="enter your hackathon name">
+            <span class="input-group-btn">
+              <button class="btn btn-primary" type="button">create now</button>
+            </span>
+          </div>
+        </div>
+
+        <div class="hidden-xs col-sm-2 col-md-3">
+          <div class="pull-left arrow text-left">
+            <i class="fa fa-long-arrow-left"></i>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
+
+  <div class="col-md-12 text-center" style="margin-top: -61px;">
+
+    <ul class="nav nav-tabs landing" role="tablist">
+
+      <li class="dashboard active">
+        <a href="#dashboards" role="tab" data-toggle="tab">Dashboards</a>
+      </li>
+      <li class="project">
+        <a href="#projects" role="tab" data-toggle="tab">Projects</a>
+      </li>
+      <li class="user">
+        <a href="#users" role="tab" data-toggle="tab">People</a>
+      </li>
+      <li class="collection">
+        <a href="#collections" role="tab" data-toggle="tab">Collections</a>
+      </li>
+
+    </ul>
+
+  </div>
+</div>
+
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane" id="dashboards"></div>
+  <div role="tabpanel" class="tab-pane" id="projects"></div>
+  <div role="tabpanel" class="tab-pane" id="users"></div>
+  <div role="tabpanel" class="tab-pane" id="collections"></div>
+</div>
 
   <!--
   <div class="span12">
