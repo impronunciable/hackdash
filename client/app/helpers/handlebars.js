@@ -18,6 +18,10 @@ Handlebars.registerHelper('firstUpper', function(text) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 });
 
+Handlebars.registerHelper('firstLetter', function(text) {
+  return text.charAt(0);
+});
+
 Handlebars.registerHelper('markdown', function(md) {
   return markdown.toHTML(md);
 });
