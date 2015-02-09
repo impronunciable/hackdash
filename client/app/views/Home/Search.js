@@ -24,7 +24,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
-  lastSearch: "",
+  lastSearch: null,
 
   initialize: function(/*options*/){
     //this.showSort = (options && options.showSort) || false;
@@ -36,8 +36,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var query = hackdash.getQueryVariable("q");
     if (query && query.length > 0){
       this.ui.searchbox.val(query);
-      this.lastSearch = query;
+      //this.lastSearch = query;
     }
+
+    this.search();
   },
 
   serializeData: function(){
@@ -78,21 +80,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
         if (keyword.length > 0) {
           opts.data = $.param({ q: keyword });
-
           hackdash.app.router.navigate(fragment + "?q=" + keyword, { trigger: true });
-
           self.collection.fetch(opts);
         }
         else {
-          /*
-          if (hackdash.app.type === "isearch"){
-            self.collection.reset();
-          }
-          else {
-          */
-            self.collection.fetch();
-          //}
-
+          self.collection.fetch();
           hackdash.app.router.navigate(fragment, { trigger: true, replace: true });
         }
       }

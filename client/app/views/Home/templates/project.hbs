@@ -1,1 +1,38 @@
-<div>{{_id}}</div>
+
+<div class="progress" title="{{status}}">
+  <div class="{{status}}"></div>
+</div>
+
+<div class="cover">
+{{#if cover}}
+  <div class="project-image">
+    <img src="{{cover}}">
+  </div>
+{{/if}}
+</div>
+
+<div class="details">
+  <h2>{{title}}</h2>
+  <h3>{{domain}}</h3>
+  <div class="description">
+    {{{markdown description}}}
+  </div>
+</div>
+
+<ul class="contributors">
+  {{#each contributors}}
+  <li>
+    <a href="/users/{{_id}}">
+      {{getProfileImage .}}
+    </a>
+  </li>
+  {{/each}}
+</ul>
+
+<div class="action-bar text-center">
+  <i class="fa fa-clock-o" title="{{timeAgo created_at}}"></i>
+  <span>Likes {{followers.length}}</span>
+  <a>Join</a>
+  <a>Demo</a>
+  <a>Share</a>
+</div>

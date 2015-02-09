@@ -71,7 +71,7 @@ body {
   margin: 0;
   font-family: @primary-font;
   color: @default-font-color;
-  background: @default-bg-color;
+  background-color: @color-whiteB;
 }
 
 h1, h2, h3 { font-family: @secondary-font; text-transform: uppercase; }
@@ -341,6 +341,139 @@ h6 { font-size: @fsize-12; }
       color: @color-white;
       font-size: @fsize-12;
       vertical-align: middle;
+    }
+  }
+
+}
+
+
+.content {
+
+  background-color: @color-whiteB;
+
+  .project {
+    font-family: @primary-font;
+    background-color: @color-white;
+
+    position: relative;
+    float: left;
+    width: 300px;
+    height: 600px;
+    margin: 1% 0.75%;
+
+    .progress {
+      height: 15px;
+      margin-bottom: 0;
+
+      >div {
+        height: 15px;
+        background-color: rgb(145, 237, 60);
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        &.brainstorming { width: 5%; }
+        &.wireframing { width: 20%; }
+        &.building { width: 40%; }
+        &.researching { width: 60%; }
+        &.prototyping { width: 80%; }
+        &.releasing { width: 100%; }
+
+      }
+    }
+
+    .cover {
+      width: 100%;
+      min-width: 300px;
+      min-height: 245px;
+      background-color: gray;
+    }
+
+    .details {
+      padding: 15px;
+      position: absolute;
+      height: auto;
+      height: 100%;
+      max-height: 270px;
+      width: 100%;
+      overflow: hidden;
+
+      h2 {
+        font-family: @primary-font;
+        font-size: @fsize-17;
+        text-transform: none;
+        font-weight: bold;
+        margin: 0;
+      }
+
+      h3 {
+        font-family: @primary-font;
+        font-size: @fsize-15;
+        text-transform: none;
+        margin: 10px 0;
+      }
+
+      .description {
+        font-size: @fsize-12;
+      }
+    }
+
+    .contributors {
+      position: absolute;
+      bottom: 40px;
+      width: 100%;
+      overflow: hidden;
+
+      list-style: none;
+      padding: 0 10px;
+      height: 30px;
+      margin: 0;
+
+      li {
+        float: left;
+        width: 30px;
+        height: 30px;
+
+        a {
+          display: inline-block;
+
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+
+    .action-bar {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+
+      background-color: @color-blackC;
+      color: @color-white;
+      font-size: @fsize-12;
+      padding: 5px 10px;
+
+      .fa {
+        font-size: 20px;
+        margin-right: 20px;
+      }
+
+      span, a {
+        border-left: 1px solid @color-white;
+        padding: 2px 10px;
+      }
+
+      a {
+        color: @color-white;
+
+        &:hover {
+          cursor: pointer;
+          color: @color-white;
+        }
+      }
+
     }
   }
 

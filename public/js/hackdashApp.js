@@ -2653,7 +2653,8 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
  *
  */
 
-var Item = require('./Item');
+//var Item = require('./Item');
+var Project = require('./Project');
 
 module.exports = Backbone.Marionette.CollectionView.extend({
 
@@ -2661,11 +2662,21 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  childView: Item,
+  //childView: Item,
+  //className: 'container-fluid',
+  childView: Project,
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
+
+  onRender: function(){
+
+    var self = this;
+    _.defer(function(){
+      self.updateIsotope();
+    });
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -2679,10 +2690,42 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
+  isotopeInitialized: false,
+  updateIsotope: function(/*sortType, filterType*/){
+    var $items = this.$el;
+
+    if (this.isotopeInitialized){
+      $items.isotope("destroy");
+    }
+
+    $items.isotope({
+        itemSelector: ".project"
+      , animationEngine: "jquery"
+      , resizable: false
+      , sortAscending: true
+      , layoutMode: 'fitRows'
+      /*
+      , getSortData : {
+          "name" : function ( $elem ) {
+            var name = $($elem).data("name");
+            return name && name.toLowerCase() || "";
+          },
+          "date" : function ( $elem ) {
+            return $($elem).data("date");
+          },
+        }
+      , sortBy: sortType || "name"
+      , filter: filterType || ""
+      */
+    });
+
+    this.isotopeInitialized = true;
+  },
+
 });
-},{"./Item":50}],50:[function(require,module,exports){
+},{"./Project":50}],50:[function(require,module,exports){
 /**
- * VIEW: An Item of HOME Search
+ * VIEW: An Project of HOME Search
  *
  */
 
@@ -2694,6 +2737,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
+  id: function(){
+    return this.model.get("_id");
+  },
+
+  className: 'project',
   template: template,
 
   //--------------------------------------
@@ -2740,7 +2788,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
-  lastSearch: "",
+  lastSearch: null,
 
   initialize: function(/*options*/){
     //this.showSort = (options && options.showSort) || false;
@@ -2752,8 +2800,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var query = hackdash.getQueryVariable("q");
     if (query && query.length > 0){
       this.ui.searchbox.val(query);
-      this.lastSearch = query;
+      //this.lastSearch = query;
     }
+
+    this.search();
   },
 
   serializeData: function(){
@@ -2794,21 +2844,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
         if (keyword.length > 0) {
           opts.data = $.param({ q: keyword });
-
           hackdash.app.router.navigate(fragment + "?q=" + keyword, { trigger: true });
-
           self.collection.fetch(opts);
         }
         else {
-          /*
-          if (hackdash.app.type === "isearch"){
-            self.collection.reset();
-          }
-          else {
-          */
-            self.collection.fetch();
-          //}
-
+          self.collection.fetch();
           hackdash.app.router.navigate(fragment, { trigger: true, replace: true });
         }
       }
@@ -3110,11 +3150,41 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 },{"hbsfy/runtime":86}],55:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "<div>"
+  return "  <div class=\"project-image\">\n    <img src=\""
+    + escapeExpression(((helper = (helper = helpers.cover || (depth0 != null ? depth0.cover : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"cover","hash":{},"data":data}) : helper)))
+    + "\">\n  </div>\n";
+},"3":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "  <li>\n    <a href=\"/users/"
     + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
-    + "</div>";
+    + "\">\n      "
+    + escapeExpression(((helpers.getProfileImage || (depth0 && depth0.getProfileImage) || helperMissing).call(depth0, depth0, {"name":"getProfileImage","hash":{},"data":data})))
+    + "\n    </a>\n  </li>\n";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, lambda=this.lambda, buffer = "\n<div class=\"progress\" title=\""
+    + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
+    + "\">\n  <div class=\""
+    + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
+    + "\"></div>\n</div>\n\n<div class=\"cover\">\n";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.cover : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "</div>\n\n<div class=\"details\">\n  <h2>"
+    + escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)))
+    + "</h2>\n  <h3>"
+    + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
+    + "</h3>\n  <div class=\"description\">\n    ";
+  stack1 = ((helpers.markdown || (depth0 && depth0.markdown) || helperMissing).call(depth0, (depth0 != null ? depth0.description : depth0), {"name":"markdown","hash":{},"data":data}));
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n  </div>\n</div>\n\n<ul class=\"contributors\">\n";
+  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.contributors : depth0), {"name":"each","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "</ul>\n\n<div class=\"action-bar text-center\">\n  <i class=\"fa fa-clock-o\" title=\""
+    + escapeExpression(((helpers.timeAgo || (depth0 && depth0.timeAgo) || helperMissing).call(depth0, (depth0 != null ? depth0.created_at : depth0), {"name":"timeAgo","hash":{},"data":data})))
+    + "\"></i>\n  <span>Likes "
+    + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.followers : depth0)) != null ? stack1.length : stack1), depth0))
+    + "</span>\n  <a>Join</a>\n  <a>Demo</a>\n  <a>Share</a>\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":86}],56:[function(require,module,exports){
