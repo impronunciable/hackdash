@@ -1,9 +1,9 @@
 /**
- * VIEW: An Item of HOME Search
+ * VIEW: An Dashboard of HOME Search
  *
  */
 
-var template = require('./templates/item.hbs');
+var template = require('./templates/dashboard.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -11,6 +11,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
+  id: function(){
+    return this.model.get("_id");
+  },
+
+  className: 'dashboard',
   template: template,
 
   //--------------------------------------

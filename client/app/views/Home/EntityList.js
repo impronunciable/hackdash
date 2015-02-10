@@ -3,8 +3,7 @@
  *
  */
 
-//var Item = require('./Item');
-var Project = require('./Project');
+var Item = require('./Item');
 
 module.exports = Backbone.Marionette.CollectionView.extend({
 
@@ -12,9 +11,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  //childView: Item,
-  //className: 'container-fluid',
-  childView: Project,
+  childView: Item,
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
@@ -41,7 +38,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
 
   isotopeInitialized: false,
-  updateIsotope: function(/*sortType, filterType*/){
+  updateIsotope: function(){
     var $items = this.$el;
 
     if (this.isotopeInitialized){
@@ -49,24 +46,11 @@ module.exports = Backbone.Marionette.CollectionView.extend({
     }
 
     $items.isotope({
-        itemSelector: ".project"
-      , animationEngine: "jquery"
+        /*itemSelector: ".project"
+      , */animationEngine: "jquery"
       , resizable: false
       , sortAscending: true
       , layoutMode: 'fitRows'
-      /*
-      , getSortData : {
-          "name" : function ( $elem ) {
-            var name = $($elem).data("name");
-            return name && name.toLowerCase() || "";
-          },
-          "date" : function ( $elem ) {
-            return $($elem).data("date");
-          },
-        }
-      , sortBy: sortType || "name"
-      , filter: filterType || ""
-      */
     });
 
     this.isotopeInitialized = true;

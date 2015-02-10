@@ -19,6 +19,8 @@
 @color-user: #515D8A;
 @color-collection: #02B387;
 
+@color-dashboard-card: #d12727;
+
 /*
  * FONTS
  */
@@ -42,6 +44,7 @@
 @fsize-40: 40/@em;
 @fsize-65: 65/@em;
 @fsize-70: 70/@em;
+@fsize-100: 100/@em;
 @fsize-130: 130/@em;
 
 @logo-url: '../images/logohack.png';
@@ -351,7 +354,40 @@ h6 { font-size: @fsize-12; }
 
   background-color: @color-whiteB;
 
-  .project {
+  .action-bar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+
+    background-color: @color-blackC;
+    color: @color-white;
+    font-size: @fsize-12;
+    padding: 5px 10px;
+
+    .fa {
+      font-size: 18px;
+      margin-right: 10px;
+      margin-left: 0;
+    }
+
+    span, a {
+      border-left: 1px solid @color-white;
+      padding: 2px 10px;
+    }
+
+    a {
+      color: @color-white;
+
+      &:hover {
+        cursor: pointer;
+        color: @color-white;
+      }
+    }
+
+  }
+
+  .project,
+  .dashboard {
     font-family: @primary-font;
     background-color: @color-white;
 
@@ -364,6 +400,8 @@ h6 { font-size: @fsize-12; }
     .progress {
       height: 15px;
       margin-bottom: 0;
+      box-shadow: none;
+      background-color: @color-whiteC;
 
       >div {
         height: 15px;
@@ -388,7 +426,7 @@ h6 { font-size: @fsize-12; }
       min-height: 245px;
       background-color: @color-project;
 
-      .project-letter {
+      .item-letter {
         color: @color-white;
         font-family: @secondary-font;
         font-size: @fsize-130;
@@ -397,6 +435,7 @@ h6 { font-size: @fsize-12; }
         padding: 20px;
         color: @color-whiteB;
         text-indent: -0.2em;
+        text-transform: uppercase;
       }
     }
 
@@ -456,35 +495,43 @@ h6 { font-size: @fsize-12; }
       }
     }
 
+  }
+
+  @dash-size-width: 400px;
+  @dash-size-width-cover: 100px;
+  @dash-size-width-details: 300px;
+  @dash-size-height: 200px;
+
+  .dashboard {
+    border-left: 15px solid @color-dashboard;
+    width: @dash-size-width;
+    height: @dash-size-height;
+
+    .cover {
+      background-color: @color-dashboard-card;
+      width: @dash-size-width-cover;
+      min-height: @dash-size-height;
+      min-width: inherit;
+
+      .item-letter {
+        font-size: @fsize-100;
+      }
+    }
+
+    .details {
+      max-height: @dash-size-width-details - 45;
+      width: @dash-size-width-details - 15;
+      top: 0;
+      right: 0;
+
+      .description {
+        max-height: 100px;
+      }
+    }
+
     .action-bar {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-
-      background-color: @color-blackC;
-      color: @color-white;
-      font-size: @fsize-12;
-      padding: 5px 10px;
-
-      .fa {
-        font-size: 20px;
-        margin-right: 20px;
-      }
-
-      span, a {
-        border-left: 1px solid @color-white;
-        padding: 2px 10px;
-      }
-
-      a {
-        color: @color-white;
-
-        &:hover {
-          cursor: pointer;
-          color: @color-white;
-        }
-      }
-
+      right: 0;
+      width: @dash-size-width-details - 15;
     }
   }
 

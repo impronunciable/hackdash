@@ -19,11 +19,17 @@ Handlebars.registerHelper('firstUpper', function(text) {
 });
 
 Handlebars.registerHelper('firstLetter', function(text) {
-  return text.charAt(0);
+  if (text){
+    return text.charAt(0);
+  }
+  return "";
 });
 
 Handlebars.registerHelper('markdown', function(md) {
-  return markdown.toHTML(md);
+  if (md){
+    return markdown.toHTML(md);
+  }
+  return "";
 });
 
 Handlebars.registerHelper('disqus_shortname', function() {

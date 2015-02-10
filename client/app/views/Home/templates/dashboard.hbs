@@ -1,0 +1,33 @@
+<div class="cover">
+  {{#if title}}
+  <i class="item-letter">{{firstLetter title}}</i>
+  {{else}}
+  <i class="item-letter">{{firstLetter domain}}</i>
+  {{/if}}
+</div>
+
+<div class="details">
+  <h2>{{title}}</h2>
+  <h3>{{domain}}</h3>
+  <div class="description">
+    {{{markdown description}}}
+  </div>
+  <!--
+  <ul class="contributors">
+    {{#each contributors}}
+    <li>
+      <a href="/users/{{_id}}">
+        {{getProfileImage .}}
+      </a>
+    </li>
+    {{/each}}
+  </ul>
+  -->
+</div>
+
+<div class="action-bar text-center">
+  <i class="fa fa-clock-o" title="{{timeAgo created_at}}"></i>
+  <span>Projects 00</span>
+  <span>Likes 00</span>
+  <a>Share</a>
+</div>
