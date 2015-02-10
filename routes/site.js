@@ -90,6 +90,9 @@ module.exports = function(app) {
   // Users Profile's card and entities
   app.get('/users/:user_id', metas.user, hackdashFullStack);
 
+  // Users search at landing
+  app.get('/users', metas.users, hackdashFullStack);
+
   // Live view of a Dashboard - ONLY with a subomain
   app.get('/live', metas.dashboard, liveStack);
 

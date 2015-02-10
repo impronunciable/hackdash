@@ -18,7 +18,7 @@ module.exports = function(app){
     projects: function(req, res, next){
       res.locals.meta = {
         url: baseURL + '/projects/',
-        title: "Find Projects",
+        title: "Projects",
         description: "Search projects at " + hdTitle
       };
 
@@ -53,8 +53,8 @@ module.exports = function(app){
     dashboards: function(req, res, next){
       res.locals.meta = {
         url: baseURL,
-        title: "Create collections",
-        description: "Create your collection at " + hdTitle
+        title: "Dashboards",
+        description: "Search dashboards at " + hdTitle
       };
 
       next();
@@ -123,6 +123,16 @@ module.exports = function(app){
 
         next();
       });
+    },
+
+    users: function(req, res, next){
+      res.locals.meta = {
+        url: baseURL + '/users/',
+        title: "People",
+        description: "Search people at " + hdTitle
+      };
+
+      next();
     },
 
     user: function(req, res, next){

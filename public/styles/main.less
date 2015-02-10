@@ -349,10 +349,10 @@ h6 { font-size: @fsize-12; }
 
 }
 
-
 .content {
-
   background-color: @color-whiteB;
+  height: 1250px;
+  overflow: hidden;
 
   .action-bar {
     position: absolute;
@@ -387,7 +387,8 @@ h6 { font-size: @fsize-12; }
   }
 
   .project,
-  .dashboard {
+  .dashboard,
+  .user {
     font-family: @primary-font;
     background-color: @color-white;
 
@@ -533,6 +534,38 @@ h6 { font-size: @fsize-12; }
       right: 0;
       width: @dash-size-width-details - 15;
     }
+  }
+
+  .user {
+    width: 300px;
+    height: 300px;
+    border-top: 15px solid @color-user;
+
+    .cover {
+      background-color: @color-white;
+      min-width: 200px;
+      min-height: 150px;
+
+      .item-letter {
+        padding: 40px 0;
+        font-size: 0;
+
+        img {
+          width: 75px;
+          height: 75px;
+          border-radius: 50%;
+        }
+      }
+    }
+
+    .details {
+      max-height: 130px;
+
+      h2, h3, .description {
+        text-align: center;
+      }
+    }
+
   }
 
 }

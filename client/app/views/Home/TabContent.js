@@ -10,11 +10,12 @@ var EntityList = require("./EntityList");
 
 var ProjectItemView = require('./Project');
 var DashboardItemView = require('./Dashboard');
+var UserItemView = require('./User');
 var ItemView = require('./Item');
 
 var ProjectList = EntityList.extend({ childView: ProjectItemView });
 var DashboardList = EntityList.extend({ childView: DashboardItemView });
-var UserList = EntityList.extend({ childView: ItemView });
+var UserList = EntityList.extend({ childView: UserItemView });
 var CollectionList = EntityList.extend({ childView: ItemView });
 
 var Projects = require('../../models/Projects');
