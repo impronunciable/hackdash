@@ -1,9 +1,9 @@
 /**
- * VIEW: An Project of HOME Search
+ * VIEW: A Collection of HOME Search
  *
  */
 
-var template = require('./templates/project.hbs');
+var template = require('./templates/collection.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -15,13 +15,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
     return this.model.get("_id");
   },
 
-  tagName: 'a',
-  className: 'project',
+  className: 'collection',
   template: template,
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
+
+  onRender: function(){
+    if (!this.model.get('title')){
+      this.$el.addClass('hide');
+    }
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS

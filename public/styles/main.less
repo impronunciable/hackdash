@@ -354,6 +354,17 @@ h6 { font-size: @fsize-12; }
   height: 1250px;
   overflow: hidden;
 
+  a {
+    text-decoration: none;
+    color: @color-black;
+
+    &:hover {
+      cursor: pointer;
+      text-decoration: none;
+      color: @color-black;
+    }
+  }
+
   .action-bar {
     position: absolute;
     bottom: 0;
@@ -388,7 +399,8 @@ h6 { font-size: @fsize-12; }
 
   .project,
   .dashboard,
-  .user {
+  .user,
+  .collection {
     font-family: @primary-font;
     background-color: @color-white;
 
@@ -503,7 +515,8 @@ h6 { font-size: @fsize-12; }
   @dash-size-width-details: 300px;
   @dash-size-height: 200px;
 
-  .dashboard {
+  .dashboard,
+  .collection {
     border-left: 15px solid @color-dashboard;
     width: @dash-size-width;
     height: @dash-size-height;
@@ -566,6 +579,19 @@ h6 { font-size: @fsize-12; }
       }
     }
 
+  }
+
+  .collection {
+    border: none;
+
+    .cover {
+      width: @dash-size-width-cover + 15;
+      background-color: @color-collection;
+    }
+
+    .action-bar {
+      padding: 5px 0;
+    }
   }
 
 }

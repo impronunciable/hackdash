@@ -46,8 +46,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
     }
 
     $items.isotope({
-        /*itemSelector: ".project"
-      , */animationEngine: "jquery"
+        animationEngine: "jquery"
       , resizable: false
       , sortAscending: true
       , layoutMode: 'fitRows'

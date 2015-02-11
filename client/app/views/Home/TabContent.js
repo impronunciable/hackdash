@@ -5,23 +5,28 @@
 
 var template = require("./templates/tabContent.hbs");
 
-var Search = require("./Search");
-var EntityList = require("./EntityList");
+// Main Views
+var
+    Search = require("./Search")
+  , EntityList = require("./EntityList")
 
-var ProjectItemView = require('./Project');
-var DashboardItemView = require('./Dashboard');
-var UserItemView = require('./User');
-var ItemView = require('./Item');
+// Item Views
+  , ProjectItemView = require('./Project')
+  , DashboardItemView = require('./Dashboard')
+  , UserItemView = require('./User')
+  , CollectionView = require('./Collection')
 
-var ProjectList = EntityList.extend({ childView: ProjectItemView });
-var DashboardList = EntityList.extend({ childView: DashboardItemView });
-var UserList = EntityList.extend({ childView: UserItemView });
-var CollectionList = EntityList.extend({ childView: ItemView });
+// List Views
+  , ProjectList = EntityList.extend({ childView: ProjectItemView })
+  , DashboardList = EntityList.extend({ childView: DashboardItemView })
+  , UserList = EntityList.extend({ childView: UserItemView })
+  , CollectionList = EntityList.extend({ childView: CollectionView })
 
-var Projects = require('../../models/Projects');
-var Dashboards = require('../../models/Dashboards');
-var Collections = require('../../models/Collections');
-var Users = require('../../models/Users');
+// Collection models
+  , Projects = require('../../models/Projects')
+  , Dashboards = require('../../models/Dashboards')
+  , Collections = require('../../models/Collections')
+  , Users = require('../../models/Users');
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
