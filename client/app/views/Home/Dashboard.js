@@ -20,7 +20,7 @@ module.exports = ItemView.extend({
   //--------------------------------------
 
   getURL: function(){
-    return "/dashboards/" + this.model.get("_id");
+    return "/dashboards/" + this.model.get("domain");
   },
 
   //--------------------------------------
