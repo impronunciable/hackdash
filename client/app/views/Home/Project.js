@@ -4,24 +4,24 @@
  */
 
 var template = require('./templates/project.hbs');
+var ItemView = require('./Item.js');
 
-module.exports = Backbone.Marionette.ItemView.extend({
+module.exports = ItemView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  id: function(){
-    return this.model.get("_id");
-  },
-
-  tagName: 'a',
   className: 'project',
   template: template,
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
+
+  getURL: function(){
+    return "/projects/" + this.model.get("_id");
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS

@@ -4,16 +4,13 @@
  */
 
 var template = require('./templates/collection.hbs');
+var ItemView = require('./Item.js');
 
-module.exports = Backbone.Marionette.ItemView.extend({
+var CollectionView = module.exports = ItemView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
-
-  id: function(){
-    return this.model.get("_id");
-  },
 
   className: 'collection',
   template: template,
@@ -22,10 +19,16 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  getURL: function(){
+    return "/collections/" + this.model.get("_id");
+  },
+
   onRender: function(){
     if (!this.model.get('title')){
       this.$el.addClass('hide');
     }
+
+    CollectionView.__super__.onRender.call(this);
   },
 
   //--------------------------------------

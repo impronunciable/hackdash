@@ -2,6 +2,8 @@
 var template = require("./templates/home.hbs")
   , Dashboards = require("../../models/Dashboards")
   , TabContent = require("./TabContent")
+  , LoginView = require("../Login")
+
 
   // Collections
   , Dashboards = require("../../models/Dashboards")
@@ -41,6 +43,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   events: {
     "keyup #domain": "validateDomain",
+    "click #domain": "checkLogin",
     "click #create-dashboard": "createDashboard",
 /*
     "keyup #search-projects": "checkSearchProjects",
@@ -120,35 +123,53 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
-  validateDomain: function(){
-    var name = this.ui.domain.val();
-    this.cleanErrors();
-
-    if(/^[a-z0-9]{5,10}$/.test(name)) {
-      this.ui.domain.parent().addClass('success').removeClass('error');
-      this.ui.create.removeClass('disabled');
-    } else {
-      this.ui.domain.parent().addClass('error').removeClass('success');
-      this.ui.create.addClass('disabled');
+  checkLogin: function(){
+    if (window.hackdash.user){
+      return true;
     }
 
+    var providers = window.hackdash.providers;
+    var app = window.hackdash.app;
+
+    app.modals.show(new LoginView({
+      model: new Backbone.Model({ providers: providers.split(',') })
+    }));
+
+    return false;
+  },
+
+  validateDomain: function(){
+    if (this.checkLogin()){
+      var name = this.ui.domain.val();
+      this.cleanErrors();
+
+      if(/^[a-z0-9]{5,10}$/.test(name)) {
+        this.ui.domain.parent().addClass('success').removeClass('error');
+        this.ui.create.removeClass('disabled');
+      } else {
+        this.ui.domain.parent().addClass('error').removeClass('success');
+        this.ui.create.addClass('disabled');
+      }
+    }
   },
 
   createDashboard: function(){
-    var domain = this.ui.domain.val();
+    if (this.checkLogin()){
+      var domain = this.ui.domain.val();
 
-    this.cleanErrors();
+      this.cleanErrors();
 
-    this.ui.create.button('loading');
+      this.ui.create.button('loading');
 
-    var dash = new Dashboards([]);
+      var dash = new Dashboards([]);
 
-    dash.create({ domain: domain }, {
-      success: this.redirectToSubdomain.bind(this, domain),
-      error: this.showError.bind(this)
-    });
+      dash.create({ domain: domain }, {
+        success: this.redirectToSubdomain.bind(this, domain),
+        error: this.showError.bind(this)
+      });
+    }
   },
-
+/*
   checkSearchProjects: function(e){
     if (this.isEnterKey(e)){
       this.searchProjects();
@@ -178,7 +199,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   createCollections: function(){
     window.location = "/dashboards";
   },
-
+*/
   showError: function(view, err){
     this.ui.create.button('reset');
 

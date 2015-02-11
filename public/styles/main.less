@@ -38,6 +38,7 @@
 @fsize-15: 15/@em;
 @fsize-17: 17/@em;
 @fsize-20: 20/@em;
+@fsize-22: 22/@em;
 @fsize-25: 25/@em;
 @fsize-32: 32/@em;
 @fsize-35: 35/@em;
@@ -410,6 +411,16 @@ h6 { font-size: @fsize-12; }
     height: 600px;
     margin: 1% 0.75%;
 
+    -moz-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+
+    &:hover {
+      box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+      top:-2px;
+    }
+
     .progress {
       height: 15px;
       margin-bottom: 0;
@@ -594,6 +605,73 @@ h6 { font-size: @fsize-12; }
     }
   }
 
+}
+
+.login {
+
+  .modal-title {
+    font-size: @fsize-25;
+  }
+
+  a {
+    width: 100%;
+    font-size: @fsize-22;
+    font-family: @primary-font;
+    margin: 5px 0;
+    border: none;
+
+    &.signup-twitter {
+      background-color: #0ba8d6;
+
+      &:hover {
+        background-color: darken(#0ba8d6, 6.5%);
+      }
+    }
+
+    &.signup-github {
+      color: #000;
+      background-color: #EAEAEA;
+
+      &:hover {
+        background-color: darken(#EAEAEA, 6.5%);
+      }
+
+      .fa {
+        color: #000;
+      }
+    }
+
+    &.signup-meetup {
+      background-color: #E11B36;
+
+      &:hover {
+        background-color: darken(#E11B36, 6.5%);
+      }
+    }
+
+    &.signup-facebook {
+      background-color: #4264b3;
+
+      &:hover {
+        background-color: darken(#4264b3, 6.5%);
+      }
+    }
+
+    .fa {
+      position: absolute;
+      top: 8px;
+      left: 20px;
+      font-size: 40px;
+
+      &.fa-meetup {
+        background: url('../images/icon-meetup.png') no-repeat;
+        background-size: 100%;
+        width: 40px;
+        height: 40px;
+        top: 11px;
+      }
+    }
+  }
 }
 
 @media (max-width: 980px) {

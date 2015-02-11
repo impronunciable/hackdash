@@ -4,16 +4,13 @@
  */
 
 var template = require('./templates/user.hbs');
+var ItemView = require('./Item.js');
 
-module.exports = Backbone.Marionette.ItemView.extend({
+module.exports = ItemView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
-
-  id: function(){
-    return this.model.get("_id");
-  },
 
   className: 'user',
   template: template,
@@ -21,6 +18,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
+
+  getURL: function(){
+    return "/users/" + this.model.get("_id");
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS

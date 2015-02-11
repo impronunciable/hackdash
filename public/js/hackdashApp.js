@@ -2664,16 +2664,13 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
  */
 
 var template = require('./templates/collection.hbs');
+var ItemView = require('./Item.js');
 
-module.exports = Backbone.Marionette.ItemView.extend({
+var CollectionView = module.exports = ItemView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
-
-  id: function(){
-    return this.model.get("_id");
-  },
 
   className: 'collection',
   template: template,
@@ -2682,10 +2679,16 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  getURL: function(){
+    return "/collections/" + this.model.get("_id");
+  },
+
   onRender: function(){
     if (!this.model.get('title')){
       this.$el.addClass('hide');
     }
+
+    CollectionView.__super__.onRender.call(this);
   },
 
   //--------------------------------------
@@ -2701,23 +2704,20 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
 });
-},{"./templates/collection.hbs":58}],50:[function(require,module,exports){
+},{"./Item.js":52,"./templates/collection.hbs":58}],50:[function(require,module,exports){
 /**
  * VIEW: An Dashboard of HOME Search
  *
  */
 
 var template = require('./templates/dashboard.hbs');
+var ItemView = require('./Item.js');
 
-module.exports = Backbone.Marionette.ItemView.extend({
+module.exports = ItemView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
-
-  id: function(){
-    return this.model.get("_id");
-  },
 
   className: 'dashboard',
   template: template,
@@ -2726,6 +2726,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  getURL: function(){
+    return "/dashboards/" + this.model.get("_id");
+  },
+
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
@@ -2739,7 +2743,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
 });
-},{"./templates/dashboard.hbs":59}],51:[function(require,module,exports){
+},{"./Item.js":52,"./templates/dashboard.hbs":59}],51:[function(require,module,exports){
 /**
  * VIEW: A collection of Items for a Home Search
  *
@@ -2812,11 +2816,23 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
+  id: function(){ return this.model.get("_id"); },
+  tagName: 'a',
   template: template,
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
+
+  // Overrided method by an Entity
+  getURL: function(){ return "#"; },
+
+  onRender: function(){
+    this.$el.attr({
+      'href': this.getURL(),
+      'data-bypass': true
+    });
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -2838,24 +2854,24 @@ module.exports = Backbone.Marionette.ItemView.extend({
  */
 
 var template = require('./templates/project.hbs');
+var ItemView = require('./Item.js');
 
-module.exports = Backbone.Marionette.ItemView.extend({
+module.exports = ItemView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  id: function(){
-    return this.model.get("_id");
-  },
-
-  tagName: 'a',
   className: 'project',
   template: template,
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
+
+  getURL: function(){
+    return "/projects/" + this.model.get("_id");
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -2870,7 +2886,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
 });
-},{"./templates/project.hbs":62}],54:[function(require,module,exports){
+},{"./Item.js":52,"./templates/project.hbs":62}],54:[function(require,module,exports){
 
 var
   template = require('./templates/search.hbs');
@@ -3067,16 +3083,13 @@ module.exports = Backbone.Marionette.LayoutView.extend({
  */
 
 var template = require('./templates/user.hbs');
+var ItemView = require('./Item.js');
 
-module.exports = Backbone.Marionette.ItemView.extend({
+module.exports = ItemView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
-
-  id: function(){
-    return this.model.get("_id");
-  },
 
   className: 'user',
   template: template,
@@ -3084,6 +3097,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
+
+  getURL: function(){
+    return "/users/" + this.model.get("_id");
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -3098,11 +3115,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
 });
-},{"./templates/user.hbs":65}],57:[function(require,module,exports){
+},{"./Item.js":52,"./templates/user.hbs":65}],57:[function(require,module,exports){
 
 var template = require("./templates/home.hbs")
   , Dashboards = require("../../models/Dashboards")
   , TabContent = require("./TabContent")
+  , LoginView = require("../Login")
+
 
   // Collections
   , Dashboards = require("../../models/Dashboards")
@@ -3142,6 +3161,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   events: {
     "keyup #domain": "validateDomain",
+    "click #domain": "checkLogin",
     "click #create-dashboard": "createDashboard",
 /*
     "keyup #search-projects": "checkSearchProjects",
@@ -3221,35 +3241,53 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
-  validateDomain: function(){
-    var name = this.ui.domain.val();
-    this.cleanErrors();
-
-    if(/^[a-z0-9]{5,10}$/.test(name)) {
-      this.ui.domain.parent().addClass('success').removeClass('error');
-      this.ui.create.removeClass('disabled');
-    } else {
-      this.ui.domain.parent().addClass('error').removeClass('success');
-      this.ui.create.addClass('disabled');
+  checkLogin: function(){
+    if (window.hackdash.user){
+      return true;
     }
 
+    var providers = window.hackdash.providers;
+    var app = window.hackdash.app;
+
+    app.modals.show(new LoginView({
+      model: new Backbone.Model({ providers: providers.split(',') })
+    }));
+
+    return false;
+  },
+
+  validateDomain: function(){
+    if (this.checkLogin()){
+      var name = this.ui.domain.val();
+      this.cleanErrors();
+
+      if(/^[a-z0-9]{5,10}$/.test(name)) {
+        this.ui.domain.parent().addClass('success').removeClass('error');
+        this.ui.create.removeClass('disabled');
+      } else {
+        this.ui.domain.parent().addClass('error').removeClass('success');
+        this.ui.create.addClass('disabled');
+      }
+    }
   },
 
   createDashboard: function(){
-    var domain = this.ui.domain.val();
+    if (this.checkLogin()){
+      var domain = this.ui.domain.val();
 
-    this.cleanErrors();
+      this.cleanErrors();
 
-    this.ui.create.button('loading');
+      this.ui.create.button('loading');
 
-    var dash = new Dashboards([]);
+      var dash = new Dashboards([]);
 
-    dash.create({ domain: domain }, {
-      success: this.redirectToSubdomain.bind(this, domain),
-      error: this.showError.bind(this)
-    });
+      dash.create({ domain: domain }, {
+        success: this.redirectToSubdomain.bind(this, domain),
+        error: this.showError.bind(this)
+      });
+    }
   },
-
+/*
   checkSearchProjects: function(e){
     if (this.isEnterKey(e)){
       this.searchProjects();
@@ -3279,7 +3317,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   createCollections: function(){
     window.location = "/dashboards";
   },
-
+*/
   showError: function(view, err){
     this.ui.create.button('reset');
 
@@ -3313,7 +3351,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   }
 
 });
-},{"../../models/Collections":9,"../../models/Dashboards":11,"../../models/Projects":14,"../../models/Users":16,"./TabContent":55,"./templates/home.hbs":60}],58:[function(require,module,exports){
+},{"../../models/Collections":9,"../../models/Dashboards":11,"../../models/Projects":14,"../../models/Users":16,"../Login":66,"./TabContent":55,"./templates/home.hbs":60}],58:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -3380,7 +3418,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   },"3":function(depth0,helpers,partials,data) {
   return "        <p>\n          <a class=\"btn btn-large btn-custom\" href=\"/login\">Log in to create a Hackathon</a>\n        </p>\n";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, buffer = "\n<div class=\"container-fluid\">\n  <div class=\"row landing-header\">\n\n    <div class=\"col-md-12 text-center\">\n      <div class=\"logo\"></div>\n    </div>\n\n    <div class=\"col-md-12 text-center call-action\">\n      <h1>Ideas for a <span class=\"highlight\">hackathon</span></h1>\n      <h2>Create your dashboard!</h2>\n\n      <div class=\"row\">\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-right arrow text-right\">\n            <i class=\"fa fa-long-arrow-right\"></i>\n          </div>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-8 col-md-6\">\n          <div class=\"input-group\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"enter your hackathon name\">\n            <span class=\"input-group-btn\">\n              <button class=\"btn btn-primary\" type=\"button\">create now</button>\n            </span>\n          </div>\n        </div>\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-left arrow text-left\">\n            <i class=\"fa fa-long-arrow-left\"></i>\n          </div>\n        </div>\n\n      </div>\n\n    </div>\n\n  </div>\n\n  <div class=\"col-md-12 text-center\" style=\"margin-top: -61px;\">\n\n    <ul class=\"nav nav-tabs landing\" role=\"tablist\">\n\n      <li class=\"dashboard active\">\n        <a href=\"#dashboards\" role=\"tab\" data-toggle=\"tab\">Dashboards</a>\n      </li>\n      <li class=\"project\">\n        <a href=\"#projects\" role=\"tab\" data-toggle=\"tab\">Projects</a>\n      </li>\n      <li class=\"user\">\n        <a href=\"#users\" role=\"tab\" data-toggle=\"tab\">People</a>\n      </li>\n      <li class=\"collection\">\n        <a href=\"#collections\" role=\"tab\" data-toggle=\"tab\">Collections</a>\n      </li>\n\n    </ul>\n\n  </div>\n</div>\n\n<div class=\"tab-content\">\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"dashboards\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"projects\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"users\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"collections\"></div>\n</div>\n\n  <!--\n  <div class=\"span12\">\n\n    <section class=\"brand\">\n      <header>\n        <h1>Ideas for a Hackathon</a></h1>\n      </header>\n\n      <div class=\"content\">\n        <h2>Ideas for a hackathon</h2>\n        <p>Upload your project. Add colaborators. Inform status. Share your app.</p>\n\n";
+  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, buffer = "\n<div class=\"container-fluid\">\n  <div class=\"row landing-header\">\n\n    <div class=\"col-md-12 text-center\">\n      <div class=\"logo\"></div>\n    </div>\n\n    <div class=\"col-md-12 text-center call-action\">\n      <h1>Ideas for a <span class=\"highlight\">hackathon</span></h1>\n      <h2>Create your dashboard!</h2>\n\n      <div class=\"row\">\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-right arrow text-right\">\n            <i class=\"fa fa-long-arrow-right\"></i>\n          </div>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-8 col-md-6\">\n          <div class=\"input-group\">\n            <input id=\"create-dashboard\" type=\"text\" class=\"form-control\" placeholder=\"enter your hackathon name\">\n            <span class=\"input-group-btn\">\n              <button class=\"btn btn-primary\" type=\"button\">create now</button>\n            </span>\n          </div>\n        </div>\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-left arrow text-left\">\n            <i class=\"fa fa-long-arrow-left\"></i>\n          </div>\n        </div>\n\n      </div>\n\n    </div>\n\n  </div>\n\n  <div class=\"col-md-12 text-center\" style=\"margin-top: -61px;\">\n\n    <ul class=\"nav nav-tabs landing\" role=\"tablist\">\n\n      <li class=\"dashboard\">\n        <a href=\"#dashboards\" role=\"tab\" data-toggle=\"tab\">Dashboards</a>\n      </li>\n      <li class=\"project\">\n        <a href=\"#projects\" role=\"tab\" data-toggle=\"tab\">Projects</a>\n      </li>\n      <li class=\"user\">\n        <a href=\"#users\" role=\"tab\" data-toggle=\"tab\">People</a>\n      </li>\n      <li class=\"collection\">\n        <a href=\"#collections\" role=\"tab\" data-toggle=\"tab\">Collections</a>\n      </li>\n\n    </ul>\n\n  </div>\n</div>\n\n<div class=\"tab-content\">\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"dashboards\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"projects\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"users\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"collections\"></div>\n</div>\n\n  <!--\n  <div class=\"span12\">\n\n    <section class=\"brand\">\n      <header>\n        <h1>Ideas for a Hackathon</a></h1>\n      </header>\n\n      <div class=\"content\">\n        <h2>Ideas for a hackathon</h2>\n        <p>Upload your project. Add colaborators. Inform status. Share your app.</p>\n\n";
   stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
@@ -3484,7 +3522,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "modal",
+  className: "login",
   template: template,
 
   //--------------------------------------
@@ -4922,18 +4960,20 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
   var lambda=this.lambda, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
-  return "    <a href=\"/auth/"
+  return "\n      <div class=\"col-xs-12 col-md-8 col-md-offset-2\">\n        <a href=\"/auth/"
     + escapeExpression(lambda(depth0, depth0))
-    + "\" class=\"btn btn-large signup-btn signup-"
+    + "\" class=\"btn btn-primary signup-btn signup-"
     + escapeExpression(lambda(depth0, depth0))
-    + "\" data-bypass>\n      <i></i>Access with "
+    + "\" data-bypass>\n          <i class=\"fa fa-"
+    + escapeExpression(lambda(depth0, depth0))
+    + "\"></i>Access with "
     + escapeExpression(((helpers.firstUpper || (depth0 && depth0.firstUpper) || helperMissing).call(depth0, depth0, {"name":"firstUpper","hash":{},"data":data})))
-    + "\n    </a>\n";
+    + "\n        </a>\n      </div>\n\n";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "\n<div class=\"modal-header\">\n  <button type=\"button\" data-dismiss=\"modal\" aria-hidden=\"true\" class=\"close\">×</button>\n  <h3>Log in</h3>\n</div>\n<div class=\"row\">\n  <div class=\"span4 offset1\">\n";
+  var stack1, buffer = "<div class=\"modal-header\">\n  <button type=\"button\" class=\"close\" data-dismiss=\"modal\">\n    <i class=\"fa fa-close\"></i>\n  </button>\n  <h2 class=\"modal-title\">Log In</h2>\n</div>\n\n<div class=\"modal-body\">\n  <div class=\"row\">\n\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.providers : depth0), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "  </div>\n</div>";
+  return buffer + "  </div>\n</div>\n";
 },"useData":true});
 
 },{"hbsfy/runtime":94}],87:[function(require,module,exports){

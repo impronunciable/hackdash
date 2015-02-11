@@ -11,7 +11,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "modal",
+  className: "login",
   template: template,
 
   //--------------------------------------

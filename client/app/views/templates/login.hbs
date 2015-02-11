@@ -1,14 +1,21 @@
-
 <div class="modal-header">
-  <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
-  <h3>Log in</h3>
+  <button type="button" class="close" data-dismiss="modal">
+    <i class="fa fa-close"></i>
+  </button>
+  <h2 class="modal-title">Log In</h2>
 </div>
-<div class="row">
-  <div class="span4 offset1">
-    {{#each providers}}
-    <a href="/auth/{{.}}" class="btn btn-large signup-btn signup-{{.}}" data-bypass>
-      <i></i>Access with {{firstUpper .}}
-    </a>
-    {{/each}}
+
+<div class="modal-body">
+  <div class="row">
+
+      {{#each providers}}
+
+      <div class="col-xs-12 col-md-8 col-md-offset-2">
+        <a href="/auth/{{.}}" class="btn btn-primary signup-btn signup-{{.}}" data-bypass>
+          <i class="fa fa-{{.}}"></i>Access with {{firstUpper .}}
+        </a>
+      </div>
+
+      {{/each}}
   </div>
 </div>

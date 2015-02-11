@@ -4,16 +4,13 @@
  */
 
 var template = require('./templates/dashboard.hbs');
+var ItemView = require('./Item.js');
 
-module.exports = Backbone.Marionette.ItemView.extend({
+module.exports = ItemView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
-
-  id: function(){
-    return this.model.get("_id");
-  },
 
   className: 'dashboard',
   template: template,
@@ -21,6 +18,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
+
+  getURL: function(){
+    return "/dashboards/" + this.model.get("_id");
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
