@@ -3,7 +3,7 @@ var template = require("./templates/home.hbs")
   , Dashboards = require("../../models/Dashboards")
   , TabContent = require("./TabContent")
   , LoginView = require("../Login")
-
+  , StatsView = require("./Stats")
 
   // Collections
   , Dashboards = require("../../models/Dashboards")
@@ -25,6 +25,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "projects": "#projects",
     "users": "#users",
     "collections": "#collections",
+    "stats": ".stats-ctn",
   },
 
   ui: {
@@ -78,6 +79,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     if (!this.ui[this.section].hasClass("active")){
       this.ui[this.section].addClass("active");
     }
+
+    this.stats.show(new StatsView());
   },
 
   getNewList: function(type){

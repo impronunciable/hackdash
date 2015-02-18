@@ -1,0 +1,13 @@
+<div class="feed-wrap">
+  <div class="feed-left">
+    {{getProfileImage user}}
+    <i class="fa fa-share-alt"></i>
+    <i class="fa fa-thumbs-up"></i>
+  </div>
+  <div class="feed-right">
+    <a href="/users/{{user._id}}">{{user.name}}</a>
+    <h6>{{title}}</h6>
+    <p>{{description}}</p>
+    <span class="time">{{timeAgo created_at}}</span>
+  </div>
+</div>
