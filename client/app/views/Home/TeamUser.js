@@ -1,27 +1,22 @@
 /**
- * VIEW: An Dashboard of HOME Search
+ * VIEW: A User Team of HOME
  *
  */
 
 var template = require('./templates/user.hbs');
-var ItemView = require('./Item.js');
 
-module.exports = ItemView.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: 'entity user',
+  className: 'col-md-2 team-user',
   template: template,
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
-
-  getURL: function(){
-    return "/users/" + this.model.get("_id");
-  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS

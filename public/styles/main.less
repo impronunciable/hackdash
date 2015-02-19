@@ -36,6 +36,7 @@
 
 @fsize-10: 10/@em;
 @fsize-12: 12/@em;
+@fsize-14: 14/@em;
 @fsize-15: 15/@em;
 @fsize-17: 17/@em;
 @fsize-20: 20/@em;
@@ -84,7 +85,7 @@ h1, h2, h3 { font-family: @secondary-font; text-transform: uppercase; }
 h4, h5, h6, .h7, .h8, .h9 { font-family: @primary-font; }
 .h7, .h8, .h9 { letter-spacing: -@fsize-12/10; }
 
-h1 { font-size: @fsize-25; }
+h1, { font-size: @fsize-25; }
 h2 { font-size: @fsize-70; }
 h3 { font-size: @fsize-17; }
 h4 { font-size: @fsize-17; font-weight: bold; }
@@ -368,159 +369,157 @@ h6 { font-size: @fsize-12; }
     }
   }
 
-  .action-bar {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+}
 
-    background-color: @color-blackC;
-    color: @color-white;
-    font-size: @fsize-12;
-    padding: 5px 10px;
+.action-bar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 
-    .fa {
-      font-size: 18px;
-      margin-right: 10px;
-      margin-left: 0;
-    }
+  background-color: @color-blackC;
+  color: @color-white;
+  font-size: @fsize-12;
+  padding: 5px 10px;
 
-    span, a {
-      border-left: 1px solid @color-white;
-      padding: 2px 10px;
-    }
-
-    a {
-      color: @color-white;
-
-      &:hover {
-        cursor: pointer;
-        color: @color-white;
-      }
-    }
-
+  .fa {
+    font-size: 18px;
+    margin-right: 10px;
+    margin-left: 0;
   }
 
-  .project,
-  .dashboard,
-  .user,
-  .collection {
-    font-family: @primary-font;
-    background-color: @color-white;
+  span, a {
+    border-left: 1px solid @color-white;
+    padding: 2px 10px;
+  }
 
-    position: relative;
-    float: left;
-    width: 300px;
-    height: 600px;
-    margin: 1% 0.75%;
-
-    -moz-transition: all 0.1s ease-in-out;
-    -webkit-transition: all 0.1s ease-in-out;
-    -o-transition: all 0.1s ease-in-out;
-    transition: all 0.1s ease-in-out;
+  a {
+    color: @color-white;
 
     &:hover {
-      box-shadow: 0 2px 3px rgba(0,0,0,0.3);
-      top:-2px;
+      cursor: pointer;
+      color: @color-white;
     }
+  }
 
-    .progress {
+}
+
+.entity {
+
+  font-family: @primary-font;
+  background-color: @color-white;
+
+  position: relative;
+  float: left;
+  width: 300px;
+  height: 600px;
+  margin: 1% 0.75%;
+
+  -moz-transition: all 0.1s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+    top:-2px;
+  }
+
+  .progress {
+    height: 15px;
+    margin-bottom: 0;
+    box-shadow: none;
+    background-color: @color-whiteC;
+
+    >div {
       height: 15px;
-      margin-bottom: 0;
-      box-shadow: none;
-      background-color: @color-whiteC;
-
-      >div {
-        height: 15px;
-        background-color: rgb(145, 237, 60);
-        position: absolute;
-        top: 0;
-        left: 0;
-
-        &.brainstorming { width: 5%; }
-        &.wireframing { width: 20%; }
-        &.building { width: 40%; }
-        &.researching { width: 60%; }
-        &.prototyping { width: 80%; }
-        &.releasing { width: 100%; }
-
-      }
-    }
-
-    .cover {
-      width: 100%;
-      min-width: 300px;
-      min-height: 245px;
-      background-color: @color-project;
-
-      .item-letter {
-        color: @color-white;
-        font-family: @secondary-font;
-        font-size: @fsize-130;
-        text-align: center;
-        display: block;
-        padding: 20px;
-        color: @color-whiteB;
-        text-indent: -0.2em;
-        text-transform: uppercase;
-      }
-    }
-
-    .details {
-      padding: 15px;
+      background-color: rgb(145, 237, 60);
       position: absolute;
-      height: auto;
-      height: 100%;
-      max-height: 270px;
-      width: 100%;
-      overflow: hidden;
+      top: 0;
+      left: 0;
 
-      h2 {
-        font-family: @primary-font;
-        font-size: @fsize-17;
-        text-transform: none;
-        font-weight: bold;
-        margin: 0;
-      }
+      &.brainstorming { width: 5%; }
+      &.wireframing { width: 20%; }
+      &.building { width: 40%; }
+      &.researching { width: 60%; }
+      &.prototyping { width: 80%; }
+      &.releasing { width: 100%; }
 
-      h3 {
-        font-family: @primary-font;
-        font-size: @fsize-15;
-        text-transform: none;
-        margin: 10px 0;
-      }
-
-      .description {
-        font-size: @fsize-12;
-      }
     }
+  }
 
-    .contributors {
-      position: absolute;
-      bottom: 40px;
-      width: 100%;
-      overflow: hidden;
+  .cover {
+    width: 100%;
+    min-width: 300px;
+    min-height: 245px;
+    background-color: @color-project;
 
-      list-style: none;
-      padding: 0 10px;
-      height: 30px;
+    .item-letter {
+      color: @color-white;
+      font-family: @secondary-font;
+      font-size: @fsize-130;
+      text-align: center;
+      display: block;
+      padding: 20px;
+      color: @color-whiteB;
+      text-indent: -0.2em;
+      text-transform: uppercase;
+    }
+  }
+
+  .details {
+    padding: 15px;
+    position: absolute;
+    height: auto;
+    height: 100%;
+    max-height: 270px;
+    width: 100%;
+    overflow: hidden;
+
+    h2 {
+      font-family: @primary-font;
+      font-size: @fsize-17;
+      text-transform: none;
+      font-weight: bold;
       margin: 0;
+    }
 
-      li {
-        float: left;
-        width: 30px;
-        height: 30px;
+    h3 {
+      font-family: @primary-font;
+      font-size: @fsize-15;
+      text-transform: none;
+      margin: 10px 0;
+    }
 
-        a {
-          display: inline-block;
+    .description {
+      font-size: @fsize-12;
+    }
+  }
 
-          img {
-            width: 100%;
-            height: 100%;
-          }
+  .contributors {
+    position: absolute;
+    bottom: 40px;
+    width: 100%;
+    overflow: hidden;
+
+    list-style: none;
+    padding: 0 10px;
+    height: 30px;
+    margin: 0;
+
+    li {
+      float: left;
+      width: 30px;
+      height: 30px;
+
+      a {
+        display: inline-block;
+
+        img {
+          width: 100%;
+          height: 100%;
         }
       }
     }
-
   }
 
   @dash-size-width: 400px;
@@ -528,8 +527,8 @@ h6 { font-size: @fsize-12; }
   @dash-size-width-details: 300px;
   @dash-size-height: 200px;
 
-  .dashboard,
-  .collection {
+  &.dashboard,
+  &.collection {
     border-left: 15px solid @color-dashboard;
     width: @dash-size-width;
     height: @dash-size-height;
@@ -562,7 +561,7 @@ h6 { font-size: @fsize-12; }
     }
   }
 
-  .user {
+  &.user {
     width: 300px;
     height: 300px;
     border-top: 15px solid @color-user;
@@ -594,7 +593,7 @@ h6 { font-size: @fsize-12; }
 
   }
 
-  .collection {
+  &.collection {
     border: none;
 
     .cover {
@@ -752,6 +751,78 @@ h6 { font-size: @fsize-12; }
 
 }
 
+.team-ctn,
+.team-tab {
+  background-color: @color-whiteB;
+  color: @color-blackB;
+}
+
+.partners-ctn,
+.partners-tab {
+  background-color: @color-blackC;
+  color: @color-whiteB;
+}
+
+.team-tab,
+.partners-tab {
+  text-align: center;
+
+  h3 {
+    font-family: @primary-font;
+    font-size: @fsize-25;
+    text-transform: uppercase;
+    margin: 15px 0;
+  }
+}
+
+.team-ctn {
+  padding: 30px 0;
+
+  .team-user {
+    background: transparent;
+    height: 200px;
+
+    .cover {
+      background: transparent;
+
+      .item-letter {
+
+        img {
+          width: 75px;
+          height: 75px;
+          margin: 0 auto;
+          display: block;
+          //border-radius: 50%;
+        }
+      }
+    }
+
+    .details {
+      width: 100%;
+      overflow: hidden;
+
+      h2, .description {
+        text-align: center;
+        font-family: @secondary-font;
+      }
+
+      h2 {
+        font-size: @fsize-17;
+        text-transform: uppercase;
+      }
+
+      .description {
+        font-size: @fsize-12;
+      }
+    }
+
+  }
+}
+
+.partners-ctn {
+  min-height: 50px;
+}
+
 .login {
 
   .modal-title {
@@ -816,6 +887,68 @@ h6 { font-size: @fsize-12; }
         top: 11px;
       }
     }
+  }
+}
+
+.footer-ctn {
+  background-color: @color-blackB;
+
+  .footer {
+    height: 70px;
+    position: relative;
+
+    .brand{
+      display: block;
+      width: 170px;
+      margin: 20px auto;
+
+      .logo {
+        width: 35px;
+        height: 45px;
+        float: left;
+      }
+
+      h3 {
+        display: inline-block;
+        color: @color-white;
+        margin: 15px 10px;
+      }
+    }
+
+    .up-button {
+      width: 80px;
+      height: 100px;
+
+      position: absolute;
+      top: -30px;
+      right: 60px;
+
+      background-color: @color-action;
+      color: @color-white;
+
+      &:hover, &:focus {
+        background-color: darken(@color-action, 6.5%);
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .fa {
+        font-size: 40px;
+        text-align: center;
+        width: 100%;
+        margin: 20px auto 10px auto;
+      }
+
+      span {
+        font-family: @secondary-font;
+        font-size: @fsize-15;
+        text-transform: uppercase;
+        text-align: center;
+        display: block;
+      }
+
+    }
+
   }
 }
 

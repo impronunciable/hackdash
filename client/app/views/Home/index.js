@@ -4,6 +4,9 @@ var template = require("./templates/home.hbs")
   , TabContent = require("./TabContent")
   , LoginView = require("../Login")
   , StatsView = require("./Stats")
+  , TeamView = require("./Team")
+  , PartnersView = require("./Partners")
+  , FooterView = require("./Footer")
 
   // Collections
   , Dashboards = require("../../models/Dashboards")
@@ -25,7 +28,11 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "projects": "#projects",
     "users": "#users",
     "collections": "#collections",
+
     "stats": ".stats-ctn",
+    "team": ".team-ctn",
+    "partners": ".partners-ctn",
+    "footer": ".footer-ctn",
   },
 
   ui: {
@@ -81,6 +88,9 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     }
 
     this.stats.show(new StatsView());
+    this.team.show(new TeamView());
+    this.partners.show(new PartnersView());
+    this.footer.show(new FooterView());
   },
 
   getNewList: function(type){

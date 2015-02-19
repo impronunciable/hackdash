@@ -12,7 +12,7 @@ module.exports = ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: 'dashboard',
+  className: 'entity dashboard',
   template: template,
 
   //--------------------------------------

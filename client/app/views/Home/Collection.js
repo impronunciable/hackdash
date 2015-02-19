@@ -12,7 +12,7 @@ var CollectionView = module.exports = ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: 'collection',
+  className: 'entity collection',
   template: template,
 
   //--------------------------------------
