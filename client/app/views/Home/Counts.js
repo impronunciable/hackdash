@@ -4,6 +4,7 @@
  */
 
 var template = require('./templates/counts.hbs');
+var Counts = require('../../models/Counts');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -14,18 +15,17 @@ module.exports = Backbone.Marionette.ItemView.extend({
   className: 'row counts',
   template: template,
 
+  modelEvents: {
+    "change": "render"
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
-  serializeData: function(){
-    return {
-      dashboards: 2560,
-      projects: 2560,
-      users: 2560,
-      collections: 2560,
-      releases: 2560
-    };
+  initialize: function(){
+    this.model = new Counts();
+    this.model.fetch();
   },
 
   //--------------------------------------

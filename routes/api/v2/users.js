@@ -1,7 +1,7 @@
 /*
  * RESTfull API: Dashboard Resources
- * 
- * 
+ *
+ *
  */
 
 
@@ -14,13 +14,17 @@ var User = mongoose.model('User')
   , Project = mongoose.model('Project')
   , Collection = mongoose.model('Collection');
 
+var teamIds = [];
+
 module.exports = function(app, uri, common) {
+  teamIds = app.get('config').team || [];
 
   app.get(uri + '/admins', getInstanceAdmins, sendUsers);
   app.post(uri + '/admins/:uid', common.isAuth, isDashboardAdmin, getUser, addAdmin, sendUser);
 
   app.get(uri + '/users', setQuery, getUsers, sendUsers);
 
+  app.get(uri + '/users/team', getTeam, sendUsers);
   app.get(uri + '/users/:uid', getUser, sendUser);
 
   app.get(uri + '/profiles/:uid', getUser, setCollections, setProjects, setContributions, setLikes, sendUser);
@@ -91,7 +95,7 @@ var getUsers = function(req, res, next){
 
 var canUpdate = function(req, res, next){
   var isLogedInUser = req.user.id === req.params.uid;
-  
+
   if (!isLogedInUser) {
     return res.send(403, "Only your own profile can be updated.");
   }
@@ -105,13 +109,13 @@ var addAdmin = function(req, res, next){
   User.update({_id: req.user_profile._id }, { $addToSet : { 'admin_in': domain }}, function(err){
     if(err) return res.send(500);
     next();
-  });  
+  });
 
 };
 
 var updateUser = function(req, res){
   var user = req.user;
-  
+
   //add trim
 
   if (!req.body.name){
@@ -134,7 +138,7 @@ var updateUser = function(req, res){
 
       return res.send(500);
     }
-    
+
     res.send(200);
   });
 };
@@ -180,7 +184,30 @@ var setLikes = function(req, res, next){
       req.user_profile.likes = projects || [];
       next();
     });
-    
+
+};
+
+var getTeam = function(req, res, next){
+  req.users = [];
+
+  if (teamIds.length > 0){
+
+    User
+      .find({ _id: { $in: teamIds } })
+      .sort("name")
+      .select("_id name picture bio")
+      .exec(function(err, users) {
+        if(err)
+          return res.send(500, "could not retrieve team users");
+
+        req.users = users;
+        next();
+      });
+
+    return;
+  }
+
+  next();
 };
 
 var sendUser = function(req, res){

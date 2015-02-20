@@ -12,7 +12,8 @@ var template = require("./templates/home.hbs")
   , Dashboards = require("../../models/Dashboards")
   , Projects = require("../../models/Projects")
   , Users = require("../../models/Users")
-  , Collections = require("../../models/Collections");
+  , Collections = require("../../models/Collections")
+  , Team = require("../../models/Team");
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
@@ -77,6 +78,9 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   initialize: function(options){
     this.section = (options && options.section) || "dashboards";
+
+    this.hdTeam = new Team();
+    this.hdTeam.fetch();
   },
 
   onRender: function(){
@@ -88,8 +92,10 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     }
 
     this.stats.show(new StatsView());
-    this.team.show(new TeamView());
+
+    this.team.show(new TeamView({ collection: this.hdTeam }));
     this.partners.show(new PartnersView());
+
     this.footer.show(new FooterView());
   },
 

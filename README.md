@@ -25,6 +25,7 @@ In your `config.json`:
 * `title`: Instance title used in the html title tag and other headings.
 * `live`: Boolean (true, false) that enable/disable the live feed feature in yourdomain.com/live.
 * `mailer`: SMTP mail info to enable email notifications using nodemailer. Check out the [options](https://github.com/andris9/Nodemailer#setting-up-smtp)
+* `team`: An array of `user`.`_id` to be shown as Team on Landing Page.
 * `prerender`: 
 	+ `enabled`: Boolean (true, false). Where the website would use the SEO Prerender 
 	+ `db`: The Mongo URI of Cached Pages.
