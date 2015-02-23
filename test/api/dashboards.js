@@ -109,6 +109,68 @@ module.exports = function(base_url, config, testUsers){
 
     });
 
+    describe('POST /dashboards', function(){
+
+      it('must create a dashboard', function(done){
+
+        request.post({
+          uri: uri,
+          auth: auth,
+          body: { domain: 'newdash' }
+        }, function (error, response, body) {
+          expect(error).to.not.be.ok();
+          expect(response.statusCode).to.be.equal(200);
+
+          expect(response.body).to.be.an('object');
+
+          var dashboard = response.body;
+
+          expect(dashboard._id).to.be.ok;
+          expect(dashboard.domain).to.be.equal('newdash');
+          expect(dashboard.open).to.be.true;
+
+          dataBuilder.clear('Dashboard', [dashboard._id], function(){
+            done();
+          });
+
+        });
+
+      });
+
+      it('must validate domain', function(done){
+
+        request.post({
+          uri: uri,
+          auth: auth,
+          body: { domain: 'new dash' }
+        }, function (error, response, body) {
+          expect(error).to.not.be.ok();
+          expect(response.statusCode).to.be.equal(500);
+          expect(response.body.error).to.be.equal('subdomain_invalid');
+          done();
+        });
+
+      });
+
+      it('must validate if domain exists', function(done){
+
+        var domain = dashboards[0].domain;
+
+        request.post({
+          uri: uri,
+          auth: auth,
+          body: { domain: domain }
+        }, function (error, response, body) {
+          expect(error).to.not.be.ok();
+          expect(response.statusCode).to.be.equal(409);
+          expect(response.body.error).to.be.equal('subdomain_inuse');
+          done();
+        });
+
+      });
+
+    });
+
   });
 
 };

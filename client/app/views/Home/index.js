@@ -21,7 +21,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  //className: "container-fluid",
   template: template,
 
   regions:{
@@ -39,30 +38,18 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   ui: {
     "domain": "#domain",
     "create": "#create-dashboard",
+    "errorHolder": "#new-dashboard-error",
 
     "dashboards": "#dashboards",
     "projects": "#projects",
     "users": "#users",
     "collections": "#collections",
-/*
-    "projects": "#search-projects",
-    "collections": "#search-collections"
-*/
   },
 
   events: {
-    "keyup #domain": "validateDomain",
-    "click #domain": "checkLogin",
-    "click #create-dashboard": "createDashboard",
-/*
-    "keyup #search-projects": "checkSearchProjects",
-    "click #search-projects-btn": "searchProjects",
-
-    "keyup #search-collections": "checkSearchCollections",
-    "click #search-collections-btn": "searchCollections",
-
-    "click #create-collections-btn": "createCollections"
-*/
+    "keyup @ui.domain": "validateDomain",
+    "click @ui.domain": "checkLogin",
+    "click @ui.create": "createDashboard",
   },
 
   lists: {
@@ -132,7 +119,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     this.changeTab();
   },
 
-  //TODO: move to i18n
   errors: {
     "subdomain_invalid": "Subdomain invalid",
     "subdomain_inuse": "Subdomain is in use"
@@ -163,11 +149,11 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       this.cleanErrors();
 
       if(/^[a-z0-9]{5,10}$/.test(name)) {
-        this.ui.domain.parent().addClass('success').removeClass('error');
-        this.ui.create.removeClass('disabled');
+        this.cleanErrors();
       } else {
-        this.ui.domain.parent().addClass('error').removeClass('success');
-        this.ui.create.addClass('disabled');
+        this.ui.errorHolder
+          .removeClass('hidden')
+          .text(this.errors.subdomain_invalid);
       }
     }
   },
@@ -188,37 +174,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       });
     }
   },
-/*
-  checkSearchProjects: function(e){
-    if (this.isEnterKey(e)){
-      this.searchProjects();
-    }
-  },
 
-  checkSearchCollections: function(e){
-    if (this.isEnterKey(e)){
-      this.searchCollections();
-    }
-  },
-
-  searchProjects: function(){
-    var q = this.ui.projects.val();
-    q = q ? "?q=" + q : "";
-
-    window.location = "/projects" + q;
-  },
-
-  searchCollections: function(){
-    var q = this.ui.collections.val();
-    q = q ? "?q=" + q : "";
-
-    window.location = "/collections" + q;
-  },
-
-  createCollections: function(){
-    window.location = "/dashboards";
-  },
-*/
   showError: function(view, err){
     this.ui.create.button('reset');
 
@@ -228,14 +184,13 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     }
 
     var error = JSON.parse(err.responseText).error;
-
-    this.ui.domain.parents('.control-group').addClass('error').removeClass('success');
-    this.ui.domain.after('<span class="help-inline">' + this.errors[error] + '</span>');
+    this.ui.errorHolder
+      .removeClass('hidden')
+      .text(this.errors[error]);
   },
 
   cleanErrors: function(){
-    $(".error", this.$el).removeClass("error").removeClass('success');
-    $("span.help-inline", this.$el).remove();
+    this.ui.errorHolder.addClass('hidden').text('');
   },
 
   //--------------------------------------
@@ -243,7 +198,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
 
   redirectToSubdomain: function(name){
-    window.location = "http://" + name + "." + hackdash.baseURL;
+    window.location = '/dashboards/' + name;
   },
 
   isEnterKey: function(e){

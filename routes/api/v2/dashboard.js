@@ -1,7 +1,7 @@
 /*
  * RESTfull API: Dashboard Resources
- * 
- * 
+ *
+ *
  */
 
 
@@ -19,7 +19,7 @@ module.exports = function(app, uri, common) {
 
   app.post(uri + '/dashboards', common.isAuth, validateSubdomain, createDashboard(app), sendDashboard);
   app.get(uri + '/dashboards', setQuery, setDashboards, sendDashboards);
-  
+
   app.get(uri + '/dashboards/:domain.jsonp', setFullOption, getDashboard, sendDashboard);
   app.get(uri + '/dashboards/:domain', getDashboard, sendDashboard);
   app.get(uri + '/', getDashboard, sendDashboard);
@@ -34,7 +34,7 @@ module.exports = function(app, uri, common) {
 };
 
 var validateSubdomain = function(req, res, next) {
-  
+
   if(!/^[a-z0-9]{5,10}$/.test(req.body.domain)) {
     return res.json(500, { error: "subdomain_invalid" });
   }
@@ -52,9 +52,9 @@ var createDashboard =  function(app){
 
       var dash = new Dashboard({ domain: req.body.domain});
       dash.save(function(err){
-        
+
         User.findById(req.user.id, function(err, user) {
-          
+
           user.admin_in.push(req.body.domain);
 
           user.save(function(){
@@ -140,7 +140,7 @@ var getDashboard = function(req, res, next){
 
         data.projects = data.projects || [];
 
-        data.projects.forEach(function(p) { 
+        data.projects.forEach(function(p) {
           p.cover = p.cover || '';
           p.contributors = p.contributors.length;
           p.followers = p.followers.length;
@@ -190,7 +190,7 @@ var updateDashboard = function(req, res, next) {
   }
 
   function getValue(prop){
-    return req.body.hasOwnProperty(prop) ? req.body[prop] : dashboard[prop];    
+    return req.body.hasOwnProperty(prop) ? req.body[prop] : dashboard[prop];
   }
 
   dashboard.title = getValue("title");
@@ -202,7 +202,7 @@ var updateDashboard = function(req, res, next) {
   if (Array.isArray(showcase)){
     dashboard.showcase = showcase;
   }
-  
+
   dashboard.save(function(err, dashboard){
     if(err) return res.send(500);
     req.dashboard = dashboard;
@@ -229,7 +229,7 @@ var sendDashboardCSV = function(req, res){
   function CSVEscape(field) {
     return String(field || "").replace(/\"/g, '""').replace(/,/g, '');
   }
-  
+
   var headers = [
       'name'
     , 'username'
@@ -240,7 +240,7 @@ var sendDashboardCSV = function(req, res){
     , 'status'
     , 'dashboard'
   ].map(CSVEscape).join(',');
- 
+
   function projectToCSV(project) {
 
     var people = [];
@@ -268,7 +268,7 @@ var sendDashboardCSV = function(req, res){
       return person.map(CSVEscape).join(',') + '\n';
     })).join("");
   }
- 
+
   var started = false;
   function start(response) {
     response.setHeader('Content-disposition', 'attachment; filename=' + domain + '.csv');
@@ -276,7 +276,7 @@ var sendDashboardCSV = function(req, res){
     response.write(headers + '\n');
     started = true;
   }
- 
+
   Project.find({ domain: domain })
     .populate('contributors')
     .populate('followers')

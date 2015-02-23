@@ -3294,41 +3294,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
-/*
-  initialize: function(){
-    this.collection = new Backbone.Collection([{
-        _id: "54909d0f7fd3d5704c0006c6",
-        name: "Alvaro Graves",
-        picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73",
-        bio: "una mañana tras un sueño intranquilo Gregorio Samsa mañana tras un sueño mañana tras"
-      },{
-        _id: "54909d0f7fd3d5704c0006c6",
-        name: "Alvaro Graves",
-        picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73",
-        bio: "una mañana tras un sueño intranquilo Gregorio Samsa mañana tras un sueño mañana tras"
-      },{
-        _id: "54909d0f7fd3d5704c0006c6",
-        name: "Alvaro Graves",
-        picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73",
-        bio: "una mañana tras un sueño intranquilo Gregorio Samsa mañana tras un sueño mañana tras"
-      },{
-        _id: "54909d0f7fd3d5704c0006c6",
-        name: "Alvaro Graves",
-        picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73",
-        bio: "una mañana tras un sueño intranquilo Gregorio Samsa mañana tras un sueño mañana tras"
-      },{
-        _id: "54909d0f7fd3d5704c0006c6",
-        name: "Alvaro Graves",
-        picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73",
-        bio: "una mañana tras un sueño intranquilo Gregorio Samsa mañana tras un sueño mañana tras"
-      },{
-        _id: "54909d0f7fd3d5704c0006c6",
-        name: "Alvaro Graves",
-        picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73",
-        bio: "una mañana tras un sueño intranquilo Gregorio Samsa mañana tras un sueño mañana tras"
-      }]);
-  },
-*/
+
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
@@ -3439,7 +3405,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  //className: "container-fluid",
   template: template,
 
   regions:{
@@ -3457,30 +3422,18 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   ui: {
     "domain": "#domain",
     "create": "#create-dashboard",
+    "errorHolder": "#new-dashboard-error",
 
     "dashboards": "#dashboards",
     "projects": "#projects",
     "users": "#users",
     "collections": "#collections",
-/*
-    "projects": "#search-projects",
-    "collections": "#search-collections"
-*/
   },
 
   events: {
-    "keyup #domain": "validateDomain",
-    "click #domain": "checkLogin",
-    "click #create-dashboard": "createDashboard",
-/*
-    "keyup #search-projects": "checkSearchProjects",
-    "click #search-projects-btn": "searchProjects",
-
-    "keyup #search-collections": "checkSearchCollections",
-    "click #search-collections-btn": "searchCollections",
-
-    "click #create-collections-btn": "createCollections"
-*/
+    "keyup @ui.domain": "validateDomain",
+    "click @ui.domain": "checkLogin",
+    "click @ui.create": "createDashboard",
   },
 
   lists: {
@@ -3550,7 +3503,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     this.changeTab();
   },
 
-  //TODO: move to i18n
   errors: {
     "subdomain_invalid": "Subdomain invalid",
     "subdomain_inuse": "Subdomain is in use"
@@ -3581,11 +3533,11 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       this.cleanErrors();
 
       if(/^[a-z0-9]{5,10}$/.test(name)) {
-        this.ui.domain.parent().addClass('success').removeClass('error');
-        this.ui.create.removeClass('disabled');
+        this.cleanErrors();
       } else {
-        this.ui.domain.parent().addClass('error').removeClass('success');
-        this.ui.create.addClass('disabled');
+        this.ui.errorHolder
+          .removeClass('hidden')
+          .text(this.errors.subdomain_invalid);
       }
     }
   },
@@ -3606,37 +3558,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       });
     }
   },
-/*
-  checkSearchProjects: function(e){
-    if (this.isEnterKey(e)){
-      this.searchProjects();
-    }
-  },
 
-  checkSearchCollections: function(e){
-    if (this.isEnterKey(e)){
-      this.searchCollections();
-    }
-  },
-
-  searchProjects: function(){
-    var q = this.ui.projects.val();
-    q = q ? "?q=" + q : "";
-
-    window.location = "/projects" + q;
-  },
-
-  searchCollections: function(){
-    var q = this.ui.collections.val();
-    q = q ? "?q=" + q : "";
-
-    window.location = "/collections" + q;
-  },
-
-  createCollections: function(){
-    window.location = "/dashboards";
-  },
-*/
   showError: function(view, err){
     this.ui.create.button('reset');
 
@@ -3646,14 +3568,13 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     }
 
     var error = JSON.parse(err.responseText).error;
-
-    this.ui.domain.parents('.control-group').addClass('error').removeClass('success');
-    this.ui.domain.after('<span class="help-inline">' + this.errors[error] + '</span>');
+    this.ui.errorHolder
+      .removeClass('hidden')
+      .text(this.errors[error]);
   },
 
   cleanErrors: function(){
-    $(".error", this.$el).removeClass("error").removeClass('success');
-    $("span.help-inline", this.$el).remove();
+    this.ui.errorHolder.addClass('hidden').text('');
   },
 
   //--------------------------------------
@@ -3661,7 +3582,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
 
   redirectToSubdomain: function(name){
-    window.location = "http://" + name + "." + hackdash.baseURL;
+    window.location = '/dashboards/' + name;
   },
 
   isEnterKey: function(e){
@@ -3778,7 +3699,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  return "\n<div class=\"container-fluid\">\n  <div class=\"row landing-header\">\n\n    <div class=\"col-md-12 text-center\">\n      <div class=\"logo\"></div>\n    </div>\n\n    <div class=\"col-md-12 text-center call-action\">\n      <h1>Ideas for a <span class=\"highlight\">hackathon</span></h1>\n      <h2>Create your dashboard!</h2>\n\n      <div class=\"row\">\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-right arrow text-right\">\n            <i class=\"fa fa-long-arrow-right\"></i>\n          </div>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-8 col-md-6\">\n          <div class=\"input-group\">\n            <input id=\"create-dashboard\" type=\"text\" class=\"form-control\" placeholder=\"enter your hackathon name\">\n            <span class=\"input-group-btn\">\n              <button class=\"btn btn-primary\" type=\"button\">create now</button>\n            </span>\n          </div>\n        </div>\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-left arrow text-left\">\n            <i class=\"fa fa-long-arrow-left\"></i>\n          </div>\n        </div>\n\n      </div>\n\n    </div>\n\n  </div>\n\n  <div class=\"col-md-12 text-center\" style=\"margin-top: -61px;\">\n\n    <ul class=\"nav nav-tabs landing\" role=\"tablist\">\n\n      <li class=\"dashboard\">\n        <a href=\"#dashboards\" role=\"tab\" data-toggle=\"tab\">Dashboards</a>\n      </li>\n      <li class=\"project\">\n        <a href=\"#projects\" role=\"tab\" data-toggle=\"tab\">Projects</a>\n      </li>\n      <li class=\"user\">\n        <a href=\"#users\" role=\"tab\" data-toggle=\"tab\">People</a>\n      </li>\n      <li class=\"collection\">\n        <a href=\"#collections\" role=\"tab\" data-toggle=\"tab\">Collections</a>\n      </li>\n\n    </ul>\n\n  </div>\n</div>\n\n<div class=\"tab-content\">\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"dashboards\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"projects\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"users\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"collections\"></div>\n</div>\n\n<div class=\"col-md-12 stats-ctn\"></div>\n\n<div class=\"col-md-12 team-ctn\"></div>\n\n<div class=\"col-md-12 team-partners\">\n  <div class=\"col-md-2 col-md-offset-4 partners-tab\">\n    <h3>partners</h3>\n  </div>\n  <div class=\"col-md-2 team-tab\">\n    <h3>team</h3>\n  </div>\n</div>\n\n<div class=\"col-md-12 partners-ctn\"></div>\n<div class=\"col-md-12 footer-ctn\"></div>";
+  return "\n<div class=\"container-fluid\">\n  <div class=\"row landing-header\">\n\n    <div class=\"col-md-12 text-center\">\n      <div class=\"logo\"></div>\n    </div>\n\n    <div class=\"col-md-12 text-center call-action\">\n      <h1>Ideas for a <span class=\"highlight\">hackathon</span></h1>\n      <h2>Create your dashboard!</h2>\n\n      <div class=\"row\">\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-right arrow text-right\">\n            <i class=\"fa fa-long-arrow-right\"></i>\n          </div>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-8 col-md-6\">\n          <div class=\"input-group\">\n            <input id=\"domain\" type=\"text\" class=\"form-control\" placeholder=\"enter your hackathon name\">\n            <span class=\"input-group-btn\">\n              <button id=\"create-dashboard\" class=\"btn btn-primary\" type=\"button\">create now</button>\n            </span>\n          </div>\n          <p id=\"new-dashboard-error\" class=\"text-left text-danger hidden\">ERROR</p>\n        </div>\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-left arrow text-left\">\n            <i class=\"fa fa-long-arrow-left\"></i>\n          </div>\n        </div>\n\n      </div>\n\n    </div>\n\n  </div>\n\n  <div class=\"col-md-12 text-center\" style=\"margin-top: -61px;\">\n\n    <ul class=\"nav nav-tabs landing\" role=\"tablist\">\n\n      <li class=\"dashboard\">\n        <a href=\"#dashboards\" role=\"tab\" data-toggle=\"tab\">Dashboards</a>\n      </li>\n      <li class=\"project\">\n        <a href=\"#projects\" role=\"tab\" data-toggle=\"tab\">Projects</a>\n      </li>\n      <li class=\"user\">\n        <a href=\"#users\" role=\"tab\" data-toggle=\"tab\">People</a>\n      </li>\n      <li class=\"collection\">\n        <a href=\"#collections\" role=\"tab\" data-toggle=\"tab\">Collections</a>\n      </li>\n\n    </ul>\n\n  </div>\n</div>\n\n<div class=\"tab-content\">\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"dashboards\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"projects\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"users\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"collections\"></div>\n</div>\n\n<div class=\"col-md-12 stats-ctn\"></div>\n\n<div class=\"col-md-12 team-ctn\"></div>\n\n<div class=\"col-md-12 team-partners\">\n  <div class=\"col-md-2 col-md-offset-4 partners-tab\">\n    <h3>partners</h3>\n  </div>\n  <div class=\"col-md-2 team-tab\">\n    <h3>team</h3>\n  </div>\n</div>\n\n<div class=\"col-md-12 partners-ctn\"></div>\n<div class=\"col-md-12 footer-ctn\"></div>";
   },"useData":true});
 
 },{"hbsfy/runtime":106}],71:[function(require,module,exports){
