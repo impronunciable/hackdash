@@ -165,6 +165,12 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
       main.show(this.homeView);
     }
+
+    smoothScroll.animateScroll(null, '#' + section, {
+      offset: 60,
+      speed: 1000,
+      easing: 'easeInOut'
+    });
   },
 
   showLandingDashboards: function(){
@@ -419,13 +425,18 @@ module.exports = function(){
     // Set global mode for InlineEditor (X-Editable)
     $.fn.editable.defaults.mode = 'inline';
   }
-  
+
    // Init Helpers
   require('./helpers/handlebars');
   require('./helpers/backboneOverrides');
-  
+
   Placeholders.init({ live: true, hideOnFocus: true });
-  
+
+  smoothScroll.init({
+    speed: 1000,
+    easing: 'easeInOut'
+  });
+
   window.hackdash.apiURL = "/api/v2";
   window.hackdash.startApp = require('./HackdashApp');
 };
@@ -2846,6 +2857,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
   className: 'footer',
   template: template,
 
+  ui: {
+    'up': '.up-button'
+  },
+
+  events: {
+    'click @ui.up': 'goTop'
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
@@ -2857,6 +2876,19 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  upBlocked: false,
+  goTop: function(){
+
+    if (!this.upBlocked){
+      this.upBlocked = true;
+
+      var body = $("html, body"), self = this;
+      body.animate({ scrollTop:0 }, 1500, 'swing', function() {
+        self.upBlocked = false;
+      });
+    }
+  }
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
@@ -3699,7 +3731,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  return "\n<div class=\"container-fluid\">\n  <div class=\"row landing-header\">\n\n    <div class=\"col-md-12 text-center\">\n      <div class=\"logo\"></div>\n    </div>\n\n    <div class=\"col-md-12 text-center call-action\">\n      <h1>Ideas for a <span class=\"highlight\">hackathon</span></h1>\n      <h2>Create your dashboard!</h2>\n\n      <div class=\"row\">\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-right arrow text-right\">\n            <i class=\"fa fa-long-arrow-right\"></i>\n          </div>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-8 col-md-6\">\n          <div class=\"input-group\">\n            <input id=\"domain\" type=\"text\" class=\"form-control\" placeholder=\"enter your hackathon name\">\n            <span class=\"input-group-btn\">\n              <button id=\"create-dashboard\" class=\"btn btn-primary\" type=\"button\">create now</button>\n            </span>\n          </div>\n          <p id=\"new-dashboard-error\" class=\"text-left text-danger hidden\">ERROR</p>\n        </div>\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-left arrow text-left\">\n            <i class=\"fa fa-long-arrow-left\"></i>\n          </div>\n        </div>\n\n      </div>\n\n    </div>\n\n  </div>\n\n  <div class=\"col-md-12 text-center\" style=\"margin-top: -61px;\">\n\n    <ul class=\"nav nav-tabs landing\" role=\"tablist\">\n\n      <li class=\"dashboard\">\n        <a href=\"#dashboards\" role=\"tab\" data-toggle=\"tab\">Dashboards</a>\n      </li>\n      <li class=\"project\">\n        <a href=\"#projects\" role=\"tab\" data-toggle=\"tab\">Projects</a>\n      </li>\n      <li class=\"user\">\n        <a href=\"#users\" role=\"tab\" data-toggle=\"tab\">People</a>\n      </li>\n      <li class=\"collection\">\n        <a href=\"#collections\" role=\"tab\" data-toggle=\"tab\">Collections</a>\n      </li>\n\n    </ul>\n\n  </div>\n</div>\n\n<div class=\"tab-content\">\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"dashboards\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"projects\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"users\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"collections\"></div>\n</div>\n\n<div class=\"col-md-12 stats-ctn\"></div>\n\n<div class=\"col-md-12 team-ctn\"></div>\n\n<div class=\"col-md-12 team-partners\">\n  <div class=\"col-md-2 col-md-offset-4 partners-tab\">\n    <h3>partners</h3>\n  </div>\n  <div class=\"col-md-2 team-tab\">\n    <h3>team</h3>\n  </div>\n</div>\n\n<div class=\"col-md-12 partners-ctn\"></div>\n<div class=\"col-md-12 footer-ctn\"></div>";
+  return "\n<div class=\"container-fluid\">\n  <div class=\"row landing-header\">\n\n    <div class=\"col-md-12 text-center\">\n      <div class=\"logo\"></div>\n    </div>\n\n    <div class=\"col-md-12 text-center call-action\">\n      <h1>Ideas for a <span class=\"highlight\">hackathon</span></h1>\n      <h2>Create your dashboard!</h2>\n\n      <div class=\"row\">\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-right arrow text-right\">\n            <i class=\"fa fa-long-arrow-right\"></i>\n          </div>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-8 col-md-6\">\n          <div class=\"input-group\">\n            <input id=\"domain\" type=\"text\" class=\"form-control\" placeholder=\"hackathon domain name (5-10 chars)\">\n            <!--enter your hackathon name-->\n            <span class=\"input-group-btn\">\n              <button id=\"create-dashboard\" class=\"btn btn-primary\" type=\"button\">create now</button>\n            </span>\n          </div>\n          <p id=\"new-dashboard-error\" class=\"text-left text-danger hidden\">ERROR</p>\n        </div>\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-left arrow text-left\">\n            <i class=\"fa fa-long-arrow-left\"></i>\n          </div>\n        </div>\n\n      </div>\n\n    </div>\n\n  </div>\n\n  <div class=\"col-md-12 text-center\" style=\"margin-top: -61px;\">\n\n    <ul class=\"nav nav-tabs landing\" role=\"tablist\">\n\n      <li id=\"dashboard\" class=\"dashboard\">\n        <a href=\"#dashboards\" role=\"tab\" data-toggle=\"tab\">Dashboards</a>\n      </li>\n      <li id=\"project\" class=\"project\">\n        <a href=\"#projects\" role=\"tab\" data-toggle=\"tab\">Projects</a>\n      </li>\n      <li id=\"user\" class=\"user\">\n        <a href=\"#users\" role=\"tab\" data-toggle=\"tab\">People</a>\n      </li>\n      <li id=\"collection\" class=\"collection\">\n        <a href=\"#collections\" role=\"tab\" data-toggle=\"tab\">Collections</a>\n      </li>\n\n    </ul>\n\n  </div>\n</div>\n\n<div class=\"tab-content\">\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"dashboards\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"projects\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"users\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"collections\"></div>\n</div>\n\n<div class=\"col-md-12 stats-ctn\"></div>\n\n<div class=\"col-md-12 team-ctn\"></div>\n\n<div class=\"col-md-12 team-partners\">\n  <div class=\"col-md-2 col-md-offset-4 partners-tab\">\n    <h3>partners</h3>\n  </div>\n  <div class=\"col-md-2 team-tab\">\n    <h3>team</h3>\n  </div>\n</div>\n\n<div class=\"col-md-12 partners-ctn\"></div>\n<div class=\"col-md-12 about-ctn\">\n  The HackDash was born by accident and by a need. We were looking for platform to track ideas through hackathons in the line to the <a href=\"http://mediaparty.info/\" data-bypass=\"true\" target=\"__blank\">Hacks/Hackers Media Party</a> organized by @HacksHackersBA where hackers and journalists share ideas. We spread the need through Twitter and that was the context of the HackDash born. @blejman had an idea and @danzajdband was interested in implement that idea. So we started building the app hoping we can get to the Buenos Aires Media Party with something that doesn't suck. The Media Party Hackathon day came followed by a grateful surprise. Not only the people liked the HackDash implementation but a couple of coders added the improvement of the HackDash as a Hackaton project. After the Media Party we realized that this small app was filling a real need. Three years later, the dashboard is becoming an standard to track innovative ideas round the world. Create your own dashboard, be part of a global community.\n\n</div>\n<div class=\"col-md-12 footer-ctn\"></div>";
   },"useData":true});
 
 },{"hbsfy/runtime":106}],71:[function(require,module,exports){

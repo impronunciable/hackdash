@@ -112,6 +112,12 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
       main.show(this.homeView);
     }
+
+    smoothScroll.animateScroll(null, '#' + section, {
+      offset: 60,
+      speed: 1000,
+      easing: 'easeInOut'
+    });
   },
 
   showLandingDashboards: function(){

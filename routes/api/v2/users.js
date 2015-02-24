@@ -194,13 +194,18 @@ var getTeam = function(req, res, next){
 
     User
       .find({ _id: { $in: teamIds } })
-      .sort("name")
       .select("_id name picture bio")
       .exec(function(err, users) {
         if(err)
           return res.send(500, "could not retrieve team users");
 
-        req.users = users;
+        req.users = [];
+
+        users.forEach(function(user){
+          var idx = teamIds.indexOf(user._id.toString());
+          req.users[idx] = user;
+        });
+
         next();
       });
 

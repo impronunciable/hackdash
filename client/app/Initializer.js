@@ -17,13 +17,18 @@ module.exports = function(){
     // Set global mode for InlineEditor (X-Editable)
     $.fn.editable.defaults.mode = 'inline';
   }
-  
+
    // Init Helpers
   require('./helpers/handlebars');
   require('./helpers/backboneOverrides');
-  
+
   Placeholders.init({ live: true, hideOnFocus: true });
-  
+
+  smoothScroll.init({
+    speed: 1000,
+    easing: 'easeInOut'
+  });
+
   window.hackdash.apiURL = "/api/v2";
   window.hackdash.startApp = require('./HackdashApp');
 };
