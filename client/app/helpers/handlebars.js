@@ -141,3 +141,37 @@ Handlebars.registerHelper('getProfileImage', function(user) {
 
   return new Handlebars.SafeString(img.outerHTML);
 });
+
+Handlebars.registerHelper('getProfileImageHex', function(user) {
+
+  if (!user){
+    return '';
+  }
+
+  var img = new window.Image();
+
+  $(img)
+    .load(function () { })
+    .error(function () {
+      $('.' + this.id)
+        .css('background-image', 'url(http://avatars.io/' + user.provider + '/' + user.username + ')');
+    })
+    .prop({
+      src: user.picture,
+      id: 'pic-' + user._id
+    });
+
+  var div = $('<div>')
+    .prop({
+      'data-id': user._id,
+      title: user.name,
+      class: 'avatar tooltips pic-' + user._id,
+      rel: 'tooltip'
+    })
+    .css('background-image', 'url(' + user.picture + ')')
+    .addClass('hexagon');
+
+  div.append('<div class="hex-top"></div><div class="hex-bottom"></div>');
+
+  return new Handlebars.SafeString(div[0].outerHTML);
+});

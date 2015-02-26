@@ -605,6 +605,40 @@ Handlebars.registerHelper('getProfileImage', function(user) {
   return new Handlebars.SafeString(img.outerHTML);
 });
 
+Handlebars.registerHelper('getProfileImageHex', function(user) {
+
+  if (!user){
+    return '';
+  }
+
+  var img = new window.Image();
+
+  $(img)
+    .load(function () { })
+    .error(function () {
+      $('.' + this.id)
+        .css('background-image', 'url(http://avatars.io/' + user.provider + '/' + user.username + ')');
+    })
+    .prop({
+      src: user.picture,
+      id: 'pic-' + user._id
+    });
+
+  var div = $('<div>')
+    .prop({
+      'data-id': user._id,
+      title: user.name,
+      class: 'avatar tooltips pic-' + user._id,
+      rel: 'tooltip'
+    })
+    .css('background-image', 'url(' + user.picture + ')')
+    .addClass('hexagon');
+
+  div.append('<div class="hex-top"></div><div class="hex-bottom"></div>');
+
+  return new Handlebars.SafeString(div[0].outerHTML);
+});
+
 },{"hbsfy/runtime":106}],6:[function(require,module,exports){
 jQuery(function() {
   require('./Initializer')();
@@ -3256,6 +3290,10 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   template: template,
 
+  ui: {
+    "content": '.content'
+  },
+
   regions: {
     "header": ".header",
     "content": ".content"
@@ -3290,6 +3328,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       this.content.show(new ListView({
         collection: this.collection
       }));
+
+      this.ui.content.height($(window).height() - 200);
     }
 
   },
@@ -3821,10 +3861,10 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "\n<div class=\"cover\">\n  <div class=\"item-letter\">\n    <img src=\""
-    + escapeExpression(((helper = (helper = helpers.picture || (depth0 != null ? depth0.picture : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"picture","hash":{},"data":data}) : helper)))
-    + "\">\n  </div>\n</div>\n\n<div class=\"details\">\n  <h2>"
+  var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function";
+  return "\n<div class=\"cover\">\n  <div class=\"item-letter\">\n    "
+    + escapeExpression(((helpers.getProfileImageHex || (depth0 && depth0.getProfileImageHex) || helperMissing).call(depth0, depth0, {"name":"getProfileImageHex","hash":{},"data":data})))
+    + "\n  </div>\n</div>\n\n<div class=\"details\">\n  <h2>"
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
     + "</h2>\n  <div class=\"description\">"
     + escapeExpression(((helper = (helper = helpers.bio || (depth0 != null ? depth0.bio : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"bio","hash":{},"data":data}) : helper)))

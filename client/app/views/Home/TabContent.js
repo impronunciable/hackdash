@@ -36,6 +36,10 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   template: template,
 
+  ui: {
+    "content": '.content'
+  },
+
   regions: {
     "header": ".header",
     "content": ".content"
@@ -70,6 +74,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       this.content.show(new ListView({
         collection: this.collection
       }));
+
+      this.ui.content.height($(window).height() - 200);
     }
 
   },

@@ -55,7 +55,6 @@
 @logo-url: '../images/logohack.png';
 @landing-photo-url: '../images/landing/cover.jpeg';
 
-
 /******************************************************/
 
 ::selection {
@@ -95,6 +94,16 @@ h6 { font-size: @fsize-12; }
 .h7 { font-size: @fsize-40;  }
 .h8 { font-size: @fsize-80; }
 .h9 { font-size: @fsize-17; text-transform: uppercase; }
+
+/*
+ * Profile Picture Hexagon
+ */
+
+@import "./mixins/hexagon";
+
+.hexagon {
+  .getHexagon();
+}
 
 /*
  * Landing
@@ -356,7 +365,7 @@ h6 { font-size: @fsize-12; }
 
 .content {
   background-color: @color-whiteB;
-  height: 1250px;
+  height: 800px;
   overflow: hidden;
 
   a {
@@ -563,29 +572,29 @@ h6 { font-size: @fsize-12; }
   }
 
   &.user {
-    width: 300px;
-    height: 300px;
+    width: 230px;
+    height: 230px;
     border-top: 15px solid @color-user;
 
     .cover {
       background-color: @color-white;
       min-width: 200px;
-      min-height: 150px;
+      min-height: 100px;
 
       .item-letter {
-        padding: 40px 0;
+        padding: 10px 0;
         font-size: 0;
+        text-align: inherit;
 
-        img {
-          width: 75px;
-          height: 75px;
-          border-radius: 50%;
+        .hexagon {
+          .getHexagon(70px);
         }
       }
     }
 
     .details {
-      max-height: 130px;
+      max-height: 115px;
+      padding: 5px;
 
       h2, h3, .description {
         text-align: center;
@@ -781,20 +790,13 @@ h6 { font-size: @fsize-12; }
 
   .team-user {
     background: transparent;
-    height: 200px;
+    height: 230px;
 
     .cover {
       background: transparent;
 
-      .item-letter {
-
-        img {
-          width: 75px;
-          height: 75px;
-          margin: 0 auto;
-          display: block;
-          //border-radius: 50%;
-        }
+      .hexagon {
+        .getHexagon(100px, 5px);
       }
     }
 

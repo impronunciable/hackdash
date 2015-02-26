@@ -84,7 +84,7 @@ var getUser = function(req, res, next){
 var getUsers = function(req, res, next){
   User
     .find(req.query || {})
-    .limit(10)
+    .limit(20)
     .sort("name username")
     .exec(function(err, users) {
       if(err) return res.send(500);
@@ -194,7 +194,7 @@ var getTeam = function(req, res, next){
 
     User
       .find({ _id: { $in: teamIds } })
-      .select("_id name picture bio")
+      .select("_id name picture bio provider username")
       .exec(function(err, users) {
         if(err)
           return res.send(500, "could not retrieve team users");
