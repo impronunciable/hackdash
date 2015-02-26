@@ -37,7 +37,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   template: template,
 
   ui: {
-    "content": '.content'
+    "content": '.content',
+    "arrows": '.arrow'
   },
 
   regions: {
@@ -75,7 +76,11 @@ module.exports = Backbone.Marionette.LayoutView.extend({
         collection: this.collection
       }));
 
-      this.ui.content.height($(window).height() - 200);
+      var h = $(window).height() - 200;
+      h = ( h < 400 ) ? 400 : h;
+
+      this.ui.content.width($(window).width() - 150).height(h);
+      this.ui.arrows.css('top', ((h/2) - this.ui.arrows.eq(0).height()/2) + "px");
     }
 
   },

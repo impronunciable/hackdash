@@ -3291,7 +3291,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   template: template,
 
   ui: {
-    "content": '.content'
+    "content": '.content',
+    "arrows": '.arrow'
   },
 
   regions: {
@@ -3329,7 +3330,11 @@ module.exports = Backbone.Marionette.LayoutView.extend({
         collection: this.collection
       }));
 
-      this.ui.content.height($(window).height() - 200);
+      var h = $(window).height() - 200;
+      h = ( h < 400 ) ? 400 : h;
+
+      this.ui.content.width($(window).width() - 150).height(h);
+      this.ui.arrows.css('top', ((h/2) - this.ui.arrows.eq(0).height()/2) + "px");
     }
 
   },
@@ -3796,9 +3801,9 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "  <div class=\"item-letter\">\n    <img src=\""
+  return "  <div class=\"item-cover\" style=\"background-image: url("
     + escapeExpression(((helper = (helper = helpers.cover || (depth0 != null ? depth0.cover : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"cover","hash":{},"data":data}) : helper)))
-    + "\">\n  </div>\n";
+    + ");\"></div>\n";
 },"3":function(depth0,helpers,partials,data) {
   var helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "  <i class=\"item-letter\">"
@@ -3819,14 +3824,11 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "\"></div>\n</div>\n\n<div class=\"cover\">\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.cover : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "</div>\n\n<div class=\"details\">\n  <h2>"
-    + escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)))
-    + "</h2>\n  <h3>"
+  buffer += "</div>\n\n<div class=\"details\">\n  <h3>"
     + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
-    + "</h3>\n  <div class=\"description\">\n    ";
-  stack1 = ((helpers.markdown || (depth0 && depth0.markdown) || helperMissing).call(depth0, (depth0 != null ? depth0.description : depth0), {"name":"markdown","hash":{},"data":data}));
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\n  </div>\n</div>\n\n<ul class=\"contributors\">\n";
+    + "</h3>\n  <h2>"
+    + escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)))
+    + "</h2>\n</div>\n\n<ul class=\"contributors\">\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.contributors : depth0), {"name":"each","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + "</ul>\n\n<div class=\"action-bar text-center\">\n  <i class=\"fa fa-clock-o\" title=\""
@@ -3854,7 +3856,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  return "<div class=\"container-fluid header\">HEAD</div>\n<div class=\"content\">CONTENT</div>";
+  return "<div class=\"container-fluid header\">HEAD</div>\n<div class=\"content\">CONTENT</div>\n<a class=\"arrow arrow-left\"></a>\n<a class=\"arrow arrow-right\"></a>";
   },"useData":true});
 
 },{"hbsfy/runtime":106}],77:[function(require,module,exports){

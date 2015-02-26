@@ -5,20 +5,20 @@
 
 <div class="cover">
 {{#if cover}}
-  <div class="item-letter">
-    <img src="{{cover}}">
-  </div>
+  <div class="item-cover" style="background-image: url({{cover}});"></div>
 {{else}}
   <i class="item-letter">{{firstLetter title}}</i>
 {{/if}}
 </div>
 
 <div class="details">
-  <h2>{{title}}</h2>
   <h3>{{domain}}</h3>
+  <h2>{{title}}</h2>
+  {{!--
   <div class="description">
     {{{markdown description}}}
   </div>
+  --}}
 </div>
 
 <ul class="contributors">

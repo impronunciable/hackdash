@@ -21,6 +21,7 @@
 @color-collection: #02B387;
 
 @color-dashboard-card: #d12727;
+@colo-arrow-box: #363e46;
 
 /*
  * FONTS
@@ -363,9 +364,43 @@ h6 { font-size: @fsize-12; }
 
 }
 
+.tab-pane {
+  position: relative;
+
+  .arrow {
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    cursor: pointer;
+
+    &.arrow-left {
+      left: 17px;
+      border-width: 142.5px 50px 142.5px 0;
+      border-color: transparent @colo-arrow-box transparent transparent;
+
+      &:hover {
+        border-color: transparent lighten(@colo-arrow-box, 10%) transparent transparent;
+      }
+    }
+
+    &.arrow-right {
+      right: 17px;
+      border-width: 142.5px 0 142.5px 50px;
+      border-color: transparent transparent transparent @colo-arrow-box;
+
+      &:hover {
+        border-color: transparent transparent transparent lighten(@colo-arrow-box, 10%);
+      }
+    }
+  }
+}
+
 .content {
   background-color: @color-whiteB;
   height: 800px;
+  margin: 0 auto;
   overflow: hidden;
 
   a {
@@ -529,6 +564,80 @@ h6 { font-size: @fsize-12; }
           height: 100%;
         }
       }
+    }
+  }
+
+  &.project {
+    width: 250px;
+    height: 250px;
+    margin: 0.5% 0.25%;
+
+    .cover {
+      width: 100%;
+      min-width: inherit;
+      min-height: inherit;
+
+      .item-letter {
+        padding: 0 20px 22px 20px;
+      }
+
+      .item-cover,
+      .item-letter {
+        background-size: cover;
+        background-position: 0 0;
+        width: 100%;
+        height: 230px;
+        color: darken(@color-project, 2%);
+
+        &:after {
+          content: "";
+          position:absolute;
+          width:100%;
+          height:100%;
+          top:0;
+          left:0;
+          background:rgba(0,0,0,0.6);
+          opacity: 0.6;
+
+          transition: all 0.5s;
+          -webkit-transition: all 0.5s;
+        }
+      }
+    }
+
+    &:hover .item-cover:after,
+    &:hover .item-letter:after {
+      opacity:0;
+    }
+
+
+    .details {
+      top: 0;
+      left: 0;
+      max-height: inherit;
+
+      h2, h3 {
+        color: @color-white;
+        margin: 10px 0;
+        padding: 5px;
+
+        text-shadow:
+         -1px -1px 0 rgba(0,0,0,0.24),
+          1px -1px 0 rgba(0,0,0,0.24),
+          -1px 1px 0 rgba(0,0,0,0.24),
+           1px 1px 0 rgba(0,0,0,0.24);
+      }
+    }
+
+    .contributors {
+      position: absolute;
+      bottom: 30px;
+      width: 100%;
+      overflow: hidden;
+      list-style: none;
+      padding: 5px 10px;
+      height: 40px;
+      margin: 0;
     }
   }
 
