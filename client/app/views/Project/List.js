@@ -16,12 +16,11 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
   childViewOptions: function() {
     return {
-      isDashboard: this.isDashboard,
-      isCollection: this.isCollection
+      type: this.type
     };
   },
 
-  showAll: false,
+  showAll: true,
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
@@ -29,8 +28,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
   initialize: function(options){
     this.fullList = options.collection;
-    this.isDashboard = (options && options.isDashboard) || false;
-    this.isCollection = (options && options.isCollection) || false;
+    this.type = (options && options.type) || false;
   },
 
   onBeforeRender: function(){

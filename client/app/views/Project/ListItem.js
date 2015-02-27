@@ -1,8 +1,8 @@
 /**
  * VIEW: Project
- * 
+ *
  */
- 
+
 var template = require('./templates/listItem.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
@@ -19,8 +19,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   initialize: function(options){
-    this.isDashboard = (options && options.isDashboard) || false;
-    this.isCollection = (options && options.isCollection) || false;
+    this.type = (options && options.type) || "projects";
   },
 
   onRender: function(){
@@ -36,15 +35,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
   serializeData: function(){
     var url;
 
-    if (this.isDashboard){
-      url = "http://" + this.model.get("title")  + "." + hackdash.baseURL; 
-    }
-    else if(this.isCollection){
-      url = "http://" + hackdash.baseURL + "/collections/" + this.model.get("_id");
-    }
-    else {
-      url = "http://" + this.model.get("domain") + "." + hackdash.baseURL + 
-        "/projects/" + this.model.get("_id");
+    switch(this.type){
+      case "collections":
+        url = "http://" + hackdash.baseURL + "/collections/" + this.model.get("_id");
+        break;
+      case "dashboards":
+        url = "http://" + hackdash.baseURL + "/dashboards/" + this.model.get("title");
+        break;
+      case "projects":
+      case "contributions":
+      case "likes":
+        url = "http://" + hackdash.baseURL + "/projects/" + this.model.get("_id");
+        break;
     }
 
     return _.extend({

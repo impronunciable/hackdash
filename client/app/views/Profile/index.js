@@ -81,7 +81,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     if (!this[this.section].currentView){
 
       this[this.section].show(new ProjectList({
-        collection: this.model.get(this.section)
+        collection: this.model.get(this.section),
+        type: this.section
       }));
     }
 
