@@ -1,0 +1,270 @@
+
+::selection {
+  background: @color-action; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: @color-action; /* Gecko Browsers */
+}
+
+.form-control:focus{
+  border-color: #cccccc;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.btn-primary {
+  background-color: #fe3554;
+}
+
+body {
+  margin: 0;
+  font-family: @primary-font;
+  color: @default-font-color;
+  /*background-color: @color-whiteB;*/
+}
+
+h1, h2, h3 { font-family: @secondary-font; text-transform: uppercase; }
+h4, h5, h6, .h7, .h8, .h9 { font-family: @primary-font; }
+.h7, .h8, .h9 { letter-spacing: -@fsize-12/10; }
+
+h1, { font-size: @fsize-25; }
+h2 { font-size: @fsize-70; }
+h3 { font-size: @fsize-17; }
+h4 { font-size: @fsize-17; font-weight: bold; }
+h5 { font-size: @fsize-15; }
+h6 { font-size: @fsize-12; }
+.h7 { font-size: @fsize-40;  }
+.h8 { font-size: @fsize-80; }
+.h9 { font-size: @fsize-17; text-transform: uppercase; }
+
+.hexagon {
+  .getHexagon();
+}
+
+.logo {
+  background: url(@logo-url) no-repeat;
+  width: 120px;
+  height: 145px;
+  margin: 2% auto;
+  background-size: 100%;
+  display: inline-block;
+}
+
+
+.tab-pane {
+  position: relative;
+
+  .arrow {
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    cursor: pointer;
+
+    &.arrow-left {
+      left: 17px;
+      border-width: 142.5px 50px 142.5px 0;
+      border-color: transparent @colo-arrow-box transparent transparent;
+
+      &:hover {
+        border-color: transparent lighten(@colo-arrow-box, 10%) transparent transparent;
+      }
+    }
+
+    &.arrow-right {
+      right: 17px;
+      border-width: 142.5px 0 142.5px 50px;
+      border-color: transparent transparent transparent @colo-arrow-box;
+
+      &:hover {
+        border-color: transparent transparent transparent lighten(@colo-arrow-box, 10%);
+      }
+    }
+  }
+}
+
+.content {
+  background-color: @color-whiteB;
+  height: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+
+  a {
+    text-decoration: none;
+    color: @color-black;
+
+    &:hover {
+      cursor: pointer;
+      text-decoration: none;
+      color: @color-black;
+    }
+  }
+
+}
+
+.action-bar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+
+  background-color: @color-blackC;
+  color: @color-white;
+  font-size: @fsize-12;
+  padding: 5px 10px;
+
+  .fa {
+    font-size: 18px;
+    margin-right: 10px;
+    margin-left: 0;
+  }
+
+  span, a {
+    border-left: 1px solid @color-white;
+    padding: 2px 10px;
+  }
+
+  a {
+    color: @color-white;
+
+    &:hover {
+      cursor: pointer;
+      color: @color-white;
+    }
+  }
+
+}
+
+.login {
+
+  .modal-title {
+    font-size: @fsize-25;
+  }
+
+  a {
+    width: 100%;
+    font-size: @fsize-22;
+    font-family: @primary-font;
+    margin: 5px 0;
+    border: none;
+
+    &.signup-twitter {
+      background-color: #0ba8d6;
+
+      &:hover {
+        background-color: darken(#0ba8d6, 6.5%);
+      }
+    }
+
+    &.signup-github {
+      color: #000;
+      background-color: #EAEAEA;
+
+      &:hover {
+        background-color: darken(#EAEAEA, 6.5%);
+      }
+
+      .fa {
+        color: #000;
+      }
+    }
+
+    &.signup-meetup {
+      background-color: #E11B36;
+
+      &:hover {
+        background-color: darken(#E11B36, 6.5%);
+      }
+    }
+
+    &.signup-facebook {
+      background-color: #4264b3;
+
+      &:hover {
+        background-color: darken(#4264b3, 6.5%);
+      }
+    }
+
+    .fa {
+      position: absolute;
+      top: 8px;
+      left: 20px;
+      font-size: 40px;
+
+      &.fa-meetup {
+        background: url('../images/icon-meetup.png') no-repeat;
+        background-size: 100%;
+        width: 40px;
+        height: 40px;
+        top: 11px;
+      }
+    }
+  }
+}
+
+.up-button {
+  cursor: pointer;
+}
+
+.footer-ctn {
+  background-color: @color-blackB;
+
+  .footer {
+    height: 70px;
+    position: relative;
+
+    .brand{
+      display: block;
+      width: 170px;
+      margin: 20px auto;
+
+      .logo {
+        width: 35px;
+        height: 45px;
+        float: left;
+      }
+
+      h3 {
+        display: inline-block;
+        color: @color-white;
+        margin: 15px 10px;
+      }
+    }
+
+    .up-button {
+      width: 80px;
+      height: 100px;
+
+      position: absolute;
+      top: -30px;
+      right: 60px;
+
+      background-color: @color-action;
+      color: @color-white;
+
+      &:hover, &:focus {
+        background-color: darken(@color-action, 6.5%);
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .fa {
+        font-size: 40px;
+        text-align: center;
+        width: 100%;
+        margin: 20px auto 10px auto;
+      }
+
+      span {
+        font-family: @secondary-font;
+        font-size: @fsize-15;
+        text-transform: uppercase;
+        text-align: center;
+        display: block;
+      }
+
+    }
+
+  }
+}
+

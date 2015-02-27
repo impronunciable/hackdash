@@ -1,0 +1,497 @@
+
+@import "./settings";
+@import "./mixins";
+
+@import "./base";
+@import "./entity";
+
+.landing-header {
+  background: url(@landing-photo-url) no-repeat;
+  background-size: 100%;
+  padding-bottom: 50px;
+
+  .call-action {
+
+    width: 100%;
+    color: @color-white;
+    padding-top: 4%;
+    padding-bottom: 4%;
+    margin-bottom: 5%;
+    background-color: @color-blackB;
+    background: url(@landing-call-action-url) repeat;
+
+    h1 {
+      font-size: @fsize-70;
+      margin: 0;
+
+      .highlight {
+        display: inline-block;
+        padding: 5px;
+        background-color: @color-action;
+      }
+    }
+
+    h2 {
+      display: inline-block;
+      font-size: @fsize-35;
+      border: 3px solid #fff;
+      border-top: none;
+      border-bottom: none;
+      padding: 0 2%;
+      margin: 2% 0;
+    }
+
+    .arrow {
+      color: @color-action;
+      height: 64px;
+      width: 100%;
+      max-width: 160px;
+
+      i {
+        font-size: 9em;
+        line-height: 0.5em;
+      }
+    }
+
+    .input-group {
+
+      font-family: @secondary-font;
+
+      .form-control,
+      .btn {
+        text-transform: uppercase;
+        font-size: @fsize-25;
+      }
+
+      .form-control {
+        font-size: @fsize-25;
+        height: 60px;
+        border: solid 2px @color-whiteC;
+      }
+
+      .input-group-btn {
+        font-size: inherit;
+
+        .btn-primary {
+          height: 60px;
+          z-index: 2;
+        }
+      }
+    }
+
+  }
+}
+
+
+.landing-tab(@color) {
+  background-color: @color;
+  border: 1px solid @color;
+
+  &:hover, a:hover, a:focus {
+    background-color: darken(@color, 6.5%);
+    border: 1px solid darken(@color, 6.5%);
+  }
+
+  &.active {
+    &:hover, a, a:hover, a:focus {
+      color: @color-white;
+      background-color: @color;
+      border: 1px solid @color;
+    }
+  }
+}
+
+.nav-tabs.landing {
+  border-bottom: none;
+
+  li {
+    float:none;
+    display:inline-block;
+    font-family: @secondary-font;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+
+    a {
+      text-transform: uppercase;
+      font-size: @fsize-25;
+      color: @color-white;
+      min-height: 60px;
+      min-width: 180px;
+      text-align: center;
+
+      &:hover {
+        cursor: pointer;
+        background-color: transparent;
+      }
+    }
+
+    &.active {
+      a:hover {
+        cursor: default;
+      }
+    }
+
+    &.dashboard {
+      .landing-tab(@color-dashboard);
+    }
+
+    &.project {
+      .landing-tab(@color-project);
+    }
+
+    &.user {
+      .landing-tab(@color-user);
+    }
+
+    &.collection {
+      .landing-tab(@color-collection);
+      position: absolute;
+      right: 2%;
+    }
+
+  }
+}
+
+.tab-content {
+
+  .tab-pane {
+    min-height: 400px;
+  }
+
+  .header {
+    padding-top: 2%;
+    padding-bottom: 2%;
+
+    .input-group {
+      padding-top: 5px;
+      font-family: @secondary-font;
+
+      .form-control,
+      .btn {
+        text-transform: uppercase;
+        font-size: @fsize-20;
+      }
+
+      .form-control {
+        font-size: @fsize-20;
+        height: 50px;
+      }
+
+      .input-group-btn {
+        font-size: inherit;
+
+        .btn-primary {
+          height: 50px;
+          z-index: 2;
+        }
+      }
+    }
+
+  }
+
+  #dashboards {
+    .header {
+      background-color: @color-dashboard;
+    }
+  }
+
+  #projects {
+    .header {
+      background-color: @color-project;
+    }
+  }
+
+  #users {
+    .header {
+      background-color: @color-user;
+    }
+  }
+
+  #collections {
+    .header {
+      background-color: @color-collection;
+    }
+  }
+}
+
+.landing-search {
+
+  .media {
+    margin: 5px 0;
+
+    .fa {
+      color: @color-white;
+      font-size: @fsize-32;
+      border-radius: 50%;
+      padding: 7px 7px;
+
+      &.fa-tasks {
+        background-color: @color-project;
+      }
+
+      &.fa-cloud-upload {
+        background-color: @color-collection;
+      }
+
+      &.fa-user-plus {
+        background-color: @color-user;
+      }
+
+      &.fa-share-alt {
+        background-color: @color-action;
+        padding: 7px 9px;
+      }
+
+    }
+
+    .media-body {
+      color: @color-white;
+      font-size: @fsize-12;
+      vertical-align: middle;
+    }
+  }
+
+}
+
+.stats-ctn {
+  margin: 30px 0;
+}
+
+.stats {
+
+  .counts {
+
+    div {
+      text-align: center;
+      color: @color-white;
+
+      h5, h6 {
+        margin: 0;
+      }
+
+      h5 { .h8 }
+      h6 { .h9 }
+
+      &.project { background-color: @color-project }
+      &.dashboard { background-color: @color-dashboard }
+      &.user { background-color: @color-user }
+      &.collection { background-color: @color-collection }
+    }
+
+    .group {
+      padding: 0 2px;
+
+      &:nth-child(2){
+        padding: 0 3px 0 1px;
+      }
+
+      div {
+        margin-bottom: 4px;
+        height: 95px;
+
+        h5 {
+          padding-top: 15px;
+          .h7
+        }
+      }
+    }
+
+    .releases {
+      height: 194px;
+      padding: 0;
+
+      h5 {
+        margin-top: 35px;
+      }
+    }
+  }
+
+  .feed {
+
+    .feed-item {
+      padding: 3px 2px;
+      height: 95px;
+      overflow: hidden;
+
+      .feed-wrap {
+        background-color: @color-whiteB;
+        display: inline-block;
+        padding: 0px 6px;
+        position: relative;
+      }
+
+      .feed-left {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        width: 30px;
+
+        .avatar {
+          width: 30px;
+          height: 30px;
+          margin-bottom: 6px;
+        }
+
+        .fa {
+          color: @color-white;
+          font-size: @fsize-12;
+          border-radius: 50%;
+          padding: 4px;
+          margin: 2px 5px;
+
+          &.fa-thumbs-up {
+            background-color: @color-project;
+          }
+
+          &.fa-share-alt {
+            background-color: @color-action;
+            padding: 4px 5px;
+          }
+
+        }
+      }
+
+      .feed-right {
+        margin-left: 35px;
+        height: 95px;
+
+        a {
+          font-size: @fsize-15;
+          font-family: @primary-font;
+          text-decoration: none;
+          color: @color-black;
+
+          &:hover{
+            text-decoration: underline;
+          }
+        }
+
+        h6 {
+          font-size: @fsize-12;
+          font-family: @primary-font;
+          margin: 0;
+        }
+
+        p {
+          font-size: @fsize-10;
+          font-family: @primary-font;
+          margin-top: 2px;
+          height: 43px;
+          overflow: hidden;
+        }
+
+        .time {
+          font-size: @fsize-10;
+          font-family: @primary-font;
+          position: absolute;
+          bottom: 4px;
+          right: 2px;
+          color: @color-blackC;
+        }
+      }
+
+    }
+
+  }
+
+}
+
+.team-ctn,
+.team-tab {
+  background-color: @color-whiteB;
+  color: @color-blackB;
+}
+
+.partners-ctn,
+.partners-tab {
+  background-color: @color-blackC;
+  color: @color-whiteB;
+}
+
+.team-tab,
+.partners-tab {
+  text-align: center;
+
+  h3 {
+    font-family: @primary-font;
+    font-size: @fsize-25;
+    text-transform: uppercase;
+    margin: 15px 0;
+  }
+}
+
+.team-ctn {
+  padding: 30px 0;
+
+  .team-user {
+    background: transparent;
+    height: 230px;
+
+    .cover {
+      background: transparent;
+
+      .hexagon {
+        .getHexagon(100px, 5px);
+      }
+    }
+
+    .details {
+      width: 100%;
+      overflow: hidden;
+
+      h2, .description {
+        text-align: center;
+        font-family: @secondary-font;
+      }
+
+      h2 {
+        font-size: @fsize-17;
+        text-transform: uppercase;
+      }
+
+      .description {
+        font-size: @fsize-12;
+      }
+    }
+
+  }
+}
+
+.partners-ctn {
+  min-height: 50px;
+}
+
+.about-ctn {
+  background-color: @color-blackB1;
+  color: @color-whiteB;
+  text-align: center;
+  padding: 40px;
+  font-size: @fsize-17;
+  font-family: @primary-font;
+}
+
+@media (max-width: 980px) {
+
+  .nav-tabs.landing {
+
+    li {
+
+      &.collection {
+        position: inherit;
+      }
+
+    }
+  }
+
+  .tab-content {
+
+    .header {
+
+      .input-group {
+        padding-top: 7%;
+      }
+    }
+  }
+
+}
+

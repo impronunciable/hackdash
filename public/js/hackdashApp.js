@@ -2323,7 +2323,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "container",
+  className: "container-fluid",
   template: template,
 
   regions: {
@@ -2578,28 +2578,28 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function", blockHelperMissing=helpers.blockHelperMissing, buffer = "  <a class=\"btn-profile\" href=\"/users/profile\">\n    <img class=\"avatar tooltips\" src=\""
+  var stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function", blockHelperMissing=helpers.blockHelperMissing, buffer = "    <a class=\"btn-profile\" href=\"/users/profile\">\n      <img class=\"avatar tooltips\" src=\""
     + escapeExpression(((helpers.user || (depth0 && depth0.user) || helperMissing).call(depth0, "picture", {"name":"user","hash":{},"data":data})))
     + "\" rel=\"tooltip\" data-placement=\"bottom\" data-original-title=\"Edit profile\">\n\n";
   stack1 = ((helper = (helper = helpers.isDashboardView || (depth0 != null ? depth0.isDashboardView : depth0)) != null ? helper : helperMissing),(options={"name":"isDashboardView","hash":{},"fn":this.program(2, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.isDashboardView) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "  </a>  \n  <a class=\"btn logout\" href=\"/logout\" data-bypass>Logout</a>\n";
+  return buffer + "    </a>  \n    <a class=\"btn logout\" href=\"/logout\" data-bypass>Logout</a>\n";
 },"2":function(depth0,helpers,partials,data) {
   var stack1, buffer = "";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isDashboardAdmin : depth0), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer;
 },"3":function(depth0,helpers,partials,data) {
-  return "      <span class=\"admin-label\">Admin</span>\n";
+  return "        <span class=\"admin-label\">Admin</span>\n";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, escapeExpression=this.escapeExpression, buffer = "<div class=\"search-ctn\"></div>\n\n<div class=\"createProject pull-right btn-group\">\n";
+  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, escapeExpression=this.escapeExpression, buffer = "\n<div class=\"row main-header\">\n\n  <div class=\"search-ctn\"></div>\n\n  <div class=\"createProject pull-right btn-group\">\n";
   stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "</div>\n\n<a class=\"logo\" href=\""
+  return buffer + "  </div>\n\n  <a class=\"logo\" href=\""
     + escapeExpression(((helper = (helper = helpers.hackdashURL || (depth0 != null ? depth0.hackdashURL : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"hackdashURL","hash":{},"data":data}) : helper)))
-    + "\" data-bypass></a>\n\n<div class=\"page-ctn\"></div>\n<h1 class=\"page-title\"></h1>";
+    + "\" data-bypass></a>\n\n  <div class=\"page-ctn\"></div>\n  <h1 class=\"page-title\"></h1>\n\n</div>\n";
 },"useData":true});
 
 },{"hbsfy/runtime":106}],47:[function(require,module,exports){
