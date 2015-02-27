@@ -55,6 +55,7 @@
 
 @logo-url: '../images/logohack.png';
 @landing-photo-url: '../images/landing/cover.jpeg';
+@landing-call-action-url: '../images/landing/dark_stripes.png';
 
 /******************************************************/
 
@@ -116,12 +117,14 @@ h6 { font-size: @fsize-12; }
   padding-bottom: 50px;
 
   .call-action {
-    background-color: @color-blackB;
+
     width: 100%;
     color: @color-white;
     padding-top: 4%;
     padding-bottom: 4%;
     margin-bottom: 5%;
+    background-color: @color-blackB;
+    background: url(@landing-call-action-url) repeat;
 
     h1 {
       font-size: @fsize-70;
@@ -942,6 +945,10 @@ h6 { font-size: @fsize-12; }
   padding: 40px;
   font-size: @fsize-17;
   font-family: @primary-font;
+}
+
+.up-button {
+  cursor: pointer;
 }
 
 .login {

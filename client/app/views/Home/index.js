@@ -50,6 +50,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "keyup @ui.domain": "validateDomain",
     "click @ui.domain": "checkLogin",
     "click @ui.create": "createDashboard",
+    "click .up-button": "goTop"
   },
 
   lists: {
@@ -191,6 +192,10 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   cleanErrors: function(){
     this.ui.errorHolder.addClass('hidden').text('');
+  },
+
+  goTop: function(){
+    this.footer.currentView.goTop();
   },
 
   //--------------------------------------
