@@ -1,5 +1,5 @@
 
-var 
+var
     template = require("./templates/profile.hbs")
   , ProfileCard = require("./Card")
   , ProfileCardEdit = require("./CardEdit")
@@ -11,19 +11,26 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "container profile-ctn",
+  className: "page-ctn profile",
   template: template,
 
   regions: {
     "profileCard": ".profile-card",
-    "collections": ".collections-ctn",
-    "dashboards": ".dashboards-ctn",
-    "projects": ".projects-ctn",
-    "contributions": ".contributions-ctn",
-    "likes": ".likes-ctn",
+
+    "collections": "#collections",
+    "dashboards": "#dashboards",
+    "projects": "#projects",
+    "contributions": "#contributions",
+    "likes": "#likes",
   },
 
   ui: {
+    "collections": "#collections",
+    "dashboards": "#dashboards",
+    "projects": "#projects",
+    "contributions": "#contributions",
+    "likes": "#likes",
+
     "collectionsLen": ".coll-length",
     "dashboardsLen": ".dash-length",
     "projectsLen": ".proj-length",
@@ -35,7 +42,17 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  initialize: function(options){
+    this.section = (options && options.section) || "dashboards";
+  },
+
   onRender: function(){
+
+    this.changeTab();
+
+    if (!this.ui[this.section].hasClass("active")){
+      this.ui[this.section].addClass("active");
+    }
 
     if (hackdash.user && this.model.get("_id") === hackdash.user._id){
       this.profileCard.show(new ProfileCardEdit({
@@ -48,28 +65,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       }));
     }
 
-    this.collections.show(new ProjectList({
-      collection: this.model.get("collections"),
-      isCollection: true
-    }));
-
-    this.dashboards.show(new ProjectList({
-      collection: this.model.get("dashboards"),
-      isDashboard: true
-    }));
-
-    this.projects.show(new ProjectList({
-      collection: this.model.get("projects")
-    }));
-
-    this.contributions.show(new ProjectList({
-      collection: this.model.get("contributions")
-    }));
-
-    this.likes.show(new ProjectList({
-      collection: this.model.get("likes")
-    }));
-
     $('.tooltips', this.$el).tooltip({});
 
     this.model.get("collections").on("reset", this.updateCount.bind(this, "collections"));
@@ -78,6 +73,24 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     this.model.get("contributions").on("reset", this.updateCount.bind(this, "contributions"));
     this.model.get("likes").on("reset", this.updateCount.bind(this, "likes"));
 
+    $('a[data-toggle="tab"]', this.$el).on('shown.bs.tab', this.setSection.bind(this));
+  },
+
+  changeTab: function(){
+
+    if (!this[this.section].currentView){
+
+      this[this.section].show(new ProjectList({
+        collection: this.model.get(this.section)
+      }));
+    }
+
+    this.ui[this.section].tab("show");
+  },
+
+  setSection: function(e){
+    this.section = e.target.parentElement.id + 's';
+    this.changeTab();
   },
 
   //--------------------------------------

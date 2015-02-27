@@ -1,6 +1,6 @@
 /**
  * VIEW: Projects of an Instance
- * 
+ *
  */
 
 var Project = require('./ListItem');
@@ -26,7 +26,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
-  
+
   initialize: function(options){
     this.fullList = options.collection;
     this.isDashboard = (options && options.isDashboard) || false;
@@ -35,6 +35,10 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
   onBeforeRender: function(){
     if (this.fullList.length > 5){
+      if (Array.isArray(this.fullList)){
+        this.fullList = new Backbone.Collection(this.fullList);
+      }
+
       if (this.showAll) {
         this.collection = this.fullList;
       }
@@ -51,7 +55,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       var li;
       if (this.showAll){
         li = $('<li class="show-less">Show less</li>');
-        li.on("click", this.toggleAll.bind(this)); 
+        li.on("click", this.toggleAll.bind(this));
       }
       else {
         li = $('<li class="show-more">Show more</li>');

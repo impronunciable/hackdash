@@ -1,20 +1,61 @@
-<div class="span6 span-center">
 
-  <div class="profile-card"></div>
+<div class="header">
+  <div class="container">
 
-  <h4>My Collections (<span class="coll-length">0</span>)</h4>
-  <div class="collections-ctn"></div>
+    <div class="profile-card"></div>
 
-  <h4>Dashboards (<span class="dash-length">0</span>)</h4>
-  <div class="dashboards-ctn"></div>
+    <div class="col-md-12 text-center">
 
-  <h4>Projects created (<span class="proj-length">0</span>)</h4>
-  <div class="projects-ctn"></div>
+      <ul class="nav nav-tabs" role="tablist">
 
-  <h4>Contributions (<span class="contrib-length">0</span>)</h4>
-  <div class="contributions-ctn"></div>
+        <li id="dashboard" class="dashboard">
+          <a href="#dashboards" role="tab" data-toggle="tab" data-bypass="true">
+            <span class="dash-length">0</span>
+            <h3>Dashboards</h3>
+          </a>
+        </li>
+        <li id="project" class="project">
+          <a href="#projects" role="tab" data-toggle="tab" data-bypass="true">
+            <span class="proj-length">0</span>
+            <h3>Projects</h3>
+          </a>
+        </li>
+        <li id="collection" class="collection">
+          <a href="#collections" role="tab" data-toggle="tab" data-bypass="true">
+            <span class="coll-length">0</span>
+            <h3>Collections</h3>
+          </a>
+        </li>
+        <li id="contribution" class="contributions">
+          <a href="#contributions" role="tab" data-toggle="tab" data-bypass="true">
+            <span class="contrib-length">0</span>
+            <h3>Contributions</h3>
+          </a>
+        </li>
+        <li id="like" class="likes">
+          <a href="#likes" role="tab" data-toggle="tab" data-bypass="true">
+            <span class="likes-length">0</span>
+            <h3>Likes</h3>
+          </a>
+        </li>
 
-  <h4>Likes (<span class="likes-length">0</span>)</h4>
-  <div class="likes-ctn"></div>
-  
+      </ul>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="body">
+  <div class="container">
+
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane" id="dashboards"></div>
+      <div role="tabpanel" class="tab-pane" id="projects"></div>
+      <div role="tabpanel" class="tab-pane" id="collections"></div>
+      <div role="tabpanel" class="tab-pane" id="contributions"></div>
+      <div role="tabpanel" class="tab-pane" id="likes"></div>
+    </div>
+
+  </div>
 </div>

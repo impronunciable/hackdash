@@ -3,8 +3,6 @@ var
     template = require('./templates/header.hbs')
   , Search = require('./Search')
   , DashboardHeader = require('./Dashboard')
-  , DashboardsHeader = require('./Dashboards')
-  , CollectionsHeader = require('./Collections')
   , CollectionHeader = require('./Collection');
 
 module.exports = Backbone.Marionette.LayoutView.extend({
@@ -58,15 +56,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     }
 
     switch(type){
-      case "isearch":
-        showSearch("Type here to search projects");
-        this.ui.pageTitle.text("Projects");
-        break;
-
-      case "dashboards":
-        showSearch();
-        this.page.show(new DashboardsHeader());
-        break;
 
       case "dashboard":
         showSearch();
@@ -79,11 +68,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
           // Hack - Remove this after removal of dashboard subdomain
           window.document.title = (this.model.get('title') || "") + " HackDash";
         }
-        break;
-
-      case "collections":
-        showSearch("Type here to search collections");
-        this.page.show(new CollectionsHeader());
         break;
 
       case "collection":

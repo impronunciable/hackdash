@@ -5,3 +5,187 @@
 @import "./base";
 @import "./entity";
 
+.main-header {
+  background-color: @color-blackB;
+
+  .logo {
+    width: 100px;
+    height: 115px;
+    display: block;
+  }
+}
+
+.profile-tab(@color) {
+  background-color: @color;
+  border: 1px solid @color;
+
+  &:hover, a:hover, a:focus {
+    background-color: darken(@color, 6.5%);
+    border: 1px solid darken(@color, 6.5%);
+  }
+
+  &.active {
+    &:hover, a, a:hover, a:focus {
+      color: @color-white;
+      background-color: @color;
+      border: 1px solid @color;
+    }
+  }
+}
+
+.page-ctn {
+
+  &.profile {
+
+    .header {
+      background-color: @color-user;
+
+      .profile-card {
+        color: @color-white;
+        max-width: 600px;
+        margin: 50px auto;
+
+        .cover {
+          margin: 80px 0;
+
+          .hexagon {
+            .getHexagon(140px, 3px, @color-white, @color-user);
+          }
+        }
+
+        h1 {
+          font-family: @primary-font;
+          font-size: @fsize-50;
+          text-transform: none;
+          letter-spacing: -@fsize-12/10;
+        }
+
+        h1, p {
+          text-align: center;
+        }
+      }
+    }
+
+    .body {
+      background-color: @color-white;
+
+      .container {
+        max-width: 900px;
+      }
+    }
+
+    .nav-tabs {
+      border-bottom: none;
+
+      li {
+        float:none;
+        display:inline-block;
+        font-family: @secondary-font;
+        margin: 0px -2px;
+
+        a {
+          text-transform: uppercase;
+          color: @color-white;
+          min-width: 130px;
+          text-align: center;
+          margin: 0px;
+          padding: 0 0 10px 0;
+
+          &:hover {
+            cursor: pointer;
+            background-color: transparent;
+          }
+
+          span {
+            font-family: @primary-font;
+            font-size: @fsize-40;
+          }
+
+          h3 {
+            font-family: @primary-font;
+            font-size: @fsize-14;
+            margin: 0;
+          }
+
+        }
+
+        &.active {
+          a:hover {
+            cursor: default;
+          }
+        }
+
+        &.dashboard {
+          .profile-tab(@color-dashboard);
+        }
+
+        &.project {
+          .profile-tab(@color-project);
+        }
+
+        &.collection {
+          .profile-tab(@color-collection);
+        }
+
+        &.contributions {
+          .profile-tab(@color-contributions);
+        }
+
+        &.likes {
+          .profile-tab(@color-likes);
+        }
+
+      }
+    }
+
+    .tab-content {
+
+      #dashboards {
+        background-color: @color-dashboard;
+      }
+
+      #projects {
+        background-color: @color-project;
+      }
+
+      #collections {
+        background-color: @color-collection;
+      }
+
+      #contributions {
+        background-color: @color-contributions;
+      }
+
+      #likes {
+        background-color: @color-likes;
+      }
+
+      .tab-pane {
+        padding: 50px;
+
+        ul {
+          list-style: none;
+          padding: 0;
+
+          li {
+
+            a {
+              text-decoration: none;
+              color: @color-blackB;
+
+              div {
+                border: none;
+                margin: 0;
+              }
+            }
+
+          }
+        }
+
+      }
+
+    }
+
+  }
+
+}
