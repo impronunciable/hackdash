@@ -3,7 +3,7 @@ var
     template = require("./templates/profile.hbs")
   , ProfileCard = require("./Card")
   , ProfileCardEdit = require("./CardEdit")
-  , ProjectList = require("../Project/List");
+  , EntityList = require("./EntityList");
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
@@ -77,11 +77,14 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   },
 
   changeTab: function(){
-
     if (!this[this.section].currentView){
+      var coll = new Backbone.Collection(this.model.get(this.section));
+      if (this.section === "dashboards"){
+        coll = this.model.get(this.section);
+      }
 
-      this[this.section].show(new ProjectList({
-        collection: this.model.get(this.section),
+      this[this.section].show(new EntityList({
+        collection: coll,
         type: this.section
       }));
     }

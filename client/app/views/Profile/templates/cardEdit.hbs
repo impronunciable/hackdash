@@ -1,26 +1,22 @@
-<h3 class="header">Edit Your Profile</h3>
-<div>
-  <form>
-    <div class="form-content">
-      <div class="control-group">
-        <div class="controls">
-          <input name="name" type="text" placeholder="Name" value="{{name}}" class="input-block-level"/>
-        </div>
-      </div>
-      <div class="control-group">
-        <div class="controls">      
-          <input name="email" type="text" placeholder="Email" value="{{email}}" class="input-block-level"/>
-        </div>
-      </div>
-      <div class="control-group">
-        <div class="controls">
-          <textarea name="bio" placeholder="Some about you" class="input-block-level">{{bio}}</textarea>
-        </div>
-      </div>
+<h1 class="header edit">Edit Your Profile</h1>
+
+<div class="cover">{{getProfileImageHex .}}</div>
+
+<form>
+  <div class="form-content">
+
+    <div class="form-group">
+      <input name="name" type="text" placeholder="Name" value="{{name}}" class="form-control"/>
     </div>
-    <div class="form-actions">
-      <input id="save" type="button" data-loading-text="saving.." value="Save profile" class="btn primary btn-success pull-left"/>
-      <a id="cancel" class="cancel btn btn-cancel pull-right">Cancel</a>
+    <div class="form-group">
+      <input name="email" type="text" placeholder="Email" value="{{email}}" class="form-control"/>
     </div>
-  </form>
-</div>
+    <div class="form-group">
+      <textarea name="bio" placeholder="Some about you" class="form-control" rows="4">{{bio}}</textarea>
+    </div>
+  </div>
+  <div class="form-actions">
+    <input id="save" type="button" data-loading-text="saving.." value="Save profile" class="btn-primary pull-right"/>
+    <a id="cancel" class="btn-cancel pull-left">cancel</a>
+  </div>
+</form>

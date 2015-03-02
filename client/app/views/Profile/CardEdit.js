@@ -11,7 +11,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "boxxy",
   template: template,
 
   ui: {
@@ -65,7 +64,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
-  //TODO: move to i18n
   errors: {
     "name_required": "Name is required",
     "email_required": "Email is required",

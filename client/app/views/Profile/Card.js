@@ -11,7 +11,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "boxxy",
   template: template,
 
   modelEvents:{

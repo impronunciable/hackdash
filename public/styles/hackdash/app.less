@@ -44,9 +44,11 @@
         color: @color-white;
         max-width: 600px;
         margin: 50px auto;
+        text-align: center;
 
         .cover {
           margin: 80px 0;
+          text-align: initial;
 
           .hexagon {
             .getHexagon(140px, 3px, @color-white, @color-user);
@@ -58,11 +60,53 @@
           font-size: @fsize-50;
           text-transform: none;
           letter-spacing: -@fsize-12/10;
+
+          &.edit {
+            display: inline-block;
+            text-align: center;
+            font-size: 2.5em;
+            border: 3px solid #fff;
+            border-top: none;
+            border-bottom: none;
+            padding: 0 2%;
+            margin: 2% 0;
+            text-transform: uppercase;
+          }
         }
 
         h1, p {
           text-align: center;
         }
+
+        .form-content {
+          .form-control {
+            text-transform: none;
+            border: none;
+          }
+        }
+
+        .form-actions {
+          display: inline-block;
+          width: 100%;
+
+          .btn-primary {
+            border: none;
+
+            &:hover {
+              border: none;
+            }
+          }
+
+          .btn-cancel {
+            color: @color-white;
+            font-size: @fsize-20;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-family: @secondary-font;
+            padding-top: 20px;
+          }
+        }
+
       }
     }
 

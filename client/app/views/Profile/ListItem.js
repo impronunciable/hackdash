@@ -1,5 +1,5 @@
 /**
- * VIEW: Project
+ * VIEW: Profile Item List
  *
  */
 

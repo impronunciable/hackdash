@@ -1,9 +1,9 @@
 /**
- * VIEW: Projects of an Instance
+ * VIEW: Profile list (collection, dashboard, project)
  *
  */
 
-var Project = require('./ListItem');
+var Item = require('./ListItem');
 
 module.exports = Backbone.Marionette.CollectionView.extend({
 
@@ -12,7 +12,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
 
   tagName: "ul",
-  childView: Project,
+  childView: Item,
 
   childViewOptions: function() {
     return {
@@ -27,16 +27,16 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
 
   initialize: function(options){
-    this.fullList = options.collection;
+    this.fullList = options.collection || new Backbone.Collection();
     this.type = (options && options.type) || false;
   },
 
   onBeforeRender: function(){
-    if (this.fullList.length > 5){
-      if (Array.isArray(this.fullList)){
-        this.fullList = new Backbone.Collection(this.fullList);
-      }
+    if (Array.isArray(this.fullList)){
+      this.fullList = new Backbone.Collection(this.fullList);
+    }
 
+    if (this.fullList.length > 0 && this.fullList.length > 5){
       if (this.showAll) {
         this.collection = this.fullList;
       }
