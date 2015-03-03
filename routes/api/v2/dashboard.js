@@ -15,6 +15,8 @@ var Project = mongoose.model('Project')
   , User = mongoose.model('User')
   , Dashboard = mongoose.model('Dashboard');
 
+var maxLimit = 30;
+
 module.exports = function(app, uri, common) {
 
   app.post(uri + '/dashboards', common.isAuth, validateSubdomain, createDashboard(app), sendDashboard);
@@ -70,6 +72,12 @@ var createDashboard =  function(app){
 
 var setQuery = function(req, res, next){
   var query = req.query.q || "";
+  req.limit = req.query.limit || maxLimit;
+  req.page = req.query.page || 0;
+
+  if (req.limit > maxLimit){
+    req.limit = maxLimit;
+  }
 
   req.search_query = {};
 
@@ -84,8 +92,11 @@ var setQuery = function(req, res, next){
 };
 
 var setDashboards = function(req, res, next){
+  var limit = req.limit || maxLimit;
+
   Dashboard.find(req.search_query || {})
-    .limit(30)
+    .skip(req.page ? req.page*limit : 0)
+    .limit(limit)
     .sort( { "created_at" : -1 } )
     .exec(function(err, dashboards) {
       if(err) return res.send(500);

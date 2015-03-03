@@ -14,6 +14,7 @@ var Project = mongoose.model('Project')
   , Dashboard = mongoose.model('Dashboard');
 
 var notify;
+var maxLimit = 30;
 
 module.exports = function(app, uri, common) {
 
@@ -271,14 +272,19 @@ var removeContributor = function(req, res){
 
 var setQuery = function(req, res, next){
   var query = req.query.q || "";
+  req.limit = req.query.limit || maxLimit;
 
-  req.query = {};
+  if (req.limit > maxLimit){
+    req.limit = maxLimit;
+  }
+
+  req.search_query = {};
 
   if (req.subdomains.length > 0) {
-    req.query = { domain: req.subdomains[0] };
+    req.search_query = { domain: req.subdomains[0] };
   }
   else if (req.params.domain) {
-    req.query = { domain: req.params.domain };
+    req.search_query = { domain: req.params.domain };
   }
 
   if (query.length === 0){
@@ -286,7 +292,7 @@ var setQuery = function(req, res, next){
   }
 
   var regex = new RegExp(query, 'i');
-  req.query.$or = [
+  req.search_query.$or = [
     { title: regex },
     { description: regex },
     { tags: regex },
@@ -297,11 +303,11 @@ var setQuery = function(req, res, next){
 };
 
 var setProjects = function(req, res, next){
-  Project.find(req.query || {})
+  Project.find(req.search_query || {})
     .populate('leader')
     .populate('contributors')
     .populate('followers')
-    .limit(30)
+    .limit(req.limit || maxLimit)
     .sort( { "created_at" : -1 } )
     .exec(function(err, projects) {
       if(err) return res.send(500);

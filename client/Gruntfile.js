@@ -59,7 +59,7 @@ module.exports = function(grunt) {
       },
       vendor: {
         options: {
-          separator: ';',
+          separator: ';\n',
         },
         src: [
             '<%= paths.vendor.js %>underscore.min.js'

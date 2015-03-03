@@ -12,13 +12,10 @@
 </div>
 
 <div class="details">
-  <h3>{{domain}}</h3>
-  <h2>{{title}}</h2>
-  {{!--
-  <div class="description">
-    {{{markdown description}}}
+  <div>
+    <h2>{{title}}</h2>
+    <h3>{{domain}}</h3>
   </div>
-  --}}
 </div>
 
 <ul class="contributors">
@@ -32,7 +29,7 @@
 </ul>
 
 <div class="action-bar text-center">
-  <i class="fa fa-clock-o" title="{{timeAgo created_at}}"></i>
+  <i class="fa fa-clock-o timer" title="{{timeAgo created_at}}"></i>
   <span>Likes {{followers.length}}</span>
   <!--<a>Join</a>
   <a>Demo</a>

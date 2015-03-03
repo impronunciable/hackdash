@@ -2,6 +2,16 @@
  * Cross Styles for: Collection / Dashboard / Project / User
  */
 
+.entities {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  height: 100%;
+}
+
 .entity {
 
   font-family: @primary-font;
@@ -24,19 +34,27 @@
   }
 
   .progress {
-    height: 15px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    height: 20px;
     margin-bottom: 0;
     box-shadow: none;
     background-color: @color-whiteC;
+    box-shadow: 0px 1px 5px rgba(0,0,0,0.1) inset;
 
     >div {
-      height: 15px;
-      background-color: rgb(145, 237, 60);
+      height: 20px;
+      background-color: @color-project-bar;
+      box-shadow: 1px 3px 2px rgba(255,255,255,0.25) inset;
+
       position: absolute;
       top: 0;
       left: 0;
 
-      &.brainstorming { width: 5%; }
+      &.brainstorming { width: 1%; }
       &.wireframing { width: 20%; }
       &.building { width: 40%; }
       &.researching { width: 60%; }
@@ -47,9 +65,12 @@
   }
 
   .cover {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    min-width: 300px;
-    min-height: 245px;
+    height: auto;
+    height: 100%;
     background-color: @color-project;
 
     .item-letter {
@@ -62,6 +83,13 @@
       color: @color-whiteB;
       text-indent: -0.2em;
       text-transform: uppercase;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      height: 100%;
     }
   }
 
@@ -70,7 +98,6 @@
     position: absolute;
     height: auto;
     height: 100%;
-    max-height: 270px;
     width: 100%;
     overflow: hidden;
 
@@ -94,42 +121,13 @@
     }
   }
 
-  .contributors {
-    position: absolute;
-    bottom: 40px;
-    width: 100%;
-    overflow: hidden;
-
-    list-style: none;
-    padding: 0 10px;
-    height: 30px;
-    margin: 0;
-
-    li {
-      float: left;
-      width: 30px;
-      height: 30px;
-
-      a {
-        display: inline-block;
-
-        img {
-          width: 100%;
-          height: 100%;
-        }
-      }
-    }
-  }
-
-  &.project {
-    width: 250px;
-    height: 250px;
-    margin: 0.5% 0.25%;
+  &.project,
+  &.dashboard,
+  &.collection {
+    width: 200px;
+    height: 200px;
 
     .cover {
-      width: 100%;
-      min-width: inherit;
-      min-height: inherit;
 
       .item-letter {
         padding: 0 20px 22px 20px;
@@ -140,18 +138,21 @@
         background-size: cover;
         background-position: 0 0;
         width: 100%;
-        height: 230px;
+
+        height:auto;
+        height:100%;
         color: darken(@color-project, 2%);
 
         &:after {
           content: "";
           position:absolute;
           width:100%;
+          height:auto;
           height:100%;
           top:0;
           left:0;
           background:rgba(0,0,0,0.6);
-          opacity: 0.6;
+          opacity: 0.1;
 
           transition: all 0.5s;
           -webkit-transition: all 0.5s;
@@ -164,15 +165,23 @@
       opacity:0;
     }
 
-
     .details {
       top: 0;
       left: 0;
       max-height: inherit;
+      padding: 0;
+
+      >div {
+        position: absolute;
+        left: 0;
+        bottom: 50px;
+        background-color: rgba(0,0,0,0.58);
+        width: 100%;
+      }
 
       h2, h3 {
         color: @color-white;
-        margin: 10px 0;
+        margin: 0;
         padding: 5px;
 
         text-shadow:
@@ -181,62 +190,105 @@
           -1px 1px 0 rgba(0,0,0,0.24),
            1px 1px 0 rgba(0,0,0,0.24);
       }
+
+      h2 {
+        font-size: @fsize-14;
+      }
+
+      h3 {
+        padding-top: 0;
+      }
     }
 
     .contributors {
       position: absolute;
-      bottom: 30px;
+      bottom: 0;
       width: 100%;
       overflow: hidden;
       list-style: none;
       padding: 5px 10px;
       height: 40px;
       margin: 0;
+      background-color: @color-blackC;
+
+      li {
+        float: left;
+        width: 30px;
+        height: 30px;
+
+        a {
+          display: inline-block;
+
+          img {
+            width: 30px;
+            height: 30px;
+          }
+/*
+          .hexagon {
+            .getHexagon(30px);
+          }
+*/
+        }
+      }
+
+    }
+
+    .action-bar {
+      display: none;
     }
   }
 
-  @dash-size-width: 400px;
-  @dash-size-width-cover: 100px;
-  @dash-size-width-details: 300px;
-  @dash-size-height: 200px;
-
-  &.dashboard,
-  &.collection {
-    border-left: 15px solid @color-dashboard;
-    width: @dash-size-width;
-    height: @dash-size-height;
+  &.dashboard {
 
     .cover {
       background-color: @color-dashboard-card;
-      width: @dash-size-width-cover;
-      min-height: @dash-size-height;
-      min-width: inherit;
 
       .item-letter {
-        font-size: @fsize-100;
-      }
-    }
-
-    .details {
-      max-height: @dash-size-width-details - 45;
-      width: @dash-size-width-details - 15;
-      top: 0;
-      right: 0;
-
-      .description {
-        max-height: 100px;
+        color: darken(@color-dashboard-card, 10%);
       }
     }
 
     .action-bar {
-      right: 0;
-      width: @dash-size-width-details - 15;
+      display: block;
+
+      .timer {
+        float: left;
+      }
+
+      span {
+        float: right;
+        border: none;
+      }
+    }
+  }
+
+  &.collection {
+
+    .cover {
+      background-color: @color-collection;
+
+      .item-letter {
+        color: darken(@color-collection, 10%);
+      }
+    }
+
+    .action-bar {
+      display: block;
+
+      .timer {
+        float: left;
+      }
+
+      span {
+        float: right;
+        border: none;
+      }
     }
   }
 
   &.user {
-    width: 230px;
-    height: 230px;
+    width: 200px;
+    height: 200px;
     border-top: 15px solid @color-user;
 
     .cover {
@@ -245,7 +297,7 @@
       min-height: 100px;
 
       .item-letter {
-        padding: 10px 0;
+        padding: 5px 0;
         font-size: 0;
         text-align: inherit;
 
@@ -256,27 +308,15 @@
     }
 
     .details {
-      max-height: 115px;
+      max-height: 120px;
       padding: 5px;
+      bottom: 0;
 
       h2, h3, .description {
         text-align: center;
       }
     }
 
-  }
-
-  &.collection {
-    border: none;
-
-    .cover {
-      width: @dash-size-width-cover + 15;
-      background-color: @color-collection;
-    }
-
-    .action-bar {
-      padding: 5px 0;
-    }
   }
 
 }

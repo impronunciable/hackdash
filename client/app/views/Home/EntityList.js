@@ -11,7 +11,10 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
+  className: 'entities',
   childView: Item,
+
+  gutter: 5,
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
@@ -21,13 +24,31 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
     var self = this;
     _.defer(function(){
-      self.updateIsotope();
+
+      var p = self.$el.parents('.content');
+      self.height = p.height()-((self.gutter*2)*2);
+
+      self.updateGrid();
+      self.refresh();
     });
   },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
+
+  refresh: function(){
+    this.wall.fitHeight(this.height);
+    this.wall.refresh();
+  },
+
+  moveLeft: function(){
+    this.move('-=');
+  },
+
+  moveRight: function(){
+    this.move('+=');
+  },
 
   //--------------------------------------
   //+ EVENT HANDLERS
@@ -37,22 +58,51 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
-  isotopeInitialized: false,
-  updateIsotope: function(){
-    var $items = this.$el;
-
-    if (this.isotopeInitialized){
-      $items.isotope("destroy");
+  updateGrid: function(){
+    if (!this.wall){
+      this.wall = new window.freewall(this.$el);
     }
 
-    $items.isotope({
+    this.wall.reset({
+      selector: '.entity',
+      cellW: 200,
+      cellH: 200,
+      gutterY: this.gutter,
+      gutterX: this.gutter,
+      onResize: this.refresh.bind(this)
+    });
+
+  },
+
+  getCardSize: function(){
+    return $('.entity:first', this.$el).outerWidth() + this.gutter;
+  },
+
+  move: function(dir){
+    var move = dir + this.getCardSize();
+    this.$el.animate({ scrollLeft: move }, 250);
+  },
+
+  /*
+  gridInitialized: false,
+  updateGrid: function(){
+    var $items = this.$el;
+
+    if (this.gridInitialized){
+      $items.packery("destroy");
+    }
+
+    $items.packery({
         animationEngine: "jquery"
       , resizable: false
       , sortAscending: true
+      , isHorizontal: true
+      , columnWidth: 250
       , layoutMode: 'fitRows'
     });
 
-    this.isotopeInitialized = true;
+    this.gridInitialized = true;
   },
+  */
 
 });

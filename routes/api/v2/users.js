@@ -15,6 +15,7 @@ var User = mongoose.model('User')
   , Collection = mongoose.model('Collection');
 
 var teamIds = [];
+var maxLimit = 30;
 
 module.exports = function(app, uri, common) {
   teamIds = app.get('config').team || [];
@@ -59,14 +60,20 @@ var isDashboardAdmin = function(req, res, next){
 var setQuery = function(req, res, next){
   var query = req.query.q || "";
 
-  req.query = {};
+  req.limit = req.query.limit || maxLimit;
+
+  if (req.limit > maxLimit){
+    req.limit = maxLimit;
+  }
+
+  req.search_query = {};
 
   if (query.length === 0){
     return next();
   }
 
   var regex = new RegExp(query, 'i');
-  req.query.$or = [ { name: regex }, { username: regex } ];
+  req.search_query.$or = [ { name: regex }, { username: regex } ];
 
   next();
 };
@@ -83,8 +90,8 @@ var getUser = function(req, res, next){
 
 var getUsers = function(req, res, next){
   User
-    .find(req.query || {})
-    .limit(20)
+    .find(req.search_query || {})
+    .limit(req.limit || maxLimit)
     .sort("name username")
     .exec(function(err, users) {
       if(err) return res.send(500);

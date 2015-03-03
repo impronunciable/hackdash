@@ -10,6 +10,7 @@ var passport = require('passport')
   , config = require('../../../config.json');
 
 var Collection = mongoose.model('Collection');
+var maxLimit = 30;
 
 module.exports = function(app, uri, common) {
 
@@ -41,6 +42,11 @@ module.exports = function(app, uri, common) {
 
 var setQuery = function(req, res, next){
   var query = req.query.q || "";
+  req.limit = req.query.limit || maxLimit;
+
+  if (req.limit > maxLimit){
+    req.limit = maxLimit;
+  }
 
   req.search_query = {};
 
@@ -57,7 +63,7 @@ var setQuery = function(req, res, next){
 var getAllCollections = function(req, res, next){
   
   Collection.find(req.search_query || {})
-    .limit(30)
+    .limit(req.limit || maxLimit)
     .sort( { "created_at" : -1 } )
     .populate('owner')
     .populate('dashboards')

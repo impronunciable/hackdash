@@ -1,7 +1,7 @@
 
 var template = require("./templates/stats.hbs")
   , CountsView = require("./Counts")
-  , FeedView = require("./Feed");
+  /*, FeedView = require("./Feed")*/;
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
@@ -24,6 +24,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   onRender: function(){
     this.counts.show(new CountsView());
 
+/*
     this.feed.show(
 
       new FeedView({
@@ -87,6 +88,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
       })
     );
+*/
   },
 
   //--------------------------------------

@@ -41,6 +41,11 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "arrows": '.arrow'
   },
 
+  events: {
+    "click .arrow-left": "moveLeft",
+    "click .arrow-right": "moveRight"
+  },
+
   regions: {
     "header": ".header",
     "content": ".content"
@@ -77,10 +82,17 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       }));
 
       var h = $(window).height() - 200;
-      h = ( h < 400 ) ? 400 : h;
+      h = ( h < 420 ) ? 420 : h;
 
-      this.ui.content.width($(window).width() - 150).height(h);
+      var w = $(window).width() - 150;
+
+      this.ui.content.width(w).height(h);
       this.ui.arrows.css('top', ((h/2) - this.ui.arrows.eq(0).height()/2) + "px");
+
+      var self = this;
+      this.collection.on('change add remove reset', function(){
+        self.content.currentView.refresh();
+      });
     }
 
   },
@@ -92,6 +104,15 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  moveLeft: function(){
+   this.content.currentView.moveLeft();
+  },
+
+  moveRight: function(){
+   this.content.currentView.moveRight();
+  },
+
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS

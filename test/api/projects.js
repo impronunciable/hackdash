@@ -125,6 +125,23 @@ module.exports = function(base_url, config, testUsers){
 
       });
 
+      it('must allow to set a limit', function(done){
+
+        request.get({
+          uri: uri + '?limit=2',
+          auth: auth
+        }, function (error, response, body) {
+          expect(error).to.not.be.ok();
+          expect(response.statusCode).to.be.equal(200);
+
+          expect(response.body).to.be.an('array');
+          expect(response.body.length).to.be.equal(2);
+
+          done();
+        });
+
+      });
+
     });
 
   });

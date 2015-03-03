@@ -6,7 +6,7 @@
 var template = require('./templates/collection.hbs');
 var ItemView = require('./Item.js');
 
-var CollectionView = module.exports = ItemView.extend({
+module.exports = ItemView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
@@ -21,14 +21,6 @@ var CollectionView = module.exports = ItemView.extend({
 
   getURL: function(){
     return "/collections/" + this.model.get("_id");
-  },
-
-  onRender: function(){
-    if (!this.model.get('title')){
-      this.$el.addClass('hide');
-    }
-
-    CollectionView.__super__.onRender.call(this);
   },
 
   //--------------------------------------

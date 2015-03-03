@@ -7,16 +7,17 @@
 </div>
 
 <div class="details">
-  <h2>{{title}}</h2>
-  <h3>{{domain}}</h3>
-  <div class="description">
-    {{description}}
+  <div>
+    <h2>{{title}}</h2>
+    <h3 class="description">
+      {{description}}
+    </h3>
   </div>
 </div>
 
 <div class="action-bar text-center">
-  <i class="fa fa-clock-o" title="{{timeAgo created_at}}"></i>
-  <span>Dashboards {{dashboards.length}}</span>
+  <i class="fa fa-clock-o timer" title="{{timeAgo created_at}}"></i>
+  <span>{{dashboards.length}} Dashboards</span>
   <!--<span>Likes 00</span>
   <a>Share</a>-->
 </div>
