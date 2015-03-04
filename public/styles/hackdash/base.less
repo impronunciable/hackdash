@@ -21,14 +21,24 @@
   box-shadow: none;
 }
 
+.btn-default,
 .btn-primary {
-  background-color: #fe3554;
-
+  color: @color-whiteB;
   font-size: @fsize-20;
-  font-family: 'Oswald';
+  font-family: @secondary-font;
   text-transform: uppercase;
+  padding: 11px 12px;
 
   height: 50px;
+}
+
+.btn-default {
+  background-color: @color-blackC;
+  border: none;
+}
+
+.btn-primary {
+  background-color: @color-action;
 }
 
 body {
@@ -171,6 +181,8 @@ h6 { font-size: @fsize-12; }
     font-family: @primary-font;
     margin: 5px 0;
     border: none;
+    text-transform: none;
+    height: inherit;
 
     &.signup-twitter {
       background-color: #0ba8d6;

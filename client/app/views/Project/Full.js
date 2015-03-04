@@ -15,8 +15,24 @@ module.exports = Backbone.Marionette.ItemView.extend({
     return this.model.get("_id");
   },
 
-  className: "project",
+  className: "page-ctn project",
   template: template,
+
+  templateHelpers: {
+    showActions: function(){
+      if (this.leader){
+        return hackdash.user._id !== this.leader._id;
+      }
+      return false;
+    },
+    isAdminOrLeader: function(){
+      var user = hackdash.user;
+      if (this.leader){
+        return user._id === this.leader._id || user.admin_in.indexOf(this.domain) >= 0;
+      }
+      return false;
+    }
+  },
 
   modelEvents: {
     "change": "render"

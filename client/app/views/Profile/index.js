@@ -106,7 +106,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
 
   updateCount: function(which){
-    this.ui[which + "Len"].text(this.model.get(which).length);
+    $(this.ui[which + "Len"]).text(this.model.get(which).length);
   }
 
   //--------------------------------------

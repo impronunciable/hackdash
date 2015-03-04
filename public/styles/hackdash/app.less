@@ -35,6 +35,53 @@
 
 .page-ctn {
 
+  .container {
+    max-width: 900px;
+  }
+
+  .header {
+
+    .container {
+      text-align: center;
+      color: @color-white;
+      position: relative;
+
+      h1 {
+        font-family: @primary-font;
+        font-size: @fsize-50;
+        text-transform: none;
+        letter-spacing: -@fsize-12/10;
+      }
+
+      .page-link-left,
+      .page-link-right {
+        position: absolute;
+        padding: 10px 20px;
+        top: -80px;
+        font-size: @fsize-22;
+        color: @color-white;
+
+        a {
+          color: @color-white;
+        }
+      }
+
+      .page-link-left {
+        left: 0;
+      }
+
+      .page-link-right {
+        right: 0;
+      }
+
+    }
+
+  }
+
+  .body {
+    background-color: @color-white;
+  }
+
   &.profile {
 
     .header {
@@ -56,10 +103,6 @@
         }
 
         h1 {
-          font-family: @primary-font;
-          font-size: @fsize-50;
-          text-transform: none;
-          letter-spacing: -@fsize-12/10;
 
           &.edit {
             display: inline-block;
@@ -112,10 +155,6 @@
 
     .body {
       background-color: @color-white;
-
-      .container {
-        max-width: 900px;
-      }
     }
 
     .nav-tabs {
@@ -230,6 +269,135 @@
 
     }
 
+  }
+
+
+  &.project {
+
+    .header {
+      background-color: @color-project;
+      padding: 20px 0;
+
+      h1 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+
+      .container {
+        color: @color-white;
+        max-width: 900px;
+        text-align: center;
+
+        .page-link-left,
+        .page-link-right {
+          background-color: @color-project;
+        }
+
+      }
+    }
+
+    .body {
+      background-color: transparent;
+
+      .bg-body-entity{
+        background-color: @color-project;
+        height: 200px;
+      }
+
+      .container {
+        position: relative;
+        max-width: 900px;
+        min-height: 300px;
+        margin: -200px auto 0 auto;
+        background-color: @color-white;
+
+        padding-top: 40px;
+        padding-bottom: 60px;
+        margin-bottom: 30px;
+
+        .project-link {
+          position: absolute;
+          right: 0;
+          top: -50px;
+
+          a {
+            color: @color-blackB;
+            float: right;
+            text-transform: uppercase;
+            background-color: @color-white;
+            padding: 12px 20px;
+          }
+
+        }
+
+        .cover {
+          .entity .cover;
+
+          position: relative;
+
+          height: 250px;
+          width: 100%;
+
+          .item-cover {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+          }
+
+          .progress {
+            .entity .progress;
+            top: -2px;
+          }
+        }
+
+        .people {
+          margin: 20px 0;
+
+          .hexagon {
+            .getHexagon(40px);
+            margin-right: 5px;
+          }
+        }
+
+        .description {
+          font-family: @primary-font;
+          font-size: @fsize-15;
+          text-transform: none;
+        }
+
+        .tags {
+          list-style: none;
+          padding: 0;
+          margin: 20px 0;
+
+          li {
+            background-color: @color-whiteC;
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 2px;
+            border-radius: 3px;
+
+            a {
+              color: @color-blackB;
+            }
+          }
+        }
+
+        .buttons-panel {
+          display: inline-block;
+          margin-top: 20px;
+          position: absolute;
+          bottom: 0;
+          right: 0;
+
+          .btn-default,
+          .btn-primary {
+            min-width: 100px;
+            margin: 0 2px;
+          }
+        }
+      }
+    }
   }
 
 }
