@@ -12,7 +12,7 @@ module.exports = Backbone.Model.extend({
   },
 
   urlRoot: function(){
-    return hackdash.apiURL + '/projects'; 
+    return hackdash.apiURL + '/projects';
   },
 
   doAction: function(type, res, done){
@@ -73,6 +73,42 @@ module.exports = Backbone.Model.extend({
     this.doAction("DELETE", "followers", function(){
       this.updateList("followers", false);
     });
+  },
+
+  toggleContribute: function(){
+    if (this.isContributor()){
+      return this.leave();
+    }
+
+    this.join();
+  },
+
+  toggleFollow: function(){
+    if (this.isFollower()){
+      return this.unfollow();
+    }
+
+    this.follow();
+  },
+
+  isContributor: function(){
+    return this.userExist(this.get("contributors"));
+  },
+
+  isFollower: function(){
+    return this.userExist(this.get("followers"));
+  },
+
+  userExist: function(arr){
+
+    if (!hackdash.user){
+      return false;
+    }
+
+    var uid = hackdash.user._id;
+    return arr && _.find(arr, function(usr){
+      return (usr._id === uid);
+    }) ? true : false;
   },
 
 });

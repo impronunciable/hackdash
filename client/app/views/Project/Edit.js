@@ -11,7 +11,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "span6 span-center",
+  className: "page-ctn project edition",
   template: template,
 
   ui: {
@@ -52,7 +52,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
-  onDomRefresh: function(){
+  onShow: function(){
     this.initSelect2();
     this.initImageDrop();
   },
@@ -201,8 +201,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
         self.model.set({ "cover": res.href }, { silent: true });
 
         $dragdrop
-          .css('background', 'url(' + res.href + ')')
-          .addClass("project-image")
+          .css('background-image', 'url(' + res.href + ')')
           .children('p').hide();
       }
     });

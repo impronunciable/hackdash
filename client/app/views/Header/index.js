@@ -79,12 +79,14 @@ module.exports = Backbone.Marionette.LayoutView.extend({
         break;
 
       case "project":
+      /*
         if (this.model.get("_id")){
           this.page.show(new DashboardHeader({
             model: this.model,
             readOnly: true
           }));
         }
+        */
         break;
     }
 

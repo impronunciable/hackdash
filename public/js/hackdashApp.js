@@ -255,18 +255,18 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "project";
 
-    app.dashboard = new Dashboard();
+    //app.dashboard = new Dashboard();
     app.project = new Project();
 
-    app.header.show(new Header({
+    app.header.show(new Header(/*{
       model: app.dashboard
-    }));
+    }*/));
 
     app.main.show(new ProjectEditView({
       model: app.project
     }));
 
-    app.dashboard.fetch();
+    //app.dashboard.fetch();
   },
 
   showProjectEdit: function(pid){
@@ -275,18 +275,18 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "project";
 
-    app.dashboard = new Dashboard();
+    //app.dashboard = new Dashboard();
     app.project = new Project({ _id: pid });
 
-    app.header.show(new Header({
+    app.header.show(new Header(/*{
       model: app.dashboard
-    }));
+    }*/));
 
     app.main.show(new ProjectEditView({
       model: app.project
     }));
 
-    app.dashboard.fetch();
+    //app.dashboard.fetch();
     app.project.fetch();
   },
 
@@ -296,18 +296,18 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "project";
 
-    app.dashboard = new Dashboard();
+    //app.dashboard = new Dashboard();
     app.project = new Project({ _id: pid });
 
-    app.header.show(new Header({
+    app.header.show(new Header(/*{
       model: app.dashboard
-    }));
+    }*/));
 
     app.main.show(new ProjectFullView({
       model: app.project
     }));
 
-    app.dashboard.fetch();
+    //app.dashboard.fetch();
     app.project.fetch();
   },
 /*
@@ -886,7 +886,7 @@ module.exports = Backbone.Model.extend({
   },
 
   urlRoot: function(){
-    return hackdash.apiURL + '/projects'; 
+    return hackdash.apiURL + '/projects';
   },
 
   doAction: function(type, res, done){
@@ -947,6 +947,42 @@ module.exports = Backbone.Model.extend({
     this.doAction("DELETE", "followers", function(){
       this.updateList("followers", false);
     });
+  },
+
+  toggleContribute: function(){
+    if (this.isContributor()){
+      return this.leave();
+    }
+
+    this.join();
+  },
+
+  toggleFollow: function(){
+    if (this.isFollower()){
+      return this.unfollow();
+    }
+
+    this.follow();
+  },
+
+  isContributor: function(){
+    return this.userExist(this.get("contributors"));
+  },
+
+  isFollower: function(){
+    return this.userExist(this.get("followers"));
+  },
+
+  userExist: function(arr){
+
+    if (!hackdash.user){
+      return false;
+    }
+
+    var uid = hackdash.user._id;
+    return arr && _.find(arr, function(usr){
+      return (usr._id === uid);
+    }) ? true : false;
   },
 
 });
@@ -2333,12 +2369,14 @@ module.exports = Backbone.Marionette.LayoutView.extend({
         break;
 
       case "project":
+      /*
         if (this.model.get("_id")){
           this.page.show(new DashboardHeader({
             model: this.model,
             readOnly: true
           }));
         }
+        */
         break;
     }
 
@@ -4454,7 +4492,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "span6 span-center",
+  className: "page-ctn project edition",
   template: template,
 
   ui: {
@@ -4495,7 +4533,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
-  onDomRefresh: function(){
+  onShow: function(){
     this.initSelect2();
     this.initImageDrop();
   },
@@ -4644,8 +4682,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
         self.model.set({ "cover": res.href }, { silent: true });
 
         $dragdrop
-          .css('background', 'url(' + res.href + ')')
-          .addClass("project-image")
+          .css('background-image', 'url(' + res.href + ')')
           .children('p').hide();
       }
     });
@@ -4663,10 +4700,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
 },{"./templates/edit.hbs":87}],84:[function(require,module,exports){
 /**
  * VIEW: Full Project view
- * 
+ *
  */
- 
-var template = require('./templates/full.hbs');
+
+var template = require("./templates/full.hbs");
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -4697,6 +4734,19 @@ module.exports = Backbone.Marionette.ItemView.extend({
     }
   },
 
+  ui: {
+    "contribute": ".contributor a",
+    "follow": ".follower a"
+  },
+
+  events: {
+    "click @ui.contribute": "onContribute",
+    "click @ui.follow": "onFollow",
+
+    "click .remove a": "onRemove",
+    //"click .edit a": "onEdit",
+  },
+
   modelEvents: {
     "change": "render"
   },
@@ -4707,8 +4757,15 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   onRender: function(){
     this.$el.addClass(this.model.get("status"));
-    $('.tooltips', this.$el).tooltip({});
-  }
+    $(".tooltips", this.$el).tooltip({});
+  },
+
+  serializeData: function(){
+    return _.extend({
+      contributing: this.model.isContributor(),
+      following: this.model.isFollower()
+    }, this.model.toJSON());
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -4717,6 +4774,24 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  onContribute: function(e){
+    this.ui.contribute.button('loading');
+    this.model.toggleContribute();
+    e.preventDefault();
+  },
+
+  onFollow: function(e){
+    this.ui.follow.button('loading');
+    this.model.toggleFollow();
+    e.preventDefault();
+  },
+
+  onRemove: function(){
+    if (window.confirm("This project is going to be deleted. Are you sure?")){
+      this.model.destroy();
+    }
+  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
@@ -5016,42 +5091,61 @@ module.exports = Backbone.Marionette.ItemView.extend({
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
-  return "        <div id=\"ghImportHolder\">\n          <a id=\"ghImportBtn\">Import from Github</a>\n\n          <div class=\"gh-import control-group hidden\">\n            <div class=\"controls\">\n              <input id=\"txt-repo\" type=\"text\" placeholder=\"repo user/name\" name=\"repo\" class=\"input-block-level\"/>\n              <button id=\"searchGh\" class=\"btn\">Import</button>\n            </div>\n          </div>\n        </div>\n";
-  },"3":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "style=\"background: url("
+  return "    <h4 class=\"project-link\">\n      <a href=\""
+    + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
+    + "\" target=\"__blank\">demo</a>\n    </h4>\n";
+},"3":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "          style=\"background-image: url("
     + escapeExpression(((helper = (helper = helpers.cover || (depth0 != null ? depth0.cover : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"cover","hash":{},"data":data}) : helper)))
-    + ");\" class=\"project-image\"";
+    + ");\"\n          ";
 },"5":function(depth0,helpers,partials,data) {
   var lambda=this.lambda, escapeExpression=this.escapeExpression;
-  return "              <option value=\""
+  return "        <li>\n          <a href=\"/projects?q="
     + escapeExpression(lambda(depth0, depth0))
-    + "\">"
+    + "\" data-bypass=\"true\">"
     + escapeExpression(lambda(depth0, depth0))
-    + "</option>\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<div class=\"boxxy\">\n  <h3 class=\"header\">"
-    + escapeExpression(((helper = (helper = helpers.typeForm || (depth0 != null ? depth0.typeForm : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"typeForm","hash":{},"data":data}) : helper)))
-    + "</h3>\n  <div>\n    <form>\n      <div class=\"form-content\">\n";
-  stack1 = helpers.unless.call(depth0, (depth0 != null ? depth0._id : depth0), {"name":"unless","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
+    + "</a>\n        </li>\n";
+},"7":function(depth0,helpers,partials,data) {
+  var stack1, buffer = "\n    <div class=\"col-md-8 buttons-panel\">\n";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isAdminOrLeader : depth0), {"name":"if","hash":{},"fn":this.program(8, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "\n        <div class=\"control-group\">\n          <div class=\"controls\">\n            <input type=\"text\" placeholder=\"Title\" name=\"title\" class=\"input-block-level\" value=\""
+  return buffer + "\n    </div>\n";
+},"8":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "      <div class=\"pull-right remove\">\n        <a class=\"btn btn-primary remove\">Remove</a>\n      </div>\n      <div class=\"pull-right edit\">\n        <a class=\"btn btn-primary edit\" href=\"/projects/"
+    + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
+    + "/edit\">Edit</a>\n      </div>\n";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "\n<div class=\"header\">\n  <div class=\"container\">\n    <h1>\n      <input name=\"title\" type=\"text\" placeholder=\"Project Title\" value=\""
     + escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)))
-    + "\"/>\n          </div>\n        </div>\n\n        <div class=\"control-group\">\n          <div class=\"controls\">\n            <textarea id=\"description\" name=\"description\" rows=\"4\" maxlength=\"400\" placeholder=\"Description\" class=\"input-block-level\">"
-    + escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"description","hash":{},"data":data}) : helper)))
-    + "</textarea>\n          </div>\n        </div>\n\n        <div class=\"control-group\">\n          <div class=\"controls\">\n            <div id=\"dragdrop\" ";
+    + "\" class=\"form-control\"/>\n    </h1>\n    <h3 class=\"page-link-left\">\n      <a href=\"/dashboards/"
+    + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
+    + "\">"
+    + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
+    + "</a>\n    </h3>\n  </div>\n</div>\n\n<div class=\"body\">\n  <div class=\"bg-body-entity\"></div>\n  <div class=\"container\">\n\n";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.link : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    <div class=\"col-md-4\">\n\n      <div class=\"cover\">\n\n        <div class=\"progress\" title=\""
+    + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
+    + "\">\n          <div class=\""
+    + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
+    + "\"></div>\n          <div class=\"status\">"
+    + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
+    + "</div>\n        </div>\n\n        <div id=\"dragdrop\" class=\"item-cover\"\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.cover : depth0), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "> \n              <p>Drag Photo Here\n                <input type=\"file\" name=\"cover_fall\" id=\"cover_fall\"/>\n              </p>\n            </div>\n          </div>\n        </div>\n\n        <div class=\"control-group\">\n          <div class=\"controls\">\n            <input type=\"text\" name=\"link\" id=\"link\" placeholder=\"Link\" class=\"input-block-level\" value=\""
-    + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
-    + "\"/>\n          </div>\n        </div>\n\n        <div class=\"control-group\">\n          <div class=\"controls\">\n            <input type=\"text\" name=\"tags\" id=\"tags\" placeholder=\"Tags\" style=\"width: 100%\" class=\"input-block-level\" value=\""
-    + escapeExpression(((helper = (helper = helpers.getTags || (depth0 != null ? depth0.getTags : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"getTags","hash":{},"data":data}) : helper)))
-    + "\"/>\n          </div>\n        </div>\n\n        <div class=\"control-group\">\n          <div class=\"controls\">\n            <select name=\"status\" id=\"status\" style=\"width: 100%\" class=\"input-block-level\" value=\""
-    + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
-    + "\">\n";
-  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.statuses : depth0), {"name":"each","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data});
+  buffer += ">\n\n          <p>Drop Image Here\n            <input type=\"file\" name=\"cover_fall\" id=\"cover_fall\"/>\n          </p>\n        </div>\n\n\n      </div>\n\n    </div>\n\n    <div class=\"col-md-8\">\n      <div class=\"description\">\n        <textarea id=\"description\" name=\"description\" placeholder=\"Description\">"
+    + escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"description","hash":{},"data":data}) : helper)))
+    + "</textarea>\n      </div>\n      <ul class=\"tags clearfix\">\n";
+  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.tags : depth0), {"name":"each","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "            </select>\n          </div>\n        </div>\n\n      </div>\n\n      <div class=\"form-actions\">\n        <input id=\"save\" type=\"button\" value=\"Save\" class=\"btn primary btn-success pull-left\"/>\n        <a id=\"cancel\" data-dismiss=\"modal\" class=\"cancel btn btn-cancel pull-right\">Cancel</a>\n      </div>\n\n    </form>\n  </div>\n</div>";
+  buffer += "      </ul>\n    </div>\n\n";
+  stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
+  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "\n  </div>\n\n</div>\n\n\n";
 },"useData":true});
 
 },{"hbsfy/runtime":99}],88:[function(require,module,exports){
@@ -5108,13 +5202,13 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   if (stack1 != null) { buffer += stack1; }
   return buffer + "      </div>\n";
 },"15":function(depth0,helpers,partials,data) {
-  return "        <a class=\"btn btn-default leave\">Leave</a>\n";
+  return "        <a data-loading-text=\"leaving...\" class=\"btn btn-default leave\">Leave</a>\n";
   },"17":function(depth0,helpers,partials,data) {
-  return "        <a class=\"btn btn-default join\">Join</a>\n";
+  return "        <a data-loading-text=\"joining...\" class=\"btn btn-default join\">Join</a>\n";
   },"19":function(depth0,helpers,partials,data) {
-  return "        <a class=\"btn btn-default unfollow\">Unfollow</a>\n";
+  return "        <a data-loading-text=\"unfollowing...\" class=\"btn btn-default unfollow\">Unfollow</a>\n";
   },"21":function(depth0,helpers,partials,data) {
-  return "        <a class=\"btn btn-default follow\">Follow</a>\n";
+  return "        <a data-loading-text=\"following...\" class=\"btn btn-default follow\">Follow</a>\n";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, lambda=this.lambda, blockHelperMissing=helpers.blockHelperMissing, buffer = "\n<div class=\"header\">\n  <div class=\"container\">\n    <h1>"
     + escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)))
@@ -5129,7 +5223,9 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
     + "\">\n          <div class=\""
     + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
-    + "\"></div>\n        </div>\n\n";
+    + "\"></div>\n          <div class=\"status\">"
+    + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
+    + "</div>\n        </div>\n\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.cover : depth0), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.program(5, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "      </div>\n\n      <div class=\"people\">\n\n        <div class=\"clearfix\">\n          <h5>Managed by</h5>\n          <a class=\"pull-left\" href=\"/users/"
@@ -5139,7 +5235,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "\n          </a>\n        </div>\n\n        <div class=\"clearfix\">\n          <h5>Contributors</h5>\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.contributors : depth0), {"name":"each","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "        </div>\n\n        <div class=\"clearfix\">\n          <h5>Likes</h5>\n";
+  buffer += "        </div>\n\n        <div class=\"clearfix\">\n          <h5>Followers</h5>\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.followers : depth0), {"name":"each","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "        </div>\n\n      </div>\n\n    </div>\n\n    <div class=\"col-md-8\">\n      <div class=\"description\">\n        ";

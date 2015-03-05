@@ -1,9 +1,9 @@
 /**
  * VIEW: Full Project view
- * 
+ *
  */
- 
-var template = require('./templates/full.hbs');
+
+var template = require("./templates/full.hbs");
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -34,6 +34,19 @@ module.exports = Backbone.Marionette.ItemView.extend({
     }
   },
 
+  ui: {
+    "contribute": ".contributor a",
+    "follow": ".follower a"
+  },
+
+  events: {
+    "click @ui.contribute": "onContribute",
+    "click @ui.follow": "onFollow",
+
+    "click .remove a": "onRemove",
+    //"click .edit a": "onEdit",
+  },
+
   modelEvents: {
     "change": "render"
   },
@@ -44,8 +57,15 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   onRender: function(){
     this.$el.addClass(this.model.get("status"));
-    $('.tooltips', this.$el).tooltip({});
-  }
+    $(".tooltips", this.$el).tooltip({});
+  },
+
+  serializeData: function(){
+    return _.extend({
+      contributing: this.model.isContributor(),
+      following: this.model.isFollower()
+    }, this.model.toJSON());
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -54,6 +74,24 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  onContribute: function(e){
+    this.ui.contribute.button('loading');
+    this.model.toggleContribute();
+    e.preventDefault();
+  },
+
+  onFollow: function(e){
+    this.ui.follow.button('loading');
+    this.model.toggleFollow();
+    e.preventDefault();
+  },
+
+  onRemove: function(){
+    if (window.confirm("This project is going to be deleted. Are you sure?")){
+      this.model.destroy();
+    }
+  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS

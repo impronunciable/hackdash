@@ -1,3 +1,84 @@
+
+<div class="header">
+  <div class="container">
+    <h1>
+      <input name="title" type="text" placeholder="Project Title" value="{{title}}" class="form-control"/>
+    </h1>
+    <h3 class="page-link-left">
+      <a href="/dashboards/{{domain}}">{{domain}}</a>
+    </h3>
+  </div>
+</div>
+
+<div class="body">
+  <div class="bg-body-entity"></div>
+  <div class="container">
+
+    {{#if link}}
+    <h4 class="project-link">
+      <a href="{{link}}" target="__blank">demo</a>
+    </h4>
+    {{/if}}
+
+    <div class="col-md-4">
+
+      <div class="cover">
+
+        <div class="progress" title="{{status}}">
+          <div class="{{status}}"></div>
+          <div class="status">{{status}}</div>
+        </div>
+
+        <div id="dragdrop" class="item-cover"
+          {{#if cover}}
+          style="background-image: url({{cover}});"
+          {{/if}}>
+
+          <p>Drop Image Here
+            <input type="file" name="cover_fall" id="cover_fall"/>
+          </p>
+        </div>
+
+
+      </div>
+
+    </div>
+
+    <div class="col-md-8">
+      <div class="description">
+        <textarea id="description" name="description" placeholder="Description">{{description}}</textarea>
+      </div>
+      <ul class="tags clearfix">
+        {{#each tags}}
+        <li>
+          <a href="/projects?q={{.}}" data-bypass="true">{{.}}</a>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+
+    {{#isLoggedIn}}
+
+    <div class="col-md-8 buttons-panel">
+      {{#if isAdminOrLeader}}
+      <div class="pull-right remove">
+        <a class="btn btn-primary remove">Remove</a>
+      </div>
+      <div class="pull-right edit">
+        <a class="btn btn-primary edit" href="/projects/{{_id}}/edit">Edit</a>
+      </div>
+      {{/if}}
+
+    </div>
+    {{/isLoggedIn}}
+
+  </div>
+
+</div>
+
+
+{{!--
+
 <div class="boxxy">
   <h3 class="header">{{typeForm}}</h3>
   <div>
@@ -70,3 +151,4 @@
     </form>
   </div>
 </div>
+--}}

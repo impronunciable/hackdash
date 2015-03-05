@@ -24,6 +24,7 @@
 
         <div class="progress" title="{{status}}">
           <div class="{{status}}"></div>
+          <div class="status">{{status}}</div>
         </div>
 
         {{#if cover}}
@@ -53,7 +54,7 @@
         </div>
 
         <div class="clearfix">
-          <h5>Likes</h5>
+          <h5>Followers</h5>
           {{#each followers}}
           <a class="pull-left" href="/users/{{_id}}">
             {{getProfileImageHex .}}
@@ -93,16 +94,16 @@
       {{#if showActions}}
       <div class="pull-right contributor">
         {{#if contributing}}
-        <a class="btn btn-default leave">Leave</a>
+        <a data-loading-text="leaving..." class="btn btn-default leave">Leave</a>
         {{else}}
-        <a class="btn btn-default join">Join</a>
+        <a data-loading-text="joining..." class="btn btn-default join">Join</a>
         {{/if}}
       </div>
       <div class="pull-right follower">
         {{#if following}}
-        <a class="btn btn-default unfollow">Unfollow</a>
+        <a data-loading-text="unfollowing..." class="btn btn-default unfollow">Unfollow</a>
         {{else}}
-        <a class="btn btn-default follow">Follow</a>
+        <a data-loading-text="following..." class="btn btn-default follow">Follow</a>
         {{/if}}
       </div>
       {{/if}}
