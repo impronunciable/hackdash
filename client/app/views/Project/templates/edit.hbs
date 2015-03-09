@@ -14,31 +14,25 @@
   <div class="bg-body-entity"></div>
   <div class="container">
 
-    {{#if link}}
-    <h4 class="project-link">
-      <a href="{{link}}" target="__blank">demo</a>
-    </h4>
-    {{/if}}
-
     <div class="col-md-4">
 
       <div class="cover">
 
         <div class="progress" title="{{status}}">
-          <div class="{{status}}"></div>
-          <div class="status">{{status}}</div>
+          <div class="status">
+            <select name="status" id="status" class="form-control" value="{{status}}">
+              {{#each statuses}}
+              <option value="{{.}}">{{.}}</option>
+              {{/each}}
+            </select>
+          </div>
         </div>
 
-        <div id="dragdrop" class="item-cover"
+        <div id="dragdrop" class="dropzone item-cover"
           {{#if cover}}
           style="background-image: url({{cover}});"
           {{/if}}>
-
-          <p>Drop Image Here
-            <input type="file" name="cover_fall" id="cover_fall"/>
-          </p>
         </div>
-
 
       </div>
 
@@ -48,107 +42,32 @@
       <div class="description">
         <textarea id="description" name="description" placeholder="Description">{{description}}</textarea>
       </div>
-      <ul class="tags clearfix">
-        {{#each tags}}
-        <li>
-          <a href="/projects?q={{.}}" data-bypass="true">{{.}}</a>
-        </li>
-        {{/each}}
-      </ul>
+      <div class="tags">
+        <input id="tags" type="text" name="tags" placeholder="Tags ( comma separated values )" class="form-control" value="{{getTags}}"/>
+      </div>
+      <div class="link">
+        <input id="link" type="text" name="link" placeholder="Project URL Demo" class="form-control" value="{{link}}"/>
+      </div>
     </div>
-
-    {{#isLoggedIn}}
 
     <div class="col-md-8 buttons-panel">
-      {{#if isAdminOrLeader}}
-      <div class="pull-right remove">
-        <a class="btn btn-primary remove">Remove</a>
+
+      <div class="pull-right cancel">
+        <a id="cancel" class="btn btn-danger"
+          {{#if _id}}
+          href="/projects/{{_id}}"
+          {{else}}
+          href="/dashboards/{{domain}}"
+          {{/if}}
+        >Cancel</a>
       </div>
-      <div class="pull-right edit">
-        <a class="btn btn-primary edit" href="/projects/{{_id}}/edit">Edit</a>
+
+      <div class="pull-right save">
+        <a id="save" class="btn btn-success">Save</a>
       </div>
-      {{/if}}
 
     </div>
-    {{/isLoggedIn}}
 
   </div>
 
 </div>
-
-
-{{!--
-
-<div class="boxxy">
-  <h3 class="header">{{typeForm}}</h3>
-  <div>
-    <form>
-      <div class="form-content">
-        {{#unless _id}}
-        <div id="ghImportHolder">
-          <a id="ghImportBtn">Import from Github</a>
-
-          <div class="gh-import control-group hidden">
-            <div class="controls">
-              <input id="txt-repo" type="text" placeholder="repo user/name" name="repo" class="input-block-level"/>
-              <button id="searchGh" class="btn">Import</button>
-            </div>
-          </div>
-        </div>
-        {{/unless}}
-
-        <div class="control-group">
-          <div class="controls">
-            <input type="text" placeholder="Title" name="title" class="input-block-level" value="{{title}}"/>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="controls">
-            <textarea id="description" name="description" rows="4" maxlength="400" placeholder="Description" class="input-block-level">{{description}}</textarea>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="controls">
-            <div id="dragdrop" {{#if cover}}style="background: url({{cover}});" class="project-image"{{/if}}> 
-              <p>Drag Photo Here
-                <input type="file" name="cover_fall" id="cover_fall"/>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="controls">
-            <input type="text" name="link" id="link" placeholder="Link" class="input-block-level" value="{{link}}"/>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="controls">
-            <input type="text" name="tags" id="tags" placeholder="Tags" style="width: 100%" class="input-block-level" value="{{getTags}}"/>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="controls">
-            <select name="status" id="status" style="width: 100%" class="input-block-level" value="{{status}}">
-              {{#each statuses}}
-              <option value="{{.}}">{{.}}</option>
-              {{/each}}
-            </select>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="form-actions">
-        <input id="save" type="button" value="Save" class="btn primary btn-success pull-left"/>
-        <a id="cancel" data-dismiss="modal" class="cancel btn btn-cancel pull-right">Cancel</a>
-      </div>
-
-    </form>
-  </div>
-</div>
---}}

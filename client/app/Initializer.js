@@ -29,6 +29,8 @@ module.exports = function(){
     easing: 'easeInOut'
   });
 
+  Dropzone.autoDiscover = false;
+
   window.hackdash.apiURL = "/api/v2";
   window.hackdash.startApp = require('./HackdashApp');
 };

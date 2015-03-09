@@ -406,8 +406,7 @@
           bottom: 0;
           right: 0;
 
-          .btn-default,
-          .btn-primary {
+          .btn {
             min-width: 100px;
             margin: 0 2px;
           }
@@ -446,27 +445,34 @@
           .cover {
             background-color: transparent;
 
-            .progress{
+            .progress {
               position: inherit;
+              height: 30px;
+              box-shadow: none;
+              background: none;
+
+              .form-control {
+                border: none;
+              }
             }
 
             #dragdrop {
               border: 3px dashed gray;
               border-radius: 8px;
 
-              p {
-                color: gray;
-                font-family: @secondary-font;
-                font-size: @fsize-40;
-                text-align: center;
-                text-transform: uppercase;
-                padding: 40px;
+              .dz-message {
                 margin: 0;
-/*
-                input[type=file]{
-                  display: none;
+
+                span {
+                  display: block;
+                  color: gray;
+                  font-family: @secondary-font;
+                  font-size: @fsize-40;
+                  text-align: center;
+                  text-transform: uppercase;
+                  padding: 15px 40px;
+                  margin: 0;
                 }
-*/
               }
             }
           }

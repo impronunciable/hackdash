@@ -1,8 +1,8 @@
 /**
  * VIEW: Project
- * 
+ *
  */
- 
+
 var template = require('./templates/edit.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
@@ -31,9 +31,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   templateHelpers: {
-    typeForm: function(){
-      return (this._id ? "Edit Project" : "Create Project" );
-    },
     getTags: function(){
       if (this.tags){
         return this.tags.join(',');
@@ -113,7 +110,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   redirect: function(){
-    hackdash.app.router.navigate("/", { trigger: true, replace: true });
+    var url = "/dashboards/" + this.model.get('domain');
+
+    if (!this.model.isNew()){
+      url = "/projects/" + this.model.get('_id');
+    }
+
+    hackdash.app.router.navigate(url, { trigger: true, replace: true });
   },
 
   //--------------------------------------
@@ -150,7 +153,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     if (this.model.get('status')){
       this.ui.status.val(this.model.get('status'));
     }
-    
+
     this.ui.status.select2({
       minimumResultsForSearch: 10
     });
@@ -169,41 +172,29 @@ module.exports = Backbone.Marionette.ItemView.extend({
   initImageDrop: function(){
     var self = this;
     var $dragdrop = $('#dragdrop', this.$el);
-    var input = $('#cover_fall', $dragdrop);
 
-    input.on('click', function(e){
-      e.stopPropagation();
-    });
-
-    $dragdrop.on('click', function(e){
-      input.click();
-      e.preventDefault();
-      return false;
-    });
-
-    $dragdrop.filedrop({
-      fallback_id: 'cover_fall',
+    var coverZone = new Dropzone("#dragdrop", {
       url: hackdash.apiURL + '/projects/cover',
-      paramname: 'cover',
-      allowedfiletypes: ['image/jpeg','image/png','image/gif'],
-      maxfiles: 1,
-      maxfilesize: 3,
-      dragOver: function () {
-        $dragdrop.css('background', 'rgb(226, 255, 226)');
-      },
-      dragLeave: function () {
-        $dragdrop.css('background', 'rgb(241, 241, 241)');
-      },
-      drop: function () {
-        $dragdrop.css('background', 'rgb(241, 241, 241)');
-      },
-      uploadFinished: function(i, file, res) {
-        self.model.set({ "cover": res.href }, { silent: true });
+      paramName: 'cover',
+      maxFiles: 1,
+      maxFilesize: 3, // MB
+      acceptedFiles: 'image/jpeg,image/png,image/gif',
+      uploadMultiple: false,
+      clickable: true,
+      dictDefaultMessage: 'Drop Image Here'
+    });
 
-        $dragdrop
-          .css('background-image', 'url(' + res.href + ')')
-          .children('p').hide();
-      }
+    coverZone.on("complete", function(file) {
+      var url = JSON.parse(file.xhr.response).href;
+      self.model.set({ "cover": url }, { silent: true });
+
+      coverZone.removeFile(file);
+
+      $dragdrop
+        .css('background-image', 'url(' + url + ')');
+
+      $('.dz-message span', $dragdrop).css('opacity', '0.6');
+
     });
   },
 

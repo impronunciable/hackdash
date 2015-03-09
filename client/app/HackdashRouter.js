@@ -30,21 +30,19 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
     , "login" : "showLogin"
 
+    // LANDING
     , "dashboards" : "showLandingDashboards"
     , "projects" : "showLandingProjects"
     , "users" : "showLandingUsers"
     , "collections" : "showLandingCollections"
 
+    // APP
+    , "dashboards/:dash": "showDashboard"
+    , "dashboards/:dash/create": "showProjectCreate"
 
-    //, "projects" : "showProjects"
-    , "projects/create" : "showProjectCreate"
     , "projects/:pid/edit" : "showProjectEdit"
     , "projects/:pid" : "showProjectFull"
 
-    //, "dashboards" : "showDashboards"
-    , "dashboards/:dash": "showDashboard"
-
-    //, "collections" : "showCollections"
     , "collections/:cid" : "showCollection"
 
     , "users/profile": "showProfile"
@@ -52,30 +50,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
   },
 
-  index: function(){
-    /*
-    if (hackdash.subdomain){
-      this.showDashboard();
-    }
-    else {
-    */
-      //this.showHome();
-    //}
-  },
-/*
-  removeHomeLayout: function(){
-    $('body').removeClass("homepage");
-    $('header').add('footer').show();
-    $('#page').addClass('container');
-  },
-*/
   showHome: function(){
-    /*
-    $('body').addClass("homepage");
-    $('header').add('footer').hide();
-    $('#page').removeClass('container');
-*/
-
     this.homeView = new HomeLayout();
     var app = window.hackdash.app;
     app.main.show(this.homeView);
@@ -136,11 +111,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     this.showHomeSection("collections");
   },
 
-
-
-
   showDashboard: function(dash) {
-    //this.removeHomeLayout();
 
     var app = window.hackdash.app;
     app.type = "dashboard";
@@ -176,34 +147,16 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     });
 
   },
-/*
-  showProjects: function() {
-    //this.removeHomeLayout();
 
-    var app = window.hackdash.app;
-    app.type = "isearch";
-
-    app.projects = new Projects();
-
-    app.header.show(new Header({
-      collection: app.projects
-    }));
-
-    app.main.show(new ProjectsView({
-      collection: app.projects
-    }));
-
-    app.projects.fetch(this.getSearchQuery());
-  },
-*/
-  showProjectCreate: function(){
-    //this.removeHomeLayout();
+  showProjectCreate: function(dashboard){
 
     var app = window.hackdash.app;
     app.type = "project";
 
     //app.dashboard = new Dashboard();
-    app.project = new Project();
+    app.project = new Project({
+      domain: dashboard
+    });
 
     app.header.show(new Header(/*{
       model: app.dashboard
@@ -212,12 +165,9 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     app.main.show(new ProjectEditView({
       model: app.project
     }));
-
-    //app.dashboard.fetch();
   },
 
   showProjectEdit: function(pid){
-    //this.removeHomeLayout();
 
     var app = window.hackdash.app;
     app.type = "project";
@@ -229,16 +179,17 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       model: app.dashboard
     }*/));
 
-    app.main.show(new ProjectEditView({
-      model: app.project
-    }));
 
     //app.dashboard.fetch();
-    app.project.fetch();
+    app.project.fetch().done(function(){
+
+      app.main.show(new ProjectEditView({
+        model: app.project
+      }));
+    });
   },
 
   showProjectFull: function(pid){
-    //this.removeHomeLayout();
 
     var app = window.hackdash.app;
     app.type = "project";
@@ -250,35 +201,16 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       model: app.dashboard
     }*/));
 
-    app.main.show(new ProjectFullView({
-      model: app.project
-    }));
-
     //app.dashboard.fetch();
-    app.project.fetch();
+    app.project.fetch().done(function(){
+
+      app.main.show(new ProjectFullView({
+        model: app.project
+      }));
+    });
   },
-/*
-  showCollections: function() {
-    //this.removeHomeLayout();
 
-    var app = window.hackdash.app;
-    app.type = "collections";
-
-    app.collections = new Collections();
-
-    app.header.show(new Header({
-      collection: app.collections
-    }));
-
-    app.main.show(new CollectionsView({
-      collection: app.collections
-    }));
-
-    app.collections.fetch(this.getSearchQuery());
-  },
-*/
   showCollection: function(collectionId) {
-    //this.removeHomeLayout();
 
     var app = window.hackdash.app;
     app.type = "collection";
@@ -301,7 +233,6 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showProfile: function(userId) {
-    //this.removeHomeLayout();
 
     var app = window.hackdash.app;
     app.type = "profile";
@@ -327,27 +258,5 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       model: app.profile
     }));
   },
-/*
-  showDashboards: function() {
-    //this.removeHomeLayout();
 
-    var app = window.hackdash.app;
-    app.type = "dashboards";
-
-    app.dashboards = new Dashboards();
-    app.collections = new Collections();
-
-    app.header.show(new Header({
-      collection: app.dashboards
-    }));
-
-    app.main.show(new DashboardsView({
-      collection: app.dashboards
-    }));
-
-    app.collections.getMines();
-
-    app.dashboards.fetch(this.getSearchQuery());
-  }
-*/
 });

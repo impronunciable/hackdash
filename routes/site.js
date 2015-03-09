@@ -68,11 +68,8 @@ module.exports = function(app) {
   // APP --------------------------------
   app.get('/collections/:cid', metas.collection, appStack);
   app.get('/dashboards/:dashboard', metas.dashboard, appStack);
+  app.get('/dashboards/:dashboard/create', metas.dashboard, appStack);
   app.get('/users/:user_id', metas.user, appStack);
-
-  app.get('/projects/:pid', metas.project, appStack);
-  app.get('/projects/:pid/edit', appStack);
-  app.get('/projects/create', appStack);
 
   // Profile  ---------------------------
   app.get('/users/profile', profileStack);
@@ -84,7 +81,29 @@ module.exports = function(app) {
   // Live view of a Dashboard - ONLY with a subomain
   //app.get('/live', metas.dashboard, liveStack);
 
-  // Redirects --------------------------
+
+  // Projects --------------------------
+
+  // if subdomain, redirect new creation url /dashboards/:dash/create
+  // else go home landing
+  app.get('/projects/create', function(req, res){
+    var protocol = req.socket.encrypted ? 'https' : 'http';
+    console.log('>>> ENTREEEEE');
+
+    if (req.subdomains.length > 0) {
+      var baseUrl = protocol + '://' + appHost + '/dashboards/' + req.subdomains[0];
+      console.log('>>> going to ' + baseUrl + '/create');
+      return res.redirect(baseUrl + '/create');
+    }
+
+    console.log('>>> going to HOME ' + protocol + '://' + appHost + '/');
+    return res.redirect(protocol + '://' + appHost + '/');
+  });
+
+  app.get('/projects/:pid', metas.project, appStack);
+  app.get('/projects/:pid/edit', appStack);
+
+  // keep old projects url
   app.get('/p/:pid', function(req, res){
     res.redirect(301, '/projects/' + req.params.pid);
   });

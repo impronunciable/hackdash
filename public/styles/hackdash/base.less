@@ -21,6 +21,7 @@
   box-shadow: none;
 }
 
+.btn,
 .btn-default,
 .btn-primary {
   color: @color-whiteB;
@@ -304,3 +305,22 @@ h6 { font-size: @fsize-12; }
   }
 }
 
+.select2-search-field {
+  background: inherit;
+}
+
+.select2-choices {
+  background: none;
+}
+
+.select2-search-field,
+.select2-input .select2-default {
+  .form-control;
+
+  label {
+    .form-control;
+    font-size: @fsize-15!important;
+  }
+
+  font-size: @fsize-15!important;
+}
