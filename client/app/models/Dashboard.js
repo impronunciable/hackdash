@@ -13,18 +13,26 @@ module.exports = Backbone.Model.extend({
 
   urlRoot: function(){
     if (this.get('domain')){
-      return hackdash.apiURL + '/dashboards'; 
+      return hackdash.apiURL + '/dashboards';
     }
     else {
-      return hackdash.apiURL + '/';
+      throw new Error('Unkonw Dashboard domain name');
     }
   },
 
-  idAttribute: "domain", 
+  idAttribute: "domain",
 
   initialize: function(){
     this.set("admins", new Admins());
+    this.on('change:domain', this.setAdminDomains.bind(this));
+    this.setAdminDomains();
   },
+
+  setAdminDomains: function(){
+    var admins = this.get("admins");
+    admins.domain = this.get('domain');
+    this.set("admins", admins);
+  }
 
 });
 

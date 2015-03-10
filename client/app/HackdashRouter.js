@@ -18,7 +18,7 @@ var Dashboard = require("./models/Dashboard")
   , ProfileView = require("./views/Profile")
   , ProjectFullView = require("./views/Project/Full")
   , ProjectEditView = require("./views/Project/Edit")
-  , ProjectsView = require("./views/Project/Layout")
+  , DashboardView = require("./views/Dashboard")
   , DashboardsView = require("./views/Dashboard/Collection")
 //  , CollectionsView = require("./views/Collection/Collection")
   ;
@@ -124,25 +124,25 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       app.projects.domain = dash;
     }
 
-    app.header.show(new Header({
-      model: app.dashboard,
-      collection: app.projects
-    }));
-
-    app.main.show(new ProjectsView({
-      model: app.dashboard,
-      collection: app.projects
-    }));
-
-    app.footer.show(new Footer({
-      model: app.dashboard
-    }));
-
     var self = this;
     app.dashboard.fetch().done(function(){
       app.projects.fetch(self.getSearchQuery(), { parse: true })
         .done(function(){
           app.projects.buildShowcase(app.dashboard.get("showcase"));
+
+          app.header.show(new Header({
+            model: app.dashboard,
+            collection: app.projects
+          }));
+
+          app.main.show(new DashboardView({
+            model: app.dashboard
+          }));
+
+          app.footer.show(new Footer({
+            model: app.dashboard
+          }));
+
         });
     });
 
@@ -153,14 +153,11 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "project";
 
-    //app.dashboard = new Dashboard();
     app.project = new Project({
       domain: dashboard
     });
 
-    app.header.show(new Header(/*{
-      model: app.dashboard
-    }*/));
+    app.header.show(new Header());
 
     app.main.show(new ProjectEditView({
       model: app.project
@@ -172,15 +169,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "project";
 
-    //app.dashboard = new Dashboard();
     app.project = new Project({ _id: pid });
 
-    app.header.show(new Header(/*{
-      model: app.dashboard
-    }*/));
+    app.header.show(new Header());
 
-
-    //app.dashboard.fetch();
     app.project.fetch().done(function(){
 
       app.main.show(new ProjectEditView({
@@ -194,14 +186,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "project";
 
-    //app.dashboard = new Dashboard();
     app.project = new Project({ _id: pid });
 
-    app.header.show(new Header(/*{
-      model: app.dashboard
-    }*/));
+    app.header.show(new Header());
 
-    //app.dashboard.fetch();
     app.project.fetch().done(function(){
 
       app.main.show(new ProjectFullView({

@@ -1,8 +1,8 @@
 /**
  * VIEW: A User Collection
- * 
+ *
  */
- 
+
 var template = require('./templates/addAdmin.hbs')
   , Users = require('../../models/Users');
 
@@ -12,7 +12,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "modal add-admins-modal",
+  className: "add-admins-modal",
   template: template,
 
   ui: {
@@ -51,7 +51,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     if (selected){
       this.collection.addAdmin(selected.get("_id"));
-      this.close();
+      this.destroy();
     }
   },
 
@@ -67,7 +67,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.ui.txtUser.typeahead({
       source: function(query, process){
         if (query.length >= MIN_CHARS_FOR_SERVER_SEARCH){
-          users.fetch({ 
+          users.fetch({
             data: $.param({ q: query }),
             success: function(){
               var usersIds = users.map(function(user){ return user.get('_id').toString(); });

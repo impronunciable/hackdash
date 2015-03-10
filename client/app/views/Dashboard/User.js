@@ -1,38 +1,26 @@
 /**
- * VIEW: Collection of Users
- * 
+ * VIEW: User
+ *
  */
 
-var template = require('./templates/users.hbs')
-  , User = require('./User')
-  , AddAdmin = require('./AddAdmin');
+var template = require('./templates/user.hbs');
 
-module.exports = Backbone.Marionette.CompositeView.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
+  tagName: "li",
   template: template,
-  
-  tagName: "div",
-  childViewContainer: "ul",
-  childView: User,
-  
-  events: {
-    "click a.add-admins": "showAddAdmins"
-  },
-
-  templateHelpers: {
-    isAdmin: function(){
-      var user = hackdash.user;
-      return user && user.admin_in.indexOf(this.domain) >= 0 || false;
-    }
-  },
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
+
+  onRender: function(){
+    $('.tooltips', this.$el).tooltip({});
+  }
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -41,12 +29,6 @@ module.exports = Backbone.Marionette.CompositeView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
-
-  showAddAdmins: function(){
-    hackdash.app.modals.show(new AddAdmin({
-      collection: this.collection
-    }));
-  }
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS

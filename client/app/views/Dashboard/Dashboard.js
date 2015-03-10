@@ -1,9 +1,9 @@
 /**
  * VIEW: DashboardHeader Layout
- * 
+ *
  */
 
-var 
+var
     template = require('./templates/dashboard.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
@@ -35,28 +35,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
-  initialize: function(options){
-    this.readOnly = (options && options.readOnly) || false;
-  },
-
   onRender: function(){
     var user = hackdash.user;
 
     if (user){
       var isAdmin = user.admin_in.indexOf(this.model.get("domain")) >= 0;
-      
+
       if (isAdmin){
         this.initEditables();
       }
     }
 
     $('.tooltips', this.$el).tooltip({});
-  },
-
-  serializeData: function(){
-    return _.extend({
-      readOnly: this.readOnly
-    }, this.model.toJSON() || {});
   },
 
   //--------------------------------------
@@ -71,48 +61,32 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
+  placeholders: {
+    title: "Hackathon Title",
+    description: "brief description of this hackathon",
+    link: "url to hackathon site"
+  },
+
   initEditables: function(){
+    this.initEditable("title", '<input type="text" maxlength="30">');
+    this.initEditable("description", '<textarea maxlength="250"></textarea>', 'textarea');
+    this.initEditable("link");
+  },
+
+  initEditable: function(type, template, control){
+    var ph = this.placeholders;
     var self = this;
 
-    if (this.ui.title.length > 0){
-      this.ui.title.editable({
-        type: 'text',
-        title: 'Enter title',
-        emptytext: "Enter a title",
-        inputclass: 'dashboard-edit-title',
-        tpl: '<input type="text" maxlength="30">',
+    if (this.ui[type].length > 0){
 
+      this.ui[type].editable({
+        type: control || 'text',
+        title: ph[type],
+        emptytext: ph[type],
+        placeholder: ph[type],
+        tpl: template,
         success: function(response, newValue) {
-          self.model.set('title', newValue);
-          self.model.save();
-        }
-      });
-    }
-
-    if (this.ui.description.length > 0){
-      this.ui.description.editable({
-        type: 'textarea',
-        title: 'Enter description',
-        emptytext: "Enter a description",
-        inputclass: "dashboard-edit-desc",
-        tpl: '<textarea maxlength="250" cols="50"></textarea>',
-
-        success: function(response, newValue) {
-          self.model.set('description', newValue);
-          self.model.save();
-        }
-      });
-    }
-
-    if (this.ui.description.length > 0){
-      this.ui.link.editable({
-        type: 'text',
-        title: 'Enter a link',
-        emptytext: "Enter a link",
-        inputclass: "dashboard-edit-link",
-
-        success: function(response, newValue) {
-          self.model.set('link', newValue);
+          self.model.set(type, newValue);
           self.model.save();
         }
       });

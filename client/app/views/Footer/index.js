@@ -1,7 +1,6 @@
 
-var 
+var
     template = require('./templates/footer.hbs')
-  , Users = require('./Users')
   , Embed = require('./Embed');
 
 module.exports = Backbone.Marionette.LayoutView.extend({
@@ -12,10 +11,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   className: "container",
   template: template,
-
-  regions: {
-    "admins": ".admins-ctn"
-  },
 
   ui: {
     "switcher": ".dashboard-btn",
@@ -45,24 +40,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
-  initialize: function(){
-    var isDashboard = (hackdash.app.type === "dashboard" ? true : false);
-
-    if (isDashboard){
-      this.model.get("admins").fetch();
-    } 
-  },
-
   onRender: function(){
-    var isDashboard = (hackdash.app.type === "dashboard" ? true : false);
-    
-    if (isDashboard){
-      this.admins.show(new Users({
-        model: this.model,
-        collection: this.model.get("admins")
-      }));
-    }
-
     $('.tooltips', this.$el).tooltip({});
   },
 
@@ -92,7 +70,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     if (this.ui.switcher.hasClass("dash-open")){
       open = false;
     }
-    
+
     $('.tooltips', this.$el).tooltip('hide');
 
     this.model.set({ "open": open }, { trigger: false });
@@ -112,9 +90,9 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
       this.model.trigger("save:showcase");
       this.model.trigger("end:showcase");
-      
+
       this.model.isShowcaseMode = false;
-    
+
       this.ui.showcaseMode
         .text("Edit Showcase")
         .removeClass("on");

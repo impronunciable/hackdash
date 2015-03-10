@@ -1,8 +1,8 @@
+/* jshint unused:false */
 
 var
     template = require('./templates/header.hbs')
   , Search = require('./Search')
-  , DashboardHeader = require('./Dashboard')
   , CollectionHeader = require('./Collection');
 
 module.exports = Backbone.Marionette.LayoutView.extend({
@@ -58,16 +58,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     switch(type){
 
       case "dashboard":
-        showSearch();
-
-        if (this.model.get("_id")){
-          this.page.show(new DashboardHeader({
-            model: this.model
-          }));
-
-          // Hack - Remove this after removal of dashboard subdomain
-          window.document.title = (this.model.get('title') || "") + " HackDash";
-        }
+        //showSearch();
         break;
 
       case "collection":
@@ -76,17 +67,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             model: this.model
           }));
         }
-        break;
-
-      case "project":
-      /*
-        if (this.model.get("_id")){
-          this.page.show(new DashboardHeader({
-            model: this.model,
-            readOnly: true
-          }));
-        }
-        */
         break;
     }
 

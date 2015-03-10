@@ -20,8 +20,8 @@ var maxLimit = 30;
 module.exports = function(app, uri, common) {
   teamIds = app.get('config').team || [];
 
-  app.get(uri + '/admins', getInstanceAdmins, sendUsers);
-  app.post(uri + '/admins/:uid', common.isAuth, isDashboardAdmin, getUser, addAdmin, sendUser);
+  app.get(uri + '/:domain/admins', getInstanceAdmins, sendUsers);
+  app.post(uri + '/:domain/admins/:uid', common.isAuth, isDashboardAdmin, getUser, addAdmin, sendUser);
 
   app.get(uri + '/users', setQuery, getUsers, sendUsers);
 
@@ -34,7 +34,7 @@ module.exports = function(app, uri, common) {
 };
 
 var getInstanceAdmins = function(req, res, next){
-  var domain = req.subdomains[0];
+  var domain = req.params.domain;
 
   User
     .find({ "admin_in": domain })
@@ -46,7 +46,7 @@ var getInstanceAdmins = function(req, res, next){
 };
 
 var isDashboardAdmin = function(req, res, next){
-  var domain = req.subdomains[0];
+  var domain = req.params.domain;
 
   var isAdmin = (req.user.admin_in.indexOf(domain) >= 0);
 
@@ -111,7 +111,7 @@ var canUpdate = function(req, res, next){
 };
 
 var addAdmin = function(req, res, next){
-  var domain = req.subdomains[0];
+  var domain = req.params.domain;
 
   User.update({_id: req.user_profile._id }, { $addToSet : { 'admin_in': domain }}, function(err){
     if(err) return res.send(500);

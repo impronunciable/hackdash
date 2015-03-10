@@ -57,7 +57,7 @@
       .page-link-right {
         position: absolute;
         padding: 10px 20px;
-        top: -80px;
+        top: -84px;
         font-size: @fsize-22;
         color: @color-white;
 
@@ -72,6 +72,10 @@
 
       .page-link-right {
         right: 0;
+      }
+
+      a {
+        color: @color-white;
       }
 
     }
@@ -270,7 +274,6 @@
     }
 
   }
-
 
   &.project {
 
@@ -491,6 +494,125 @@
         }
       }
 
+    }
+  }
+
+  &.dashboard {
+
+    .header {
+      background-color: @color-dashboard;
+      padding: 20px 0;
+
+      h1 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+
+      .container {
+        color: @color-white;
+        max-width: inherit;
+        text-align: center;
+        margin-bottom: 200px;
+
+        .page-link-right {
+          background-color: @color-project;
+        }
+
+        .editable-container {
+          font-size: 15px;
+          width: 100%;
+
+          .form-group {
+            width: 100%;
+
+            .editable-input {
+              width: 80%;
+
+              input, textarea {
+                width: 100%;
+              }
+            }
+          }
+        }
+
+        .editable-buttons {
+          button {
+            height: 44px;
+            padding: 6px 12px;
+            vertical-align: top;
+          }
+        }
+
+        .editable-click,
+        a.editable-click,
+        a.editable-click:hover {
+          border: none;
+          background: darken(@color-dashboard, 4%);
+          padding: 5px 10px;
+          cursor: pointer;
+        }
+
+        .dash-admins {
+
+          ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px auto 0 auto;
+            display: inline-block;
+
+            li {
+              text-align: left;
+              display: inline-block;
+              margin: 3px;
+              padding: 2px 8px;
+              background: lighten(@color-dashboard, 5%);
+
+              .hexagon {
+                .getHexagon(45px);
+              }
+            }
+          }
+
+          .add-admins {
+            display: inline-block;
+            background: lighten(@color-dashboard, 5%);
+            padding: 0px 14px;
+            font-size: 40px;
+            vertical-align: top;
+            margin: 0;
+            margin-top: 13px;
+            color: @color-white;
+
+            &:hover {
+              cursor: pointer;
+              background: darken(@color-dashboard, 5%);
+            }
+          }
+
+        }
+
+      }
+    }
+
+    .body {
+      background-color: transparent;
+
+      .bg-body-entity{
+        background-color: @color-project;
+        height: 200px;
+      }
+
+      .container {
+        position: relative;
+        max-width: inherit;
+        min-height: 300px;
+        margin: -200px auto 0 auto;
+        background-color: @color-white;
+
+        padding-top: 40px;
+        padding-bottom: 60px;
+        margin-bottom: 30px;
+      }
     }
   }
 

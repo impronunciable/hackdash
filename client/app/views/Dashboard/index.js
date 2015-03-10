@@ -1,60 +1,94 @@
 /**
- * VIEW: Dashboard
- * 
+ * VIEW: Dashboard Projects Layout
+ *
  */
- 
-var template = require('./templates/dashboard.hbs')
-  , UserCollectionsView = require('../Collection/List');
 
-module.exports = Backbone.Marionette.ItemView.extend({
+var template = require('./templates/index.hbs')
+  , UsersView = require('./Users')
+  , DashboardView = require('./Dashboard')
+  , ProjectsView = require('../Project/Collection');
+
+module.exports = Backbone.Marionette.LayoutView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  id: function(){
-    return this.model.get("_id");
-  },
-  className: "dashboard span4",
+  className: "page-ctn dashboard",
   template: template,
 
-  events: {
-    "click .demo a": "stopPropagation",
-    "click .add a": "onAddToCollection"
+  ui: {
+    inactiveCtn: ".inactive-ctn"
+  },
+
+  regions: {
+    "dashboard": ".dash-details",
+    "admins": ".dash-admins",
+    "projects": "#dashboard-projects",
+    "inactives": "#inactive-projects"
+  },
+
+  modelEvents:{
+    "edit:showcase": "onStartEditShowcase",
+    "end:showcase": "onEndEditShowcase",
+    "save:showcase": "onSaveEditShowcase"
   },
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
-  initialize: function(options){
-    this.hideAdd = (options && options.hideAdd) || false;
-  },
+  showcaseMode: false,
+  showcaseSort: false,
 
   onRender: function(){
-    this.$el
-      .attr({
-          "title": this.model.get("status")
-        , "data-name": this.model.get("domain")
-        , "data-date": this.model.get("created_at")
-      })
-      .tooltip({});
+    var self = this;
 
-    $('.tooltips', this.$el).tooltip({});
+    this.dashboard.show(new DashboardView({
+      model: this.model
+    }));
 
-    var url = "http://" + this.model.get("domain") + "." + hackdash.baseURL;
-
-    this.$el.on("click", function(e){
-      if (!$(e.target).hasClass("add")){
-        window.location = url;
-      }
+    this.model.get("admins").fetch().done(function(){
+      self.admins.show(new UsersView({
+        model: self.model,
+        collection: self.model.get("admins")
+      }));
     });
-  },
 
-  serializeData: function(){
-    return _.extend({
-      hideAdd: this.hideAdd
-    }, this.model.toJSON());
+    if (this.showcaseMode){
+      this.projects.show(new ProjectsView({
+        model: this.model,
+        collection: hackdash.app.projects.getActives(),
+        showcaseMode: true
+      }));
+
+      this.ui.inactiveCtn.removeClass("hide");
+
+      this.inactives.show(new ProjectsView({
+        model: this.model,
+        collection: hackdash.app.projects.getInactives()
+      }));
+
+      hackdash.app.projects.off("change:active").on("change:active", function(){
+        self.projects.currentView.collection = hackdash.app.projects.getActives();
+        self.inactives.currentView.collection = hackdash.app.projects.getInactives();
+
+        self.model.isDirty = true;
+
+        self.projects.currentView.render();
+        self.inactives.currentView.render();
+      });
+    }
+    else {
+      this.ui.inactiveCtn.addClass("hide");
+
+      this.projects.show(new ProjectsView({
+        model: this.model,
+        collection: hackdash.app.projects,
+        showcaseMode: false,
+        showcaseSort: this.showcaseSort
+      }));
+    }
   },
 
   //--------------------------------------
@@ -65,15 +99,26 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
-  stopPropagation: function(e){
-    e.stopPropagation();
+  onStartEditShowcase: function(){
+    this.showcaseMode = true;
+    this.render();
   },
 
-  onAddToCollection: function(){
-    hackdash.app.modals.show(new UserCollectionsView({
-      model: this.model,
-      collection: hackdash.app.collections
-    }));
+  onSaveEditShowcase: function(){
+    var showcase = this.dashboard.currentView.updateShowcaseOrder();
+    this.model.save({ "showcase": showcase });
+
+    this.model.isDirty = false;
+    this.onEndEditShowcase();
+  },
+
+  onEndEditShowcase: function(){
+    this.model.isShowcaseMode = false;
+    this.model.trigger("change");
+
+    this.showcaseSort = true;
+    this.showcaseMode = false;
+    this.render();
   },
 
   //--------------------------------------
