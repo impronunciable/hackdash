@@ -7,11 +7,10 @@
 
 <div class="modal-body">
   <div class="row">
-
       {{#each providers}}
 
       <div class="col-xs-12 col-md-8 col-md-offset-2">
-        <a href="/auth/{{.}}" class="btn btn-primary signup-btn signup-{{.}}" data-bypass>
+        <a href="/auth/{{.}}{{../redirectURL}}" class="btn btn-primary signup-btn signup-{{.}}" data-bypass>
           <i class="fa fa-{{.}}"></i>Access with {{firstUpper .}}
         </a>
       </div>

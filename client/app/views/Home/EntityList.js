@@ -83,26 +83,4 @@ module.exports = Backbone.Marionette.CollectionView.extend({
     this.$el.animate({ scrollLeft: move }, 250);
   },
 
-  /*
-  gridInitialized: false,
-  updateGrid: function(){
-    var $items = this.$el;
-
-    if (this.gridInitialized){
-      $items.packery("destroy");
-    }
-
-    $items.packery({
-        animationEngine: "jquery"
-      , resizable: false
-      , sortAscending: true
-      , isHorizontal: true
-      , columnWidth: 250
-      , layoutMode: 'fitRows'
-    });
-
-    this.gridInitialized = true;
-  },
-  */
-
 });

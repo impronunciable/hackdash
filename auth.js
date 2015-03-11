@@ -26,7 +26,13 @@ module.exports = function(app) {
 
   var saveSubdomain = function(req, res, next) {
     if(!req.session) req.session = {};
+
     req.session.subdomain = (req.subdomains.length && req.subdomains[0]) || '';
+
+    var redirect = ((req.query && req.query.redirect) || '');
+    redirect = (redirect.charAt(0) === '/' ? redirect : '/' + redirect);
+    req.session.redirectUrl = redirect;
+
     next();
   };
 
@@ -37,7 +43,9 @@ module.exports = function(app) {
       domain = req.session.subdomain + '.' + domain;
     }
 
-    res.redirect('http://' + domain + ':' + app.get('config').port);
+    var url = req.session.redirectUrl || '';
+
+    res.redirect('http://' + domain + ':' + app.get('config').port + url);
   };
 
   app.set('providers', Object.keys(keys));

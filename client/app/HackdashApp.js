@@ -21,6 +21,9 @@ module.exports = function(){
 
   function initRouter(){
     app.router = new HackdashRouter();
+    app.router.on("route", function(/*route, params*/) {
+      app.previousURL = Backbone.history.fragment;
+    });
     Backbone.history.start({ pushState: true });
   }
 

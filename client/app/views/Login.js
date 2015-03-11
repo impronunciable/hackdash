@@ -18,7 +18,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
-  onClose: function(){
+  templateHelpers: {
+    redirectURL: function(){
+      var url = hackdash.app.previousURL || '';
+      return (url.length ? '?redirect=' + url : url);
+    }
+  },
+
+  onDestroy: function(){
     window.history.back();
   }
 

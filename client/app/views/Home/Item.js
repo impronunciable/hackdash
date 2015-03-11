@@ -21,12 +21,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   // Overrided method by an Entity
   getURL: function(){ return "#"; },
+  afterRender: function(){ },
 
   onRender: function(){
+
     this.$el.attr({
       'href': this.getURL(),
       'data-bypass': true
     });
+
+    $('.tooltips', this.$el).tooltip({});
+
+    this.afterRender();
   },
 
   //--------------------------------------

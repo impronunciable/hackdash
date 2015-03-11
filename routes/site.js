@@ -69,10 +69,9 @@ module.exports = function(app) {
   app.get('/collections/:cid', metas.collection, appStack);
   app.get('/dashboards/:dashboard', metas.dashboard, appStack);
   app.get('/dashboards/:dashboard/create', metas.dashboard, appStack);
-  app.get('/users/:user_id', metas.user, appStack);
 
-  // Profile  ---------------------------
   app.get('/users/profile', profileStack);
+  app.get('/users/:user_id', metas.user, appStack);
 
   // Auth  ------------------------------
   app.get('/login', homeStack);
@@ -88,15 +87,12 @@ module.exports = function(app) {
   // else go home landing
   app.get('/projects/create', function(req, res){
     var protocol = req.socket.encrypted ? 'https' : 'http';
-    console.log('>>> ENTREEEEE');
 
     if (req.subdomains.length > 0) {
       var baseUrl = protocol + '://' + appHost + '/dashboards/' + req.subdomains[0];
-      console.log('>>> going to ' + baseUrl + '/create');
       return res.redirect(baseUrl + '/create');
     }
 
-    console.log('>>> going to HOME ' + protocol + '://' + appHost + '/');
     return res.redirect(protocol + '://' + appHost + '/');
   });
 

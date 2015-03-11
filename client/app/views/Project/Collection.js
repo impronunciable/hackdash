@@ -1,9 +1,9 @@
 /**
  * VIEW: Projects of an Instance
- * 
+ *
  */
 
-var Project = require('./index');
+var Project = require('./Card');
 
 module.exports = Backbone.Marionette.CollectionView.extend({
 
@@ -11,10 +11,9 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  id: "projects",
-  className: "row projects",
+  className: "entities",
   childView: Project,
-  
+
   collectionEvents: {
     "remove": "render",
     "sort:date": "sortByDate",
@@ -22,15 +21,12 @@ module.exports = Backbone.Marionette.CollectionView.extend({
     "sort:showcase": "sortByShowcase"
   },
 
-  gridSize: {
-    columnWidth: 300,
-    rowHeight: 220
-  },
+  gutter: 5,
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
-  
+
   initialize: function(options){
     this.showcaseMode = (options && options.showcaseMode) || false;
     this.showcaseSort = (options && options.showcaseSort) || false;
@@ -38,6 +34,14 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
   onRender: function(){
 
+    var self = this;
+    _.defer(function(){
+      self.updateGrid();
+      self.refresh();
+      self.sortByDate();
+    });
+
+/*
     var self = this;
     _.defer(function(){
       if (self.showcaseSort) {
@@ -51,12 +55,13 @@ module.exports = Backbone.Marionette.CollectionView.extend({
         self.startSortable();
       }
     });
+*/
   },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
-
+/*
   updateShowcaseOrder: function(){
     var itemElems = this.pckry.getItemElements();
     var showcase = [];
@@ -67,7 +72,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
       var found = this.collection.where({ _id: elem.id, active: true });
       if (found.length > 0){
-        found[0].set({ 
+        found[0].set({
           "showcase": i
         }, { silent: true });
       }
@@ -79,33 +84,84 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
     return showcase;
   },
-
+*/
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
 
   sortByName: function(){
+    this.wall.sortBy(function(a, b) {
+      return $(a).attr('data-name') > $(b).attr('data-name');
+    });
+
+    this.fixSize();
+
+    /*
     this.$el
       .isotope({"filter": ""})
       .isotope({"sortBy": "name"});
+    */
   },
 
   sortByDate: function(){
+    this.wall.sortBy(function(a, b) {
+      return $(a).attr('data-date') < $(b).attr('data-date');
+    });
+
+    this.fixSize();
+
+    /*
     this.$el
       .isotope({"filter": ""})
       .isotope({"sortBy": "date"});
+    */
   },
 
   sortByShowcase: function(){
+    this.wall.sortBy(function(a, b) {
+      return $(a).attr('data-showcase') - $(b).attr('data-showcase');
+    });
+
+    this.fixSize();
+
+    /*
     this.$el
       .isotope({"filter": ".filter-active"})
       .isotope({"sortBy": "showcase"});
+    */
   },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
+  updateGrid: function(){
+    if (!this.wall){
+      this.wall = new window.freewall(this.$el);
+    }
+
+    this.wall.reset({
+      selector: '.entity',
+      cellW: 200,
+      cellH: 200,
+      gutterY: this.gutter,
+      gutterX: this.gutter,
+      onResize: this.refresh.bind(this)
+    });
+
+  },
+
+  refresh: function(){
+    this.wall.fitWidth();
+    this.wall.refresh();
+    this.fixSize();
+  },
+
+  fixSize: function(){
+    this.$el.height(this.$el.height() + this.gutter*4);
+  },
+
+/*
   isotopeInitialized: false,
   updateIsotope: function(sortType, filterType){
     var $projects = this.$el;
@@ -136,7 +192,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       , sortBy: sortType || "name"
       , filter: filterType || ""
     });
-    
+
     this.isotopeInitialized = true;
   },
 
@@ -150,7 +206,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       this.pckry.destroy();
     }
 
-    this.pckry = new Packery( $projects[0], this.gridSize); 
+    this.pckry = new Packery( $projects[0], this.gridSize);
 
     var itemElems = this.pckry.getItemElements();
 
@@ -161,9 +217,9 @@ module.exports = Backbone.Marionette.CollectionView.extend({
     }
 
     var self = this;
-    this.pckry.on( 'dragItemPositioned', function() { 
+    this.pckry.on( 'dragItemPositioned', function() {
       self.model.isDirty = true;
     });
   }
-
+*/
 });

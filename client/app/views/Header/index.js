@@ -1,5 +1,3 @@
-/* jshint unused:false */
-
 var
     template = require('./templates/header.hbs')
   , Search = require('./Search')
@@ -58,7 +56,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     switch(type){
 
       case "dashboard":
-        //showSearch();
+        showSearch();
         break;
 
       case "collection":

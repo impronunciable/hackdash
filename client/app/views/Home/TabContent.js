@@ -11,7 +11,7 @@ var
   , EntityList = require("./EntityList")
 
 // Item Views
-  , ProjectItemView = require('./Project')
+  , ProjectItemView = require('../Project/Card')
   , DashboardItemView = require('./Dashboard')
   , UserItemView = require('./User')
   , CollectionView = require('./Collection')
