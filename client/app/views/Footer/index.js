@@ -9,7 +9,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "container",
+  className: "footer",
   template: template,
 
   ui: {

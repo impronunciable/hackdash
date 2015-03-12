@@ -22,6 +22,8 @@ module.exports = function(app, uri, common) {
   app.post(uri + '/dashboards', common.isAuth, validateSubdomain, createDashboard(app), sendDashboard);
   app.get(uri + '/dashboards', setQuery, setDashboards, sendDashboards);
 
+  app.get(uri + '/dashboards/:domain/csv', common.isAuth, getDashboard, isAdminDashboard, sendDashboardCSV);
+
   app.get(uri + '/dashboards/:domain.jsonp', setFullOption, getDashboard, sendDashboard);
   app.get(uri + '/dashboards/:domain', getDashboard, sendDashboard);
   app.get(uri + '/', getDashboard, sendDashboard);
@@ -31,8 +33,6 @@ module.exports = function(app, uri, common) {
 
   app.post(uri + '/', common.notAllowed);
   app.del(uri + '/', common.notAllowed);
-
-  app.get(uri + '/csv', common.isAuth, getDashboard, isAdminDashboard, sendDashboardCSV);
 };
 
 var validateSubdomain = function(req, res, next) {
@@ -235,7 +235,7 @@ var sendDashboards = function(req, res){
 };
 
 var sendDashboardCSV = function(req, res){
-  var domain = req.subdomains[0];
+  var domain = req.dashboard.domain;
 
   function CSVEscape(field) {
     return String(field || "").replace(/\"/g, '""').replace(/,/g, '');

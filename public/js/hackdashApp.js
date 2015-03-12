@@ -1647,7 +1647,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "modal",
+  className: "",
   template: template,
 
   ui: {
@@ -1690,7 +1690,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "container",
+  className: "footer",
   template: template,
 
   ui: {
@@ -1817,7 +1817,9 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "\">\n    ";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.open : depth0), {"name":"if","hash":{},"fn":this.program(6, data),"inverse":this.program(8, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n  </a>\n\n  <a class=\"btn pull-right\" href=\"/api/v2/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n  <a class=\"btn pull-right embed-btn\">Embed code</a>\n</div>\n<a class=\"btn btn-large pull-right btn-showcase-mode\">Edit Showcase</a>\n";
+  return buffer + "\n  </a>\n\n  <a class=\"btn pull-right\" href=\"/api/v2/dashboards/"
+    + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
+    + "/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n  <a class=\"btn pull-right embed-btn\">Embed code</a>\n  <a class=\"btn btn-large pull-right btn-showcase-mode\">Edit Showcase</a>\n</div>\n";
 },"2":function(depth0,helpers,partials,data) {
   return "dash-open";
   },"4":function(depth0,helpers,partials,data) {
@@ -1827,11 +1829,11 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   },"8":function(depth0,helpers,partials,data) {
   return "Open Dashboard";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1;
+  var stack1, buffer = "\n<a class=\"brand\">\n  <div class=\"logo\"></div>\n  <h3>hackdash.org</h3>\n</a>\n\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isAdmin : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { return stack1; }
-  else { return ''; }
-  },"useData":true});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "\n<a class=\"up-button\">\n  <i class=\"fa fa-long-arrow-up\"></i>\n  <span>up</span>\n</a>";
+},"useData":true});
 
 },{"hbsfy/runtime":91}],34:[function(require,module,exports){
 /**
@@ -1933,7 +1935,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 });
 },{"./templates/collection.hbs":37}],35:[function(require,module,exports){
 
-var 
+var
   template = require('./templates/search.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
@@ -1942,17 +1944,16 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  tagName: "form",
-  className: "formSearch",
+  className: "search",
   template: template,
 
   ui: {
-    searchbox: "#searchInput"
+    searchbox: "#search"
   },
 
   events: {
-    "keyup #searchInput": "search",
-    "click .sort": "sort"
+    "keyup @ui.searchbox": "search",
+    "click .btn-group>.btn": "sortClicked"
   },
 
   //--------------------------------------
@@ -1964,7 +1965,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   initialize: function(options){
     this.showSort = (options && options.showSort) || false;
     this.collection = options && options.collection;
-    this.placeholder = (options && options.placeholder) || "Type here";
+    this.placeholder = (options && options.placeholder) || "Enter your keywords";
   },
 
   onRender: function(){
@@ -1990,9 +1991,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
-  sort: function(e){
+  sortClicked: function(e){
     e.preventDefault();
-    var val = $(e.currentTarget).data("option-value");
+    var val = $('input[type=radio]', e.currentTarget)[0].id;
     this.collection.trigger("sort:" + val);
   },
 
@@ -2013,7 +2014,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
         if (keyword.length > 0) {
           opts.data = $.param({ q: keyword });
-          
+
           hackdash.app.router.navigate(fragment + "?q=" + keyword, { trigger: true });
 
           self.collection.fetch(opts);
@@ -2029,7 +2030,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
           hackdash.app.router.navigate(fragment, { trigger: true, replace: true });
         }
       }
-      
+
     }, 300);
   }
 
@@ -2170,7 +2171,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   stack1 = ((helper = (helper = helpers.isDashboardView || (depth0 != null ? depth0.isDashboardView : depth0)) != null ? helper : helperMissing),(options={"name":"isDashboardView","hash":{},"fn":this.program(2, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.isDashboardView) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "    </a>  \n    <a class=\"btn logout\" href=\"/logout\" data-bypass>Logout</a>\n";
+  return buffer + "    </a>\n    <a class=\"btn logout\" href=\"/logout\" data-bypass>Logout</a>\n";
 },"2":function(depth0,helpers,partials,data) {
   var stack1, buffer = "";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isDashboardAdmin : depth0), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
@@ -2179,7 +2180,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 },"3":function(depth0,helpers,partials,data) {
   return "        <span class=\"admin-label\">Admin</span>\n";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, escapeExpression=this.escapeExpression, buffer = "\n<div class=\"row main-header\">\n\n  <div class=\"search-ctn\"></div>\n\n  <div class=\"createProject pull-right btn-group\">\n";
+  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, escapeExpression=this.escapeExpression, buffer = "\n<div class=\"row main-header\">\n\n  <div class=\"pull-left col-xs-6 col-md-4 search-ctn\"></div>\n\n  <div class=\"pull-right btn-group\">\n";
   stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
@@ -2192,11 +2193,11 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
-  return "<div class=\"orderby\">\n  <div class=\"btn-group\">\n    <button data-option-value=\"name\" class=\"sort btn\">By Name</button>\n    <button data-option-value=\"date\" class=\"sort btn\">By Date</button>\n    <button data-option-value=\"showcase\" class=\"sort btn\">Showcase</button>\n  </div>\n</div>\n";
+  return "<div class=\"btn-group col-xs-12 col-md-12\" data-toggle=\"buttons\">\n  <label class=\"btn btn-default col-xs-4 col-md-4\">\n    <input type=\"radio\" name=\"options\" id=\"name\" autocomplete=\"off\"> By Name\n  </label>\n  <label class=\"btn btn-default col-xs-4 col-md-4 active\">\n    <input type=\"radio\" name=\"options\" id=\"date\" autocomplete=\"off\"> By Date\n  </label>\n  <label class=\"btn btn-default col-xs-4 col-md-4\">\n    <input type=\"radio\" name=\"options\" id=\"showcase\" autocomplete=\"off\"> Showcase\n  </label>\n</div>\n";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "<i class=\"icon-large icon-search\"></i>\n<input id=\"searchInput\" type=\"text\" class=\"search-query input-large\" placeholder=\""
+  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "<div class=\"col-xs-12 col-md-12\">\n\n  <div class=\"input-group\">\n    <input id=\"search\" type=\"text\" class=\"form-control\" placeholder=\""
     + escapeExpression(((helper = (helper = helpers.placeholder || (depth0 != null ? depth0.placeholder : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"placeholder","hash":{},"data":data}) : helper)))
-    + "\"/>\n\n";
+    + "\">\n    <span class=\"input-group-btn\">\n      <button class=\"btn btn-primary\" type=\"button\">\n        <i class=\"fa fa-search\"></i>\n      </button>\n    </span>\n  </div>\n\n</div>\n\n";
   stack1 = ((helper = (helper = helpers.isDashboardView || (depth0 != null ? depth0.isDashboardView : depth0)) != null ? helper : helperMissing),(options={"name":"isDashboardView","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.isDashboardView) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }

@@ -1,12 +1,26 @@
-<i class="icon-large icon-search"></i>
-<input id="searchInput" type="text" class="search-query input-large" placeholder="{{placeholder}}"/>
+<div class="col-xs-12 col-md-12">
+
+  <div class="input-group">
+    <input id="search" type="text" class="form-control" placeholder="{{placeholder}}">
+    <span class="input-group-btn">
+      <button class="btn btn-primary" type="button">
+        <i class="fa fa-search"></i>
+      </button>
+    </span>
+  </div>
+
+</div>
 
 {{#isDashboardView}}
-<div class="orderby">
-  <div class="btn-group">
-    <button data-option-value="name" class="sort btn">By Name</button>
-    <button data-option-value="date" class="sort btn">By Date</button>
-    <button data-option-value="showcase" class="sort btn">Showcase</button>
-  </div>
+<div class="btn-group col-xs-12 col-md-12" data-toggle="buttons">
+  <label class="btn btn-default col-xs-4 col-md-4">
+    <input type="radio" name="options" id="name" autocomplete="off"> By Name
+  </label>
+  <label class="btn btn-default col-xs-4 col-md-4 active">
+    <input type="radio" name="options" id="date" autocomplete="off"> By Date
+  </label>
+  <label class="btn btn-default col-xs-4 col-md-4">
+    <input type="radio" name="options" id="showcase" autocomplete="off"> Showcase
+  </label>
 </div>
 {{/isDashboardView}}

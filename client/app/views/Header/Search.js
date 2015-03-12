@@ -1,5 +1,5 @@
 
-var 
+var
   template = require('./templates/search.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
@@ -8,17 +8,16 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  tagName: "form",
-  className: "formSearch",
+  className: "search",
   template: template,
 
   ui: {
-    searchbox: "#searchInput"
+    searchbox: "#search"
   },
 
   events: {
-    "keyup #searchInput": "search",
-    "click .sort": "sort"
+    "keyup @ui.searchbox": "search",
+    "click .btn-group>.btn": "sortClicked"
   },
 
   //--------------------------------------
@@ -30,7 +29,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   initialize: function(options){
     this.showSort = (options && options.showSort) || false;
     this.collection = options && options.collection;
-    this.placeholder = (options && options.placeholder) || "Type here";
+    this.placeholder = (options && options.placeholder) || "Enter your keywords";
   },
 
   onRender: function(){
@@ -56,9 +55,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
-  sort: function(e){
+  sortClicked: function(e){
     e.preventDefault();
-    var val = $(e.currentTarget).data("option-value");
+    var val = $('input[type=radio]', e.currentTarget)[0].id;
     this.collection.trigger("sort:" + val);
   },
 
@@ -79,7 +78,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
         if (keyword.length > 0) {
           opts.data = $.param({ q: keyword });
-          
+
           hackdash.app.router.navigate(fragment + "?q=" + keyword, { trigger: true });
 
           self.collection.fetch(opts);
@@ -95,7 +94,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
           hackdash.app.router.navigate(fragment, { trigger: true, replace: true });
         }
       }
-      
+
     }, 300);
   }
 
