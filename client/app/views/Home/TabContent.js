@@ -12,7 +12,7 @@ var
 
 // Item Views
   , ProjectItemView = require('../Project/Card')
-  , DashboardItemView = require('./Dashboard')
+  , DashboardItemView = require('../Dashboard/Card')
   , UserItemView = require('./User')
   , CollectionView = require('./Collection')
 

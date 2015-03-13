@@ -3,8 +3,8 @@
  *
  */
 
-var template = require('./templates/dashboard.hbs');
-var ItemView = require('./Item.js');
+var template = require('./templates/card.hbs');
+var ItemView = require('../Home/Item.js');
 
 module.exports = ItemView.extend({
 

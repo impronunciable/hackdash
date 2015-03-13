@@ -1,7 +1,6 @@
 var
     template = require('./templates/header.hbs')
-  , Search = require('./Search')
-  , CollectionHeader = require('./Collection');
+  , Search = require('./Search');
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
@@ -59,13 +58,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
         showSearch();
         break;
 
-      case "collection":
-        if (this.model.get("_id")){
-          this.page.show(new CollectionHeader({
-            model: this.model
-          }));
-        }
-        break;
     }
 
     $('.tooltips', this.$el).tooltip({});

@@ -1,21 +1,25 @@
 /**
- * VIEW: Collection
- * 
+ * VIEW: Collection Dashboards Layout
+ *
  */
- 
-var template = require('./templates/collection.hbs');
 
-module.exports = Backbone.Marionette.ItemView.extend({
+var template = require('./templates/index.hbs')
+  , CollectionView = require('./Collection')
+  , DashboardsView = require('../Dashboard/Collection');
+
+module.exports = Backbone.Marionette.LayoutView.extend({
 
   //--------------------------------------
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  id: function(){
-    return this.model.get("_id");
-  },
-  className: "collection span4",
+  className: "page-ctn collection",
   template: template,
+
+  regions: {
+    "collection": ".coll-details",
+    "dashboards": "#collection-dashboards"
+  },
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
@@ -23,13 +27,15 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   onRender: function(){
 
-    var url = "http://" + hackdash.baseURL + "/collections/" + this.model.get("_id");
+    this.collection.show(new CollectionView({
+      model: this.model
+    }));
 
-    this.$el.on("click", function(e){
-      if (!$(e.target).hasClass("add")){
-        window.location = url;
-      }
-    });
+    this.dashboards.show(new DashboardsView({
+      model: this.model,
+      collection: this.model.get('dashboards')
+    }));
+
   },
 
   //--------------------------------------

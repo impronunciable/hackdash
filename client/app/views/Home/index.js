@@ -1,6 +1,5 @@
 
 var template = require("./templates/home.hbs")
-  , Dashboards = require("../../models/Dashboards")
   , TabContent = require("./TabContent")
   , LoginView = require("../Login")
   , StatsView = require("./Stats")

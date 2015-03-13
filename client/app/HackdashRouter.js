@@ -5,9 +5,7 @@
 var Dashboard = require("./models/Dashboard")
   , Project = require("./models/Project")
   , Projects = require("./models/Projects")
-//  , Dashboards = require("./models/Dashboards")
   , Collection = require("./models/Collection")
-//  , Collections = require("./models/Collections")
   , Profile = require("./models/Profile")
 
   , Header = require("./views/Header")
@@ -19,8 +17,7 @@ var Dashboard = require("./models/Dashboard")
   , ProjectFullView = require("./views/Project/Full")
   , ProjectEditView = require("./views/Project/Edit")
   , DashboardView = require("./views/Dashboard")
-  , DashboardsView = require("./views/Dashboard/Collection")
-//  , CollectionsView = require("./views/Collection/Collection")
+  , CollectionView = require("./views/Collection")
   ;
 
 module.exports = Backbone.Marionette.AppRouter.extend({
@@ -213,9 +210,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
           model: app.collection
         }));
 
-        app.main.show(new DashboardsView({
-          hideAdd: true,
-          collection: app.collection.get("dashboards")
+        app.main.show(new CollectionView({
+          model: app.collection
         }));
       });
   },
