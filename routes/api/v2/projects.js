@@ -292,11 +292,18 @@ var setQuery = function(req, res, next){
 };
 
 var setProjects = function(req, res, next){
+
+  var limit = 30;
+
+  if (req.query && req.query.hasOwnProperty('domain')){
+    limit = 0;
+  }
+
   Project.find(req.query || {})
     .populate('leader')
     .populate('contributors')
     .populate('followers')
-    .limit(30)
+    .limit(limit)
     .sort( { "created_at" : -1 } )
     .exec(function(err, projects) {
       if(err) return res.send(500);
