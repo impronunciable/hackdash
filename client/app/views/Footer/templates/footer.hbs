@@ -1,20 +1,22 @@
 
-<a class="brand">
+<a class="brand {{#if isDashboard}}dashboard-footer{{/if}}">
   <div class="logo"></div>
   <h3>hackdash.org</h3>
 </a>
 
-{{#if isAdmin}}
-<div class="footer-toggle-ctn">
-  <a class="tooltips btn dashboard-btn {{#if open}}dash-open{{else}}dash-close{{/if}} pull-right"
-    data-placement="top" data-original-title="{{switcherMsg}}">
-    {{#if open}}Close Dashboard{{else}}Open Dashboard{{/if}}
-  </a>
+{{#if isDashboard}}
+  {{#if isAdmin}}
+  <div class="footer-toggle-ctn">
+    <a class="tooltips btn dashboard-btn {{#if open}}dash-open{{else}}dash-close{{/if}} pull-right"
+      data-placement="top" data-original-title="{{switcherMsg}}">
+      {{#if open}}Close Dashboard{{else}}Open Dashboard{{/if}}
+    </a>
 
-  <a class="btn pull-right" href="/api/v2/dashboards/{{domain}}/csv" target="_blank" data-bypass>Export CSV</a>
-  <a class="btn pull-right embed-btn">Embed code</a>
-  <a class="btn btn-large pull-right btn-showcase-mode">Edit Showcase</a>
-</div>
+    <a class="btn pull-right" href="/api/v2/dashboards/{{domain}}/csv" target="_blank" data-bypass>Export CSV</a>
+    <a class="btn pull-right embed-btn">Embed code</a>
+    <a class="btn btn-large pull-right btn-showcase-mode">Edit Showcase</a>
+  </div>
+  {{/if}}
 {{/if}}
 
 <a class="up-button">

@@ -159,6 +159,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     app.main.show(new ProjectEditView({
       model: app.project
     }));
+
+    app.footer.show(new Footer({
+      model: app.dashboard
+    }));
   },
 
   showProjectEdit: function(pid){
@@ -176,6 +180,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
         model: app.project
       }));
     });
+
+    app.footer.show(new Footer({
+      model: app.dashboard
+    }));
   },
 
   showProjectFull: function(pid){
@@ -193,6 +201,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
         model: app.project
       }));
     });
+
+    app.footer.show(new Footer({
+      model: app.dashboard
+    }));
   },
 
   showCollection: function(collectionId) {
@@ -212,6 +224,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
         app.main.show(new CollectionView({
           model: app.collection
+        }));
+
+        app.footer.show(new Footer({
+          model: app.dashboard
         }));
       });
   },
@@ -240,6 +256,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
     app.main.show(new ProfileView({
       model: app.profile
+    }));
+
+    app.footer.show(new Footer({
+      model: app.dashboard
     }));
   },
 

@@ -42,9 +42,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   events: {
     "click @ui.contribute": "onContribute",
     "click @ui.follow": "onFollow",
-
     "click .remove a": "onRemove",
-    //"click .edit a": "onEdit",
   },
 
   modelEvents: {
@@ -89,7 +87,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   onRemove: function(){
     if (window.confirm("This project is going to be deleted. Are you sure?")){
+      var domain = this.model.get('domain');
       this.model.destroy();
+
+      hackdash.app.router.navigate("/dashboards/" + domain, {
+        trigger: true,
+        replace: true
+      });
     }
   },
 

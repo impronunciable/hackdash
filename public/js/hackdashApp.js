@@ -215,6 +215,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     app.main.show(new ProjectEditView({
       model: app.project
     }));
+
+    app.footer.show(new Footer({
+      model: app.dashboard
+    }));
   },
 
   showProjectEdit: function(pid){
@@ -232,6 +236,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
         model: app.project
       }));
     });
+
+    app.footer.show(new Footer({
+      model: app.dashboard
+    }));
   },
 
   showProjectFull: function(pid){
@@ -249,6 +257,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
         model: app.project
       }));
     });
+
+    app.footer.show(new Footer({
+      model: app.dashboard
+    }));
   },
 
   showCollection: function(collectionId) {
@@ -268,6 +280,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
         app.main.show(new CollectionView({
           model: app.collection
+        }));
+
+        app.footer.show(new Footer({
+          model: app.dashboard
         }));
       });
   },
@@ -296,6 +312,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
     app.main.show(new ProfileView({
       model: app.profile
+    }));
+
+    app.footer.show(new Footer({
+      model: app.dashboard
     }));
   },
 
@@ -1956,7 +1976,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
 var
     template = require('./templates/footer.hbs')
-  , Embed = require('./Embed');
+  , Embed = require('./Embed')
+  , Dashboard = require('../../models/Dashboard');
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
@@ -1984,6 +2005,9 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     isAdmin: function(){
       var user = hackdash.user;
       return user && user.admin_in.indexOf(this.domain) >= 0 || false;
+    },
+    isDashboard: function(){
+      return (hackdash.app.type === "dashboard");
     }
   },
 
@@ -1997,18 +2021,29 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   onRender: function(){
     $('.tooltips', this.$el).tooltip({});
+/*
+    if (hackdash.app.type !== "dashboard"){
+      this.$el.addClass('unlocked');
+    }
+*/
   },
 
   serializeData: function(){
-    var msg = "This Dashboard is open: click to close";
 
-    if (!this.model.get("open")) {
-      msg = "This Dashboard is closed: click to reopen";
+    if (this.model && this.model instanceof Dashboard){
+
+      var msg = "This Dashboard is open: click to close";
+
+      if (!this.model.get("open")) {
+        msg = "This Dashboard is closed: click to reopen";
+      }
+
+      return _.extend({
+        switcherMsg: msg
+      }, this.model.toJSON());
     }
 
-    return _.extend({
-      switcherMsg: msg
-    }, this.model.toJSON());
+    return (this.model && this.model.toJSON()) || {};
   },
 
   //--------------------------------------
@@ -2069,7 +2104,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   }
 
 });
-},{"./Embed":36,"./templates/footer.hbs":39}],38:[function(require,module,exports){
+},{"../../models/Dashboard":11,"./Embed":36,"./templates/footer.hbs":39}],38:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -2083,28 +2118,38 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<div class=\"footer-toggle-ctn\">\n  <a class=\"tooltips btn dashboard-btn ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.open : depth0), {"name":"if","hash":{},"fn":this.program(2, data),"inverse":this.program(4, data),"data":data});
+  return "dashboard-footer";
+  },"3":function(depth0,helpers,partials,data) {
+  var stack1, buffer = "";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isAdmin : depth0), {"name":"if","hash":{},"fn":this.program(4, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += " pull-right\"\n    data-placement=\"top\" data-original-title=\""
+  return buffer;
+},"4":function(depth0,helpers,partials,data) {
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "  <div class=\"footer-toggle-ctn\">\n    <a class=\"tooltips btn dashboard-btn ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.open : depth0), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.program(7, data),"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += " pull-right\"\n      data-placement=\"top\" data-original-title=\""
     + escapeExpression(((helper = (helper = helpers.switcherMsg || (depth0 != null ? depth0.switcherMsg : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"switcherMsg","hash":{},"data":data}) : helper)))
-    + "\">\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.open : depth0), {"name":"if","hash":{},"fn":this.program(6, data),"inverse":this.program(8, data),"data":data});
+    + "\">\n      ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.open : depth0), {"name":"if","hash":{},"fn":this.program(9, data),"inverse":this.program(11, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n  </a>\n\n  <a class=\"btn pull-right\" href=\"/api/v2/dashboards/"
+  return buffer + "\n    </a>\n\n    <a class=\"btn pull-right\" href=\"/api/v2/dashboards/"
     + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
-    + "/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n  <a class=\"btn pull-right embed-btn\">Embed code</a>\n  <a class=\"btn btn-large pull-right btn-showcase-mode\">Edit Showcase</a>\n</div>\n";
-},"2":function(depth0,helpers,partials,data) {
+    + "/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n    <a class=\"btn pull-right embed-btn\">Embed code</a>\n    <a class=\"btn btn-large pull-right btn-showcase-mode\">Edit Showcase</a>\n  </div>\n";
+},"5":function(depth0,helpers,partials,data) {
   return "dash-open";
-  },"4":function(depth0,helpers,partials,data) {
+  },"7":function(depth0,helpers,partials,data) {
   return "dash-close";
-  },"6":function(depth0,helpers,partials,data) {
+  },"9":function(depth0,helpers,partials,data) {
   return "Close Dashboard";
-  },"8":function(depth0,helpers,partials,data) {
+  },"11":function(depth0,helpers,partials,data) {
   return "Open Dashboard";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "\n<a class=\"brand\">\n  <div class=\"logo\"></div>\n  <h3>hackdash.org</h3>\n</a>\n\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isAdmin : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
+  var stack1, buffer = "\n<a class=\"brand ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isDashboard : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\">\n  <div class=\"logo\"></div>\n  <h3>hackdash.org</h3>\n</a>\n\n";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isDashboard : depth0), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n<a class=\"up-button\">\n  <i class=\"fa fa-long-arrow-up\"></i>\n  <span>up</span>\n</a>";
 },"useData":true});
@@ -2230,12 +2275,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   template: template,
 
   regions: {
-    "search": ".search-ctn",
-    "page": ".page-ctn"
-  },
-
-  ui: {
-    pageTitle: ".page-title"
+    "search": ".search-ctn"
   },
 
   modelEvents: {
@@ -2259,23 +2299,16 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
 
   onRender: function(){
-    var type = window.hackdash.app.type;
 
-    var self = this;
-    function showSearch(placeholder){
-      self.search.show(new Search({
-        showSort: type === "dashboard",
-        placeholder: placeholder,
-        collection: self.collection
-      }));
-    }
-
-    switch(type){
+    switch(hackdash.app.type){
 
       case "dashboard":
-        showSearch();
+        this.search.show(new Search({
+          showSort: true,
+          placeholder: "Enter your keywords",
+          collection: this.collection
+        }));
         break;
-
     }
 
     $('.tooltips', this.$el).tooltip({});
@@ -2319,7 +2352,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   if (stack1 != null) { buffer += stack1; }
   return buffer + "  </div>\n\n  <a class=\"logo\" href=\""
     + escapeExpression(((helper = (helper = helpers.hackdashURL || (depth0 != null ? depth0.hackdashURL : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"hackdashURL","hash":{},"data":data}) : helper)))
-    + "\" data-bypass></a>\n\n  <div class=\"page-ctn\"></div>\n  <h1 class=\"page-title\"></h1>\n\n</div>\n";
+    + "\" data-bypass></a>\n\n</div>\n";
 },"useData":true});
 
 },{"hbsfy/runtime":93}],43:[function(require,module,exports){
@@ -4471,9 +4504,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   events: {
     "click @ui.contribute": "onContribute",
     "click @ui.follow": "onFollow",
-
     "click .remove a": "onRemove",
-    //"click .edit a": "onEdit",
   },
 
   modelEvents: {
@@ -4518,7 +4549,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   onRemove: function(){
     if (window.confirm("This project is going to be deleted. Are you sure?")){
+      var domain = this.model.get('domain');
       this.model.destroy();
+
+      hackdash.app.router.navigate("/dashboards/" + domain, {
+        trigger: true,
+        replace: true
+      });
     }
   },
 
@@ -4665,7 +4702,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer + "\n    </div>\n";
 },"12":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "      <div class=\"pull-right remove\">\n        <a class=\"btn btn-primary remove\">Remove</a>\n      </div>\n      <div class=\"pull-right edit\">\n        <a class=\"btn btn-primary edit\" href=\"/projects/"
+  return "      <div class=\"pull-right remove\">\n        <a class=\"btn btn-danger\">Remove</a>\n      </div>\n      <div class=\"pull-right edit\">\n        <a class=\"btn btn-success\" href=\"/projects/"
     + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
     + "/edit\">Edit</a>\n      </div>\n";
 },"14":function(depth0,helpers,partials,data) {

@@ -1,7 +1,8 @@
 
 var
     template = require('./templates/footer.hbs')
-  , Embed = require('./Embed');
+  , Embed = require('./Embed')
+  , Dashboard = require('../../models/Dashboard');
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
@@ -29,6 +30,9 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     isAdmin: function(){
       var user = hackdash.user;
       return user && user.admin_in.indexOf(this.domain) >= 0 || false;
+    },
+    isDashboard: function(){
+      return (hackdash.app.type === "dashboard");
     }
   },
 
@@ -42,18 +46,29 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   onRender: function(){
     $('.tooltips', this.$el).tooltip({});
+/*
+    if (hackdash.app.type !== "dashboard"){
+      this.$el.addClass('unlocked');
+    }
+*/
   },
 
   serializeData: function(){
-    var msg = "This Dashboard is open: click to close";
 
-    if (!this.model.get("open")) {
-      msg = "This Dashboard is closed: click to reopen";
+    if (this.model && this.model instanceof Dashboard){
+
+      var msg = "This Dashboard is open: click to close";
+
+      if (!this.model.get("open")) {
+        msg = "This Dashboard is closed: click to reopen";
+      }
+
+      return _.extend({
+        switcherMsg: msg
+      }, this.model.toJSON());
     }
 
-    return _.extend({
-      switcherMsg: msg
-    }, this.model.toJSON());
+    return (this.model && this.model.toJSON()) || {};
   },
 
   //--------------------------------------

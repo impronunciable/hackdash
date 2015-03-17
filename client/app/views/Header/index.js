@@ -12,12 +12,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   template: template,
 
   regions: {
-    "search": ".search-ctn",
-    "page": ".page-ctn"
-  },
-
-  ui: {
-    pageTitle: ".page-title"
+    "search": ".search-ctn"
   },
 
   modelEvents: {
@@ -41,23 +36,16 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
 
   onRender: function(){
-    var type = window.hackdash.app.type;
 
-    var self = this;
-    function showSearch(placeholder){
-      self.search.show(new Search({
-        showSort: type === "dashboard",
-        placeholder: placeholder,
-        collection: self.collection
-      }));
-    }
-
-    switch(type){
+    switch(hackdash.app.type){
 
       case "dashboard":
-        showSearch();
+        this.search.show(new Search({
+          showSort: true,
+          placeholder: "Enter your keywords",
+          collection: this.collection
+        }));
         break;
-
     }
 
     $('.tooltips', this.$el).tooltip({});

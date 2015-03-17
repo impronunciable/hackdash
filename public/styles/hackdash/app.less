@@ -65,22 +65,36 @@
 }
 
 footer {
-  position: fixed;
-  z-index: 100;
-  bottom: 0;
-  left: 0;
-  width: 100%;
 
   .footer {
-    position: relative;
+    background-color: @color-blackB;
+
+    z-index: 100;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    position: fixed;
+
+    &.unlocked {
+      position: relative;
+    }
 
     .brand {
-      position: absolute;
-      top: 0;
-      left: 0;
 
-      margin: 10px auto;
-      margin-left: 2%;
+      margin: 0px auto;
+      padding-top: 15px;
+
+      &.dashboard-footer {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        margin: 10px auto;
+        margin-left: 2%;
+        padding-top: 0;
+      }
+
     }
 
     .up-button {
@@ -90,6 +104,7 @@ footer {
 
       .fa {
         font-size: @fsize-32;
+        margin: 10px auto 10px auto;
       }
     }
 
@@ -102,6 +117,7 @@ footer {
 }
 
 .page-ctn {
+  padding-bottom: 50px;
 
   .container {
     max-width: 900px;
