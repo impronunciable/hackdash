@@ -20,15 +20,19 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   // Overrided method by an Entity
-  getURL: function(){ return "#"; },
+  getURL: function(){ return false; },
   afterRender: function(){ },
 
   onRender: function(){
 
-    this.$el.attr({
-      'href': this.getURL(),
-      'data-bypass': true
-    });
+    var url = this.getURL();
+
+    if (url !== false){
+      this.$el.attr({
+        'href': url,
+        'data-bypass': true
+      });
+    }
 
     $('.tooltips', this.$el).tooltip({});
 

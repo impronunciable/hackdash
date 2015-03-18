@@ -15,11 +15,20 @@ module.exports = ItemView.extend({
   className: 'entity project',
   template: template,
 
+  ui: {
+    "switcher": ".switcher input"
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
   getURL: function(){
+
+    if (this.isShowcaseMode()){
+      return false;
+    }
+
     return "/projects/" + this.model.get("_id");
   },
 
@@ -36,6 +45,16 @@ module.exports = ItemView.extend({
     else {
       this.$el.removeClass('filter-active');
     }
+
+    this.initSwitcher();
+  },
+
+  serializeData: function(){
+    return _.extend({
+      isShowcaseMode: this.isShowcaseMode(),
+      contributing: this.model.isContributor(),
+      following: this.model.isFollower()
+    }, this.model.toJSON());
   },
 
   //--------------------------------------
@@ -46,8 +65,28 @@ module.exports = ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
+  initSwitcher: function(){
+    var self = this;
+
+    if (this.ui.switcher.length > 0){
+      this.ui.switcher
+        .bootstrapSwitch({
+          size: 'mini',
+          onColor: 'success',
+          offColor: 'danger',
+          onSwitchChange: function(event, state){
+            self.model.set("active", state);
+          }
+        });
+    }
+  },
+
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
+
+  isShowcaseMode: function(){
+    return hackdash.app.dashboard && hackdash.app.dashboard.isShowcaseMode;
+  }
 
 });

@@ -14,8 +14,8 @@ module.exports = function(grunt) {
         root: "app/"
       },
       vendor: {
-        js: "vendor/scriptsV2/",
-        css: "vendor/stylesV2/"
+        js: "vendor/scripts/",
+        css: "vendor/styles/"
       },
       dist: {
         root: "dist/",

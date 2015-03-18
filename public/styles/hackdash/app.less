@@ -69,7 +69,7 @@ footer {
   .footer {
     background-color: @color-blackB;
 
-    z-index: 100;
+    z-index: 999;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -700,6 +700,19 @@ footer {
 
         margin-bottom: 30px;
         padding: 10px 10px 10px 0;
+      }
+    }
+  }
+
+  &.dashboard {
+
+    .body {
+
+      .inactive-ctn {
+        .entities {
+          border-top: 2px dashed gray;
+          margin-top: 20px;
+        }
       }
     }
   }

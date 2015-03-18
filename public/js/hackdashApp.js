@@ -2618,15 +2618,19 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   // Overrided method by an Entity
-  getURL: function(){ return "#"; },
+  getURL: function(){ return false; },
   afterRender: function(){ },
 
   onRender: function(){
 
-    this.$el.attr({
-      'href': this.getURL(),
-      'data-bypass': true
-    });
+    var url = this.getURL();
+
+    if (url !== false){
+      this.$el.attr({
+        'href': url,
+        'data-bypass': true
+      });
+    }
 
     $('.tooltips', this.$el).tooltip({});
 
@@ -3987,11 +3991,20 @@ module.exports = ItemView.extend({
   className: 'entity project',
   template: template,
 
+  ui: {
+    "switcher": ".switcher input"
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
   getURL: function(){
+
+    if (this.isShowcaseMode()){
+      return false;
+    }
+
     return "/projects/" + this.model.get("_id");
   },
 
@@ -4008,6 +4021,16 @@ module.exports = ItemView.extend({
     else {
       this.$el.removeClass('filter-active');
     }
+
+    this.initSwitcher();
+  },
+
+  serializeData: function(){
+    return _.extend({
+      isShowcaseMode: this.isShowcaseMode(),
+      contributing: this.model.isContributor(),
+      following: this.model.isFollower()
+    }, this.model.toJSON());
   },
 
   //--------------------------------------
@@ -4018,9 +4041,29 @@ module.exports = ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
+  initSwitcher: function(){
+    var self = this;
+
+    if (this.ui.switcher.length > 0){
+      this.ui.switcher
+        .bootstrapSwitch({
+          size: 'mini',
+          onColor: 'success',
+          offColor: 'danger',
+          onSwitchChange: function(event, state){
+            self.model.set("active", state);
+          }
+        });
+    }
+  },
+
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
+
+  isShowcaseMode: function(){
+    return hackdash.app.dashboard && hackdash.app.dashboard.isShowcaseMode;
+  }
 
 });
 },{"../Home/Item.js":48,"./templates/card.hbs":82}],79:[function(require,module,exports){
@@ -4056,37 +4099,40 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   initialize: function(options){
     this.showcaseMode = (options && options.showcaseMode) || false;
     this.showcaseSort = (options && options.showcaseSort) || false;
+
+    //window.showSort = this.updateShowcaseOrder.bind(this);
   },
 
   onRender: function(){
+    _.defer(this.onEndRender.bind(this));
+  },
 
-    var self = this;
-    _.defer(function(){
-      self.updateGrid();
-      self.refresh();
-      self.sortByDate();
-    });
-
-/*
-    var self = this;
-    _.defer(function(){
-      if (self.showcaseSort) {
-        self.updateIsotope("showcase", ".filter-active");
-      }
-      else {
-        self.updateIsotope();
-      }
-
-      if (self.showcaseMode){
-        self.startSortable();
-      }
-    });
-*/
+  onEndRender: function(){
+    this.updateGrid();
+    this.refresh();
   },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
+
+  updateShowcaseOrder: function(){
+    var showcase = [];
+
+    $('.entity', this.$el).sort(function (a, b) {
+
+      var av = ( isNaN(+a.dataset.showcase) ? +a.dataset.delay : +a.dataset.showcase +1);
+      var bv = ( isNaN(+b.dataset.showcase) ? +b.dataset.delay : +b.dataset.showcase +1);
+
+      return av - bv;
+    }).each(function(i, e){
+      console.log (i + ' > ' + e.dataset.name);
+    });
+
+
+    return showcase;
+  },
+
 /*
   updateShowcaseOrder: function(){
     var itemElems = this.pckry.getItemElements();
@@ -4118,43 +4164,25 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   sortByName: function(){
     this.wall.sortBy(function(a, b) {
       return $(a).attr('data-name') > $(b).attr('data-name');
-    });
+    }).filter('*');
 
     this.fixSize();
-
-    /*
-    this.$el
-      .isotope({"filter": ""})
-      .isotope({"sortBy": "name"});
-    */
   },
 
   sortByDate: function(){
     this.wall.sortBy(function(a, b) {
       return $(a).attr('data-date') < $(b).attr('data-date');
-    });
+    }).filter('*');
 
     this.fixSize();
-
-    /*
-    this.$el
-      .isotope({"filter": ""})
-      .isotope({"sortBy": "date"});
-    */
   },
 
   sortByShowcase: function(){
     this.wall.sortBy(function(a, b) {
       return $(a).attr('data-showcase') - $(b).attr('data-showcase');
-    });
+    }).filter('.filter-active');
 
     this.fixSize();
-
-    /*
-    this.$el
-      .isotope({"filter": ".filter-active"})
-      .isotope({"sortBy": "showcase"});
-    */
   },
 
   //--------------------------------------
@@ -4162,18 +4190,46 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
 
   updateGrid: function(){
+    var self = this;
+
     if (!this.wall){
       this.wall = new window.freewall(this.$el);
     }
 
     this.wall.reset({
+      draggable: this.showcaseMode,
+      keepOrder: false,
       selector: '.entity',
       cellW: 200,
       cellH: 200,
       gutterY: this.gutter,
       gutterX: this.gutter,
-      onResize: this.refresh.bind(this)
+      onResize: this.refresh.bind(this),
+      onComplete: function(/*lastItem, lastBlock, setting*/) { },
+      onBlockDrop: function() {
+
+        var cols = self.$el.attr('data-total-col');
+        var pos = $(this).attr('data-position');
+        var ps = pos.split('-');
+
+        var row = parseInt(ps[0],10);
+        var showcase = ((row*cols) + parseInt(ps[1],10));
+
+        $(this).attr('data-showcase', showcase+1);
+        console.log(showcase+1);
+        self.model.isDirty = true;
+
+        self.updateShowcaseOrder();
+      }
     });
+
+    if (this.showcaseMode){
+      this.$el.addClass("showcase");
+      this.sortByShowcase();
+      return;
+    }
+
+    this.sortByDate();
 
   },
 
@@ -4584,8 +4640,20 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "\" data-bypass>\n      "
     + escapeExpression(((helpers.getProfileImage || (depth0 && depth0.getProfileImage) || helperMissing).call(depth0, depth0, {"name":"getProfileImage","hash":{},"data":data})))
     + "\n    </a>\n  </li>\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, lambda=this.lambda, buffer = "\n<div class=\"progress\" title=\""
+},"7":function(depth0,helpers,partials,data) {
+  var stack1, buffer = "";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isShowcaseMode : depth0), {"name":"if","hash":{},"fn":this.program(8, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer;
+},"8":function(depth0,helpers,partials,data) {
+  var stack1, buffer = "\n  <div class=\"switcher tooltips\" data-placement=\"top\" data-original-title=\"Toggle visibility\">\n    <input type=\"checkbox\" ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.active : depth0), {"name":"if","hash":{},"fn":this.program(9, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + " class=\"switch-small\">\n  </div>\n\n";
+},"9":function(depth0,helpers,partials,data) {
+  return "checked";
+  },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, lambda=this.lambda, blockHelperMissing=helpers.blockHelperMissing, buffer = "\n<div class=\"progress\" title=\""
     + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
     + "\">\n  <div class=\""
     + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
@@ -4599,11 +4667,15 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "</h3>\n  </div>\n</div>\n\n<ul class=\"contributors\">\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.contributors : depth0), {"name":"each","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "</ul>\n\n<div class=\"action-bar text-center\">\n  <i class=\"fa fa-clock-o timer\" title=\""
+  buffer += "</ul>\n\n<div class=\"action-bar text-center\">\n  <i class=\"fa fa-clock-o timer\" title=\""
     + escapeExpression(((helpers.timeAgo || (depth0 && depth0.timeAgo) || helperMissing).call(depth0, (depth0 != null ? depth0.created_at : depth0), {"name":"timeAgo","hash":{},"data":data})))
     + "\"></i>\n  <span>Likes "
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.followers : depth0)) != null ? stack1.length : stack1), depth0))
-    + "</span>\n  <!--<a>Join</a>\n  <a>Demo</a>\n  <a>Share</a>-->\n</div>";
+    + "</span>\n  <!--<a>Join</a>\n  <a>Demo</a>\n  <a>Share</a>-->\n</div>\n\n";
+  stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
+  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+  if (stack1 != null) { buffer += stack1; }
+  return buffer;
 },"useData":true});
 
 },{"hbsfy/runtime":93}],83:[function(require,module,exports){
