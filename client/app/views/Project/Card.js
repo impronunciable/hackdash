@@ -34,7 +34,8 @@ module.exports = ItemView.extend({
 
   afterRender: function(){
     this.$el.attr({
-        "data-name": this.model.get("title")
+        "data-id": this.model.get("_id")
+      , "data-name": this.model.get("title")
       , "data-date": this.model.get("created_at")
       , "data-showcase": this.model.get("showcase")
     });

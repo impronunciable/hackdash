@@ -105,7 +105,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   },
 
   onSaveEditShowcase: function(){
-    var showcase = this.dashboard.currentView.updateShowcaseOrder();
+    var showcase = this.projects.currentView.updateShowcaseOrder();
     this.model.save({ "showcase": showcase });
 
     this.model.isDirty = false;

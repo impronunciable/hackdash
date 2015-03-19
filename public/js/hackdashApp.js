@@ -1779,7 +1779,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   },
 
   onSaveEditShowcase: function(){
-    var showcase = this.dashboard.currentView.updateShowcaseOrder();
+    var showcase = this.projects.currentView.updateShowcaseOrder();
     this.model.save({ "showcase": showcase });
 
     this.model.isDirty = false;
@@ -2125,17 +2125,17 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   if (stack1 != null) { buffer += stack1; }
   return buffer;
 },"4":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "  <div class=\"footer-toggle-ctn\">\n    <a class=\"tooltips btn dashboard-btn ";
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "  <div class=\"footer-dash-ctn\">\n    <div class=\"footer-toggle-ctn\">\n      <a class=\"tooltips btn dashboard-btn ";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.open : depth0), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.program(7, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += " pull-right\"\n      data-placement=\"top\" data-original-title=\""
+  buffer += " pull-right\"\n        data-placement=\"top\" data-original-title=\""
     + escapeExpression(((helper = (helper = helpers.switcherMsg || (depth0 != null ? depth0.switcherMsg : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"switcherMsg","hash":{},"data":data}) : helper)))
-    + "\">\n      ";
+    + "\">\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.open : depth0), {"name":"if","hash":{},"fn":this.program(9, data),"inverse":this.program(11, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n    </a>\n\n    <a class=\"btn pull-right\" href=\"/api/v2/dashboards/"
+  return buffer + "\n      </a>\n\n      <a class=\"btn pull-right\" href=\"/api/v2/dashboards/"
     + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
-    + "/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n    <a class=\"btn pull-right embed-btn\">Embed code</a>\n    <a class=\"btn btn-large pull-right btn-showcase-mode\">Edit Showcase</a>\n  </div>\n";
+    + "/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n      <a class=\"btn pull-right embed-btn\">Embed code</a>\n    </div>\n    <a class=\"btn btn-large pull-right btn-showcase-mode\">Edit Showcase</a>\n  </div>\n";
 },"5":function(depth0,helpers,partials,data) {
   return "dash-open";
   },"7":function(depth0,helpers,partials,data) {
@@ -4010,7 +4010,8 @@ module.exports = ItemView.extend({
 
   afterRender: function(){
     this.$el.attr({
-        "data-name": this.model.get("title")
+        "data-id": this.model.get("_id")
+      , "data-name": this.model.get("title")
       , "data-date": this.model.get("created_at")
       , "data-showcase": this.model.get("showcase")
     });
@@ -4099,8 +4100,6 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   initialize: function(options){
     this.showcaseMode = (options && options.showcaseMode) || false;
     this.showcaseSort = (options && options.showcaseSort) || false;
-
-    //window.showSort = this.updateShowcaseOrder.bind(this);
   },
 
   onRender: function(){
@@ -4126,37 +4125,12 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
       return av - bv;
     }).each(function(i, e){
-      console.log (i + ' > ' + e.dataset.name);
+      showcase.push(e.dataset.id);
     });
 
-
     return showcase;
   },
 
-/*
-  updateShowcaseOrder: function(){
-    var itemElems = this.pckry.getItemElements();
-    var showcase = [];
-
-    for ( var i=0, len = itemElems.length; i < len; i++ ) {
-      var elem = itemElems[i];
-      $(elem).data('showcase', i);
-
-      var found = this.collection.where({ _id: elem.id, active: true });
-      if (found.length > 0){
-        found[0].set({
-          "showcase": i
-        }, { silent: true });
-      }
-
-      showcase.push(elem.id);
-    }
-
-    this.pckry.destroy();
-
-    return showcase;
-  },
-*/
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
@@ -4216,10 +4190,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
         var showcase = ((row*cols) + parseInt(ps[1],10));
 
         $(this).attr('data-showcase', showcase+1);
-        console.log(showcase+1);
         self.model.isDirty = true;
-
-        self.updateShowcaseOrder();
       }
     });
 
@@ -4243,67 +4214,6 @@ module.exports = Backbone.Marionette.CollectionView.extend({
     this.$el.height(this.$el.height() + this.gutter*4);
   },
 
-/*
-  isotopeInitialized: false,
-  updateIsotope: function(sortType, filterType){
-    var $projects = this.$el;
-
-    if (this.isotopeInitialized){
-      $projects.isotope("destroy");
-    }
-
-    $projects.isotope({
-        itemSelector: ".project"
-      , animationEngine: "jquery"
-      , resizable: true
-      , sortAscending: true
-      , cellsByColumn: this.gridSize
-      , getSortData : {
-          "name" : function ( $elem ) {
-            var name = $($elem).data("name");
-            return name && name.toLowerCase() || "";
-          },
-          "date" : function ( $elem ) {
-            return $($elem).data("date");
-          },
-          "showcase" : function ( $elem ) {
-            var showcase = $($elem).data("showcase");
-            return (showcase && window.parseInt(showcase)) || 0;
-          },
-        }
-      , sortBy: sortType || "name"
-      , filter: filterType || ""
-    });
-
-    this.isotopeInitialized = true;
-  },
-
-  startSortable: function(){
-    var $projects = this.$el;
-
-    $projects.addClass("showcase");
-    this.sortByShowcase();
-
-    if (this.pckry){
-      this.pckry.destroy();
-    }
-
-    this.pckry = new Packery( $projects[0], this.gridSize);
-
-    var itemElems = this.pckry.getItemElements();
-
-    for ( var i=0, len = itemElems.length; i < len; i++ ) {
-      var elem = itemElems[i];
-      var draggie = new Draggabilly( elem );
-      this.pckry.bindDraggabillyEvents( draggie );
-    }
-
-    var self = this;
-    this.pckry.on( 'dragItemPositioned', function() {
-      self.model.isDirty = true;
-    });
-  }
-*/
 });
 },{"./Card":78}],80:[function(require,module,exports){
 /**

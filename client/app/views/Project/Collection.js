@@ -30,8 +30,6 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   initialize: function(options){
     this.showcaseMode = (options && options.showcaseMode) || false;
     this.showcaseSort = (options && options.showcaseSort) || false;
-
-    //window.showSort = this.updateShowcaseOrder.bind(this);
   },
 
   onRender: function(){
@@ -57,37 +55,12 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
       return av - bv;
     }).each(function(i, e){
-      console.log (i + ' > ' + e.dataset.name);
+      showcase.push(e.dataset.id);
     });
 
-
     return showcase;
   },
 
-/*
-  updateShowcaseOrder: function(){
-    var itemElems = this.pckry.getItemElements();
-    var showcase = [];
-
-    for ( var i=0, len = itemElems.length; i < len; i++ ) {
-      var elem = itemElems[i];
-      $(elem).data('showcase', i);
-
-      var found = this.collection.where({ _id: elem.id, active: true });
-      if (found.length > 0){
-        found[0].set({
-          "showcase": i
-        }, { silent: true });
-      }
-
-      showcase.push(elem.id);
-    }
-
-    this.pckry.destroy();
-
-    return showcase;
-  },
-*/
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
@@ -147,10 +120,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
         var showcase = ((row*cols) + parseInt(ps[1],10));
 
         $(this).attr('data-showcase', showcase+1);
-        console.log(showcase+1);
         self.model.isDirty = true;
-
-        self.updateShowcaseOrder();
       }
     });
 
@@ -174,65 +144,4 @@ module.exports = Backbone.Marionette.CollectionView.extend({
     this.$el.height(this.$el.height() + this.gutter*4);
   },
 
-/*
-  isotopeInitialized: false,
-  updateIsotope: function(sortType, filterType){
-    var $projects = this.$el;
-
-    if (this.isotopeInitialized){
-      $projects.isotope("destroy");
-    }
-
-    $projects.isotope({
-        itemSelector: ".project"
-      , animationEngine: "jquery"
-      , resizable: true
-      , sortAscending: true
-      , cellsByColumn: this.gridSize
-      , getSortData : {
-          "name" : function ( $elem ) {
-            var name = $($elem).data("name");
-            return name && name.toLowerCase() || "";
-          },
-          "date" : function ( $elem ) {
-            return $($elem).data("date");
-          },
-          "showcase" : function ( $elem ) {
-            var showcase = $($elem).data("showcase");
-            return (showcase && window.parseInt(showcase)) || 0;
-          },
-        }
-      , sortBy: sortType || "name"
-      , filter: filterType || ""
-    });
-
-    this.isotopeInitialized = true;
-  },
-
-  startSortable: function(){
-    var $projects = this.$el;
-
-    $projects.addClass("showcase");
-    this.sortByShowcase();
-
-    if (this.pckry){
-      this.pckry.destroy();
-    }
-
-    this.pckry = new Packery( $projects[0], this.gridSize);
-
-    var itemElems = this.pckry.getItemElements();
-
-    for ( var i=0, len = itemElems.length; i < len; i++ ) {
-      var elem = itemElems[i];
-      var draggie = new Draggabilly( elem );
-      this.pckry.bindDraggabillyEvents( draggie );
-    }
-
-    var self = this;
-    this.pckry.on( 'dragItemPositioned', function() {
-      self.model.isDirty = true;
-    });
-  }
-*/
 });
