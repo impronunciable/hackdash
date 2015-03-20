@@ -14,6 +14,31 @@
   <div class="bg-body-entity"></div>
   <div class="container">
 
+    {{#unless _id}}
+    <div id="ghImportHolder" class="hidden-xs">
+
+      <div class="project-link">
+        <a id="ghImportBtn" >
+          <label>Import Project</label>
+          <div>
+            <i class="fa fa-github"></i>
+            <span class="github">GitHub</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="gh-import input-group col-md-4 hide">
+        <input id="txt-repo" type="text" class="form-control" placeholder="username / repository">
+        <span class="input-group-btn">
+          <button id="searchGh" class="btn btn-blue" type="button" data-loading-text="LOADING">
+            import
+          </button>
+        </span>
+      </div>
+
+    </div>
+    {{/unless}}
+
     <div class="col-md-4">
 
       <div class="cover">

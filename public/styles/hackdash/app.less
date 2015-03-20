@@ -464,7 +464,49 @@ footer {
             background-color: @color-white;
             padding: 12px 20px;
           }
+        }
 
+        #ghImportBtn {
+          border-radius: 3px;
+          padding: 7px 15px;
+          cursor: pointer;
+
+          label {
+            display: block;
+            text-transform: none;
+            font-size: 10px;
+            cursor: pointer;
+          }
+
+          .fa {
+            font-size: @fsize-20;
+            cursor: pointer;
+          }
+
+          .github {
+            cursor: pointer;
+            font-family: sans-serif;
+            text-transform: none;
+            font-size: 16px;
+            font-weight: bold;
+          }
+        }
+
+        .gh-import {
+          position: absolute;
+          right: 20px;
+          top: 10px;
+          z-index: 10;
+
+          .input-group-btn {
+            font-size: inherit;
+
+            .btn {
+              height: 44px;
+              padding-top: 5px;
+              z-index: 2;
+            }
+          }
         }
 
         .cover {

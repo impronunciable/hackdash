@@ -3,18 +3,19 @@
 
   <div class="pull-left col-xs-6 col-md-4 search-ctn"></div>
 
-  <div class="pull-right btn-group">
+  <div class="pull-right col-xs-6 col-md-4 my-profile">
     {{#isLoggedIn}}
-    <a class="btn-profile" href="/users/profile">
-      <img class="avatar tooltips" src="{{user "picture"}}" rel="tooltip" data-placement="bottom" data-original-title="Edit profile">
-
-      {{#isDashboardView}}
-        {{#if isDashboardAdmin}}
-        <span class="admin-label">Admin</span>
-        {{/if}}
-      {{/isDashboardView}}
-    </a>
-    <a class="btn logout" href="/logout" data-bypass>Logout</a>
+    <div class="pull-right col-xs-3 col-md-3">
+      <a class="btn-profile" href="/users/profile">
+        {{getMyProfileImageHex}}
+      </a>
+    </div>
+    <div class="pull-right col-xs-6 col-md-6 text-right">
+      <div class="salute">How is going
+        <span>{{user 'name'}}?<span>
+      </div>
+      <a class="logout" href="/logout" data-bypass>LogOut?</a>
+    </div>
     {{/isLoggedIn}}
   </div>
 

@@ -23,7 +23,8 @@
 
 .btn,
 .btn-default,
-.btn-primary {
+.btn-primary,
+.btn-blue {
   color: @color-whiteB;
   font-size: @fsize-20;
   font-family: @secondary-font;
@@ -40,6 +41,10 @@
 
 .btn-primary {
   background-color: @color-action;
+}
+
+.btn-blue {
+  background-color: @color-project;
 }
 
 body {
@@ -82,6 +87,34 @@ h6 { font-size: @fsize-12; }
   font-size: @fsize-20;
   text-transform: uppercase;
   height: 44px;
+}
+
+.my-profile {
+  margin-top: 20px;
+
+  .salute {
+    color: @color-white;
+    font-family: @secondary-font;
+    font-size: @fsize-17;
+    margin-right: 20px;
+    margin-top: 15px;
+
+    span {
+      display: block;
+      margin-right: -20px;
+    }
+  }
+
+  .logout {
+    font-family: @secondary-font;
+    font-size: @fsize-12;
+  }
+
+  .btn-profile {
+    .hexagon {
+      .getHexagon(75px, 5px, @color-white);
+    }
+  }
 }
 
 .tab-pane {
@@ -226,12 +259,12 @@ h6 { font-size: @fsize-12; }
       position: absolute;
       top: 8px;
       left: 20px;
-      font-size: 40px;
+      font-size: 50px;
 
       &.fa-meetup {
         background: url('../images/icon-meetup.png') no-repeat;
         background-size: 100%;
-        width: 40px;
+        width: 50px;
         height: 40px;
         top: 11px;
       }

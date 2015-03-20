@@ -19,7 +19,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "description": "textarea[name=description]",
     "link": "input[name=link]",
     "tags": "input[name=tags]",
-    "status": "select[name=status]",
+    "status": "select[name=status]"
   },
 
   events: {
@@ -63,14 +63,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   showGhImport: function(e){
-    $(".gh-import", this.$el).removeClass('hidden');
-    $(e.currentTarget).remove();
-
+    $(".gh-import", this.$el).removeClass('hide');
+    this.ui.description.css('margin-top', '30px');
     e.preventDefault();
   },
 
   searchRepo: function(e){
-    var repo = $("#txt-repo", this.$el).val();
+    var $repo = $("#txt-repo", this.$el),
+      $btn = $("#searchGh", this.$el),
+      repo = $repo.val();
+
+    $repo.removeClass('btn-danger');
+    $btn.button('loading');
 
     if(repo.length) {
       $.ajax({
@@ -78,7 +82,16 @@ module.exports = Backbone.Marionette.ItemView.extend({
         dataType: 'json',
         contentType: 'json',
         context: this
-      }).done(this.fillGhProjectForm);
+      })
+      .done(this.fillGhProjectForm)
+      .error(function(){
+        $repo.addClass('btn-danger');
+        $btn.button('reset');
+      });
+    }
+    else {
+      $repo.addClass('btn-danger');
+      $btn.button('reset');
     }
 
     e.preventDefault();
@@ -123,7 +136,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
-  //TODO: move to i18n
   errors: {
     "title_required": "Title is required",
     "description_required": "Description is required"
@@ -204,6 +216,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.ui.link.val(project.html_url);
     this.ui.tags.select2("data", [{id: project.language, text:project.language}]);
     this.ui.status.select2("val", "building");
+
+    $("#searchGh", this.$el).button('reset');
+    $("#txt-repo", this.$el).val('');
   }
 
 });

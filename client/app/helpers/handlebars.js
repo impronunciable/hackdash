@@ -142,7 +142,7 @@ Handlebars.registerHelper('getProfileImage', function(user) {
   return new Handlebars.SafeString(img.outerHTML);
 });
 
-Handlebars.registerHelper('getProfileImageHex', function(user) {
+function getProfileImageHex(user) {
 
   if (!user){
     return '';
@@ -174,4 +174,10 @@ Handlebars.registerHelper('getProfileImageHex', function(user) {
   div.append('<div class="hex-top"></div><div class="hex-bottom"></div>');
 
   return new Handlebars.SafeString(div[0].outerHTML);
+}
+
+Handlebars.registerHelper('getProfileImageHex', getProfileImageHex);
+
+Handlebars.registerHelper('getMyProfileImageHex', function() {
+  return getProfileImageHex(window.hackdash.user);
 });
