@@ -2084,7 +2084,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       this.model.isShowcaseMode = false;
 
       this.ui.showcaseMode
-        .text("Edit Showcase")
+        .html("<i class='btn-danger txt'>off</i><div>Edit Showcase</div>")
         .removeClass("on");
 
       this.ui.createShowcase.removeClass("hide");
@@ -2096,7 +2096,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
       this.ui.showcaseMode
         .text("Save Showcase")
-        .addClass("on");
+        .addClass("btn btn-success on");
 
       this.ui.createShowcase.addClass("hide");
       this.ui.footerToggle.addClass("hide");
@@ -2125,25 +2125,32 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   if (stack1 != null) { buffer += stack1; }
   return buffer;
 },"4":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "  <div class=\"footer-dash-ctn\">\n    <div class=\"footer-toggle-ctn\">\n      <a class=\"tooltips btn dashboard-btn ";
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "  <div class=\"footer-dash-ctn\">\n\n\n    <div class=\"footer-toggle-ctn\">\n\n      <a href=\"/api/v2/dashboards/"
+    + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
+    + "/csv\" target=\"_blank\" data-bypass>\n        <i class=\"fa fa-download\"></i>\n        <div>Export .CSV File</div>\n      </a>\n\n      <a class=\"embed-btn\">\n        <i class=\"fa fa-share-alt\"></i>\n        <div>Embed</div>\n      </a>\n\n      <a data-placement=\"top\" data-original-title=\""
+    + escapeExpression(((helper = (helper = helpers.switcherMsg || (depth0 != null ? depth0.switcherMsg : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"switcherMsg","hash":{},"data":data}) : helper)))
+    + "\"\n        class=\"tooltips dashboard-btn ";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.open : depth0), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.program(7, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += " pull-right\"\n        data-placement=\"top\" data-original-title=\""
-    + escapeExpression(((helper = (helper = helpers.switcherMsg || (depth0 != null ? depth0.switcherMsg : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"switcherMsg","hash":{},"data":data}) : helper)))
-    + "\">\n        ";
+  buffer += "\">\n        <i class=\"txt ";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.open : depth0), {"name":"if","hash":{},"fn":this.program(9, data),"inverse":this.program(11, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n      </a>\n\n      <a class=\"btn pull-right\" href=\"/api/v2/dashboards/"
-    + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
-    + "/csv\" target=\"_blank\" data-bypass>Export CSV</a>\n      <a class=\"btn pull-right embed-btn\">Embed code</a>\n    </div>\n    <a class=\"btn btn-large pull-right btn-showcase-mode\">Edit Showcase</a>\n  </div>\n";
+  buffer += "\">";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.open : depth0), {"name":"if","hash":{},"fn":this.program(13, data),"inverse":this.program(15, data),"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "</i>\n        <div>Dashboard Status</div>\n      </a>\n\n    </div>\n\n    <a class=\"btn-showcase-mode\">\n      <i class=\"btn-danger txt\">off</i><div>Edit Showcase</div>\n    </a>\n\n  </div>\n";
 },"5":function(depth0,helpers,partials,data) {
   return "dash-open";
   },"7":function(depth0,helpers,partials,data) {
   return "dash-close";
   },"9":function(depth0,helpers,partials,data) {
-  return "Close Dashboard";
+  return "btn-success";
   },"11":function(depth0,helpers,partials,data) {
-  return "Open Dashboard";
+  return "btn-danger";
+  },"13":function(depth0,helpers,partials,data) {
+  return "Open";
+  },"15":function(depth0,helpers,partials,data) {
+  return "Close";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, buffer = "\n<a class=\"brand ";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isDashboard : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
@@ -2236,19 +2243,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
         if (keyword.length > 0) {
           opts.data = $.param({ q: keyword });
 
-          hackdash.app.router.navigate(fragment + "?q=" + keyword, { trigger: true });
+          hackdash.app.router.navigate(fragment + "?q=" + keyword);
 
           self.collection.fetch(opts);
         }
         else {
-          if (hackdash.app.type === "isearch"){
-            self.collection.reset();
-          }
-          else {
-            self.collection.fetch();
-          }
-
-          hackdash.app.router.navigate(fragment, { trigger: true, replace: true });
+          hackdash.app.router.navigate(fragment);
+          self.collection.fetch();
         }
       }
 

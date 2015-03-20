@@ -7,16 +7,32 @@
 {{#if isDashboard}}
   {{#if isAdmin}}
   <div class="footer-dash-ctn">
+
+
     <div class="footer-toggle-ctn">
-      <a class="tooltips btn dashboard-btn {{#if open}}dash-open{{else}}dash-close{{/if}} pull-right"
-        data-placement="top" data-original-title="{{switcherMsg}}">
-        {{#if open}}Close Dashboard{{else}}Open Dashboard{{/if}}
+
+      <a href="/api/v2/dashboards/{{domain}}/csv" target="_blank" data-bypass>
+        <i class="fa fa-download"></i>
+        <div>Export .CSV File</div>
       </a>
 
-      <a class="btn pull-right" href="/api/v2/dashboards/{{domain}}/csv" target="_blank" data-bypass>Export CSV</a>
-      <a class="btn pull-right embed-btn">Embed code</a>
+      <a class="embed-btn">
+        <i class="fa fa-share-alt"></i>
+        <div>Embed</div>
+      </a>
+
+      <a data-placement="top" data-original-title="{{switcherMsg}}"
+        class="tooltips dashboard-btn {{#if open}}dash-open{{else}}dash-close{{/if}}">
+        <i class="txt {{#if open}}btn-success{{else}}btn-danger{{/if}}">{{#if open}}Open{{else}}Close{{/if}}</i>
+        <div>Dashboard Status</div>
+      </a>
+
     </div>
-    <a class="btn btn-large pull-right btn-showcase-mode">Edit Showcase</a>
+
+    <a class="btn-showcase-mode">
+      <i class="btn-danger txt">off</i><div>Edit Showcase</div>
+    </a>
+
   </div>
   {{/if}}
 {{/if}}

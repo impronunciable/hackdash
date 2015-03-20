@@ -111,7 +111,53 @@ footer {
     .footer-dash-ctn {
       width: 60%;
       float: right;
-      margin: 10px 15% 0 0;
+      margin: 0 10% 0 0;
+
+      a {
+        color: @color-white;
+        float: right;
+        margin: 15px 5px;
+
+        &:hover {
+          color: @color-white;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        i.txt, div {
+          font-family: @primary-font;
+          text-transform: uppercase;
+          font-weight: bold;
+          display: inline-block;
+        }
+
+        i {
+          padding: 10px;
+          font-size: @fsize-14;
+          border-radius: 3px;
+
+          &.fa {
+            background-color: @color-action;
+            padding: 13px;
+          }
+        }
+
+        div {
+          font-size: @fsize-12;
+          padding: 12px;
+          background-color: @color-blackB2;
+          margin-left: -5px;
+        }
+
+        &.btn-showcase-mode div {
+          margin-left: -2px;
+        }
+
+        &.btn-showcase-mode.on {
+          margin: 10px 5px;
+        }
+
+      }
     }
   }
 }

@@ -109,7 +109,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       this.model.isShowcaseMode = false;
 
       this.ui.showcaseMode
-        .text("Edit Showcase")
+        .html("<i class='btn-danger txt'>off</i><div>Edit Showcase</div>")
         .removeClass("on");
 
       this.ui.createShowcase.removeClass("hide");
@@ -121,7 +121,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
       this.ui.showcaseMode
         .text("Save Showcase")
-        .addClass("on");
+        .addClass("btn btn-success on");
 
       this.ui.createShowcase.addClass("hide");
       this.ui.footerToggle.addClass("hide");
