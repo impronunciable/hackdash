@@ -11,7 +11,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: 'col-md-2 team-user',
+  className: 'team-user',
   template: template,
 
   //--------------------------------------

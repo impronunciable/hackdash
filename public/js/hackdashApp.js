@@ -1916,7 +1916,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
   return "<a href=\"/users/"
     + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
     + "\">\n  "
-    + escapeExpression(((helpers.getProfileImageHex || (depth0 && depth0.getProfileImageHex) || helperMissing).call(depth0, depth0, {"name":"getProfileImageHex","hash":{},"data":data})))
+    + escapeExpression(((helpers.getProfileImage || (depth0 && depth0.getProfileImage) || helperMissing).call(depth0, depth0, {"name":"getProfileImage","hash":{},"data":data})))
     + "\n</a>";
 },"useData":true});
 
@@ -3057,7 +3057,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: 'col-md-2 team-user',
+  className: 'team-user',
   template: template,
 
   //--------------------------------------
@@ -3404,7 +3404,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  return "PARTNERS";
+  return "<ul>\n  <li class=\"hackshackers\"></li>\n  <li class=\"hackslabs\"></li>\n  <li class=\"ICFJ\"></li>\n  <li class=\"hivos\"></li>\n  <li class=\"vurbia\"></li>\n</ul>";
   },"useData":true});
 
 },{"hbsfy/runtime":93}],63:[function(require,module,exports){
@@ -3432,14 +3432,14 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function";
-  return "\n<div class=\"cover\">\n  <div class=\"item-letter\">\n    "
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<a href=\"/users/"
+    + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
+    + "\" data-bypass>\n  <div class=\"cover\">\n    <div class=\"item-letter\">\n      "
     + escapeExpression(((helpers.getProfileImageHex || (depth0 && depth0.getProfileImageHex) || helperMissing).call(depth0, depth0, {"name":"getProfileImageHex","hash":{},"data":data})))
-    + "\n  </div>\n</div>\n\n<div class=\"details\">\n  <h2>"
+    + "\n    </div>\n  </div>\n\n  <div class=\"details\">\n    <h2>"
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
-    + "</h2>\n  <div class=\"description\">"
-    + escapeExpression(((helper = (helper = helpers.bio || (depth0 != null ? depth0.bio : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"bio","hash":{},"data":data}) : helper)))
-    + "</div>\n</div>\n";
+    + "</h2>\n  </div>\n</a>";
 },"useData":true});
 
 },{"hbsfy/runtime":93}],67:[function(require,module,exports){
@@ -4592,9 +4592,9 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   if (stack1 != null) { buffer += stack1; }
   buffer += "</ul>\n\n<div class=\"action-bar text-center\">\n  <i class=\"fa fa-clock-o timer\" title=\""
     + escapeExpression(((helpers.timeAgo || (depth0 && depth0.timeAgo) || helperMissing).call(depth0, (depth0 != null ? depth0.created_at : depth0), {"name":"timeAgo","hash":{},"data":data})))
-    + "\"></i>\n  <span>Likes "
+    + "\"></i>\n  <span>"
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.followers : depth0)) != null ? stack1.length : stack1), depth0))
-    + "</span>\n  <!--<a>Join</a>\n  <a>Demo</a>\n  <a>Share</a>-->\n</div>\n\n";
+    + " Followers</span>\n  <a>Join</a>\n  <a>Demo</a>\n</div>\n\n";
   stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }

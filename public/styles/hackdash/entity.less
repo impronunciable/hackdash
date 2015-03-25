@@ -229,12 +229,28 @@
           img {
             width: 30px;
             height: 30px;
+            border-radius: 50%;
           }
-/*
-          .hexagon {
-            .getHexagon(30px);
-          }
-*/
+        }
+      }
+
+    }
+
+  }
+
+  &.project {
+
+    .details {
+
+      >div {
+        bottom: 40px;
+        height: 80px;
+        overflow: hidden;
+
+        h2 {
+          overflow: hidden;
+          height: 57px;
+          line-height: 1.25em;
         }
       }
 
@@ -242,6 +258,26 @@
 
     .action-bar {
       display: none;
+      padding: 2px;
+      bottom: 40px;
+
+      a, span {
+        padding: 2px 5px;
+      }
+
+    }
+
+    .contributors {
+      background-color: @color-project;
+      text-align: right;
+
+      background-color: #353d45;
+
+      li {
+        float: none;
+        clear: both;
+        display: inline-block;
+      }
     }
   }
 
@@ -326,4 +362,33 @@
 
   }
 
+}
+
+
+.page-ctn.dashboard {
+  .entities {
+    .project {
+
+      .details{
+
+        >div {
+          bottom: 65px;
+          height: 60px;
+          overflow: hidden;
+
+          h2 {
+            height: 57px;
+          }
+
+          h3 {
+            display: none;
+          }
+        }
+      }
+
+      .action-bar {
+        display: block;
+      }
+    }
+  }
 }

@@ -17,8 +17,8 @@
     padding-top: 4%;
     padding-bottom: 4%;
     margin-bottom: 5%;
-    background-color: @color-blackB;
-    background: url(@landing-call-action-url) repeat;
+
+    background-color: rgba(0,0,0,0.65);
 
     h1 {
       font-size: @fsize-70;
@@ -396,6 +396,10 @@
 
 }
 
+.team-partners {
+  background-color: @color-blackC;
+}
+
 .team-ctn,
 .team-tab {
   background-color: @color-whiteB;
@@ -404,8 +408,8 @@
 
 .partners-ctn,
 .partners-tab {
-  background-color: @color-blackC;
-  color: @color-whiteB;
+  background-color: @color-white;
+  color: @color-blackB;
 }
 
 .team-tab,
@@ -422,16 +426,28 @@
 
 .team-ctn {
   padding: 30px 0;
+  text-align: center;
 
   .team-user {
     background: transparent;
-    height: 230px;
+    display: inline-block;
+    width: 150px;
+    text-align: initial;
+
+    a {
+      text-decoration: none;
+      color: @color-blackB;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
 
     .cover {
       background: transparent;
 
       .hexagon {
-        .getHexagon(100px, 5px);
+        .getHexagon(70px, 3px);
       }
     }
 
@@ -448,10 +464,6 @@
         font-size: @fsize-17;
         text-transform: uppercase;
       }
-
-      .description {
-        font-size: @fsize-12;
-      }
     }
 
   }
@@ -459,6 +471,43 @@
 
 .partners-ctn {
   min-height: 50px;
+
+  ul {
+    list-style: none;
+    padding: 20px;
+    margin: 20px 10px 10px 10px;
+    text-align: center;
+
+    li {
+      display: inline-block;
+      width: 150px;
+      height: 80px;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      margin: 0 40px;
+
+      &.ICFJ {
+        background-image: url('/images/partners/ICFJ.png');
+      }
+
+      &.hackslabs {
+        background-image: url('/images/partners/hackslabs.jpg');
+      }
+
+      &.hackshackers {
+        background-image: url('/images/partners/hackshackers.jpeg');
+      }
+
+      &.hivos {
+        background-image: url('/images/partners/hivos.jpg');
+      }
+
+      &.vurbia {
+        background-image: url('/images/partners/vurbia.png');
+      }
+    }
+  }
 }
 
 .about-ctn {

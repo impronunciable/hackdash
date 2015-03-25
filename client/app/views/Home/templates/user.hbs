@@ -1,11 +1,11 @@
-
-<div class="cover">
-  <div class="item-letter">
-    {{getProfileImageHex .}}
+<a href="/users/{{_id}}" data-bypass>
+  <div class="cover">
+    <div class="item-letter">
+      {{getProfileImageHex .}}
+    </div>
   </div>
-</div>
 
-<div class="details">
-  <h2>{{name}}</h2>
-  <div class="description">{{bio}}</div>
-</div>
+  <div class="details">
+    <h2>{{name}}</h2>
+  </div>
+</a>
