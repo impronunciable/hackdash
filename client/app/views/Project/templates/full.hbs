@@ -45,7 +45,7 @@
         </div>
 
         <div class="clearfix">
-          <h5>Contributors</h5>
+          <h5>Contributors [{{contributors.length}}]</h5>
           {{#each contributors}}
           <a class="pull-left" href="/users/{{_id}}">
             {{getProfileImageHex .}}
@@ -54,7 +54,7 @@
         </div>
 
         <div class="clearfix">
-          <h5>Followers</h5>
+          <h5>Followers [{{followers.length}}]</h5>
           {{#each followers}}
           <a class="pull-left" href="/users/{{_id}}">
             {{getProfileImageHex .}}
@@ -72,9 +72,11 @@
       </div>
       <ul class="tags clearfix">
         {{#each tags}}
+        {{#if .}}
         <li>
           <a href="/projects?q={{.}}" data-bypass="true">{{.}}</a>
         </li>
+        {{/if}}
         {{/each}}
       </ul>
     </div>

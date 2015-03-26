@@ -16,7 +16,18 @@ module.exports = ItemView.extend({
   template: template,
 
   ui: {
-    "switcher": ".switcher input"
+    "switcher": ".switcher input",
+    "contribute": ".contribute",
+    "follow": ".follow"
+  },
+
+  events: {
+    "click @ui.contribute": "onContribute",
+    "click @ui.follow": "onFollow",
+  },
+
+  modelEvents: {
+    "change": "render"
   },
 
   //--------------------------------------
@@ -65,6 +76,20 @@ module.exports = ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  onContribute: function(e){
+    this.ui.contribute.button('loading');
+    this.model.toggleContribute();
+    e.preventDefault();
+    e.stopPropagation();
+  },
+
+  onFollow: function(e){
+    this.ui.follow.button('loading');
+    this.model.toggleFollow();
+    e.preventDefault();
+    e.stopPropagation();
+  },
 
   initSwitcher: function(){
     var self = this;

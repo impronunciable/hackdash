@@ -30,12 +30,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "projects": "#projects",
     "contributions": "#contributions",
     "likes": "#likes",
-
-    "collectionsLen": ".coll-length",
-    "dashboardsLen": ".dash-length",
-    "projectsLen": ".proj-length",
-    "contributionsLen": ".contrib-length",
-    "likesLen": ".likes-length"
   },
 
   //--------------------------------------
@@ -67,24 +61,14 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
     $('.tooltips', this.$el).tooltip({});
 
-    this.model.get("collections").on("reset", this.updateCount.bind(this, "collections"));
-    this.model.get("dashboards").on("reset", this.updateCount.bind(this, "dashboards"));
-    this.model.get("projects").on("reset", this.updateCount.bind(this, "projects"));
-    this.model.get("contributions").on("reset", this.updateCount.bind(this, "contributions"));
-    this.model.get("likes").on("reset", this.updateCount.bind(this, "likes"));
-
     $('a[data-toggle="tab"]', this.$el).on('shown.bs.tab', this.setSection.bind(this));
   },
 
   changeTab: function(){
     if (!this[this.section].currentView){
-      var coll = new Backbone.Collection(this.model.get(this.section));
-      if (this.section === "dashboards"){
-        coll = this.model.get(this.section);
-      }
 
       this[this.section].show(new EntityList({
-        collection: coll,
+        collection: this.model.get(this.section),
         type: this.section
       }));
     }
@@ -104,10 +88,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
-
-  updateCount: function(which){
-    $(this.ui[which + "Len"]).text(this.model.get(which).length);
-  }
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS

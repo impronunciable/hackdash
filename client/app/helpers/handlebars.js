@@ -1,6 +1,6 @@
 /**
  * HELPER: Handlebars Template Helpers
- * 
+ *
  */
 
 var Handlebars = require("hbsfy/runtime");
@@ -9,7 +9,7 @@ Handlebars.registerHelper('embedCode', function() {
   var embedUrl = window.location.protocol + "//" + window.location.host;
   var template = _.template('<iframe src="<%= embedUrl %>" width="100%" height="500" frameborder="0" allowtransparency="true" title="Hackdash"></iframe>');
 
-  return template({ 
+  return template({
     embedUrl: embedUrl
   });
 });
@@ -77,24 +77,24 @@ Handlebars.registerHelper('timeAgo', function(date) {
 Handlebars.registerHelper('formatDate', function(date) {
   if (date && moment(date).isValid()) {
     return moment(date).format("DD/MM/YYYY HH:mm");
-  } 
-  
+  }
+
   return "-";
 });
 
 Handlebars.registerHelper('formatDateText', function(date) {
   if (date && moment(date).isValid()) {
     return moment(date).format("DD MMM YYYY, HH:mm");
-  } 
-  
+  }
+
   return "";
 });
 
 Handlebars.registerHelper('formatDateTime', function(date) {
   if (date && moment(date).isValid()) {
     return moment(date).format("HH:mm");
-  } 
-  
+  }
+
   return "";
 });
 
@@ -113,7 +113,7 @@ Handlebars.registerHelper('timeFromSeconds', function(seconds) {
 
     return h + ":" + m + ":" + s;
   }
-  
+
   return "-";
 });
 
@@ -180,4 +180,17 @@ Handlebars.registerHelper('getProfileImageHex', getProfileImageHex);
 
 Handlebars.registerHelper('getMyProfileImageHex', function() {
   return getProfileImageHex(window.hackdash.user);
+});
+
+Handlebars.registerHelper('each_upto', function(ary, max, options) {
+    if(!ary || ary.length === 0) {
+      return options.inverse(this);
+    }
+
+    var result = [];
+    for(var i = 0; i < max && i < ary.length; ++i) {
+      result.push(options.fn(ary[i]));
+    }
+
+    return result.join('');
 });

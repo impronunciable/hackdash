@@ -1,5 +1,15 @@
-<a href="{{url}}" data-bypass>
-  <div class="well">
-    {{title}}
+<a class="{{type}}" href="{{url}}" data-bypass>
+  <div class="well media">
+    <div class="media-left">
+      {{#if showImage}}
+      <img src="{{cover}}" style="width: 64px; height: 64px;">
+      {{else}}
+      <i class="item-letter">{{firstLetter title}}</i>
+      {{/if}}
+    </div>
+    <div class="media-body">
+      <h4 class="media-heading">{{title}}</h4>
+      <p>{{description}}</p>
+    </div>
   </div>
 </a>

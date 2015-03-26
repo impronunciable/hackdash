@@ -250,17 +250,17 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       _id: userId
     });
 
-    app.profile.fetch({ parse: true });
-
     app.header.show(new Header());
 
-    app.main.show(new ProfileView({
-      model: app.profile
-    }));
+    app.profile.fetch({ parse: true }).done(function(){
 
-    app.footer.show(new Footer({
-      model: app.dashboard
-    }));
+      app.main.show(new ProfileView({
+        model: app.profile
+      }));
+
+      app.footer.show(new Footer());
+    });
+
   },
 
 });

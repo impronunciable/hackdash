@@ -11,6 +11,7 @@ var passport = require('passport')
   , config = require('../../../config.json');
 
 var User = mongoose.model('User')
+  , Dashboard = mongoose.model('Dashboard')
   , Project = mongoose.model('Project')
   , Collection = mongoose.model('Collection');
 
@@ -28,7 +29,7 @@ module.exports = function(app, uri, common) {
   app.get(uri + '/users/team', getTeam, sendUsers);
   app.get(uri + '/users/:uid', getUser, sendUser);
 
-  app.get(uri + '/profiles/:uid', getUser, setCollections, setProjects, setContributions, setLikes, sendUser);
+  app.get(uri + '/profiles/:uid', getUser, setCollections, setDashboards, setProjects, setContributions, setLikes, sendUser);
   app.put(uri + '/profiles/:uid', common.isAuth, getUser, canUpdate, updateUser);
 
 };
@@ -158,6 +159,17 @@ var setCollections = function(req, res, next){
       req.user_profile.collections = collections || [];
       next();
     });
+};
+
+var setDashboards = function(req, res, next){
+
+  Dashboard
+    .find({ "domain": { $in: req.user.admin_in } }, function(err, dashboards) {
+      if(err) return res.send(500);
+      req.user_profile.dashboards = dashboards || [];
+      next();
+    });
+
 };
 
 var setProjects = function(req, res, next){

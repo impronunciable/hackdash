@@ -49,7 +49,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
         break;
     }
 
+    var showImage = (this.type === "collections" || this.type === "dashboards" ? false : true);
+    if (showImage){
+      showImage = this.model.get('cover');
+    }
+
     return _.extend({
+      showImage: showImage,
+      type: this.type,
       url: url
     }, this.model.toJSON());
   }
