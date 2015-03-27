@@ -120,8 +120,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   },
 
   errors: {
-    "subdomain_invalid": "Subdomain invalid",
-    "subdomain_inuse": "Subdomain is in use"
+    "subdomain_invalid": "5 to 10 chars, no spaces or special",
+    "subdomain_inuse": "Sorry, that one is in use. Try another one."
   },
 
   //--------------------------------------

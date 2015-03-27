@@ -34,29 +34,31 @@
   <i class="fa fa-clock-o timer tooltips"
     data-original-title="{{timeAgo created_at}}"></i>
 
-  {{#if contributing}}
-  <a
-    class="tooltips contribute"
-    data-loading-text="leaving..."
-    data-original-title="{{contributors.length}} contributors">Leave</a>
-  {{else}}
-  <a
-    class="tooltips contribute"
-    data-loading-text="joining..."
-    data-original-title="{{contributors.length}} contributors">Join</a>
-  {{/if}}
+  {{#unless isOwner}}
+    {{#if contributing}}
+    <a
+      class="tooltips contribute"
+      data-loading-text="leaving..."
+      data-original-title="{{contributors.length}} contributors">Leave</a>
+    {{else}}
+    <a
+      class="tooltips contribute"
+      data-loading-text="joining..."
+      data-original-title="{{contributors.length}} contributors">Join</a>
+    {{/if}}
 
-  {{#if following}}
-  <a
-    class="tooltips follow"
-    data-loading-text="unfollowing..."
-    data-original-title="{{followers.length}} followers">Unfollow</a>
-  {{else}}
-  <a
-    class="tooltips follow"
-    data-loading-text="following..."
-    data-original-title="{{followers.length}} followers">Follow</a>
-  {{/if}}
+    {{#if following}}
+    <a
+      class="tooltips follow"
+      data-loading-text="unfollowing..."
+      data-original-title="{{followers.length}} followers">Unfollow</a>
+    {{else}}
+    <a
+      class="tooltips follow"
+      data-loading-text="following..."
+      data-original-title="{{followers.length}} followers">Follow</a>
+    {{/if}}
+  {{/unless}}
 
   {{#if link}}
   <a href="{{link}}" target="_blank" data-bypass>Demo</a>

@@ -12,7 +12,6 @@ var Dashboard = require("./models/Dashboard")
   , Footer = require("./views/Footer")
 
   , HomeLayout = require("./views/Home")
-  , LoginView = require("./views/Login")
   , ProfileView = require("./views/Profile")
   , ProjectFullView = require("./views/Project/Full")
   , ProjectEditView = require("./views/Project/Edit")
@@ -25,7 +24,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   routes : {
       "" : "showHome"
 
-    , "login" : "showLogin"
+    , "login" : "showHome"
 
     // LANDING
     , "dashboards" : "showLandingDashboards"
@@ -61,15 +60,6 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     }
 
     return fetchData;
-  },
-
-  showLogin: function(){
-    var providers = window.hackdash.providers;
-    var app = window.hackdash.app;
-
-    app.modals.show(new LoginView({
-      model: new Backbone.Model({ providers: providers.split(',') })
-    }));
   },
 
   showHomeSection: function(section){

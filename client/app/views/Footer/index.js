@@ -17,13 +17,15 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "switcher": ".dashboard-btn",
     "showcaseMode": ".btn-showcase-mode",
     "createShowcase": ".btn-new-project",
-    "footerToggle": ".footer-toggle-ctn"
+    "footerToggle": ".footer-toggle-ctn",
+    "up": ".up-button"
   },
 
   events: {
     "click .dashboard-btn": "onClickSwitcher",
     "click .embed-btn": "showEmbedModal",
-    "click .btn-showcase-mode": "changeShowcaseMode"
+    "click .btn-showcase-mode": "changeShowcaseMode",
+    "click @ui.up": "goTop"
   },
 
   templateHelpers: {
@@ -94,6 +96,19 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   showEmbedModal: function(){
     hackdash.app.modals.show(new Embed());
+  },
+
+  upBlocked: false,
+  goTop: function(){
+
+    if (!this.upBlocked){
+      this.upBlocked = true;
+
+      var body = $("html, body"), self = this;
+      body.animate({ scrollTop:0 }, 1500, 'swing', function() {
+        self.upBlocked = false;
+      });
+    }
   },
 
   //--------------------------------------

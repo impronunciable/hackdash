@@ -1,8 +1,8 @@
 /**
  * VIEW: Login Modal
- * 
+ *
  */
- 
+
 var template = require('./templates/login.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
@@ -14,6 +14,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   className: "login",
   template: template,
 
+  events: {
+    "click .close": "destroy"
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
@@ -23,10 +27,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
       var url = hackdash.app.previousURL || '';
       return (url.length ? '?redirect=' + url : url);
     }
-  },
-
-  onDestroy: function(){
-    window.history.back();
   }
 
   //--------------------------------------

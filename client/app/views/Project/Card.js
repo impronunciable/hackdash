@@ -62,10 +62,13 @@ module.exports = ItemView.extend({
   },
 
   serializeData: function(){
+    var me = hackdash.user._id;
+
     return _.extend({
       isShowcaseMode: this.isShowcaseMode(),
       contributing: this.model.isContributor(),
-      following: this.model.isFollower()
+      following: this.model.isFollower(),
+      isOwner: (this.model.get('leader')._id === me ? true : false)
     }, this.model.toJSON());
   },
 
@@ -78,17 +81,29 @@ module.exports = ItemView.extend({
   //--------------------------------------
 
   onContribute: function(e){
-    this.ui.contribute.button('loading');
-    this.model.toggleContribute();
     e.preventDefault();
     e.stopPropagation();
+
+    if (!window.hackdash.user){
+      hackdash.app.showLogin();
+      return;
+    }
+
+    this.ui.contribute.button('loading');
+    this.model.toggleContribute();
   },
 
   onFollow: function(e){
-    this.ui.follow.button('loading');
-    this.model.toggleFollow();
     e.preventDefault();
     e.stopPropagation();
+
+    if (!window.hackdash.user){
+      hackdash.app.showLogin();
+      return;
+    }
+
+    this.ui.follow.button('loading');
+    this.model.toggleFollow();
   },
 
   initSwitcher: function(){

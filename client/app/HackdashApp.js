@@ -4,6 +4,7 @@
  */
 
 var HackdashRouter = require('./HackdashRouter')
+  , LoginView = require("./views/Login")
   , ModalRegion = require('./views/ModalRegion');
 
 module.exports = function(){
@@ -17,6 +18,14 @@ module.exports = function(){
       footer: "footer",
       modals: ModalRegion
     });
+
+    app.showLogin = function(){
+      var providers = window.hackdash.providers;
+
+      app.modals.show(new LoginView({
+        model: new Backbone.Model({ providers: providers.split(',') })
+      }));
+    };
   }
 
   function initRouter(){
@@ -33,7 +42,7 @@ module.exports = function(){
   window.hackdash.app = app;
   window.hackdash.app.start();
 
-  // Add navigation for BackboneRouter to all links 
+  // Add navigation for BackboneRouter to all links
   // unless they have attribute "data-bypass"
   $(window.document).on("click", "a:not([data-bypass])", function(evt) {
     var href = { prop: $(this).prop("href"), attr: $(this).attr("href") };
