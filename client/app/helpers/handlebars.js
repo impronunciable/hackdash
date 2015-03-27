@@ -194,3 +194,27 @@ Handlebars.registerHelper('each_upto', function(ary, max, options) {
 
     return result.join('');
 });
+
+Handlebars.registerHelper('each_upto_rnd', function(ary, max, options) {
+    if(!ary || ary.length === 0) {
+      return options.inverse(this);
+    }
+
+    var picks = [];
+    function pick(max){
+      var rnd = Math.floor(Math.random() * max);
+      if (picks.indexOf(rnd) === -1) {
+        picks.push(rnd);
+        return rnd;
+      }
+      return pick(max);
+    }
+
+    var result = [];
+    for(var i = 0; i < max && i < ary.length; ++i) {
+      result.push( options.fn(ary[pick(ary.length)]) );
+    }
+
+    return result.join('');
+});
+

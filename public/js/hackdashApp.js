@@ -575,6 +575,31 @@ Handlebars.registerHelper('each_upto', function(ary, max, options) {
 
     return result.join('');
 });
+
+Handlebars.registerHelper('each_upto_rnd', function(ary, max, options) {
+    if(!ary || ary.length === 0) {
+      return options.inverse(this);
+    }
+
+    var picks = [];
+    function pick(max){
+      var rnd = Math.floor(Math.random() * max);
+      if (picks.indexOf(rnd) === -1) {
+        picks.push(rnd);
+        return rnd;
+      }
+      return pick(max);
+    }
+
+    var result = [];
+    for(var i = 0; i < max && i < ary.length; ++i) {
+      result.push( options.fn(ary[pick(ary.length)]) );
+    }
+
+    return result.join('');
+});
+
+
 },{"hbsfy/runtime":93}],6:[function(require,module,exports){
 jQuery(function() {
   require('./Initializer')();
@@ -1392,6 +1417,26 @@ module.exports = ItemView.extend({
     return "/dashboards/" + this.model.get("domain");
   },
 
+  afterRender: function(){
+    var list = $('.list',this.$el);
+    var count = this.model.get('covers').length;
+
+    if (count === 0){
+      return;
+    }
+
+    if (count >= 4){
+      list.addClass('grid-4');
+    }
+
+    switch(count){
+      case 1: list.addClass('grid-1'); break;
+      case 2: list.addClass('grid-2'); break;
+      case 3: list.addClass('grid-3'); break;
+    }
+
+  },
+
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
@@ -1436,12 +1481,6 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       self.refresh();
     });
 
-    /*
-    var self = this;
-    _.defer(function(){
-      self.updateIsotope();
-    });
-    */
   },
 
   //--------------------------------------
@@ -1482,24 +1521,6 @@ module.exports = Backbone.Marionette.CollectionView.extend({
     this.$el.height(this.$el.height() + this.gutter*4);
   },
 
-/*
-  isotopeInitialized: false,
-  updateIsotope: function(){
-    var $dashboards = this.$el;
-
-    if (this.isotopeInitialized){
-      $dashboards.isotope("destroy");
-    }
-
-    $dashboards.isotope({
-        itemSelector: ".dashboard"
-      , animationEngine: "jquery"
-      , resizable: true
-    });
-
-    this.isotopeInitialized = true;
-  }
-*/
 });
 },{"./Card":24}],26:[function(require,module,exports){
 /**
@@ -1835,18 +1856,31 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
+  return "list";
+  },"3":function(depth0,helpers,partials,data) {
+  var lambda=this.lambda, escapeExpression=this.escapeExpression;
+  return "  <div style=\"background-image: url("
+    + escapeExpression(lambda(depth0, depth0))
+    + ");\"></div>\n";
+},"5":function(depth0,helpers,partials,data) {
   var helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "  <i class=\"item-letter\">"
     + escapeExpression(((helpers.firstLetter || (depth0 && depth0.firstLetter) || helperMissing).call(depth0, (depth0 != null ? depth0.title : depth0), {"name":"firstLetter","hash":{},"data":data})))
     + "</i>\n";
-},"3":function(depth0,helpers,partials,data) {
+},"7":function(depth0,helpers,partials,data) {
   var helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "  <i class=\"item-letter\">"
     + escapeExpression(((helpers.firstLetter || (depth0 && depth0.firstLetter) || helperMissing).call(depth0, (depth0 != null ? depth0.domain : depth0), {"name":"firstLetter","hash":{},"data":data})))
     + "</i>\n";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<div class=\"cover\">\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.title : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data});
+  var stack1, helper, helperMissing=helpers.helperMissing, functionType="function", escapeExpression=this.escapeExpression, buffer = "<div class=\"cover ";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 != null ? depth0.covers : depth0)) != null ? stack1.length : stack1), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\">\n";
+  stack1 = ((helpers.each_upto_rnd || (depth0 && depth0.each_upto_rnd) || helperMissing).call(depth0, (depth0 != null ? depth0.covers : depth0), 6, {"name":"each_upto_rnd","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data}));
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.title : depth0), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.program(7, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + "</div>\n\n<div class=\"details\">\n  <div>\n    <h2>"
     + escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)))
@@ -1854,7 +1888,9 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
     + "</h3>\n  </div>\n</div>\n\n<div class=\"action-bar text-center\">\n  <i class=\"fa fa-clock-o timer\" title=\""
     + escapeExpression(((helpers.timeAgo || (depth0 && depth0.timeAgo) || helperMissing).call(depth0, (depth0 != null ? depth0.created_at : depth0), {"name":"timeAgo","hash":{},"data":data})))
-    + "\"></i>\n</div>";
+    + "\"></i>\n  <span>"
+    + escapeExpression(((helper = (helper = helpers.projectsCount || (depth0 != null ? depth0.projectsCount : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"projectsCount","hash":{},"data":data}) : helper)))
+    + " Projects</span>\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":93}],32:[function(require,module,exports){
@@ -3458,7 +3494,9 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + escapeExpression(((helpers.getProfileImageHex || (depth0 && depth0.getProfileImageHex) || helperMissing).call(depth0, depth0, {"name":"getProfileImageHex","hash":{},"data":data})))
     + "\n    </div>\n  </div>\n\n  <div class=\"details\">\n    <h2>"
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
-    + "</h2>\n  </div>\n</a>";
+    + "</h2>\n    <div class=\"description\">"
+    + escapeExpression(((helper = (helper = helpers.bio || (depth0 != null ? depth0.bio : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"bio","hash":{},"data":data}) : helper)))
+    + "</div>\n  </div>\n</a>";
 },"useData":true});
 
 },{"hbsfy/runtime":93}],67:[function(require,module,exports){
@@ -4638,9 +4676,11 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   if (stack1 != null) { buffer += stack1; }
   buffer += "</div>\n\n<div class=\"details\">\n  <div>\n    <h2>"
     + escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)))
-    + "</h2>\n    <h3>"
+    + "</h2>\n    <h3><a href=\"/dashboards/"
     + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
-    + "</h3>\n  </div>\n</div>\n\n<ul class=\"contributors\">\n";
+    + "\" data-bypass>"
+    + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
+    + "</a></h3>\n  </div>\n</div>\n\n<ul class=\"contributors\">\n";
   stack1 = ((helpers.each_upto || (depth0 && depth0.each_upto) || helperMissing).call(depth0, (depth0 != null ? depth0.contributors : depth0), 5, {"name":"each_upto","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data}));
   if (stack1 != null) { buffer += stack1; }
   buffer += "</ul>\n\n<div class=\"action-bar text-right\">\n\n  <i class=\"fa fa-clock-o timer tooltips\"\n    data-original-title=\""

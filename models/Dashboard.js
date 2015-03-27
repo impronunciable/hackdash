@@ -7,4 +7,6 @@ module.exports = {
   , "open": { type: Boolean, default: true }
   , "showcase": [String]
   , "created_at": { type: Date, default: Date.now }
+  , "covers": [String]
+  , "projectsCount": Number
 };

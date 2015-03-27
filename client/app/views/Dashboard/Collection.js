@@ -28,12 +28,6 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       self.refresh();
     });
 
-    /*
-    var self = this;
-    _.defer(function(){
-      self.updateIsotope();
-    });
-    */
   },
 
   //--------------------------------------
@@ -74,22 +68,4 @@ module.exports = Backbone.Marionette.CollectionView.extend({
     this.$el.height(this.$el.height() + this.gutter*4);
   },
 
-/*
-  isotopeInitialized: false,
-  updateIsotope: function(){
-    var $dashboards = this.$el;
-
-    if (this.isotopeInitialized){
-      $dashboards.isotope("destroy");
-    }
-
-    $dashboards.isotope({
-        itemSelector: ".dashboard"
-      , animationEngine: "jquery"
-      , resizable: true
-    });
-
-    this.isotopeInitialized = true;
-  }
-*/
 });

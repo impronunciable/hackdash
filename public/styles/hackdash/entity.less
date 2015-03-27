@@ -244,7 +244,9 @@
 
   }
 
-  &.project {
+  &.project,
+  &.dashboard,
+  &.collection {
 
     .details {
 
@@ -267,10 +269,22 @@
           width: 100%;
           bottom: 40px;
           text-align: right;
+
+          a {
+            color: @color-white;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
         }
       }
 
     }
+
+  }
+
+  &.project {
 
     .action-bar {
       display: none;
@@ -304,8 +318,49 @@
     .cover {
       background-color: @color-dashboard-card;
 
+      &.list {
+        overflow: hidden;
+
+        div {
+          background-size: cover;
+          height: auto;
+          width: 100%;
+        }
+
+        &.grid-1 {
+          div { height: 100%; }
+        }
+
+        &.grid-2 {
+          div { height: 50%; }
+        }
+
+        &.grid-3 {
+          div { height: 34%; }
+        }
+
+        &.grid-4 {
+          div { height: 25%; }
+        }
+
+        .item-letter {
+          display: none;
+        }
+      }
+
       .item-letter {
         color: darken(@color-dashboard-card, 10%);
+      }
+    }
+
+    .details {
+
+      >div {
+        padding-top: 0;
+
+        h3 {
+          bottom: 25px;
+        }
       }
     }
 

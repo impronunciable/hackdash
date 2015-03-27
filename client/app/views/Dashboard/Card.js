@@ -23,6 +23,26 @@ module.exports = ItemView.extend({
     return "/dashboards/" + this.model.get("domain");
   },
 
+  afterRender: function(){
+    var list = $('.list',this.$el);
+    var count = this.model.get('covers').length;
+
+    if (count === 0){
+      return;
+    }
+
+    if (count >= 4){
+      list.addClass('grid-4');
+    }
+
+    switch(count){
+      case 1: list.addClass('grid-1'); break;
+      case 2: list.addClass('grid-2'); break;
+      case 3: list.addClass('grid-3'); break;
+    }
+
+  },
+
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------

@@ -1,4 +1,8 @@
-<div class="cover">
+<div class="cover {{#if covers.length}}list{{/if}}">
+  {{#each_upto_rnd covers 6}}
+  <div style="background-image: url({{.}});"></div>
+  {{/each_upto_rnd}}
+
   {{#if title}}
   <i class="item-letter">{{firstLetter title}}</i>
   {{else}}
@@ -15,9 +19,5 @@
 
 <div class="action-bar text-center">
   <i class="fa fa-clock-o timer" title="{{timeAgo created_at}}"></i>
-  {{!--
-  <span>00 Projects</span>
-  <span>Likes 00</span>
-  <a>Share</a>
-  --}}
+  <span>{{projectsCount}} Projects</span>
 </div>

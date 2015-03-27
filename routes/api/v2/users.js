@@ -16,10 +16,11 @@ var User = mongoose.model('User')
   , Collection = mongoose.model('Collection');
 
 var teamIds = [];
-var maxLimit = 30;
+var maxLimit;
 
 module.exports = function(app, uri, common) {
   teamIds = app.get('config').team || [];
+  maxLimit = app.get('config').maxQueryLimit || 50;
 
   app.get(uri + '/:domain/admins', getInstanceAdmins, sendUsers);
   app.post(uri + '/:domain/admins/:uid', common.isAuth, isDashboardAdmin, getUser, addAdmin, sendUser);
@@ -70,6 +71,11 @@ var setQuery = function(req, res, next){
   req.search_query = {};
 
   if (query.length === 0){
+    // landing - only the ones with bio
+    req.search_query.$and = [
+      { bio: { $exists: true } },
+      { $where: "this.bio.length>0" }
+    ];
     return next();
   }
 

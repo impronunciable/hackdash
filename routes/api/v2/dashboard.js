@@ -15,9 +15,10 @@ var Project = mongoose.model('Project')
   , User = mongoose.model('User')
   , Dashboard = mongoose.model('Dashboard');
 
-var maxLimit = 30;
+var maxLimit;
 
 module.exports = function(app, uri, common) {
+  maxLimit = app.get('config').maxQueryLimit || 50;
 
   app.post(uri + '/dashboards', common.isAuth, validateSubdomain, createDashboard(app), sendDashboard);
   app.get(uri + '/dashboards', setQuery, setDashboards, sendDashboards);
@@ -82,6 +83,11 @@ var setQuery = function(req, res, next){
   req.search_query = {};
 
   if (query.length === 0){
+    req.search_query.$and = [
+      { projectsCount: { $gt : 1 } },
+      { covers: { $exists: true } },
+      { $where:'this.covers.length>0' }
+    ];
     return next();
   }
 

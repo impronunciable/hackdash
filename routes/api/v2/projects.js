@@ -14,9 +14,10 @@ var Project = mongoose.model('Project')
   , Dashboard = mongoose.model('Dashboard');
 
 var notify;
-var maxLimit = 30;
+var maxLimit;
 
 module.exports = function(app, uri, common) {
+  maxLimit = app.get('config').maxQueryLimit || 50;
 
   notify = function(type, req) {
     app.emit('post', {
@@ -131,8 +132,9 @@ var createProject = function(req, res, next){
     req.project = project;
 
     notify('project_created', req);
-
-    next();
+    updateDashboard(req.project.domain, function(){
+      next();
+    });
   });
 
 };
@@ -172,6 +174,8 @@ var updateProject = function(req, res, next) {
     tags = tags.toString().split(',');
   }
 
+  var coverChanged = (project.cover !== getValue("cover"));
+
   project.title = getValue("title");
   project.description = getValue("description");
   project.link = link;
@@ -195,14 +199,26 @@ var updateProject = function(req, res, next) {
 
     notify('project_edited', req);
 
+    if (coverChanged) {
+      updateDashboard(req.project.domain, function(){
+        next();
+      });
+
+      return;
+    }
+
     next();
   });
 };
 
 var removeProject = function(req, res){
+  var domain = req.project.domain;
+
   req.project.remove(function (err){
     if (err) return res.send(500, "An error ocurred when removing this project");
-    res.send(204); //all good, no content
+    updateDashboard(domain, function(){
+      res.send(204); //all good, no content
+    });
   });
 };
 
@@ -286,6 +302,14 @@ var setQuery = function(req, res, next){
   }
 
   if (query.length === 0){
+
+    if (!req.search_query.hasOwnProperty('domain')){
+      // landing - no query: only ones with cover
+      req.search_query.$and = [
+        { cover: { $exists: true } }
+      ];
+    }
+
     return next();
   }
 
@@ -301,11 +325,17 @@ var setQuery = function(req, res, next){
 };
 
 var setProjects = function(req, res, next){
+  var limit = req.limit || maxLimit;
+
+  if (req.search_query.hasOwnProperty('domain')){
+    limit = 0;
+  }
+
   Project.find(req.search_query || {})
     .populate('leader')
     .populate('contributors')
     .populate('followers')
-    .limit(req.limit || maxLimit)
+    .limit(limit)
     .sort( { "created_at" : -1 } )
     .exec(function(err, projects) {
       if(err) return res.send(500);
@@ -320,4 +350,34 @@ var sendProject = function(req, res){
 
 var sendProjects = function(req, res){
   res.send(req.projects);
+};
+
+var updateDashboard = function(domain, done){
+
+  Dashboard
+    .findOne({ domain: domain })
+    .exec(function(err, _dashboard) {
+      if(err) return console.log(err);
+      if(!_dashboard) return;
+
+      Project
+        .find({ domain: _dashboard.domain })
+        .exec(function(err, projects){
+
+        _dashboard.projectsCount = projects.length;
+        _dashboard.covers = [];
+
+        projects.forEach(function(project){
+          if (project.cover){
+            _dashboard.covers.push(project.cover);
+          }
+        });
+
+        _dashboard.save(function(err){
+          done && done(err, _dashboard.covers.length);
+        });
+
+      });
+
+    });
 };

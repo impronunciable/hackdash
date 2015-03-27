@@ -10,9 +10,10 @@ var passport = require('passport')
   , config = require('../../../config.json');
 
 var Collection = mongoose.model('Collection');
-var maxLimit = 30;
+var maxLimit;
 
 module.exports = function(app, uri, common) {
+  maxLimit = app.get('config').maxQueryLimit || 50;
 
   // Get & Search all collections
   app.get(uri + '/collections', setQuery, getAllCollections, sendCollections);
