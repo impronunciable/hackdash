@@ -170,7 +170,7 @@ var setCollections = function(req, res, next){
 var setDashboards = function(req, res, next){
 
   Dashboard
-    .find({ "domain": { $in: req.user.admin_in } }, function(err, dashboards) {
+    .find({ "domain": { $in: req.user_profile.admin_in } }, function(err, dashboards) {
       if(err) return res.send(500);
       req.user_profile.dashboards = dashboards || [];
       next();

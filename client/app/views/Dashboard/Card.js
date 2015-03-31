@@ -31,6 +31,8 @@ module.exports = ItemView.extend({
       return;
     }
 
+    list.addClass('grid-1');
+/*
     if (count >= 4){
       list.addClass('grid-4');
     }
@@ -40,7 +42,7 @@ module.exports = ItemView.extend({
       case 2: list.addClass('grid-2'); break;
       case 3: list.addClass('grid-3'); break;
     }
-
+*/
   },
 
   //--------------------------------------
