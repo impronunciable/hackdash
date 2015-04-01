@@ -1,7 +1,7 @@
 
 <div class="row main-header">
 
-  <div class="pull-left col-xs-6 col-md-4 search-ctn"></div>
+  <div class="pull-left col-xs-8 col-md-6 search-ctn"></div>
 
   <div class="pull-right col-xs-6 col-md-4 my-profile">
     {{#isLoggedIn}}
@@ -9,12 +9,7 @@
       <a class="btn-profile" href="/users/profile">
         {{getMyProfileImageHex}}
       </a>
-    </div>
-    <div class="pull-right col-xs-6 col-md-6 text-right">
-      <div class="salute">How is going
-        <span>{{user 'name'}}?<span>
-      </div>
-      <a class="logout" href="/logout" data-bypass>LogOut?</a>
+      <a class="logout" href="/logout" data-bypass>Log out</a>
     </div>
     {{/isLoggedIn}}
   </div>

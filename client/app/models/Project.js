@@ -25,6 +25,10 @@ module.exports = Backbone.Model.extend({
 
   updateList: function(type, add){
     var list = this.get(type);
+    if (!hackdash.user){
+      return;
+    }
+
     var uid = hackdash.user._id;
 
     function exists(){

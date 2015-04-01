@@ -29,7 +29,7 @@
 {{/if}}
 
 {{#if open}}
-<h3 class="page-link-right">
+<h3 class="page-link-right {{#isLoggedIn}}{{else}}no-user{{/isLoggedIn}}">
   <i class="fa fa-plus"></i>
   {{#isLoggedIn}}
   <a href="/dashboards/{{domain}}/create">Create Project</a>

@@ -49,6 +49,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     }
 
     $('.tooltips', this.$el).tooltip({});
+    this.$el.addClass(hackdash.app.type);
   },
 
   //--------------------------------------

@@ -62,7 +62,7 @@ module.exports = ItemView.extend({
   },
 
   serializeData: function(){
-    var me = hackdash.user._id;
+    var me = (hackdash.user && hackdash.user._id) || '';
 
     return _.extend({
       isShowcaseMode: this.isShowcaseMode(),

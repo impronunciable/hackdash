@@ -80,12 +80,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
           opts.data = $.param({ q: keyword });
 
           hackdash.app.router.navigate(fragment + "?q=" + keyword);
-
           self.collection.fetch(opts);
         }
         else {
           hackdash.app.router.navigate(fragment);
-          self.collection.fetch();
+          self.collection.fetch(opts);
         }
       }
 

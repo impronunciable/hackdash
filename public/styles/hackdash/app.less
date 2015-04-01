@@ -15,28 +15,6 @@
   }
 }
 
-.profile-tab(@color) {
-  background-color: @color;
-  border: 1px solid @color;
-
-  &:hover, a:hover, a:focus {
-    background-color: darken(@color, 6.5%);
-    border: 1px solid darken(@color, 6.5%);
-  }
-
-  &.active {
-    &:hover, a, a:hover, a:focus {
-      color: @color-white;
-      background-color: @color;
-      border: 1px solid @color;
-    }
-  }
-}
-
-.search-ctn {
-  margin: 35px 0;
-}
-
 .search {
 
   .input-group {
@@ -61,6 +39,60 @@
       height: 44px;
     }
 
+  }
+}
+
+.dashboard {
+
+  .main-header {
+    position: relative;
+
+    .logo {
+      margin:0;
+      position: absolute;
+      top: 10px;
+      left: 30px;
+      width: 75px;
+    }
+
+    .search-ctn {
+      margin-top: 10px;
+      margin-left: 100px;
+
+      .search {
+
+        input {
+          height: 35px;
+        }
+
+        .input-group-btn {
+          button {
+            height: 35px;
+            padding-top: 0;
+          }
+        }
+
+      }
+    }
+
+  }
+}
+
+.profile-tab(@color) {
+  background-color: @color;
+  border: 1px solid @color;
+
+  &:hover, a:hover, a:focus {
+    background-color: darken(@color, 6.5%);
+    border: 1px solid darken(@color, 6.5%);
+  }
+
+  &.active {
+    &:hover, a, a:hover, a:focus {
+      color: @color-white;
+      background-color: @color;
+      border: 1px solid @color;
+    }
   }
 }
 
@@ -189,7 +221,7 @@ footer {
         font-family: @primary-font;
         font-size: @fsize-50;
         text-transform: none;
-        letter-spacing: -@fsize-12/10;
+        letter-spacing: -@fsize-12/17;
       }
 
       .page-link-left,
@@ -614,7 +646,7 @@ footer {
             font-family: @primary-font;
             font-size: @fsize-14;
             text-transform: none;
-            letter-spacing: -@fsize-12/10;
+            letter-spacing: -@fsize-12/17;
             color: @color-white;
             text-align: center;
             padding-top: 0;
@@ -754,8 +786,8 @@ footer {
               padding: 0;
 
               .avatar {
-                width: 57px;
-                height: 57px;
+                width: 35px;
+                height: 35px;
                 border-radius: 50%;
               }
 
@@ -800,12 +832,30 @@ footer {
         background-color: @color-white;
 
         margin-bottom: 30px;
-        padding: 10px 10px 10px 0;
+        padding: 0 10px 10px 0;
       }
     }
   }
 
   &.dashboard {
+
+    .header {
+
+      .container {
+
+        .page-link-right {
+          background-color: @color-action;
+          right: 50px;
+          height: 35px;
+          font-size: 20px;
+          padding: 6px 15px;
+
+          &.no-user {
+            right: 0;
+          }
+        }
+      }
+    }
 
     .body {
 

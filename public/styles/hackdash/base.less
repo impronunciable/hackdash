@@ -90,7 +90,7 @@ h6 { font-size: @fsize-12; }
 }
 
 .my-profile {
-  margin-top: 20px;
+  margin: 10px;
 
   .salute {
     color: @color-white;
@@ -108,11 +108,22 @@ h6 { font-size: @fsize-12; }
   .logout {
     font-family: @secondary-font;
     font-size: @fsize-12;
+
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 70px;
+    text-align: center;
+    color: @color-white;
   }
 
   .btn-profile {
+    position: absolute;
+    right: 20px;
+
     .hexagon {
-      .getHexagon(75px, 5px, @color-white);
+      //.getHexagon(75px, 5px, @color-white);
+      .getHexagon(35px, 2px, @color-white);
     }
   }
 }

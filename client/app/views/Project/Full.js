@@ -20,7 +20,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   templateHelpers: {
     showActions: function(){
-      if (this.leader){
+      if (hackdash.user && this.leader){
         return hackdash.user._id !== this.leader._id;
       }
       return false;
