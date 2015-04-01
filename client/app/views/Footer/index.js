@@ -48,6 +48,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   onRender: function(){
     $('.tooltips', this.$el).tooltip({});
+    this.setStatics();
 /*
     if (hackdash.app.type !== "dashboard"){
       this.$el.addClass('unlocked');
@@ -140,6 +141,14 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
       this.ui.createShowcase.addClass("hide");
       this.ui.footerToggle.addClass("hide");
+    }
+  },
+
+  setStatics: function(){
+    var statics = ['project', 'profile'];
+
+    if (statics.indexOf(hackdash.app.type) > -1){
+      this.$el.addClass('static');
     }
   }
 
