@@ -71,8 +71,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
           });
         }
         else {
-          self.collection.fetch();
           hackdash.app.router.navigate(fragment, { trigger: true, replace: true });
+          self.collection.fetch({ reset: true });
         }
       }
 

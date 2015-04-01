@@ -61,8 +61,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     }
 
     this.collection
-      .off('change add remove reset', this.refresher)
-      .on('change add remove reset', this.refresher);
+      .off('reset', this.refresher)
+      .on('reset', this.refresher);
   },
 
   refreshContent: function(){
