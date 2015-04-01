@@ -1,5 +1,5 @@
 /*! 
-* Hackdash - v0.6.6
+* Hackdash - v0.8.0
 * Copyright (c) 2015 Hackdash 
 *  
 */ 
@@ -88,7 +88,6 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
   routes : {
       "" : "showHome"
-
     , "login" : "showHome"
 
     // LANDING
@@ -2571,8 +2570,10 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
 
   refresh: function(){
-    this.wall.fitHeight(this.height);
-    this.wall.refresh();
+    if (this.wall){
+      this.wall.fitHeight(this.height);
+      this.wall.refresh();
+    }
   },
 
   moveLeft: function(){
@@ -2779,8 +2780,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   events: {
-    "keyup #search": "search",
-    "click .sort": "sort"
+    "keyup #search": "search"
   },
 
   //--------------------------------------
@@ -2788,12 +2788,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   lastSearch: null,
-
-  initialize: function(/*options*/){
-    //this.showSort = (options && options.showSort) || false;
-    //this.collection = options && options.collection;
-    //this.placeholder = (options && options.placeholder) || "Type here";
-  },
 
   onRender: function(){
     var query = hackdash.getQueryVariable("q");
@@ -2820,12 +2814,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
-  sort: function(e){
-    e.preventDefault();
-    var val = $(e.currentTarget).data("option-value");
-    this.collection.trigger("sort:" + val);
-  },
-
   search: function(){
     var self = this;
     window.clearTimeout(this.timer);
@@ -2837,14 +2825,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
       if (keyword !== self.lastSearch) {
         self.lastSearch = keyword;
 
-        var opts = {
-          reset: true
-        };
-
         if (keyword.length > 0) {
-          opts.data = $.param({ q: keyword });
+          fragment = (!fragment.length ? "dashboards" : fragment);
           hackdash.app.router.navigate(fragment + "?q=" + keyword, { trigger: true });
-          self.collection.fetch(opts);
+
+          self.collection.fetch({
+            reset: true,
+            data: $.param({ q: keyword })
+          });
         }
         else {
           self.collection.fetch();
@@ -3025,6 +3013,22 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  initialize: function(){
+    if (!this.refresher){
+      this.refresher = this.refreshContent.bind(this);
+    }
+
+    this.collection
+      .off('change add remove reset', this.refresher)
+      .on('change add remove reset', this.refresher);
+  },
+
+  refreshContent: function(){
+    if (this.content && this.content.currentView){
+      this.content.currentView.refresh();
+    }
+  },
+
   onRender: function(){
 
     if (!this.header.currentView){
@@ -3058,11 +3062,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
       this.ui.content.width(w).height(h);
       this.ui.arrows.css('top', ((h/2) - this.ui.arrows.eq(0).height()/2) + "px");
-
-      var self = this;
-      this.collection.on('change add remove reset', function(){
-        self.content.currentView.refresh();
-      });
     }
 
   },

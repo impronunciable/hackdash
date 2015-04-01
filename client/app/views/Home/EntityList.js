@@ -38,8 +38,10 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
 
   refresh: function(){
-    this.wall.fitHeight(this.height);
-    this.wall.refresh();
+    if (this.wall){
+      this.wall.fitHeight(this.height);
+      this.wall.refresh();
+    }
   },
 
   moveLeft: function(){

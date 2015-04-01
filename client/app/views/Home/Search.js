@@ -16,8 +16,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   events: {
-    "keyup #search": "search",
-    "click .sort": "sort"
+    "keyup #search": "search"
   },
 
   //--------------------------------------
@@ -25,12 +24,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   lastSearch: null,
-
-  initialize: function(/*options*/){
-    //this.showSort = (options && options.showSort) || false;
-    //this.collection = options && options.collection;
-    //this.placeholder = (options && options.placeholder) || "Type here";
-  },
 
   onRender: function(){
     var query = hackdash.getQueryVariable("q");
@@ -57,12 +50,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
-  sort: function(e){
-    e.preventDefault();
-    var val = $(e.currentTarget).data("option-value");
-    this.collection.trigger("sort:" + val);
-  },
-
   search: function(){
     var self = this;
     window.clearTimeout(this.timer);
@@ -74,14 +61,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
       if (keyword !== self.lastSearch) {
         self.lastSearch = keyword;
 
-        var opts = {
-          reset: true
-        };
-
         if (keyword.length > 0) {
-          opts.data = $.param({ q: keyword });
+          fragment = (!fragment.length ? "dashboards" : fragment);
           hackdash.app.router.navigate(fragment + "?q=" + keyword, { trigger: true });
-          self.collection.fetch(opts);
+
+          self.collection.fetch({
+            reset: true,
+            data: $.param({ q: keyword })
+          });
         }
         else {
           self.collection.fetch();

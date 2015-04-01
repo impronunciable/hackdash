@@ -55,6 +55,22 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  initialize: function(){
+    if (!this.refresher){
+      this.refresher = this.refreshContent.bind(this);
+    }
+
+    this.collection
+      .off('change add remove reset', this.refresher)
+      .on('change add remove reset', this.refresher);
+  },
+
+  refreshContent: function(){
+    if (this.content && this.content.currentView){
+      this.content.currentView.refresh();
+    }
+  },
+
   onRender: function(){
 
     if (!this.header.currentView){
@@ -88,11 +104,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
       this.ui.content.width(w).height(h);
       this.ui.arrows.css('top', ((h/2) - this.ui.arrows.eq(0).height()/2) + "px");
-
-      var self = this;
-      this.collection.on('change add remove reset', function(){
-        self.content.currentView.refresh();
-      });
     }
 
   },

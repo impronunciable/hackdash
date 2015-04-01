@@ -23,7 +23,6 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
   routes : {
       "" : "showHome"
-
     , "login" : "showHome"
 
     // LANDING
