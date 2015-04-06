@@ -4620,6 +4620,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   onRender: function(){
     this.$el.addClass(this.model.get("status"));
     $(".tooltips", this.$el).tooltip({});
+    $.getScript("/js/disqus.js");
   },
 
   serializeData: function(){
@@ -4867,7 +4868,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer + "\n    </div>\n";
 },"11":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "      <div class=\"pull-right remove\">\n        <a href=\""
+  return "      <div class=\"pull-right\">\n        <a href=\""
     + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
     + "\" target=\"__blank\" class=\"btn btn-default\">demo</a>\n      </div>\n";
 },"13":function(depth0,helpers,partials,data) {
@@ -4931,9 +4932,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(10, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n  </div>\n\n  <div id=\"disqus_thread\" class=\"col-md-12\"></div>\n  <script src=\"/js/disqus.js\" disqus_shortname=\""
-    + escapeExpression(((helper = (helper = helpers.disqus_shortname || (depth0 != null ? depth0.disqus_shortname : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"disqus_shortname","hash":{},"data":data}) : helper)))
-    + "\"></script>\n\n</div>\n";
+  return buffer + "\n  </div>\n\n  <div class=\"container disqus-ctn\">\n    <div id=\"disqus_thread\" class=\"col-md-12\"></div>\n  </div>\n\n</div>\n";
 },"useData":true});
 
 },{"hbsfy/runtime":93}],85:[function(require,module,exports){

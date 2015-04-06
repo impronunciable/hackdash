@@ -56,6 +56,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   onRender: function(){
     this.$el.addClass(this.model.get("status"));
     $(".tooltips", this.$el).tooltip({});
+    $.getScript("/js/disqus.js");
   },
 
   serializeData: function(){

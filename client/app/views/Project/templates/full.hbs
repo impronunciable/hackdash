@@ -79,7 +79,7 @@
 
     <div class="col-md-8 buttons-panel">
       {{#if link}}
-      <div class="pull-right remove">
+      <div class="pull-right">
         <a href="{{link}}" target="__blank" class="btn btn-default">demo</a>
       </div>
       {{/if}}
@@ -115,7 +115,8 @@
 
   </div>
 
-  <div id="disqus_thread" class="col-md-12"></div>
-  <script src="/js/disqus.js" disqus_shortname="{{disqus_shortname}}"></script>
+  <div class="container disqus-ctn">
+    <div id="disqus_thread" class="col-md-12"></div>
+  </div>
 
 </div>
