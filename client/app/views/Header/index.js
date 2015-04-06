@@ -43,6 +43,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
         this.search.show(new Search({
           showSort: true,
           placeholder: "Enter your keywords",
+          model: this.model,
           collection: this.collection
         }));
         break;

@@ -36,7 +36,7 @@
 
     .btn {
       font-size: @fsize-17;
-      height: 44px;
+      height: 40px;
     }
 
   }
@@ -45,7 +45,11 @@
 .dashboard {
 
   .main-header {
-    position: relative;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    width: 100%;
+    height: 50px;
 
     .logo {
       margin:0;
@@ -57,7 +61,7 @@
 
     .search-ctn {
       margin-top: 10px;
-      margin-left: 100px;
+      float: left;
 
       .search {
 
@@ -66,9 +70,27 @@
         }
 
         .input-group-btn {
+
           button {
             height: 35px;
             padding-top: 0;
+          }
+
+        }
+
+        .create-project {
+          font-size: @fsize-22;
+          color: @color-white;
+          background-color: @color-action;
+          height: 35px;
+          font-size: 20px;
+          padding: 6px 10px;
+          max-width: 180px;
+          float: right;
+          margin: 0;
+
+          a {
+            color: @color-white;
           }
         }
 
@@ -802,8 +824,8 @@ footer {
           .add-admins {
             display: inline-block;
             background: lighten(@color-dashboard, 5%);
-            padding: 0px 14px;
-            font-size: 40px;
+            padding: 3px 9px 1px 8px;
+            font-size: @fsize-22;
             vertical-align: top;
             margin: 0;
             margin-top: 13px;
@@ -843,24 +865,7 @@ footer {
   }
 
   &.dashboard {
-
-    .header {
-
-      .container {
-
-        .page-link-right {
-          background-color: @color-action;
-          right: 50px;
-          height: 35px;
-          font-size: 20px;
-          padding: 6px 15px;
-
-          &.no-user {
-            right: 0;
-          }
-        }
-      }
-    }
+    padding-top: 50px;
 
     .body {
 

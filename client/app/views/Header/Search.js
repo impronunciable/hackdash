@@ -17,7 +17,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   events: {
     "keyup @ui.searchbox": "search",
-    "click .btn-group>.btn": "sortClicked"
+    "click .btn-group>.btn": "sortClicked",
+    "click .login": "showLogin"
   },
 
   //--------------------------------------
@@ -41,10 +42,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   serializeData: function(){
-    return {
+    return _.extend({
       showSort: this.showSort,
       placeholder: this.placeholder
-    };
+    }, this.model.toJSON());
   },
 
   //--------------------------------------
@@ -54,6 +55,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  showLogin: function(){
+    hackdash.app.showLogin();
+  },
 
   sortClicked: function(e){
     e.preventDefault();

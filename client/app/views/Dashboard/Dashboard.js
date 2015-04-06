@@ -20,10 +20,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "link": "#dashboard-link"
   },
 
-  events: {
-    "click .login": "showLogin"
-  },
-
   templateHelpers: {
     isAdmin: function(){
       var user = hackdash.user;
@@ -60,10 +56,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
-
-  showLogin: function(){
-    hackdash.app.showLogin();
-  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS

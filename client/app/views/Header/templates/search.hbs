@@ -1,4 +1,4 @@
-<div class="col-xs-6 col-md-6">
+<div class="hidden-sm col-md-4 col-lg-4">
 
   <div class="input-group">
     <input id="search" type="text" class="form-control" placeholder="{{placeholder}}">
@@ -12,7 +12,7 @@
 </div>
 
 {{#isDashboardView}}
-<div class="btn-group col-xs-6 col-md-6" data-toggle="buttons">
+<div class="btn-group col-xs-6 col-sm-7 col-sm-offset-1 col-md-5 col-md-offset-0 col-lg-4" data-toggle="buttons">
   <label class="btn btn-default col-xs-4 col-md-4">
     <input type="radio" name="options" id="name" autocomplete="off"> By Name
   </label>
@@ -22,5 +22,18 @@
   <label class="btn btn-default col-xs-4 col-md-4">
     <input type="radio" name="options" id="showcase" autocomplete="off"> Showcase
   </label>
+</div>
+
+<div class="col-sm-4 col-md-3 col-lg-4">
+  {{#if open}}
+  <h3 class="create-project">
+    <i class="fa fa-plus"></i>
+    {{#isLoggedIn}}
+    <a href="/dashboards/{{domain}}/create">Create Project</a>
+    {{else}}
+    <a class="login">Create Project</a>
+    {{/isLoggedIn}}
+  </h3>
+  {{/if}}
 </div>
 {{/isDashboardView}}
