@@ -5,6 +5,29 @@
 @import "./base";
 @import "./entity";
 
+@footer-height: 60px;
+
+html, body {
+  /* for sticky footer */
+  height: 100%;
+}
+
+#main {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -@footer-height;
+}
+
+#main:after {
+  content: "";
+  display: block;
+}
+
+footer, #main:after {
+  height: @footer-height;
+}
+
 .main-header {
   background-color: @color-blackB;
 
@@ -216,10 +239,18 @@ footer {
 
     &.static {
       position: relative;
-      height: 80px;
+      height: 55px;
+
+      .brand {
+        padding-top: 5px;
+      }
 
       .up-button {
-        height: 90px;
+        height: 65px;
+
+        .fa {
+          margin: 5px auto 5px auto;
+        }
       }
     }
   }
@@ -299,7 +330,7 @@ footer {
           text-align: initial;
 
           .hexagon {
-            .getHexagon(140px, 3px, @color-white, @color-user);
+            .getHexagon(100px, 3px, @color-white, @color-user);
           }
         }
 

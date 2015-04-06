@@ -149,6 +149,16 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
     if (statics.indexOf(hackdash.app.type) > -1){
       this.$el.addClass('static');
+      return;
+    }
+
+    function isAdmin(domain){
+      var user = hackdash.user;
+      return user && user.admin_in.indexOf(domain) >= 0 || false;
+    }
+
+    if (hackdash.app.type === 'dashboard' && !isAdmin(this.model.get('domain')) ){
+      this.$el.addClass('static');
     }
   }
 
