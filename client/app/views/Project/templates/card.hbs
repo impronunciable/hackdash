@@ -23,7 +23,7 @@
 <ul class="contributors">
   {{#each_upto contributors 5}}
   <li>
-    <a href="/users/{{_id}}" data-bypass>
+    <a href="/users/{{_id}}" {{#isLandingView}}data-bypass{{/isLandingView}}>
       {{getProfileImage .}}
     </a>
   </li>

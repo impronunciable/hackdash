@@ -28,13 +28,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var url = this.getURL();
 
     if (url !== false){
-      this.$el.attr({
-        'href': url,
-        'data-bypass': true
-      });
+      this.$el.attr({ 'href': url });
     }
 
-    $('.tooltips', this.$el).tooltip({});
+    if (hackdash.app.type === 'landing'){
+      this.$el.attr({ 'data-bypass': true });
+    }
+
+    $('.tooltips', this.$el).tooltip({ container: '.container' });
 
     this.afterRender();
   },

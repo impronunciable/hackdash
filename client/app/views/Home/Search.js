@@ -56,7 +56,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     this.timer = window.setTimeout(function(){
       var keyword = self.ui.searchbox.val();
-      var fragment = Backbone.history.fragment.replace(Backbone.history.location.search, "");
+      var currentSearch = decodeURI(Backbone.history.location.search);
+      var fragment = Backbone.history.fragment.replace(currentSearch, "");
 
       if (keyword !== self.lastSearch) {
         self.lastSearch = keyword;

@@ -113,6 +113,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   showHome: function(){
     this.homeView = new HomeLayout();
     var app = window.hackdash.app;
+    app.type = "landing";
+
     app.main.show(this.homeView);
   },
 
@@ -127,6 +129,9 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showHomeSection: function(section){
+    var app = window.hackdash.app;
+    app.type = "landing";
+
     if (this.homeView){
       this.homeView.setSection(section);
     }
@@ -137,13 +142,13 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       });
 
       main.show(this.homeView);
-    }
 
-    smoothScroll.animateScroll(null, '#' + section, {
-      offset: 60,
-      speed: 1000,
-      easing: 'easeInOut'
-    });
+      window.smoothScroll.animateScroll(null, '#' + section, {
+        offset: 60,
+        speed: 100,
+        easing: 'Linear'
+      });
+    }
   },
 
   showLandingDashboards: function(){
@@ -346,11 +351,6 @@ module.exports = function(){
 
   Placeholders.init({ live: true, hideOnFocus: true });
 
-  smoothScroll.init({
-    speed: 1000,
-    easing: 'easeInOut'
-  });
-
   Dropzone.autoDiscover = false;
 
   window.hackdash.apiURL = "/api/v2";
@@ -437,8 +437,8 @@ Handlebars.registerHelper('isDashboardView', function(options) {
   }
 });
 
-Handlebars.registerHelper('isSearchView', function(options) {
-  if (window.hackdash.app.type === "isearch"){
+Handlebars.registerHelper('isLandingView', function(options) {
+  if (window.hackdash.app.type === "landing"){
     return options.fn(this);
   } else {
     return options.inverse(this);
@@ -2728,13 +2728,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var url = this.getURL();
 
     if (url !== false){
-      this.$el.attr({
-        'href': url,
-        'data-bypass': true
-      });
+      this.$el.attr({ 'href': url });
     }
 
-    $('.tooltips', this.$el).tooltip({});
+    if (hackdash.app.type === 'landing'){
+      this.$el.attr({ 'data-bypass': true });
+    }
+
+    $('.tooltips', this.$el).tooltip({ container: '.container' });
 
     this.afterRender();
   },
@@ -2844,7 +2845,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     this.timer = window.setTimeout(function(){
       var keyword = self.ui.searchbox.val();
-      var fragment = Backbone.history.fragment.replace(Backbone.history.location.search, "");
+      var currentSearch = decodeURI(Backbone.history.location.search);
+      var fragment = Backbone.history.fragment.replace(currentSearch, "");
 
       if (keyword !== self.lastSearch) {
         self.lastSearch = keyword;
@@ -3489,7 +3491,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  return "\n<div class=\"container-fluid\">\n  <div class=\"row landing-header\">\n\n    <div class=\"col-md-12 text-center\">\n      <div class=\"logo\"></div>\n    </div>\n\n    <div class=\"col-md-12 text-center call-action\">\n      <h1>Ideas for a <span class=\"highlight\">hackathon</span></h1>\n      <h2>Create your dashboard!</h2>\n\n      <div class=\"row\">\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-right arrow text-right hidden\">\n            <i class=\"fa fa-long-arrow-right\"></i>\n          </div>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-8 col-md-6\">\n          <div class=\"input-group\">\n            <input id=\"domain\" type=\"text\" class=\"form-control\" placeholder=\"hackathon name (5-10 chars)\">\n            <span class=\"input-group-btn\">\n              <button id=\"create-dashboard\" class=\"btn btn-primary\" type=\"button\">create now</button>\n            </span>\n          </div>\n          <p id=\"new-dashboard-error\" class=\"text-left text-danger hidden\">ERROR</p>\n        </div>\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-left arrow text-left hidden\">\n            <i class=\"fa fa-long-arrow-left\"></i>\n          </div>\n        </div>\n\n      </div>\n\n    </div>\n\n  </div>\n\n  <div class=\"col-md-12 text-center\" style=\"margin-top: -61px;\">\n\n    <ul class=\"nav nav-tabs landing\" role=\"tablist\">\n\n      <li id=\"dashboard\" class=\"dashboard\">\n        <a href=\"#dashboards\" role=\"tab\" data-toggle=\"tab\">Dashboards</a>\n      </li>\n      <li id=\"project\" class=\"project\">\n        <a href=\"#projects\" role=\"tab\" data-toggle=\"tab\">Projects</a>\n      </li>\n      <li id=\"user\" class=\"user\">\n        <a href=\"#users\" role=\"tab\" data-toggle=\"tab\">People</a>\n      </li>\n      <li id=\"collection\" class=\"collection\">\n        <a href=\"#collections\" role=\"tab\" data-toggle=\"tab\">Collections</a>\n      </li>\n\n    </ul>\n\n  </div>\n</div>\n\n<div class=\"tab-content\">\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"dashboards\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"projects\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"users\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"collections\"></div>\n</div>\n\n<div class=\"col-md-12 stats-ctn\"></div>\n\n<div class=\"col-md-12 team-ctn\"></div>\n\n<div class=\"col-md-12 team-partners\">\n  <div class=\"col-md-2 col-md-offset-4 partners-tab\">\n    <h3>partners</h3>\n  </div>\n  <div class=\"col-md-2 team-tab\">\n    <h3>team</h3>\n  </div>\n</div>\n\n<div class=\"col-md-12 partners-ctn\"></div>\n<div class=\"col-md-12 about-ctn\">\n  The HackDash was born by accident and by a need. We were looking for a platform to track ideas through hackathons in the line to the <a href=\"http://mediaparty.info/\" data-bypass=\"true\" target=\"__blank\">Hacks/Hackers Media Party</a> organized by <a href=\"https://twitter.com/HacksHackersBA\" data-bypass=\"true\" target=\"__blank\">@HacksHackersBA</a> where hackers and journalists share ideas. We spread the need through Twitter and that was the context of the HackDash born. <a href=\"https://twitter.com/blejman\" data-bypass=\"true\" target=\"__blank\">@blejman</a> had an idea and <a href=\"https://twitter.com/dzajdband\" data-bypass=\"true\" target=\"__blank\">@danzajdband</a> was interested in implement that idea. So we started building the app hoping we can get to the Buenos Aires Media Party with something that doesn't suck. The Media Party Hackathon day came followed by a grateful surprise. Not only the people liked the HackDash implementation but a couple of coders added the improvement of the HackDash as a Hackaton project. After the Media Party we realized that this small app was filling a real need. Three years later, the dashboard is becoming an standard to track innovative ideas around the world.\n  <p><a class=\"up-button\">Create your own dashboard</a>, be part of a global community.</p>\n\n</div>\n<div class=\"col-md-12 footer-ctn\"></div>\n";
+  return "\n<div class=\"container-fluid\">\n  <div class=\"row landing-header\">\n\n    <div class=\"col-md-12 text-center\">\n      <div class=\"logo\"></div>\n    </div>\n\n    <div class=\"col-md-12 text-center call-action\">\n      <h1>Ideas for a <span class=\"highlight\">hackathon</span></h1>\n      <h2>Create your dashboard!</h2>\n\n      <div class=\"row\">\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-right arrow text-right hidden\">\n            <i class=\"fa fa-long-arrow-right\"></i>\n          </div>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-8 col-md-6\">\n          <div class=\"input-group\">\n            <input id=\"domain\" type=\"text\" class=\"form-control\" placeholder=\"hackathon name (5-10 chars)\">\n            <span class=\"input-group-btn\">\n              <button id=\"create-dashboard\" class=\"btn btn-primary\" type=\"button\">create now</button>\n            </span>\n          </div>\n          <p id=\"new-dashboard-error\" class=\"text-left text-danger hidden\">ERROR</p>\n        </div>\n\n        <div class=\"hidden-xs col-sm-2 col-md-3\">\n          <div class=\"pull-left arrow text-left hidden\">\n            <i class=\"fa fa-long-arrow-left\"></i>\n          </div>\n        </div>\n\n      </div>\n\n    </div>\n\n  </div>\n\n  <div class=\"col-md-12 text-center\" style=\"margin-top: -61px;\">\n\n    <ul class=\"nav nav-tabs landing\" role=\"tablist\">\n\n      <li id=\"dashboard\" class=\"dashboard\">\n        <a href=\"#dashboards\" role=\"tab\" data-toggle=\"tab\">Dashboards</a>\n      </li>\n      <li id=\"project\" class=\"project\">\n        <a href=\"#projects\" role=\"tab\" data-toggle=\"tab\">Projects</a>\n      </li>\n      <li id=\"user\" class=\"user\">\n        <a href=\"#users\" role=\"tab\" data-toggle=\"tab\">People</a>\n      </li>\n      <li id=\"collection\" class=\"collection\">\n        <a href=\"#collections\" role=\"tab\" data-toggle=\"tab\">Collections</a>\n      </li>\n\n    </ul>\n\n  </div>\n</div>\n\n<div class=\"tab-content\">\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"dashboards\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"projects\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"users\"></div>\n  <div role=\"tabpanel\" class=\"tab-pane\" id=\"collections\"></div>\n</div>\n\n<div class=\"col-md-12 stats-ctn\"></div>\n\n<div class=\"col-md-12 team-ctn\"></div>\n\n<div class=\"col-md-12 team-partners\">\n  <div class=\"col-md-2 col-md-offset-4 partners-tab\">\n    <h3>partners</h3>\n  </div>\n  <div class=\"col-md-2 team-tab\">\n    <h3>team</h3>\n  </div>\n</div>\n\n<div class=\"col-md-12 partners-ctn\"></div>\n<div class=\"col-md-12 about-ctn\">\n  The HackDash was born by accident and by a need. We were looking for a platform to track ideas through hackathons in the line to the <a href=\"http://mediaparty.info/\" data-bypass=\"true\" target=\"__blank\">Hacks/Hackers Media Party</a> organized by <a href=\"https://twitter.com/HacksHackersBA\" data-bypass=\"true\" target=\"__blank\">@HacksHackersBA</a> where hackers and journalists share ideas. We spread the need through Twitter and that was the context of the HackDash born. <a href=\"https://twitter.com/blejman\" data-bypass=\"true\" target=\"__blank\">@blejman</a> had an idea and <a href=\"https://twitter.com/dzajdband\" data-bypass=\"true\" target=\"__blank\">@dzajdband</a> was interested in implement that idea. So we started building the app hoping we can get to the Buenos Aires Media Party with something that doesn't suck. The Media Party Hackathon day came followed by a grateful surprise. Not only the people liked the HackDash implementation but a couple of coders added the improvement of the HackDash as a Hackaton project. After the Media Party we realized that this small app was filling a real need. Three years later, the dashboard is becoming an standard to track innovative ideas around the world.\n  <p><a class=\"up-button\">Create your own dashboard</a>, be part of a global community.</p>\n\n</div>\n<div class=\"col-md-12 footer-ctn\"></div>\n";
   },"useData":true});
 
 },{"hbsfy/runtime":93}],61:[function(require,module,exports){
@@ -3847,15 +3849,15 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     switch(this.type){
       case "collections":
-        url = "http://" + hackdash.baseURL + "/collections/" + this.model.get("_id");
+        url = "/collections/" + this.model.get("_id");
         break;
       case "dashboards":
-        url = "http://" + hackdash.baseURL + "/dashboards/" + this.model.get("domain");
+        url = "/dashboards/" + this.model.get("domain");
         break;
       case "projects":
       case "contributions":
       case "likes":
-        url = "http://" + hackdash.baseURL + "/projects/" + this.model.get("_id");
+        url = "/projects/" + this.model.get("_id");
         break;
     }
 
@@ -4031,7 +4033,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + escapeExpression(((helper = (helper = helpers.type || (depth0 != null ? depth0.type : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"type","hash":{},"data":data}) : helper)))
     + "\" href=\""
     + escapeExpression(((helper = (helper = helpers.url || (depth0 != null ? depth0.url : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"url","hash":{},"data":data}) : helper)))
-    + "\" data-bypass>\n  <div class=\"well media\">\n    <div class=\"media-left\">\n";
+    + "\">\n  <div class=\"well media\">\n    <div class=\"media-left\">\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.showImage : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + "    </div>\n    <div class=\"media-body\">\n      <h4 class=\"media-heading\">"
@@ -4086,6 +4088,7 @@ module.exports = ItemView.extend({
   events: {
     "click @ui.contribute": "onContribute",
     "click @ui.follow": "onFollow",
+    "click .contributors a": "stopPropagation"
   },
 
   modelEvents: {
@@ -4141,6 +4144,10 @@ module.exports = ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  stopPropagation: function(e){
+    e.stopPropagation();
+  },
 
   onContribute: function(e){
     e.preventDefault();
@@ -4298,6 +4305,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
     this.wall.reset({
       draggable: this.showcaseMode,
+      animate: true,
       keepOrder: false,
       selector: '.entity',
       cellW: 200,
@@ -4691,56 +4699,61 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + escapeExpression(((helpers.firstLetter || (depth0 && depth0.firstLetter) || helperMissing).call(depth0, (depth0 != null ? depth0.title : depth0), {"name":"firstLetter","hash":{},"data":data})))
     + "</i>\n";
 },"5":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "  <li>\n    <a href=\"/users/"
+  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "  <li>\n    <a href=\"/users/"
     + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
-    + "\" data-bypass>\n      "
+    + "\" ";
+  stack1 = ((helper = (helper = helpers.isLandingView || (depth0 != null ? depth0.isLandingView : depth0)) != null ? helper : helperMissing),(options={"name":"isLandingView","hash":{},"fn":this.program(6, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
+  if (!helpers.isLandingView) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + ">\n      "
     + escapeExpression(((helpers.getProfileImage || (depth0 && depth0.getProfileImage) || helperMissing).call(depth0, depth0, {"name":"getProfileImage","hash":{},"data":data})))
     + "\n    </a>\n  </li>\n";
-},"7":function(depth0,helpers,partials,data) {
+},"6":function(depth0,helpers,partials,data) {
+  return "data-bypass";
+  },"8":function(depth0,helpers,partials,data) {
   var stack1, buffer = "";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.contributing : depth0), {"name":"if","hash":{},"fn":this.program(8, data),"inverse":this.program(10, data),"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.contributing : depth0), {"name":"if","hash":{},"fn":this.program(9, data),"inverse":this.program(11, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.following : depth0), {"name":"if","hash":{},"fn":this.program(12, data),"inverse":this.program(14, data),"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.following : depth0), {"name":"if","hash":{},"fn":this.program(13, data),"inverse":this.program(15, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer;
-},"8":function(depth0,helpers,partials,data) {
+},"9":function(depth0,helpers,partials,data) {
   var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression;
   return "    <a\n      class=\"tooltips contribute\"\n      data-loading-text=\"leaving...\"\n      data-original-title=\""
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.contributors : depth0)) != null ? stack1.length : stack1), depth0))
     + " contributors\">Leave</a>\n";
-},"10":function(depth0,helpers,partials,data) {
+},"11":function(depth0,helpers,partials,data) {
   var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression;
   return "    <a\n      class=\"tooltips contribute\"\n      data-loading-text=\"joining...\"\n      data-original-title=\""
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.contributors : depth0)) != null ? stack1.length : stack1), depth0))
     + " contributors\">Join</a>\n";
-},"12":function(depth0,helpers,partials,data) {
+},"13":function(depth0,helpers,partials,data) {
   var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression;
   return "    <a\n      class=\"tooltips follow\"\n      data-loading-text=\"unfollowing...\"\n      data-original-title=\""
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.followers : depth0)) != null ? stack1.length : stack1), depth0))
     + " followers\">Unfollow</a>\n";
-},"14":function(depth0,helpers,partials,data) {
+},"15":function(depth0,helpers,partials,data) {
   var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression;
   return "    <a\n      class=\"tooltips follow\"\n      data-loading-text=\"following...\"\n      data-original-title=\""
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.followers : depth0)) != null ? stack1.length : stack1), depth0))
     + " followers\">Follow</a>\n";
-},"16":function(depth0,helpers,partials,data) {
+},"17":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "  <a href=\""
     + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
     + "\" target=\"_blank\" data-bypass>Demo</a>\n";
-},"18":function(depth0,helpers,partials,data) {
+},"19":function(depth0,helpers,partials,data) {
   var stack1, buffer = "";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isShowcaseMode : depth0), {"name":"if","hash":{},"fn":this.program(19, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isShowcaseMode : depth0), {"name":"if","hash":{},"fn":this.program(20, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer;
-},"19":function(depth0,helpers,partials,data) {
+},"20":function(depth0,helpers,partials,data) {
   var stack1, buffer = "\n  <div class=\"switcher tooltips\" data-placement=\"top\" data-original-title=\"Toggle visibility\">\n    <input type=\"checkbox\" ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.active : depth0), {"name":"if","hash":{},"fn":this.program(20, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.active : depth0), {"name":"if","hash":{},"fn":this.program(21, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + " class=\"switch-small\">\n  </div>\n\n";
-},"20":function(depth0,helpers,partials,data) {
+},"21":function(depth0,helpers,partials,data) {
   return "checked";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "\n<div class=\"progress\" title=\""
@@ -4764,13 +4777,13 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   buffer += "</ul>\n\n<div class=\"action-bar text-right\">\n\n  <i class=\"fa fa-clock-o timer tooltips\"\n    data-original-title=\""
     + escapeExpression(((helpers.timeAgo || (depth0 && depth0.timeAgo) || helperMissing).call(depth0, (depth0 != null ? depth0.created_at : depth0), {"name":"timeAgo","hash":{},"data":data})))
     + "\"></i>\n\n";
-  stack1 = helpers.unless.call(depth0, (depth0 != null ? depth0.isOwner : depth0), {"name":"unless","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data});
+  stack1 = helpers.unless.call(depth0, (depth0 != null ? depth0.isOwner : depth0), {"name":"unless","hash":{},"fn":this.program(8, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.link : depth0), {"name":"if","hash":{},"fn":this.program(16, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.link : depth0), {"name":"if","hash":{},"fn":this.program(17, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "</div>\n\n";
-  stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(18, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
+  stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(19, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
   return buffer;

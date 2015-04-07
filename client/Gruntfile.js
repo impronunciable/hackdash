@@ -146,7 +146,6 @@ module.exports = function(grunt) {
             ,Placeholders: true
             ,Packery: true
             ,Draggabilly: true
-            ,smoothScroll: true
             ,Dropzone: true
             ,hackdash: true
           }

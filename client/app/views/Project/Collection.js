@@ -102,6 +102,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
     this.wall.reset({
       draggable: this.showcaseMode,
+      animate: true,
       keepOrder: false,
       selector: '.entity',
       cellW: 200,

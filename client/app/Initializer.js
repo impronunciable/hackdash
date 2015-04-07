@@ -24,11 +24,6 @@ module.exports = function(){
 
   Placeholders.init({ live: true, hideOnFocus: true });
 
-  smoothScroll.init({
-    speed: 1000,
-    easing: 'easeInOut'
-  });
-
   Dropzone.autoDiscover = false;
 
   window.hackdash.apiURL = "/api/v2";

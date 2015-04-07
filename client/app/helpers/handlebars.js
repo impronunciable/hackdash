@@ -58,8 +58,8 @@ Handlebars.registerHelper('isDashboardView', function(options) {
   }
 });
 
-Handlebars.registerHelper('isSearchView', function(options) {
-  if (window.hackdash.app.type === "isearch"){
+Handlebars.registerHelper('isLandingView', function(options) {
+  if (window.hackdash.app.type === "landing"){
     return options.fn(this);
   } else {
     return options.inverse(this);

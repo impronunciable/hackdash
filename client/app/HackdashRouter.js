@@ -48,6 +48,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   showHome: function(){
     this.homeView = new HomeLayout();
     var app = window.hackdash.app;
+    app.type = "landing";
+
     app.main.show(this.homeView);
   },
 
@@ -62,6 +64,9 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   showHomeSection: function(section){
+    var app = window.hackdash.app;
+    app.type = "landing";
+
     if (this.homeView){
       this.homeView.setSection(section);
     }
@@ -72,13 +77,13 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       });
 
       main.show(this.homeView);
-    }
 
-    smoothScroll.animateScroll(null, '#' + section, {
-      offset: 60,
-      speed: 1000,
-      easing: 'easeInOut'
-    });
+      window.smoothScroll.animateScroll(null, '#' + section, {
+        offset: 60,
+        speed: 100,
+        easing: 'Linear'
+      });
+    }
   },
 
   showLandingDashboards: function(){

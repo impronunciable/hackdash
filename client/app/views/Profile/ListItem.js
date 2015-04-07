@@ -37,15 +37,15 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     switch(this.type){
       case "collections":
-        url = "http://" + hackdash.baseURL + "/collections/" + this.model.get("_id");
+        url = "/collections/" + this.model.get("_id");
         break;
       case "dashboards":
-        url = "http://" + hackdash.baseURL + "/dashboards/" + this.model.get("domain");
+        url = "/dashboards/" + this.model.get("domain");
         break;
       case "projects":
       case "contributions":
       case "likes":
-        url = "http://" + hackdash.baseURL + "/projects/" + this.model.get("_id");
+        url = "/projects/" + this.model.get("_id");
         break;
     }
 

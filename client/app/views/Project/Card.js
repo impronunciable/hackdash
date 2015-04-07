@@ -24,6 +24,7 @@ module.exports = ItemView.extend({
   events: {
     "click @ui.contribute": "onContribute",
     "click @ui.follow": "onFollow",
+    "click .contributors a": "stopPropagation"
   },
 
   modelEvents: {
@@ -79,6 +80,10 @@ module.exports = ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  stopPropagation: function(e){
+    e.stopPropagation();
+  },
 
   onContribute: function(e){
     e.preventDefault();
