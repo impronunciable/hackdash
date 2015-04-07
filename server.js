@@ -13,6 +13,9 @@ var express = require('express')
 
 var app = exports.app = express();
 
+var sessionMaxAge = 7 * 24 * 60 * 60 * 1000; // 7 days;
+var staticsMaxAge = 365 * 24 * 60 * 60 * 1000; // 1 Year;
+
 var config;
 
 // Set Config
@@ -59,14 +62,14 @@ app.configure(function(){
   app.use(express.session({
       secret: app.get('config').session
     , store: new MongoStore({db: app.get('config').db.name, url: app.get('config').db.url})
-    , cookie: { maxAge: 365 * 24 * 60 * 60 * 1000, path: '/', domain: '.' + app.get('config').host }
+    , cookie: { maxAge: sessionMaxAge, path: '/', domain: '.' + app.get('config').host }
   }));
 
   app.use(passport.initialize());
   app.use(passport.session());
 
   app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+  app.use(express.static(__dirname + '/public', { maxAge: staticsMaxAge }));
 
   app.use(function(req, res) {
      res.status(400);

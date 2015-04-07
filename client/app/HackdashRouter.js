@@ -115,9 +115,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       app.projects.domain = dash;
     }
 
-    var self = this;
     app.dashboard.fetch().done(function(){
-      app.projects.fetch(self.getSearchQuery(), { parse: true })
+      app.projects.fetch({}, { parse: true })
         .done(function(){
           app.projects.buildShowcase(app.dashboard.get("showcase"));
 

@@ -37,7 +37,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var query = hackdash.getQueryVariable("q");
     if (query && query.length > 0){
       this.ui.searchbox.val(query);
-      this.lastSearch = query;
+      this.search();
     }
   },
 
@@ -72,25 +72,24 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     this.timer = window.setTimeout(function(){
       var keyword = self.ui.searchbox.val();
-      var fragment = Backbone.history.fragment.replace(Backbone.history.location.search, "");
+      var currentSearch = decodeURI(Backbone.history.location.search);
+      var fragment = Backbone.history.fragment.replace(currentSearch, "");
 
       if (keyword !== self.lastSearch) {
         self.lastSearch = keyword;
 
-        var opts = {
-          reset: true
-        };
-
-        if (keyword.length > 0) {
-          opts.data = $.param({ q: keyword });
-
-          hackdash.app.router.navigate(fragment + "?q=" + keyword);
-          self.collection.fetch(opts);
+        var url = fragment + "?q=" + keyword;
+        if (keyword.length === 0) {
+          url = fragment;
         }
-        else {
-          hackdash.app.router.navigate(fragment);
-          self.collection.fetch(opts);
-        }
+
+        hackdash.app.router.navigate(url);
+        self.collection.search(keyword);
+
+        var top = $('#dashboard-projects').offset().top;
+        var offset = self.$el.parent().height();
+        var pos = (top - offset >= 0 ? top - offset : 0);
+        $(window).scrollTop(pos);
       }
 
     }, 300);

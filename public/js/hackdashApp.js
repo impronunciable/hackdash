@@ -180,9 +180,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       app.projects.domain = dash;
     }
 
-    var self = this;
     app.dashboard.fetch().done(function(){
-      app.projects.fetch(self.getSearchQuery(), { parse: true })
+      app.projects.fetch({}, { parse: true })
         .done(function(){
           app.projects.buildShowcase(app.dashboard.get("showcase"));
 
@@ -350,6 +349,11 @@ module.exports = function(){
   require('./helpers/backboneOverrides');
 
   Placeholders.init({ live: true, hideOnFocus: true });
+
+  window.smoothScroll.init({
+    speed: 100,
+    easing: 'Linear'
+  });
 
   Dropzone.autoDiscover = false;
 
@@ -971,7 +975,7 @@ module.exports = Backbone.Model.extend({
  *
  */
 
-var 
+var
   Project = require('./Project');
 
 var Projects = module.exports = Backbone.Collection.extend({
@@ -979,15 +983,17 @@ var Projects = module.exports = Backbone.Collection.extend({
   model: Project,
 
   idAttribute: "_id",
-  
+
   url: function(){
     if (this.domain){
-      return hackdash.apiURL + '/' + this.domain + '/projects';   
+      return hackdash.apiURL + '/' + this.domain + '/projects';
     }
-    return hackdash.apiURL + '/projects'; 
+    return hackdash.apiURL + '/projects';
   },
 
   parse: function(response){
+
+    this.allItems = response;
 
     if (hackdash.app.type !== "dashboard"){
       //it is not a dashboard so all projects active
@@ -1002,15 +1008,15 @@ var Projects = module.exports = Backbone.Collection.extend({
       return response;
     }
 
-    // set active property of a project from showcase mode 
+    // set active property of a project from showcase mode
     // (only projects at showcase array are active ones)
     _.each(response, function(project){
-      
+
       if (showcase.indexOf(project._id) >= 0){
         project.active = true;
       }
       else {
-        project.active = false; 
+        project.active = false;
       }
 
     });
@@ -1043,6 +1049,30 @@ var Projects = module.exports = Backbone.Collection.extend({
         return !project.get("active");
       })
     );
+  },
+
+  search: function(keywords){
+
+    if (keywords.length === 0){
+      this.reset(this.allItems);
+      return;
+    }
+
+    var regex = new RegExp(keywords, 'i');
+    var items = [];
+
+    _.each(this.allItems, function(project){
+      if (
+        regex.test(project.title) ||
+        regex.test(project.description) ||
+        regex.test(project.tags.join(' '))
+        ) {
+
+          return items.push(project);
+      }
+    });
+
+    this.reset(items);
   }
 
 });
@@ -2288,7 +2318,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var query = hackdash.getQueryVariable("q");
     if (query && query.length > 0){
       this.ui.searchbox.val(query);
-      this.lastSearch = query;
+      this.search();
     }
   },
 
@@ -2323,25 +2353,24 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     this.timer = window.setTimeout(function(){
       var keyword = self.ui.searchbox.val();
-      var fragment = Backbone.history.fragment.replace(Backbone.history.location.search, "");
+      var currentSearch = decodeURI(Backbone.history.location.search);
+      var fragment = Backbone.history.fragment.replace(currentSearch, "");
 
       if (keyword !== self.lastSearch) {
         self.lastSearch = keyword;
 
-        var opts = {
-          reset: true
-        };
-
-        if (keyword.length > 0) {
-          opts.data = $.param({ q: keyword });
-
-          hackdash.app.router.navigate(fragment + "?q=" + keyword);
-          self.collection.fetch(opts);
+        var url = fragment + "?q=" + keyword;
+        if (keyword.length === 0) {
+          url = fragment;
         }
-        else {
-          hackdash.app.router.navigate(fragment);
-          self.collection.fetch(opts);
-        }
+
+        hackdash.app.router.navigate(url);
+        self.collection.search(keyword);
+
+        var top = $('#dashboard-projects').offset().top;
+        var offset = self.$el.parent().height();
+        var pos = (top - offset >= 0 ? top - offset : 0);
+        $(window).scrollTop(pos);
       }
 
     }, 300);

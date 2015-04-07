@@ -3,7 +3,7 @@
  *
  */
 
-var 
+var
   Project = require('./Project');
 
 var Projects = module.exports = Backbone.Collection.extend({
@@ -11,15 +11,17 @@ var Projects = module.exports = Backbone.Collection.extend({
   model: Project,
 
   idAttribute: "_id",
-  
+
   url: function(){
     if (this.domain){
-      return hackdash.apiURL + '/' + this.domain + '/projects';   
+      return hackdash.apiURL + '/' + this.domain + '/projects';
     }
-    return hackdash.apiURL + '/projects'; 
+    return hackdash.apiURL + '/projects';
   },
 
   parse: function(response){
+
+    this.allItems = response;
 
     if (hackdash.app.type !== "dashboard"){
       //it is not a dashboard so all projects active
@@ -34,15 +36,15 @@ var Projects = module.exports = Backbone.Collection.extend({
       return response;
     }
 
-    // set active property of a project from showcase mode 
+    // set active property of a project from showcase mode
     // (only projects at showcase array are active ones)
     _.each(response, function(project){
-      
+
       if (showcase.indexOf(project._id) >= 0){
         project.active = true;
       }
       else {
-        project.active = false; 
+        project.active = false;
       }
 
     });
@@ -75,6 +77,30 @@ var Projects = module.exports = Backbone.Collection.extend({
         return !project.get("active");
       })
     );
+  },
+
+  search: function(keywords){
+
+    if (keywords.length === 0){
+      this.reset(this.allItems);
+      return;
+    }
+
+    var regex = new RegExp(keywords, 'i');
+    var items = [];
+
+    _.each(this.allItems, function(project){
+      if (
+        regex.test(project.title) ||
+        regex.test(project.description) ||
+        regex.test(project.tags.join(' '))
+        ) {
+
+          return items.push(project);
+      }
+    });
+
+    this.reset(items);
   }
 
 });
