@@ -55,10 +55,10 @@
       left: 0;
 
       &.brainstorming { width: 1%; }
-      &.wireframing { width: 20%; }
-      &.building { width: 40%; }
-      &.researching { width: 60%; }
-      &.prototyping { width: 80%; }
+      &.researching { width: 10%; }
+      &.prototyping { width: 25%; }
+      &.wireframing { width: 50%; }
+      &.building { width: 75%; }
       &.releasing { width: 100%; }
 
     }
@@ -124,7 +124,12 @@
     }
 
     .description {
+      display: none;
       font-size: @fsize-12;
+      color: @color-white;
+      overflow: hidden;
+      max-height: 100px;
+      padding: 0 5px;
     }
   }
 

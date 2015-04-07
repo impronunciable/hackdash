@@ -3719,7 +3719,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   cancel: function(){
-    hackdash.app.router.navigate("/", { trigger: true, replace: true });
+    window.location.reload();
   },
 
   //--------------------------------------
@@ -4612,6 +4612,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "click @ui.contribute": "onContribute",
     "click @ui.follow": "onFollow",
     "click .remove a": "onRemove",
+    "click .login": "showLogin"
   },
 
   modelEvents: {
@@ -4665,6 +4666,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
         replace: true
       });
     }
+  },
+
+  showLogin: function(){
+    hackdash.app.showLogin();
   },
 
   //--------------------------------------
@@ -4751,7 +4756,9 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
     + "\" data-bypass>"
     + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
-    + "</a></h3>\n  </div>\n</div>\n\n<ul class=\"contributors\">\n";
+    + "</a></h3>\n    <p class=\"description\">"
+    + escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"description","hash":{},"data":data}) : helper)))
+    + "</p>\n  </div>\n</div>\n\n<ul class=\"contributors\">\n";
   stack1 = ((helpers.each_upto || (depth0 && depth0.each_upto) || helperMissing).call(depth0, (depth0 != null ? depth0.contributors : depth0), 5, {"name":"each_upto","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data}));
   if (stack1 != null) { buffer += stack1; }
   buffer += "</ul>\n\n<div class=\"action-bar text-right\">\n\n  <i class=\"fa fa-clock-o timer tooltips\"\n    data-original-title=\""
@@ -4861,7 +4868,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + escapeExpression(lambda(depth0, depth0))
     + "</a>\n        </li>\n";
 },"10":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "\n    <div class=\"col-md-8 buttons-panel\">\n";
+  var stack1, buffer = "\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.link : depth0), {"name":"if","hash":{},"fn":this.program(11, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n";
@@ -4870,7 +4877,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   buffer += "\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.showActions : depth0), {"name":"if","hash":{},"fn":this.program(15, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n    </div>\n";
+  return buffer + "\n\n";
 },"11":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "      <div class=\"pull-right\">\n        <a href=\""
@@ -4897,6 +4904,8 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return "        <a data-loading-text=\"unfollowing...\" class=\"btn btn-default unfollow\">Unfollow</a>\n";
   },"22":function(depth0,helpers,partials,data) {
   return "        <a data-loading-text=\"following...\" class=\"btn btn-default follow\">Follow</a>\n";
+  },"24":function(depth0,helpers,partials,data) {
+  return "\n      <div class=\"pull-right\">\n        <a class=\"btn btn-default login\">Follow</a>\n        <a class=\"btn btn-default login\">Join</a>\n      </div>\n\n";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, lambda=this.lambda, blockHelperMissing=helpers.blockHelperMissing, buffer = "\n<div class=\"header\">\n  <div class=\"container\">\n    <h1>"
     + escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)))
@@ -4933,11 +4942,11 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   buffer += "\n      </div>\n      <ul class=\"tags clearfix\">\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.tags : depth0), {"name":"each","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "      </ul>\n    </div>\n\n";
-  stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(10, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
+  buffer += "      </ul>\n    </div>\n\n    <div class=\"col-md-8 buttons-panel\">\n    \n";
+  stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(10, data),"inverse":this.program(24, data),"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n  </div>\n\n  <div class=\"container disqus-ctn\">\n    <div id=\"disqus_thread\" class=\"col-md-12\"></div>\n  </div>\n\n</div>\n";
+  return buffer + "    </div>\n\n  </div>\n\n  <div class=\"container disqus-ctn\">\n    <div id=\"disqus_thread\" class=\"col-md-12\"></div>\n  </div>\n\n</div>\n";
 },"useData":true});
 
 },{"hbsfy/runtime":93}],85:[function(require,module,exports){

@@ -43,6 +43,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "click @ui.contribute": "onContribute",
     "click @ui.follow": "onFollow",
     "click .remove a": "onRemove",
+    "click .login": "showLogin"
   },
 
   modelEvents: {
@@ -96,6 +97,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
         replace: true
       });
     }
+  },
+
+  showLogin: function(){
+    hackdash.app.showLogin();
   },
 
   //--------------------------------------

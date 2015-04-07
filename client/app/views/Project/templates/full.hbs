@@ -75,9 +75,10 @@
       </ul>
     </div>
 
+    <div class="col-md-8 buttons-panel">
+    
     {{#isLoggedIn}}
 
-    <div class="col-md-8 buttons-panel">
       {{#if link}}
       <div class="pull-right">
         <a href="{{link}}" target="__blank" class="btn btn-default">demo</a>
@@ -110,8 +111,16 @@
       </div>
       {{/if}}
 
-    </div>
+
+    {{else}}
+
+      <div class="pull-right">
+        <a class="btn btn-default login">Follow</a>
+        <a class="btn btn-default login">Join</a>
+      </div>
+
     {{/isLoggedIn}}
+    </div>
 
   </div>
 
