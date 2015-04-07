@@ -4117,7 +4117,8 @@ module.exports = ItemView.extend({
   events: {
     "click @ui.contribute": "onContribute",
     "click @ui.follow": "onFollow",
-    "click .contributors a": "stopPropagation"
+    "click .contributors a": "stopPropagation",
+    "click .demo-link": "stopPropagation"
   },
 
   modelEvents: {
@@ -4769,7 +4770,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + " followers\">Follow</a>\n";
 },"17":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "  <a href=\""
+  return "  <a class=\"demo-link\" href=\""
     + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
     + "\" target=\"_blank\" data-bypass>Demo</a>\n";
 },"19":function(depth0,helpers,partials,data) {

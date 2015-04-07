@@ -24,7 +24,8 @@ module.exports = ItemView.extend({
   events: {
     "click @ui.contribute": "onContribute",
     "click @ui.follow": "onFollow",
-    "click .contributors a": "stopPropagation"
+    "click .contributors a": "stopPropagation",
+    "click .demo-link": "stopPropagation"
   },
 
   modelEvents: {
