@@ -33,9 +33,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     if (hackdash.app.type === 'landing'){
       this.$el.attr({ 'data-bypass': true });
+      $('.tooltips', this.$el).tooltip({ container: '.tab-content' });
     }
-
-    $('.tooltips', this.$el).tooltip({ container: '.container' });
+    else {
+      $('.tooltips', this.$el).tooltip({ container: '.container' });
+    }
 
     this.afterRender();
   },

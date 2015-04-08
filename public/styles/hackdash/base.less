@@ -6,13 +6,28 @@
   background: @color-action; /* Gecko Browsers */
 }
 
-.noselect {
+.no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.text-select {
+  -webkit-touch-callout: text;
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+input,textarea,
+h1,h2,h3,h4,h5,h6,
+label, span, p {
+  .text-select;
 }
 
 .form-control:focus{
@@ -48,7 +63,7 @@
 }
 
 body {
-  .noselect;
+  .no-select;
   margin: 0;
   font-family: @primary-font;
   color: @default-font-color;
@@ -106,7 +121,7 @@ h6 { font-size: @fsize-12; }
     }
   }
 
-  .logout {
+  .logout, .login {
     font-family: @secondary-font;
     font-size: @fsize-12;
 
@@ -119,12 +134,17 @@ h6 { font-size: @fsize-12; }
     text-shadow: 0px 0px 2px rgba(0,0,0,1);
   }
 
+  .login {
+    font-size: @fsize-20;
+    top: 2px;
+    right: 20px;
+  }
+
   .btn-profile {
     position: absolute;
     right: 20px;
 
     .hexagon {
-      //.getHexagon(75px, 5px, @color-white);
       .getHexagon(35px, 2px, @color-white);
     }
   }

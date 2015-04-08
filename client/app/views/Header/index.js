@@ -15,6 +15,10 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "search": ".search-ctn"
   },
 
+  events: {
+    "click .login": "showLogin"
+  },
+
   modelEvents: {
     "change": "render"
   },
@@ -60,6 +64,10 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  showLogin: function(){
+    hackdash.app.showLogin();
+  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
