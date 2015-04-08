@@ -1,5 +1,5 @@
 /*! 
-* Hackdash - v0.8.0
+* Hackdash - v0.8.1
 * Copyright (c) 2015 Hackdash 
 *  
 */ 
@@ -3517,7 +3517,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<div class=\"col-xs-4 col-md-4 group\">\n  <div class=\"dashboard\">\n    <h5>"
     + escapeExpression(((helper = (helper = helpers.dashboards || (depth0 != null ? depth0.dashboards : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"dashboards","hash":{},"data":data}) : helper)))
-    + "</h5>\n    <h6>hackathons</h6>\n  </div>\n  <div class=\"project\">\n    <h5>"
+    + "</h5>\n    <h6>dashboards</h6>\n  </div>\n  <div class=\"project\">\n    <h5>"
     + escapeExpression(((helper = (helper = helpers.projects || (depth0 != null ? depth0.projects : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"projects","hash":{},"data":data}) : helper)))
     + "</h5>\n    <h6>projects</h6>\n  </div>\n</div>\n<div class=\"col-xs-4 col-md-4 group\">\n  <div class=\"user\">\n    <h5>"
     + escapeExpression(((helper = (helper = helpers.users || (depth0 != null ? depth0.users : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"users","hash":{},"data":data}) : helper)))
