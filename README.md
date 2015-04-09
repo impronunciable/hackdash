@@ -27,6 +27,7 @@ In your `config.json`:
 * `mailer`: SMTP mail info to enable email notifications using nodemailer. Check out the [options](https://github.com/andris9/Nodemailer#setting-up-smtp)
 * `team`: An array of `user`.`_id` to be shown as Team on Landing Page.
 * `maxQueryLimit`: a Number for the max amount of results at the landing page searchs.
+* `googleAnalytics`: the UA-XXXXXXXX-X code from Google Analytics. if not specified wont set the script.
 * `prerender`: 
 	+ `enabled`: Boolean (true, false). Where the website would use the SEO Prerender 
 	+ `db`: The Mongo URI of Cached Pages.

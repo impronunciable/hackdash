@@ -251,9 +251,9 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
     app.project = new Project({ _id: pid });
 
-    app.header.show(new Header());
-
     app.project.fetch().done(function(){
+
+      app.header.show(new Header());
 
       app.main.show(new ProjectFullView({
         model: app.project

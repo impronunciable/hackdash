@@ -34,6 +34,7 @@ module.exports = function(app) {
     setViewVar('version', app.get('clientVersion')),
     setViewVar('statuses', app.get('statuses')),
     setViewVar('disqus_shortname', config.disqus_shortname),
+    setViewVar('googleAnalytics', config.googleAnalytics || null),
     metas.check()
   ];
 
