@@ -1,6 +1,6 @@
 # How to
 
-**[NodeJS](http://nodejs.org/) v0.8.x is required**
+**[NodeJS](http://nodejs.org/) v0.10.x is required**
 
 ## Install [GruntJS](http://gruntjs.com/)
 This will put the `grunt` command in your system path
