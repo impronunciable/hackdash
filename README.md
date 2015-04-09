@@ -26,6 +26,7 @@ In your `config.json`:
 * `live`: Boolean (true, false) that enable/disable the live feed feature in yourdomain.com/live.
 * `mailer`: SMTP mail info to enable email notifications using nodemailer. Check out the [options](https://github.com/andris9/Nodemailer#setting-up-smtp)
 * `team`: An array of `user`.`_id` to be shown as Team on Landing Page.
+* `maxQueryLimit`: a Number for the max amount of results at the landing page searchs.
 * `prerender`: 
 	+ `enabled`: Boolean (true, false). Where the website would use the SEO Prerender 
 	+ `db`: The Mongo URI of Cached Pages.
@@ -43,12 +44,11 @@ Add your own Dashboard!
 Contribute
 ==========
 
-### Install GruntJS
-[GruntJS](http://gruntjs.com/) is required.
-
-```bash
-npm install -g grunt-cli
-```
+### Requirements
+[NodeJS v0.10+](http://nodejs.org)  
+[NPM v1.3+](http://npmjs.org/)  
+[MongoDB v2.4+](http://mongodb.org)  
+[GruntJS](http://gruntjs.com)  
 
 ### Create a configuration file
 Create a `config.test.json` file using the config.json.sample with the configuration of your local for test. (i.e. mongoDB url for tests)
