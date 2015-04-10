@@ -124,9 +124,8 @@
     }
 
     .description {
-      display: none;
       font-size: @fsize-12;
-      color: @color-white;
+      color: @color-black;
       overflow: hidden;
       max-height: 100px;
       padding: 0 5px;
@@ -437,6 +436,10 @@
       h2, h3, .description {
         text-align: center;
       }
+
+      .description {
+        max-height: 85px;
+      }
     }
 
   }
@@ -459,6 +462,12 @@
 
           h3 {
             display: none;
+          }
+
+          .description {
+            display: none;
+            font-size: @fsize-12;
+            color: @color-white;
           }
         }
 
