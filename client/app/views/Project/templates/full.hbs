@@ -64,7 +64,7 @@
       <div class="description">
         {{{markdown description}}}
       </div>
-      <ul class="tags clearfix">
+      <ul class="tags clearfix col-md-10">
         {{#each tags}}
         {{#if .}}
         <li>
@@ -73,17 +73,22 @@
         {{/if}}
         {{/each}}
       </ul>
+      <div class="share-ctn clearfix col-md-2">
+        <a class="share">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </div>
     </div>
 
-    <div class="col-md-8 buttons-panel">
+    <div class="col-md-12 buttons-panel">
+
+    {{#if link}}
+    <div class="pull-right">
+      <a href="{{link}}" target="__blank" class="btn btn-default">demo</a>
+    </div>
+    {{/if}}
 
     {{#isLoggedIn}}
-
-      {{#if link}}
-      <div class="pull-right">
-        <a href="{{link}}" target="__blank" class="btn btn-default">demo</a>
-      </div>
-      {{/if}}
 
       {{#if isAdminOrLeader}}
       <div class="pull-right remove">
@@ -95,26 +100,30 @@
       {{/if}}
 
       {{#if showActions}}
-      <div class="pull-right contributor">
-        {{#if contributing}}
-        <a data-loading-text="leaving..." class="btn btn-default leave">Leave</a>
-        {{else}}
-        <a data-loading-text="joining..." class="btn btn-default join">Join</a>
-        {{/if}}
-      </div>
-      <div class="pull-right follower">
-        {{#if following}}
-        <a data-loading-text="unfollowing..." class="btn btn-default unfollow">Unfollow</a>
-        {{else}}
-        <a data-loading-text="following..." class="btn btn-default follow">Follow</a>
-        {{/if}}
+
+      <div class="col-md-4 pull-left">
+
+        <div class="pull-left contributor">
+          {{#if contributing}}
+          <a data-loading-text="leaving..." class="btn btn-default leave">Leave</a>
+          {{else}}
+          <a data-loading-text="joining..." class="btn btn-default join">Join</a>
+          {{/if}}
+        </div>
+        <div class="pull-left follower">
+          {{#if following}}
+          <a data-loading-text="unfollowing..." class="btn btn-default unfollow">Unfollow</a>
+          {{else}}
+          <a data-loading-text="following..." class="btn btn-default follow">Follow</a>
+          {{/if}}
+        </div>
+
       </div>
       {{/if}}
 
-
     {{else}}
 
-      <div class="pull-right">
+      <div class="col-md-4 pull-left">
         <a class="btn btn-default login">Follow</a>
         <a class="btn btn-default login">Join</a>
       </div>

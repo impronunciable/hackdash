@@ -3,7 +3,8 @@
  *
  */
 
-var template = require("./templates/full.hbs");
+var template = require("./templates/full.hbs"),
+  Share = require("./Share");
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -43,7 +44,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "click @ui.contribute": "onContribute",
     "click @ui.follow": "onFollow",
     "click .remove a": "onRemove",
-    "click .login": "showLogin"
+    "click .login": "showLogin",
+    "click .share": "showShare",
   },
 
   modelEvents: {
@@ -101,6 +103,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   showLogin: function(){
     hackdash.app.showLogin();
+  },
+
+  showShare: function(){
+    hackdash.app.modals.show(new Share({
+      model: this.model
+    }));
   },
 
   //--------------------------------------

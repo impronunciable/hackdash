@@ -3,6 +3,18 @@
   <div class="container">
     <div class="dash-details"></div>
     <div class="dash-admins"></div>
+
+    <div class="dash-buttons">
+      {{#if link}}
+        <a class="link" href="{{link}}" target="_blank" data-bypass>
+          <i class="fa fa-link"></i>
+        </a>
+      {{/if}}
+      <a class="share">
+        <i class="fa fa-share-alt"></i>
+      </a>
+    </div>
+
   </div>
 </div>
 

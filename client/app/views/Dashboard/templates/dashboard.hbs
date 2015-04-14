@@ -10,11 +10,6 @@
 
   <p>
     <a id="dashboard-link">{{link}}</a>
-    {{#if link}}
-    <a href="{{link}}" target="_blank" data-bypass>
-      <i class="fa fa-external-link"></i>
-    </a>
-    {{/if}}
   </p>
 
 {{else}}
@@ -25,10 +20,6 @@
 
   {{#if description}}
   <p>{{description}}</p>
-  {{/if}}
-
-  {{#if link}}
-  <a href="{{link}}" target="_blank" data-bypass>{{link}}</a>
   {{/if}}
 
 {{/if}}
