@@ -1,0 +1,91 @@
+
+@import "./settings";
+@import "./mixins";
+
+@import "./base";
+@import "./entity";
+
+@import "./app";
+
+footer {
+  display: none;
+}
+
+.entity {
+
+  &.project {
+    background-color: @color-whiteD;
+    text-decoration: none;
+    cursor: pointer;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    .progress {
+      position: relative;
+      height: 3%;
+
+      >div {
+        height: 100%;
+      }
+    }
+
+    .cover {
+      position: relative;
+      height: 48%;
+
+      .details {
+        height: 100%;
+        top: 0;
+
+        >div {
+          padding-top: 0;
+
+          h3 {
+            bottom: 0;
+          }
+        }
+      }
+    }
+
+    .description {
+      background-color: @color-white;
+      position: relative;
+      top: 0;
+      height: 34%;
+      width: 100%;
+      left: 0;
+      padding: 0 15px 0 5px;
+      color: @color-blackC;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .contributors {
+      position: relative;
+      bottom: 0;
+      background-color: @color-dashboard;
+    }
+
+    .action-bar {
+      padding: 5px;
+      position: relative;
+      display: block;
+
+      .fa.timer{
+        position: absolute;
+        left: 10px;
+      }
+    }
+  }
+
+}

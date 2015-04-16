@@ -1,0 +1,66 @@
+
+{{#if settings.prg}}
+<div class="progress" title="{{status}}">
+  <div class="progress-bar progress-bar-success progress-bar-striped {{status}}" role="progressbar">
+  </div>
+</div>
+{{/if}}
+
+<div class="cover">
+{{#if settings.pic}}
+
+  {{#if cover}}
+    <div class="item-cover" style="background-image: url({{cover}});"></div>
+  {{else}}
+    <i class="item-letter">{{firstLetter title}}</i>
+  {{/if}}
+
+{{else}}
+  <i class="item-letter">{{firstLetter title}}</i>
+{{/if}}
+
+{{#if settings.title}}
+  <div class="details">
+    <div>
+      <h2>{{title}}</h2>
+      <h3><a href="/dashboards/{{domain}}" target="_blank">{{domain}}</a></h3>
+    </div>
+  </div>
+{{/if}}
+
+</div>
+
+{{#if settings.desc}}
+<div class="description">{{{markdown description}}}</div>
+{{/if}}
+
+{{#if settings.contrib}}
+<ul class="contributors">
+  {{#each_upto contributors 5}}
+  <li>
+    <a href="/users/{{_id}}" target="_blank">
+      {{getProfileImage .}}
+    </a>
+  </li>
+  {{/each_upto}}
+</ul>
+{{/if}}
+
+{{#if settings.acnbar}}
+<div class="action-bar text-right">
+
+  <i class="fa fa-clock-o timer tooltips"
+    data-original-title="{{timeAgo created_at}}"></i>
+
+    <a href="/projects/{{_id}}"
+      class="tooltips contribute" target="_blank"
+      data-original-title="{{contributors.length}} contributors">Join</a>
+    <a href="/projects/{{_id}}"
+      class="tooltips follow" target="_blank"
+      data-original-title="{{followers.length}} followers">Follow</a>
+
+  {{#if link}}
+  <a class="demo-link" href="{{link}}" target="_blank">Demo</a>
+  {{/if}}
+</div>
+{{/if}}

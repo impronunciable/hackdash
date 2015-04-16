@@ -1,5 +1,5 @@
 /**
- * Landing Application
+ * Hackdash Application
  *
  */
 

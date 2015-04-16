@@ -58,6 +58,11 @@ module.exports = function(app) {
     .concat(viewsStack)
     .concat([render('app')]);
 
+  var embedStack = []
+    .concat([hasSubDomain_RemoveIt])
+    .concat(viewsStack)
+    .concat([render('embed')]);
+
   // Landing ----------------------------
   app.get('/', metas.dashboard, homeStack);
 
@@ -104,6 +109,11 @@ module.exports = function(app) {
   app.get('/p/:pid', function(req, res){
     res.redirect(301, '/projects/' + req.params.pid);
   });
+
+
+  // EMBED --------------------------------
+  app.get('/embed/projects/:pid', metas.project, embedStack);
+  app.get('/embed/dashboards/:dashboard', metas.dashboard, embedStack);
 
 };
 

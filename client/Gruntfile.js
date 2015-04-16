@@ -20,6 +20,7 @@ module.exports = function(grunt) {
       dist: {
         root: "dist/",
         appName: "hackdashApp.js",
+        embedName: "embedApp.js",
         vendorName: "vendor.js",
         vendorCSSName: "vendor.css",
         exportJS: "../public/js/",
@@ -39,12 +40,23 @@ module.exports = function(grunt) {
     browserify: {
       app: {
         options:{
+          banner: '<%= banner %>',
           extension: [ '.js', '.hbs' ],
           transform: [ 'hbsfy' ],
           //debug: true
         },
         src: ['<%= paths.app.root %>index.js'],
         dest: '<%= paths.dist.root %><%= paths.dist.appName %>'
+      },
+      embed: {
+        options:{
+          banner: '<%= banner %>',
+          extension: [ '.js', '.hbs' ],
+          transform: [ 'hbsfy' ],
+          //debug: true
+        },
+        src: ['<%= paths.app.root %>indexEmbed.js'],
+        dest: '<%= paths.dist.root %><%= paths.dist.embedName %>'
       }
     },
 
@@ -69,18 +81,6 @@ module.exports = function(grunt) {
           , '<%= paths.vendor.js %>**/*.js'
          ],
         dest: '<%= paths.dist.root %><%= paths.dist.vendorName %>'
-      },
-      app: {
-        options: {
-          stripBanners: {
-            line: true
-          },
-          banner: '<%= banner %>',
-        },
-        files: {
-          '<%= paths.dist.root %><%= paths.dist.appName %>':
-            [ '<%= paths.dist.root %><%= paths.dist.appName %>' ]
-        }
       }
     },
 
@@ -95,7 +95,10 @@ module.exports = function(grunt) {
             "<%= paths.dist.root %><%= paths.dist.vendorName %>",
 
           "<%= paths.dist.exportJS %><%= paths.dist.appName %>":
-            "<%= paths.dist.root %><%= paths.dist.appName %>"
+            "<%= paths.dist.root %><%= paths.dist.appName %>",
+
+          "<%= paths.dist.exportJS %><%= paths.dist.embedName %>":
+            "<%= paths.dist.root %><%= paths.dist.embedName %>"
         }
       }
 

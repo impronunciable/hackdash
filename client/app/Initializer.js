@@ -32,5 +32,4 @@ module.exports = function(){
   Dropzone.autoDiscover = false;
 
   window.hackdash.apiURL = "/api/v2";
-  window.hackdash.startApp = require('./HackdashApp');
 };

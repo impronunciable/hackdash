@@ -1,36 +1,35 @@
-<div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal">
-    <i class="fa fa-close"></i>
-  </button>
-  <h3 class="modal-title">Share Project</h3>
-</div>
-
 <div class="modal-body">
 
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
 
-    <textarea>
-      code code code code code code code code code code code code code code
-    </textarea>
+      <h1>spread your voice</h1>
 
-    <div class="settings">
+      <div class="settings">
 
-    {{#each settings}}
+      {{#each settings}}
 
-      <div class="checkbox">
-        <label>
-          <input id="{{code}}" type="checkbox" checked> {{name}}
-        </label>
+        <div class="checkbox">
+          <label>
+            <input id="{{code}}" type="checkbox" checked> {{name}}
+          </label>
+        </div>
+
+      {{/each}}
+
       </div>
 
-    {{/each}}
+      <textarea id="embed-code" onclick="this.focus();this.select();" readonly="readonly"></textarea>
+
+      <a class="btn btn-primary get-code">GRAB CODE</a>
 
     </div>
-
-    </div>
-    <div class="col-md-8" style="position:relative;">
-      <div class="preview"></div>
+    <div class="col-md-7" style="position:relative;">
+      <div class="preview">
+        <iframe width="100%" height="450"
+          frameborder="0" allowtransparency="true" title="Hackdash"></iframe>
+      </div>
     </div>
   </div>
+
 </div>

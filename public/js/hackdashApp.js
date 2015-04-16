@@ -4,9 +4,10 @@
 *  
 */ 
 
+
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /**
- * Landing Application
+ * Hackdash Application
  *
  */
 
@@ -358,10 +359,9 @@ module.exports = function(){
   Dropzone.autoDiscover = false;
 
   window.hackdash.apiURL = "/api/v2";
-  window.hackdash.startApp = require('./HackdashApp');
 };
 
-},{"./HackdashApp":1,"./helpers/backboneOverrides":4,"./helpers/handlebars":5}],4:[function(require,module,exports){
+},{"./helpers/backboneOverrides":4,"./helpers/handlebars":5}],4:[function(require,module,exports){
 /*
  * Backbone Global Overrides
  *
@@ -605,8 +605,9 @@ Handlebars.registerHelper('each_upto_rnd', function(ary, max, options) {
 },{"hbsfy/runtime":95}],6:[function(require,module,exports){
 jQuery(function() {
   require('./Initializer')();
+  window.hackdash.startApp = require('./HackdashApp');
 });
-},{"./Initializer":3}],7:[function(require,module,exports){
+},{"./HackdashApp":1,"./Initializer":3}],7:[function(require,module,exports){
 /**
  * Collection: Administrators of a Dashboard
  *
@@ -4750,13 +4751,34 @@ module.exports = Backbone.Marionette.ItemView.extend({
   className: "share",
   template: template,
 
+  ui: {
+    'prg': '#prg',
+    'pic': '#pic',
+    'title': '#title',
+    'desc': '#desc',
+    'contrib': '#contrib',
+    'acnbar': '#acnbar',
+
+    'preview': '.preview iframe',
+    'code': '#embed-code'
+  },
+
   events: {
-    "click .close": "destroy"
+    "click .close": "destroy",
+    "click .checkbox": "onClickSetting"
   },
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
+
+  initialize: function(){
+    this.embedTmpl = _.template('<iframe src="<%= url %>" width="100%" height="450" frameborder="0" allowtransparency="true" title="Hackdash"></iframe>');
+  },
+
+  onRender: function(){
+    this.reloadPreview();
+  },
 
   serializeData: function(){
     return _.extend({
@@ -4772,9 +4794,46 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
+  hiddenSettings: [],
+
+  onClickSetting: function(e){
+    var ele = $('input', e.currentTarget);
+    var id = ele.attr('id');
+    var checked = $(ele).is(':checked');
+    var idx = this.hiddenSettings.indexOf(id);
+
+    if (checked){
+      if(idx > -1){
+        this.hiddenSettings.splice(idx, 1);
+        this.reloadPreview();
+      }
+      return;
+    }
+
+    if (idx === -1){
+      this.hiddenSettings.push(id);
+      this.reloadPreview();
+    }
+  },
+
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
+
+  reloadPreview: function(){
+    var embedUrl = window.location.protocol + "//" + window.location.host;
+    var fragment = '/embed/projects/' + this.model.get('_id');
+    var hide = '?hide=';
+
+    _.each(this.hiddenSettings, function(id){
+      hide += id + ',';
+    }, this);
+
+    var url = embedUrl + fragment + (this.hiddenSettings.length ? hide : '');
+
+    this.ui.preview.attr('src', url);
+    this.ui.code.val(this.embedTmpl({ url: url }));
+  },
 
   settings: [{
     code: 'prg',
@@ -5079,16 +5138,16 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "\n      <div class=\"checkbox\">\n        <label>\n          <input id=\""
+  return "\n        <div class=\"checkbox\">\n          <label>\n            <input id=\""
     + escapeExpression(((helper = (helper = helpers.code || (depth0 != null ? depth0.code : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"code","hash":{},"data":data}) : helper)))
     + "\" type=\"checkbox\" checked> "
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
-    + "\n        </label>\n      </div>\n\n";
+    + "\n          </label>\n        </div>\n\n";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "<div class=\"modal-header\">\n  <button type=\"button\" class=\"close\" data-dismiss=\"modal\">\n    <i class=\"fa fa-close\"></i>\n  </button>\n  <h3 class=\"modal-title\">Share Project</h3>\n</div>\n\n<div class=\"modal-body\">\n\n  <div class=\"row\">\n    <div class=\"col-md-4\">\n\n    <textarea>\n      code code code code code code code code code code code code code code\n    </textarea>\n\n    <div class=\"settings\">\n\n";
+  var stack1, buffer = "<div class=\"modal-body\">\n\n  <div class=\"row\">\n    <div class=\"col-md-5\">\n\n      <h1>spread your voice</h1>\n\n      <div class=\"settings\">\n\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.settings : depth0), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n    </div>\n\n    </div>\n    <div class=\"col-md-8\" style=\"position:relative;\">\n      <div class=\"preview\"></div>\n    </div>\n  </div>\n</div>\n";
+  return buffer + "\n      </div>\n\n      <textarea id=\"embed-code\" onclick=\"this.focus();this.select();\" readonly=\"readonly\"></textarea>\n\n      <a class=\"btn btn-primary get-code\">GRAB CODE</a>\n\n    </div>\n    <div class=\"col-md-7\" style=\"position:relative;\">\n      <div class=\"preview\">\n        <iframe width=\"100%\" height=\"450\"\n          frameborder=\"0\" allowtransparency=\"true\" title=\"Hackdash\"></iframe>\n      </div>\n    </div>\n  </div>\n\n</div>\n";
 },"useData":true});
 
 },{"hbsfy/runtime":95}],87:[function(require,module,exports){

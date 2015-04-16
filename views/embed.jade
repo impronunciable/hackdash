@@ -1,0 +1,16 @@
+extends layout
+
+block styles
+
+  link(rel='stylesheet', href='/styles/embed.css?v=' + version)
+
+block content
+
+block scripts
+
+  script(src="/js/embedApp.js?v=" + version)
+
+  script.
+    $(function(){
+      window.hackdash.startApp();
+    });
