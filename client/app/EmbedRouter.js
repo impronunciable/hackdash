@@ -6,8 +6,7 @@ var Dashboard = require("./models/Dashboard")
   , Project = require("./models/Project")
   , Projects = require("./models/Projects")
 
-  , Header = require("./views/Header")
-  , Footer = require("./views/Footer")
+  //, Header = require("./views/Header/Embed")
 
   , ProjectView = require("./views/Project/Embed")
   , DashboardView = require("./views/Dashboard/Embed")
@@ -39,17 +38,13 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       app.projects.fetch({}, { parse: true })
         .done(function(){
           app.projects.buildShowcase(app.dashboard.get("showcase"));
-
+/*
           app.header.show(new Header({
             model: app.dashboard,
             collection: app.projects
           }));
-
+*/
           app.main.show(new DashboardView({
-            model: app.dashboard
-          }));
-
-          app.footer.show(new Footer({
             model: app.dashboard
           }));
 

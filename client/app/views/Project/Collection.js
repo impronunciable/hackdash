@@ -39,6 +39,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   onEndRender: function(){
     this.updateGrid();
     this.refresh();
+    this.trigger('ended:render');
   },
 
   //--------------------------------------

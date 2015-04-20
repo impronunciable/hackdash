@@ -17,6 +17,8 @@ module.exports = function(){
       main: "#main",
       footer: "footer"
     });
+
+    $('body').addClass('embedapp');
   }
 
   function initRouter(){

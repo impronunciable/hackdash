@@ -1,7 +1,6 @@
 
 var
     template = require('./templates/footer.hbs')
-  , Embed = require('./Embed')
   , Dashboard = require('../../models/Dashboard');
 
 module.exports = Backbone.Marionette.LayoutView.extend({
@@ -23,7 +22,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   events: {
     "click .dashboard-btn": "onClickSwitcher",
-    "click .embed-btn": "showEmbedModal",
     "click .btn-showcase-mode": "changeShowcaseMode",
     "click @ui.up": "goTop"
   },
@@ -93,10 +91,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
     this.model.set({ "open": open }, { trigger: false });
     this.model.save({ wait: true });
-  },
-
-  showEmbedModal: function(){
-    hackdash.app.modals.show(new Embed());
   },
 
   upBlocked: false,

@@ -6,7 +6,8 @@
 var template = require('./templates/index.hbs')
   , UsersView = require('./Users')
   , DashboardView = require('./Dashboard')
-  , ProjectsView = require('../Project/Collection');
+  , ProjectsView = require('../Project/Collection')
+  , Share = require("./Share");
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
@@ -19,6 +20,10 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   ui: {
     inactiveCtn: ".inactive-ctn"
+  },
+
+  events: {
+    "click .share": "showShare"
   },
 
   regions: {
@@ -98,6 +103,12 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  showShare: function(){
+    hackdash.app.modals.show(new Share({
+      model: this.model
+    }));
+  },
 
   onStartEditShowcase: function(){
     this.showcaseMode = true;

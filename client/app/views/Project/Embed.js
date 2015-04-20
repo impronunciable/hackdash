@@ -14,7 +14,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   id: function(){ return this.model.get("_id"); },
 
   tagName: 'a',
-  className: 'entity project',
+  className: 'entity project embed-project',
   template: template,
 
   //--------------------------------------
