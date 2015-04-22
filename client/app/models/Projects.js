@@ -86,6 +86,8 @@ var Projects = module.exports = Backbone.Collection.extend({
       return;
     }
 
+    keywords = keywords.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+
     var regex = new RegExp(keywords, 'i');
     var items = [];
 

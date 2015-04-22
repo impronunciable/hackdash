@@ -44,12 +44,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   onRender: function(){
     this.reloadPreview();
+    $('.modal > .modal-dialog').addClass('big-modal');
   },
 
   serializeData: function(){
     return _.extend({
-      settings: this.settings
+      settings: this.settings,
+      pSettings: this.projectSettings,
     }, this.model.toJSON());
+  },
+
+  onDestroy: function(){
+    $('.modal > .modal-dialog').removeClass('big-modal');
   },
 
   //--------------------------------------
@@ -123,18 +129,24 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }, {
     code: 'desc',
     name: 'Description'
-  }, {
+  }],
+
+  projectSettings: [{
     code: 'pprg',
-    name: 'Project Progress'
+    name: 'Progress',
+    project: true
   }, {
     code: 'ptitle',
-    name: 'Project Title'
+    name: 'Title',
+    project: true
   }, {
     code: 'pcontrib',
-    name: 'Project Contributors'
+    name: 'Contributors',
+    project: true
   }, {
     code: 'pacnbar',
-    name: 'Project Action Bar'
+    name: 'Action Bar',
+    project: true
   }]
 
 });

@@ -1059,6 +1059,8 @@ var Projects = module.exports = Backbone.Collection.extend({
       return;
     }
 
+    keywords = keywords.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+
     var regex = new RegExp(keywords, 'i');
     var items = [];
 
@@ -1701,12 +1703,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   onRender: function(){
     this.reloadPreview();
+    $('.modal > .modal-dialog').addClass('big-modal');
   },
 
   serializeData: function(){
     return _.extend({
-      settings: this.settings
+      settings: this.settings,
+      pSettings: this.projectSettings,
     }, this.model.toJSON());
+  },
+
+  onDestroy: function(){
+    $('.modal > .modal-dialog').removeClass('big-modal');
   },
 
   //--------------------------------------
@@ -1780,18 +1788,24 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }, {
     code: 'desc',
     name: 'Description'
-  }, {
+  }],
+
+  projectSettings: [{
     code: 'pprg',
-    name: 'Project Progress'
+    name: 'Progress',
+    project: true
   }, {
     code: 'ptitle',
-    name: 'Project Title'
+    name: 'Title',
+    project: true
   }, {
     code: 'pcontrib',
-    name: 'Project Contributors'
+    name: 'Contributors',
+    project: true
   }, {
     code: 'pacnbar',
-    name: 'Project Action Bar'
+    name: 'Action Bar',
+    project: true
   }]
 
 });
@@ -2142,11 +2156,21 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "\" type=\"checkbox\" checked> "
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
     + "\n          </label>\n        </div>\n\n";
+},"3":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "\n          <div class=\"checkbox\">\n            <label>\n              <input id=\""
+    + escapeExpression(((helper = (helper = helpers.code || (depth0 != null ? depth0.code : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"code","hash":{},"data":data}) : helper)))
+    + "\" type=\"checkbox\" checked> "
+    + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
+    + "\n            </label>\n          </div>\n\n";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "<div class=\"modal-body\">\n\n  <div class=\"row\">\n    <div class=\"col-md-5\">\n\n      <h1>spread your voice</h1>\n\n      <div class=\"settings\">\n\n";
+  var stack1, buffer = "<div class=\"modal-body\">\n\n  <div class=\"row\">\n    <div class=\"col-md-5 col-lg-3\">\n\n      <h1>spread your voice</h1>\n\n      <div class=\"settings\">\n\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.settings : depth0), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n      <input id=\"keywords\" type=\"text\" class=\"form-control\" placeholder=\"keywords\">\n\n      <div class=\"btn-group\" data-toggle=\"buttons\">\n        <label class=\"btn btn-default\">\n          <input type=\"radio\" name=\"options\" id=\"name\" autocomplete=\"off\"> By Name\n        </label>\n        <label class=\"btn btn-default active\">\n          <input type=\"radio\" name=\"options\" id=\"date\" autocomplete=\"off\"> By Date\n        </label>\n        <label class=\"btn btn-default\">\n          <input type=\"radio\" name=\"options\" id=\"showcase\" autocomplete=\"off\"> Showcase\n        </label>\n      </div>\n\n      </div>\n\n      <textarea id=\"embed-code\" onclick=\"this.focus();this.select();\" readonly=\"readonly\"></textarea>\n\n      <a class=\"btn btn-primary get-code\">GRAB CODE</a>\n\n    </div>\n    <div class=\"col-md-7\" style=\"position:relative;\">\n      <div class=\"preview\">\n        <iframe width=\"100%\" height=\"450\"\n          frameborder=\"0\" allowtransparency=\"true\" title=\"Hackdash\"></iframe>\n      </div>\n    </div>\n  </div>\n\n</div>\n";
+  buffer += "\n        <div class=\"\">\n        <h5>Projects</h5>\n\n";
+  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.pSettings : depth0), {"name":"each","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "        </div>\n\n      </div>\n\n      <label class=\"get-code\">Add this dashboard to your website by coping this code below</label>\n      <textarea id=\"embed-code\" onclick=\"this.focus();this.select();\" readonly=\"readonly\"></textarea>\n\n    </div>\n    <div class=\"col-md-7 col-lg-9\" style=\"position:relative;\">\n\n      <div class=\"col-sm-12 share-dashboard-filters\">\n\n        <div class=\"col-md-4\">\n          <input id=\"keywords\" type=\"text\" class=\"form-control\" placeholder=\"keywords\">\n        </div>\n\n        <div class=\"col-md-8\">\n          <div class=\"btn-group pull-right\" data-toggle=\"buttons\">\n            <label class=\"btn btn-default\">\n              <input type=\"radio\" name=\"options\" id=\"name\" autocomplete=\"off\"> By Name\n            </label>\n            <label class=\"btn btn-default active\">\n              <input type=\"radio\" name=\"options\" id=\"date\" autocomplete=\"off\"> By Date\n            </label>\n            <label class=\"btn btn-default\">\n              <input type=\"radio\" name=\"options\" id=\"showcase\" autocomplete=\"off\"> Showcase\n            </label>\n          </div>\n        </div>\n\n      </div>\n\n      <div class=\"col-sm-12 preview\">\n        <iframe width=\"100%\" height=\"450\" title=\"Hackdash\" frameborder=\"0\" allowtransparency=\"true\"></iframe>\n      </div>\n    </div>\n  </div>\n\n</div>\n";
 },"useData":true});
 
 },{"hbsfy/runtime":95}],36:[function(require,module,exports){
@@ -5256,7 +5280,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   var stack1, buffer = "<div class=\"modal-body\">\n\n  <div class=\"row\">\n    <div class=\"col-md-5\">\n\n      <h1>spread your voice</h1>\n\n      <div class=\"settings\">\n\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.settings : depth0), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n      </div>\n\n      <textarea id=\"embed-code\" onclick=\"this.focus();this.select();\" readonly=\"readonly\"></textarea>\n\n      <a class=\"btn btn-primary get-code\">GRAB CODE</a>\n\n    </div>\n    <div class=\"col-md-7\" style=\"position:relative;\">\n      <div class=\"preview\">\n        <iframe width=\"100%\" height=\"450\"\n          frameborder=\"0\" allowtransparency=\"true\" title=\"Hackdash\"></iframe>\n      </div>\n    </div>\n  </div>\n\n</div>\n";
+  return buffer + "\n      </div>\n\n      <label class=\"get-code\">Add this project to your website by coping this code below</label>\n      <textarea id=\"embed-code\" onclick=\"this.focus();this.select();\" readonly=\"readonly\"></textarea>\n\n    </div>\n    <div class=\"col-md-7\" style=\"position:relative;\">\n      <div class=\"preview\">\n        <iframe width=\"100%\" height=\"450\"\n          frameborder=\"0\" allowtransparency=\"true\" title=\"Hackdash\"></iframe>\n      </div>\n    </div>\n  </div>\n\n</div>\n";
 },"useData":true});
 
 },{"hbsfy/runtime":95}],87:[function(require,module,exports){

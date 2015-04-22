@@ -1,7 +1,7 @@
 <div class="modal-body">
 
   <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-5 col-lg-3">
 
       <h1>spread your voice</h1>
 
@@ -17,31 +17,52 @@
 
       {{/each}}
 
-      <input id="keywords" type="text" class="form-control" placeholder="keywords">
+        <div class="">
+        <h5>Projects</h5>
 
-      <div class="btn-group" data-toggle="buttons">
-        <label class="btn btn-default">
-          <input type="radio" name="options" id="name" autocomplete="off"> By Name
-        </label>
-        <label class="btn btn-default active">
-          <input type="radio" name="options" id="date" autocomplete="off"> By Date
-        </label>
-        <label class="btn btn-default">
-          <input type="radio" name="options" id="showcase" autocomplete="off"> Showcase
-        </label>
+        {{#each pSettings}}
+
+          <div class="checkbox">
+            <label>
+              <input id="{{code}}" type="checkbox" checked> {{name}}
+            </label>
+          </div>
+
+        {{/each}}
+        </div>
+
       </div>
 
-      </div>
-
+      <label class="get-code">Add this dashboard to your website by coping this code below</label>
       <textarea id="embed-code" onclick="this.focus();this.select();" readonly="readonly"></textarea>
 
-      <a class="btn btn-primary get-code">GRAB CODE</a>
-
     </div>
-    <div class="col-md-7" style="position:relative;">
-      <div class="preview">
-        <iframe width="100%" height="450"
-          frameborder="0" allowtransparency="true" title="Hackdash"></iframe>
+    <div class="col-md-7 col-lg-9" style="position:relative;">
+
+      <div class="col-sm-12 share-dashboard-filters">
+
+        <div class="col-md-4">
+          <input id="keywords" type="text" class="form-control" placeholder="keywords">
+        </div>
+
+        <div class="col-md-8">
+          <div class="btn-group pull-right" data-toggle="buttons">
+            <label class="btn btn-default">
+              <input type="radio" name="options" id="name" autocomplete="off"> By Name
+            </label>
+            <label class="btn btn-default active">
+              <input type="radio" name="options" id="date" autocomplete="off"> By Date
+            </label>
+            <label class="btn btn-default">
+              <input type="radio" name="options" id="showcase" autocomplete="off"> Showcase
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-sm-12 preview">
+        <iframe width="100%" height="450" title="Hackdash" frameborder="0" allowtransparency="true"></iframe>
       </div>
     </div>
   </div>
