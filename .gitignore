@@ -8,4 +8,8 @@ config.test.json
 public/uploads/*
 npm-debug.log
 
+public/styles/app.css
+public/styles/embed.css
+public/styles/landing.css
+
 *.sample
