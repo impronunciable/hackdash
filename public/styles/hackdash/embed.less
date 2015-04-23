@@ -72,16 +72,16 @@ footer {
       }
 
       .description {
-        background-color: @color-white;
         position: relative;
         top: 0;
-        height: 34%;
+        height: 32%;
         width: 100%;
         left: 0;
-        padding: 0 15px 0 5px;
+        padding: 5px;
+        overflow: hidden;
+
+        background-color: @color-white;
         color: @color-blackC;
-        overflow-x: hidden;
-        overflow-y: auto;
       }
 
       .contributors {
@@ -112,11 +112,10 @@ footer {
   }
 
   .logo {
-    position: absolute;
-    right: 5px;
-    bottom: 0;
     width: 40px;
-    height: 45px;
+    height: 43px;
+    display: inline-block;
+    margin: 0;
   }
 
   .main-header {

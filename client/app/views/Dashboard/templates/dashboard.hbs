@@ -15,7 +15,12 @@
 {{else}}
 
   {{#if title}}
-  <h1>{{title}}</h1>
+  <h1>
+    {{#isEmbed}}
+    <a class="logo" href="{{hackdashURL}}" target="_blank"></a>
+    {{/isEmbed}}
+    {{title}}
+  </h1>
   {{/if}}
 
   {{#if description}}

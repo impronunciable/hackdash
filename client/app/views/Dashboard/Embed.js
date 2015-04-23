@@ -65,11 +65,15 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
     dashboardView.on('show', function(){
       var ctn = self.dashboard.$el;
+
       if (!self.settings.title){
         $('h1', ctn).remove();
       }
       if (!self.settings.desc){
         $('p', ctn).remove();
+      }
+      if (!self.settings.logo){
+        $('.logo', ctn).remove();
       }
 
       if (!self.settings.title && !self.settings.desc){
@@ -94,10 +98,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
         $('.action-bar', ctn).remove();
       }
     });
-
-    if (!this.settings.logo){
-      $('.logo', this.$el).remove();
-    }
 
     projectsView.on('ended:render', function(){
       if (sort){

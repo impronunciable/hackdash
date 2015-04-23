@@ -81,17 +81,37 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var checked = $(ele).is(':checked');
     var idx = this.hiddenSettings.indexOf(id);
 
+    if (ele.attr('disabled')){
+      return;
+    }
+
+    function toggleLogo(){
+      if (id === "title" && !this.ui.title.is(':checked')){
+        this.ui.logo
+          .attr('disabled', 'disabled')
+          .parents('.checkbox').addClass('disabled');
+      }
+      else {
+        this.ui.logo
+          .attr('disabled', false)
+          .parents('.checkbox').removeClass('disabled');
+      }
+    }
+
     if (checked){
       if(idx > -1){
         this.hiddenSettings.splice(idx, 1);
         this.reloadPreview();
       }
+
+      toggleLogo.call(this);
       return;
     }
 
     if (idx === -1){
       this.hiddenSettings.push(id);
       this.reloadPreview();
+      toggleLogo.call(this);
     }
   },
 

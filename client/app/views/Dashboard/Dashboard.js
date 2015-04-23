@@ -20,7 +20,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "link": "#dashboard-link"
   },
 
+  events: {
+    "click .logo": "stopPropagation"
+  },
+
   templateHelpers: {
+    hackdashURL: function(){
+      return "http://" + hackdash.baseURL;
+    },
     isAdmin: function(){
       var user = hackdash.user;
       return user && user.admin_in.indexOf(this.domain) >= 0 || false;
@@ -56,6 +63,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+  
+  stopPropagation: function(e){
+    e.stopPropagation();
+  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS

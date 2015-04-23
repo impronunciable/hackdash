@@ -857,6 +857,7 @@ footer {
         }
 
         .dash-admins {
+          display: inline-block;
 
           ul {
             list-style: none;
@@ -899,6 +900,8 @@ footer {
         }
 
         .dash-buttons {
+          display: inline-block;
+          margin-left: 20px;
           padding: 20px 0 5px 0;
 
           a {
@@ -1032,6 +1035,18 @@ footer {
 
   .share {
 
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 18px;
+      z-index: 10;
+      color: white;
+      background-color: rgb(53, 61, 69);
+      padding: 4px 4px 5px 5px;
+      border-radius: 3px;
+      opacity: 1;
+    }
+
     h1 {
       margin-top: 0;
       color: @color-blackC;
@@ -1064,6 +1079,12 @@ footer {
         label {
           font-family: @primary-font;
           font-size: @fsize-14;
+        }
+
+        &.disabled {
+          label {
+            color: gray;
+          }
         }
       }
 
@@ -1120,5 +1141,25 @@ footer {
       }
     }
 
+  }
+}
+
+
+@media (max-width: 950px) {
+
+  .modal {
+
+    .share {
+
+      .close {
+        top: 15px;
+        right: 18px;
+      }
+
+      h1 {
+        border: none;
+      }
+
+    }
   }
 }
