@@ -15,7 +15,8 @@
 <div class="details">
   <div>
     <h2>{{title}}</h2>
-    <h3><a href="/dashboards/{{domain}}" data-bypass>{{domain}}</a></h3>
+    <h3><a href="/dashboards/{{domain}}"
+      {{#isEmbed}}target="_blank"{{else}}data-bypass{{/isEmbed}}>{{domain}}</a></h3>
     <p class="description">{{description}}</p>
   </div>
 </div>
@@ -23,7 +24,12 @@
 <ul class="contributors">
   {{#each_upto contributors 5}}
   <li>
-    <a href="/users/{{_id}}" {{#isLandingView}}data-bypass{{/isLandingView}}>
+    <a href="/users/{{_id}}"
+    {{#isEmbed}}
+      target="_blank"
+    {{else}}
+      {{#isLandingView}}data-bypass{{/isLandingView}}
+    {{/isEmbed}}>
       {{getProfileImage .}}
     </a>
   </li>
@@ -35,31 +41,42 @@
   <i class="fa fa-clock-o timer tooltips"
     data-original-title="{{timeAgo created_at}}"></i>
 
-  {{#unless isOwner}}
-    {{#if contributing}}
-    <a
-      class="tooltips contribute"
-      data-loading-text="leaving..."
-      data-original-title="{{contributors.length}} contributors">Leave</a>
-    {{else}}
-    <a
-      class="tooltips contribute"
-      data-loading-text="joining..."
+  {{#isEmbed}}
+    <a href="/projects/{{_id}}"
+      class="tooltips contribute" target="_blank"
       data-original-title="{{contributors.length}} contributors">Join</a>
-    {{/if}}
-
-    {{#if following}}
-    <a
-      class="tooltips follow"
-      data-loading-text="unfollowing..."
-      data-original-title="{{followers.length}} followers">Unfollow</a>
-    {{else}}
-    <a
-      class="tooltips follow"
-      data-loading-text="following..."
+    <a href="/projects/{{_id}}"
+      class="tooltips follow" target="_blank"
       data-original-title="{{followers.length}} followers">Follow</a>
-    {{/if}}
-  {{/unless}}
+  {{else}}
+
+    {{#unless isOwner}}
+      {{#if contributing}}
+      <a
+        class="tooltips contribute"
+        data-loading-text="leaving..."
+        data-original-title="{{contributors.length}} contributors">Leave</a>
+      {{else}}
+      <a
+        class="tooltips contribute"
+        data-loading-text="joining..."
+        data-original-title="{{contributors.length}} contributors">Join</a>
+      {{/if}}
+
+      {{#if following}}
+      <a
+        class="tooltips follow"
+        data-loading-text="unfollowing..."
+        data-original-title="{{followers.length}} followers">Unfollow</a>
+      {{else}}
+      <a
+        class="tooltips follow"
+        data-loading-text="following..."
+        data-original-title="{{followers.length}} followers">Follow</a>
+      {{/if}}
+    {{/unless}}
+
+  {{/isEmbed}}
 
   {{#if link}}
   <a class="demo-link" href="{{link}}" target="_blank" data-bypass>Demo</a>

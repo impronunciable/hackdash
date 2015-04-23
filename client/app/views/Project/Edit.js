@@ -37,7 +37,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
       }
     },
     statuses: function(){
-      return window.hackdash.statuses.split(",");
+      return window.hackdash.statuses;
     }
   },
 

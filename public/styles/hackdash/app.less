@@ -1052,7 +1052,7 @@ footer {
       border: none;
       resize: none;
       width: 100%;
-      height: 120px;
+      height: 110px;
     }
 
     .settings {
@@ -1064,6 +1064,11 @@ footer {
           font-family: @primary-font;
           font-size: @fsize-14;
         }
+      }
+
+      .status {
+        font-size: 1em;
+        height: 34px;
       }
 
     }
@@ -1088,6 +1093,30 @@ footer {
     .share-dashboard-filters {
       background-color: @color-dashboard;
       padding-top: 6px;
+
+      .btn-group {
+
+        .btn {
+          padding: 9px 12px;
+          height: 45px;
+          margin-bottom: 6px;
+        }
+      }
+    }
+
+    .dash-preview-help {
+      margin: 15px 0 5px 0;
+
+      h3 {
+        margin: 0;
+        display: inline-block;
+      }
+
+      p {
+        margin: 0;
+        display: inline-block;
+        float: right;
+      }
     }
 
   }

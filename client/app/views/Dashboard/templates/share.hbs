@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-5 col-lg-3">
 
-      <h1>spread your voice</h1>
+      <h1>embed this dashboard</h1>
 
       <div class="settings">
 
@@ -29,6 +29,16 @@
           </div>
 
         {{/each}}
+
+          <div class="form-group">
+            <select name="status" class="form-control status" value="{{status}}">
+              <option value="all" selected="true">ANY STATUS</option>
+              {{#each statuses}}
+              <option value="{{name}}">{{name}} [{{count}}]</option>
+              {{/each}}
+            </select>
+          </div>
+
         </div>
 
       </div>
@@ -39,13 +49,13 @@
     </div>
     <div class="col-md-7 col-lg-9" style="position:relative;">
 
-      <div class="col-sm-12 share-dashboard-filters">
+      <div class="col-xs-12 col-sm-12 share-dashboard-filters">
 
-        <div class="col-md-4">
+        <div class="col-xs-12 col-sm-4 col-md-4">
           <input id="keywords" type="text" class="form-control" placeholder="keywords">
         </div>
 
-        <div class="col-md-8">
+        <div class="col-xs-12 col-sm-8 col-md-8">
           <div class="btn-group pull-right" data-toggle="buttons">
             <label class="btn btn-default">
               <input type="radio" name="options" id="name" autocomplete="off"> By Name
@@ -61,7 +71,12 @@
 
       </div>
 
-      <div class="col-sm-12 preview">
+      <div class="col-xs-12 dash-preview-help">
+        <h3>Preview</h3>
+        <p>The embedded code will show exactly what's below</p>
+      </div>
+
+      <div class="col-xs-12 preview">
         <iframe width="100%" height="450" title="Hackdash" frameborder="0" allowtransparency="true"></iframe>
       </div>
     </div>

@@ -19,12 +19,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
     'pic': '#pic',
     'title': '#title',
     'desc': '#desc',
+    'logo': '#logo',
     'contrib': '#contrib',
     'acnbar': '#acnbar',
     'searchbox': '#keywords',
 
+    'status': 'select[name=status]',
     'preview': '.preview iframe',
-    'code': '#embed-code',
+    'code': '#embed-code'
   },
 
   events: {
@@ -32,6 +34,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "click .checkbox": "onClickSetting",
     "keyup @ui.searchbox": "onKeyword",
     "click .btn-group>.btn": "sortClicked",
+    "change @ui.status": "onChangeStatus",
   },
 
   //--------------------------------------
@@ -51,6 +54,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     return _.extend({
       settings: this.settings,
       pSettings: this.projectSettings,
+      statuses: this.getStatuses()
     }, this.model.toJSON());
   },
 
@@ -69,6 +73,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   hiddenSettings: [],
   keywords: '',
   sorting: '',
+  status: '',
 
   onClickSetting: function(e){
     var ele = $('input', e.currentTarget);
@@ -90,6 +95,16 @@ module.exports = Backbone.Marionette.ItemView.extend({
     }
   },
 
+  onChangeStatus: function(){
+    this.status = this.ui.status.val();
+
+    if (this.status.toLowerCase() === 'all'){
+      this.status = null;
+    }
+
+    this.reloadPreview();
+  },
+
   onKeyword: function(){
     this.keywords = this.ui.searchbox.val();
     this.reloadPreview();
@@ -105,19 +120,27 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
+  getStatuses: function(){
+    var counts = hackdash.app.projects.getStatusCount();
+    return _.map(counts, function(item, key){
+      return { name: key, count: item };
+    });
+  },
+
   reloadPreview: function(){
     var embedUrl = window.location.protocol + "//" + window.location.host;
     var fragment = '/embed/dashboards/' + this.model.get('domain');
     var hide = 'hide=';
     var query = (this.keywords ? '&query=' + this.keywords : '');
     var sort = (this.sorting ? '&sort=' + this.sorting : '');
+    var status = (this.status ? '&status=' + this.status : '');
 
     _.each(this.hiddenSettings, function(id){
       hide += id + ',';
     }, this);
 
     var url = embedUrl + fragment + '?' +
-      (this.hiddenSettings.length ? hide : '') + query + sort;
+      (this.hiddenSettings.length ? hide : '') + query + sort + status;
 
     this.ui.preview.attr('src', url);
     this.ui.code.val(this.embedTmpl({ url: url }));
@@ -129,6 +152,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }, {
     code: 'desc',
     name: 'Description'
+  }, {
+    code: 'logo',
+    name: 'Hackdash Logo'
   }],
 
   projectSettings: [{

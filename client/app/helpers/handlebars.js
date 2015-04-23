@@ -66,6 +66,14 @@ Handlebars.registerHelper('isLandingView', function(options) {
   }
 });
 
+Handlebars.registerHelper('isEmbed', function(options) {
+  if (window.hackdash.app.source === "embed"){
+    return options.fn(this);
+  } else {
+    return options.inverse(this);
+  }
+});
+
 Handlebars.registerHelper('timeAgo', function(date) {
   if (date && moment(date).isValid()) {
     return moment(date).fromNow();

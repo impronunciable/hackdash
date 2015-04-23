@@ -21,6 +21,12 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "projects": "#dashboard-projects",
   },
 
+  templateHelpers: {
+    hackdashURL: function(){
+      return "http://" + hackdash.baseURL;
+    }
+  },
+
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
@@ -34,9 +40,16 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
     var sort = hackdash.getQueryVariable('sort');
     var query = hackdash.getQueryVariable('query');
+    var status = hackdash.getQueryVariable('status');
 
     if (query){
       hackdash.app.projects.search(query);
+    }
+
+    if (status){
+      hackdash.app.projects.reset(
+        hackdash.app.projects.where({ status: status })
+      );
     }
 
     var dashboardView = new DashboardView({
@@ -49,7 +62,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       showcaseMode: false,
       showcaseSort: false
     });
-
 
     dashboardView.on('show', function(){
       var ctn = self.dashboard.$el;
@@ -83,6 +95,10 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       }
     });
 
+    if (!this.settings.logo){
+      $('.logo', this.$el).remove();
+    }
+
     projectsView.on('ended:render', function(){
       if (sort){
         hackdash.app.projects.trigger("sort:" + sort);
@@ -110,7 +126,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
 
   getSettings: function(){
-    var settings = ['title', 'desc', 'pprg', 'ptitle', 'pcontrib','pacnbar'];
+    var settings = ['title', 'desc', 'logo', 'pprg', 'ptitle', 'pcontrib','pacnbar'];
     var hide = hackdash.getQueryVariable('hide');
     hide = (hide && hide.split(',')) || [];
 

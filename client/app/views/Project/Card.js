@@ -61,6 +61,10 @@ module.exports = ItemView.extend({
     }
 
     this.initSwitcher();
+
+    if (hackdash.app.source === "embed"){
+      this.$el.attr('target', '_blank');
+    }
   },
 
   serializeData: function(){
@@ -87,8 +91,13 @@ module.exports = ItemView.extend({
   },
 
   onContribute: function(e){
-    e.preventDefault();
     e.stopPropagation();
+
+    if (hackdash.app.source === "embed"){
+      return;
+    }
+
+    e.preventDefault();
 
     if (!window.hackdash.user){
       hackdash.app.showLogin();
@@ -100,8 +109,13 @@ module.exports = ItemView.extend({
   },
 
   onFollow: function(e){
-    e.preventDefault();
     e.stopPropagation();
+
+    if (hackdash.app.source === "embed"){
+      return;
+    }
+
+    e.preventDefault();
 
     if (!window.hackdash.user){
       hackdash.app.showLogin();

@@ -1,7 +1,13 @@
 
 <div class="header">
   <div class="container">
+
+    {{#isEmbed}}
+    <a class="dash-details" href="/dashboards/{{domain}}" target="_blank"></a>
+    {{else}}
     <div class="dash-details"></div>
+    {{/isEmbed}}
+
     <div class="dash-admins"></div>
 
     <div class="dash-buttons">
@@ -14,6 +20,10 @@
         <i class="fa fa-share-alt"></i>
       </a>
     </div>
+
+    {{#isEmbed}}
+    <a class="logo" href="{{hackdashURL}}" target="_blank"></a>
+    {{/isEmbed}}
 
   </div>
 </div>

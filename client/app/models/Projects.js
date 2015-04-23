@@ -103,6 +103,17 @@ var Projects = module.exports = Backbone.Collection.extend({
     });
 
     this.reset(items);
+  },
+
+  getStatusCount: function(){
+    var statuses = window.hackdash.statuses;
+    var statusCount = {};
+
+    _.each(statuses, function(status){
+      statusCount[status] = this.where({ status: status }).length;
+    }, this);
+
+    return statusCount;
   }
 
 });

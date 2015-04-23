@@ -18,7 +18,16 @@ module.exports = function(){
     $.fn.editable.defaults.mode = 'inline';
   }
 
-   // Init Helpers
+  hackdash.statuses = [
+    'brainstorming',
+    'researching',
+    'prototyping',
+    'wireframing',
+    'building',
+    'releasing'
+  ];
+
+  // Init Helpers
   require('./helpers/handlebars');
   require('./helpers/backboneOverrides');
 
