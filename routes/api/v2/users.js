@@ -80,7 +80,7 @@ var setQuery = function(req, res, next){
   }
 
   var regex = new RegExp(query, 'i');
-  req.search_query.$or = [ { name: regex }, { username: regex } ];
+  req.search_query.$or = [ { name: regex }, { username: regex }, { email: regex } ];
 
   next();
 };
