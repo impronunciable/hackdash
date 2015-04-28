@@ -43,13 +43,17 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "projects": "#projects",
     "users": "#users",
     "collections": "#collections",
+
+    "tabs": ".nav-tabs.landing",
+    "mobileMenu": ".mobile-menu",
   },
 
   events: {
     "keyup @ui.domain": "validateDomain",
     "click @ui.domain": "checkLogin",
     "click @ui.create": "createDashboard",
-    "click .up-button": "goTop"
+    "click .up-button": "goTop",
+    "click @ui.mobileMenu": "toggleMobileMenu"
   },
 
   lists: {
@@ -84,6 +88,15 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     this.partners.show(new PartnersView());
 
     this.footer.show(new FooterView());
+
+    var self = this;
+    _.defer(function(){
+      if (self.ui.mobileMenu.is(':visible')){
+        self.ui.tabs.addClass('hidden');
+      }
+
+      self.animateScroll();
+    });
   },
 
   getNewList: function(type){
@@ -108,6 +121,21 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     }
 
     this.ui[this.section].tab("show");
+
+    if (this.ui.mobileMenu.is(':visible')){
+      this.ui.tabs.addClass('hidden');
+    }
+  },
+
+  toggleMobileMenu: function(){
+    if (this.ui.mobileMenu.is(':visible')){
+      if (this.ui.tabs.hasClass('hidden')){
+        this.ui.tabs.removeClass('hidden');
+      }
+      else {
+        this.ui.tabs.addClass('hidden');
+      }
+    }
   },
 
   //--------------------------------------
@@ -117,6 +145,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   setSection: function(section){
     this.section = section;
     this.changeTab();
+    this.animateScroll();
   },
 
   errors: {
@@ -200,6 +229,14 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
+
+  animateScroll: function(){
+    window.smoothScroll.animateScroll(null, '#' + this.section, {
+      offset: (this.ui.mobileMenu.is(':visible') ? 0 : 60),
+      speed: 100,
+      easing: 'Linear'
+    });
+  },
 
   redirectToSubdomain: function(name){
     window.location = '/dashboards/' + name;

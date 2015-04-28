@@ -12,7 +12,8 @@ label, span, p {
 
 .landing-header {
   background: url(@landing-photo-url) no-repeat;
-  background-size: 100%;
+  background-size: cover;
+  background-position: center;
   padding-bottom: 50px;
 
   .call-action {
@@ -401,6 +402,9 @@ label, span, p {
 
 .team-partners {
   background-color: @color-blackC;
+  display: inline-block;
+  width: 100%;
+  height: auto;
 }
 
 .team-ctn,
@@ -526,18 +530,16 @@ label, span, p {
   font-family: @primary-font;
 }
 
-@media (max-width: 980px) {
-
-  .nav-tabs.landing {
-
-    li {
-
-      &.collection {
-        position: inherit;
-      }
-
+.footer-ctn{
+  .footer {
+    .brand {
+      margin: 0 auto;
+      padding-top: 10px;
     }
   }
+}
+
+@media (max-width: 980px) {
 
   .tab-content {
 
@@ -551,3 +553,103 @@ label, span, p {
 
 }
 
+@media (max-width: 860px) {
+  .nav-tabs.landing {
+
+    li {
+      a {
+        font-size: @fsize-20;
+        min-height: 50px;
+        min-width: 140px;
+      }
+    }
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .nav-tabs.landing {
+    /*display: none;*/
+
+    position: fixed;
+    top: 10px;
+    right: 50px;
+    z-index: 999;
+    max-width: 160px;
+    width: 100%;
+    background-color: @color-blackC;
+    padding: 7px;
+
+    li {
+      a {
+        font-size: @fsize-20;
+        min-height: 50px;
+        min-width: 140px;
+      }
+    }
+  }
+
+  .tab-content {
+
+    .header {
+
+      .input-group {
+        width: 100%;
+        padding: 10px;
+
+        .input-group-btn {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .team-tab {
+    padding-top: 20px;
+    margin: 0;
+  }
+
+  .team-tab,
+  .partners-tab {
+    font-size: @fsize-35;
+  }
+
+  .footer-ctn{
+    .footer {
+      .brand {
+        margin: 0;
+      }
+      .up-button {
+        right: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 540px) {
+
+  .landing-header {
+    .call-action {
+      h1{
+        font-size: @fsize-50;
+      }
+
+      .input-group {
+        width: 100%;
+
+        input {
+          width: 100%;
+          display: inline-block;
+        }
+
+        .input-group-btn{
+          display: inline-block;
+          clear: both;
+          margin: 5px auto 0 auto;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
