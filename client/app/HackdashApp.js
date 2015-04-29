@@ -26,6 +26,10 @@ module.exports = function(){
         model: new Backbone.Model({ providers: providers.split(',') })
       }));
     };
+
+    app.setTitle = function(title){
+      window.document.title = title + " - Hackdash";
+    };
   }
 
   function initRouter(){

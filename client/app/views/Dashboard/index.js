@@ -94,6 +94,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
         showcaseSort: this.showcaseSort
       }));
     }
+
+    $(".tooltips", this.$el).tooltip({});
   },
 
   //--------------------------------------

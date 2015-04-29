@@ -4,9 +4,10 @@
  */
 
 var
-  Collection = require('./Collection');
+  Collection = require('./Collection'),
+  BaseCollection = require('./BaseCollection');
 
-module.exports = Backbone.Collection.extend({
+module.exports = BaseCollection.extend({
 
   model: Collection,
 

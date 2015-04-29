@@ -12,11 +12,12 @@
 
     <div class="dash-buttons">
       {{#if link}}
-        <a class="link" href="{{link}}" target="_blank" data-bypass>
+        <a class="link tooltips" href="{{link}}" target="_blank"
+        data-bypass data-original-title="Open dashboard website">
           <i class="fa fa-link"></i>
         </a>
       {{/if}}
-      <a class="share">
+      <a class="share tooltips" data-original-title="Share this Dashboard">
         <i class="fa fa-share-alt"></i>
       </a>
     </div>

@@ -4,9 +4,10 @@
  */
 
 var
-  Project = require('./Project');
+  Project = require('./Project'),
+  BaseCollection = require('./BaseCollection');
 
-var Projects = module.exports = Backbone.Collection.extend({
+var Projects = module.exports = BaseCollection.extend({
 
   model: Project,
 

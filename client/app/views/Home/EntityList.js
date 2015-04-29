@@ -14,43 +14,27 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   className: 'entities',
   childView: Item,
 
-  gutter: 5,
-
   //--------------------------------------
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
-  onRender: function(){
+  onBeforeRender: function(){
+    if (this.initialized && !this.$el.is(':empty')){
+      this.destroySlick();
+      this.$el.empty();
+    }
+  },
 
+  onRender: function(){
     var self = this;
     _.defer(function(){
-
-      var p = self.$el.parents('.content');
-      self.height = p.height()-((self.gutter*2)*2);
-
       self.updateGrid();
-      self.refresh();
     });
   },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
-
-  refresh: function(){
-    if (this.wall){
-      this.wall.fitHeight(this.height);
-      this.wall.refresh();
-    }
-  },
-
-  moveLeft: function(){
-    this.move('-=');
-  },
-
-  moveRight: function(){
-    this.move('+=');
-  },
 
   //--------------------------------------
   //+ EVENT HANDLERS
@@ -60,29 +44,67 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
+  initialized: false,
+  destroyed: false,
+
+  destroySlick: function(){
+    this.$el.slick('unslick');
+
+    var slick = this.$el.slick('getSlick');
+    slick.$list.remove();
+    slick.destroy();
+
+    this.destroyed = true;
+  },
+
   updateGrid: function(){
-    if (!this.wall){
-      this.wall = new window.freewall(this.$el);
+
+    if (this.initialized && !this.destroyed){
+      this.destroySlick();
     }
 
-    this.wall.reset({
-      selector: '.entity',
-      cellW: 200,
-      cellH: 200,
-      gutterY: this.gutter,
-      gutterX: this.gutter,
-      onResize: this.refresh.bind(this)
+    if (this.$el.is(':empty')){
+      this.initialized = false;
+      return;
+    }
+
+    var breakpoints = [1450, 1200, 1024, 750, 430];
+    var cols = 5;
+
+    var responsive = _.map(breakpoints, function(value){
+      return {
+        breakpoint: value,
+        settings: {
+          slidesToShow: cols,
+          slidesToScroll: cols--
+        }
+      };
     });
 
+    this.$el.slick({
+      dots: false,
+      autoplay: false,
+      infinite: false,
+      adaptiveHeight: true,
+      speed: 300,
+      slidesToShow: 6,
+      slidesToScroll: 6,
+      responsive: responsive
+    });
+
+    this.$el
+      .off('setPosition')
+      .on('setPosition', this.replaceIcons.bind(this));
+
+    this.replaceIcons();
+
+    this.initialized = true;
+    this.destroyed = false;
   },
 
-  getCardSize: function(){
-    return $('.entity:first', this.$el).outerWidth() + this.gutter;
-  },
-
-  move: function(dir){
-    var move = dir + this.getCardSize();
-    this.$el.animate({ scrollLeft: move }, 250);
-  },
+  replaceIcons: function(){
+    $('.slick-prev', this.$el).html('<i class="fa fa-chevron-left"></i>');
+    $('.slick-next', this.$el).html('<i class="fa fa-chevron-right"></i>');
+  }
 
 });

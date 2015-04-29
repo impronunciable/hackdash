@@ -67,10 +67,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "landing";
 
-    if (this.homeView){
-      this.homeView.setSection(section);
-    }
-    else {
+    if (!this.homeView){
       var main = hackdash.app.main;
       this.homeView = new HomeLayout({
         section: section
@@ -79,11 +76,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       main.show(this.homeView);
     }
 
-    window.smoothScroll.animateScroll(null, '#' + section, {
-      offset: 60,
-      speed: 100,
-      easing: 'Linear'
-    });
+    this.homeView.setSection(section);
   },
 
   showLandingDashboards: function(){
@@ -133,6 +126,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
             model: app.dashboard
           }));
 
+          app.setTitle(app.dashboard.get('title') || app.dashboard.get('domain'));
+
         });
     });
 
@@ -156,6 +151,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     app.footer.show(new Footer({
       model: app.dashboard
     }));
+
+    app.setTitle('Create a project');
   },
 
   showProjectEdit: function(pid){
@@ -172,6 +169,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       app.main.show(new ProjectEditView({
         model: app.project
       }));
+
+      app.setTitle('Edit project');
     });
 
     app.footer.show(new Footer({
@@ -193,6 +192,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       app.main.show(new ProjectFullView({
         model: app.project
       }));
+
+      app.setTitle(app.project.get('title') || 'Project');
     });
 
     app.footer.show(new Footer({
@@ -222,6 +223,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
         app.footer.show(new Footer({
           model: app.dashboard
         }));
+
+        app.setTitle(app.collection.get('title') || 'Collection');
       });
   },
 
@@ -252,6 +255,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
       }));
 
       app.footer.show(new Footer());
+
+      app.setTitle(app.profile.get('name') || 'Profile');
     });
 
   },

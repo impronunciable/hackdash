@@ -1,8 +1,8 @@
 /**
  * VIEW: ProfileCard Edit
- * 
+ *
  */
- 
+
 var template = require('./templates/cardEdit.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
@@ -16,7 +16,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   ui: {
     "name": "input[name=name]",
     "email": "input[name=email]",
-    "bio": "textarea[name=bio]"
+    "bio": "textarea[name=bio]",
   },
 
   events: {
@@ -74,6 +74,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
     $("#save", this.$el).button('reset');
 
     if (err.responseText === "OK"){
+      var saved = $(".saved", this.$el).addClass('show');
+
+      window.clearTimeout(this.timer);
+      this.timer = window.setTimeout(function(){
+        saved.removeClass('show');
+      }, 2000);
+
       return;
     }
 

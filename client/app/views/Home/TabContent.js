@@ -37,18 +37,12 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   template: template,
 
   ui: {
-    "content": '.content',
-    "arrows": '.arrow'
-  },
-
-  events: {
-    "click .arrow-left": "moveLeft",
-    "click .arrow-right": "moveRight"
+    "loading": '.loading'
   },
 
   regions: {
     "header": ".header",
-    "content": ".content"
+    "content": ".content-place"
   },
 
   //--------------------------------------
@@ -56,19 +50,18 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
 
   initialize: function(){
-    if (!this.refresher){
-      this.refresher = this.refreshContent.bind(this);
+    var self = this;
+
+    function showLoading(){
+      self.ui.loading.removeClass('hidden');
     }
 
-    this.collection
-      .off('reset', this.refresher)
-      .on('reset', this.refresher);
-  },
+    this.collection.on('fetch', showLoading);
 
-  refreshContent: function(){
-    if (this.content && this.content.currentView){
-      this.content.currentView.refresh();
-    }
+    this.collection.on('reset', function(){
+      self.ui.loading.addClass('hidden');
+      self.collection.off('fetch', showLoading);
+    });
   },
 
   onRender: function(){
@@ -97,13 +90,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
         collection: this.collection
       }));
 
-      var h = $(window).height() - 200;
-      h = ( h < 420 ) ? 420 : h;
-
-      var w = $(window).width() - 150;
-
-      this.ui.content.width(w).height(h);
-      this.ui.arrows.css('top', ((h/2) - this.ui.arrows.eq(0).height()/2) + "px");
     }
 
   },
@@ -115,15 +101,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
-
-  moveLeft: function(){
-   this.content.currentView.moveLeft();
-  },
-
-  moveRight: function(){
-   this.content.currentView.moveRight();
-  },
-
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
