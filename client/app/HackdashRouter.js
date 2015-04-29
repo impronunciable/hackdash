@@ -67,10 +67,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "landing";
 
-    if (this.homeView){
-      this.homeView.setSection(section);
-    }
-    else {
+    if (!this.homeView){
       var main = hackdash.app.main;
       this.homeView = new HomeLayout({
         section: section
@@ -78,6 +75,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
       main.show(this.homeView);
     }
+
+    this.homeView.setSection(section);
   },
 
   showLandingDashboards: function(){

@@ -94,8 +94,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       if (self.ui.mobileMenu.is(':visible')){
         self.ui.tabs.addClass('hidden');
       }
-
-      self.animateScroll();
     });
   },
 
@@ -231,11 +229,13 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
 
   animateScroll: function(){
-    window.smoothScroll.animateScroll(null, '#' + this.section, {
-      offset: (this.ui.mobileMenu.is(':visible') ? 0 : 60),
-      speed: 100,
-      easing: 'Linear'
-    });
+    if (this.section){
+      window.smoothScroll.animateScroll(null, '#' + this.section, {
+        offset: (this.ui.mobileMenu.is(':visible') ? 0 : 60),
+        speed: 100,
+        easing: 'Linear'
+      });
+    }
   },
 
   redirectToSubdomain: function(name){

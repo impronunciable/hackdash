@@ -52,12 +52,15 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   initialize: function(){
     var self = this;
 
-    this.collection.on('fetch', function(){
+    function showLoading(){
       self.ui.loading.removeClass('hidden');
-    });
+    }
+
+    this.collection.on('fetch', showLoading);
 
     this.collection.on('reset', function(){
       self.ui.loading.addClass('hidden');
+      self.collection.off('fetch', showLoading);
     });
   },
 

@@ -133,10 +133,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "landing";
 
-    if (this.homeView){
-      this.homeView.setSection(section);
-    }
-    else {
+    if (!this.homeView){
       var main = hackdash.app.main;
       this.homeView = new HomeLayout({
         section: section
@@ -144,6 +141,8 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
       main.show(this.homeView);
     }
+
+    this.homeView.setSection(section);
   },
 
   showLandingDashboards: function(){
@@ -3362,12 +3361,15 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   initialize: function(){
     var self = this;
 
-    this.collection.on('fetch', function(){
+    function showLoading(){
       self.ui.loading.removeClass('hidden');
-    });
+    }
+
+    this.collection.on('fetch', showLoading);
 
     this.collection.on('reset', function(){
       self.ui.loading.addClass('hidden');
+      self.collection.off('fetch', showLoading);
     });
   },
 
@@ -3617,8 +3619,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       if (self.ui.mobileMenu.is(':visible')){
         self.ui.tabs.addClass('hidden');
       }
-
-      self.animateScroll();
     });
   },
 
@@ -3754,11 +3754,13 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
 
   animateScroll: function(){
-    window.smoothScroll.animateScroll(null, '#' + this.section, {
-      offset: (this.ui.mobileMenu.is(':visible') ? 0 : 60),
-      speed: 100,
-      easing: 'Linear'
-    });
+    if (this.section){
+      window.smoothScroll.animateScroll(null, '#' + this.section, {
+        offset: (this.ui.mobileMenu.is(':visible') ? 0 : 60),
+        speed: 100,
+        easing: 'Linear'
+      });
+    }
   },
 
   redirectToSubdomain: function(name){
