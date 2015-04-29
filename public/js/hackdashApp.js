@@ -4019,9 +4019,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
 },{"./templates/card.hbs":75}],71:[function(require,module,exports){
 /**
  * VIEW: ProfileCard Edit
- * 
+ *
  */
- 
+
 var template = require('./templates/cardEdit.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
@@ -4035,7 +4035,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   ui: {
     "name": "input[name=name]",
     "email": "input[name=email]",
-    "bio": "textarea[name=bio]"
+    "bio": "textarea[name=bio]",
   },
 
   events: {
@@ -4093,6 +4093,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
     $("#save", this.$el).button('reset');
 
     if (err.responseText === "OK"){
+      var saved = $(".saved", this.$el).addClass('show');
+
+      window.clearTimeout(this.timer);
+      this.timer = window.setTimeout(function(){
+        saved.removeClass('show');
+      }, 2000);
+
       return;
     }
 
@@ -4367,7 +4374,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + escapeExpression(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"email","hash":{},"data":data}) : helper)))
     + "\" class=\"form-control\"/>\n    </div>\n    <div class=\"form-group\">\n      <textarea name=\"bio\" placeholder=\"Some about you\" class=\"form-control\" rows=\"4\">"
     + escapeExpression(((helper = (helper = helpers.bio || (depth0 != null ? depth0.bio : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"bio","hash":{},"data":data}) : helper)))
-    + "</textarea>\n    </div>\n  </div>\n  <div class=\"form-actions\">\n    <input id=\"save\" type=\"button\" data-loading-text=\"saving..\" value=\"Save profile\" class=\"btn-primary pull-right\"/>\n    <a id=\"cancel\" class=\"btn-cancel pull-left\">cancel</a>\n  </div>\n</form>";
+    + "</textarea>\n    </div>\n  </div>\n  <div class=\"form-actions\">\n    <input id=\"save\" type=\"button\" data-loading-text=\"saving..\" value=\"Save profile\" class=\"btn-primary pull-right\"/>\n    <label class=\"saved pull-right\">Profile saved!</label>\n    <a id=\"cancel\" class=\"btn-cancel pull-left\">cancel</a>\n  </div>\n</form>";
 },"useData":true});
 
 },{"hbsfy/runtime":96}],77:[function(require,module,exports){
