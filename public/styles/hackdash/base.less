@@ -399,6 +399,37 @@ a.login {
   cursor: pointer;
 }
 
+.mobile-menu {
+  position: fixed;
+  right: 5px;
+  top: 5px;
+  border-radius: 4px;
+  z-index: 999;
+  font-size: @fsize-20;
+  padding: 6px 10px 8px 10px;
+  height: auto;
+  background-color: @color-blackC;
+  color: @color-whiteB;
+
+  &:hover, &:active {
+    background-color: @color-blackC;
+    color: @color-whiteB;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .login {
+    a {
+      font-size: @fsize-17;
+
+      .fa {
+        font-size: @fsize-35;
+      }
+    }
+  }
+}
+
 @media (max-width: 800px) {
   .modal-dialog.big-modal {
     width: inherit;
