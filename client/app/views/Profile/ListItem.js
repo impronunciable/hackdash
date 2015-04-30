@@ -26,7 +26,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.$el
       .addClass(this.model.get("status"))
       .attr({
-        "title": this.model.get("status"),
         "data-placement": "left"
       })
       .tooltip({});
@@ -34,6 +33,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   serializeData: function(){
     var url;
+    var isProject = false;
 
     switch(this.type){
       case "collections":
@@ -46,6 +46,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
       case "contributions":
       case "likes":
         url = "/projects/" + this.model.get("_id");
+        isProject = true;
         break;
     }
 
@@ -56,6 +57,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     return _.extend({
       showImage: showImage,
+      isProject: isProject,
       type: this.type,
       url: url
     }, this.model.toJSON());

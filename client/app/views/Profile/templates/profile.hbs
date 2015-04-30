@@ -4,9 +4,18 @@
 
     <div class="profile-card"></div>
 
-    <div class="col-md-12 text-center">
+    <div class="text-center">
 
       <ul class="nav nav-tabs" role="tablist">
+
+        {{#if collections.length}}
+        <li id="collection" class="collection">
+          <a href="#collections" role="tab" data-toggle="tab" data-bypass="true">
+            <span class="coll-length">{{collections.length}}</span>
+            <h3>Collections</h3>
+          </a>
+        </li>
+        {{/if}}
 
         <li id="dashboard" class="dashboard">
           <a href="#dashboards" role="tab" data-toggle="tab" data-bypass="true">
@@ -18,12 +27,6 @@
           <a href="#projects" role="tab" data-toggle="tab" data-bypass="true">
             <span class="proj-length">{{projects.length}}</span>
             <h3>Projects</h3>
-          </a>
-        </li>
-        <li id="collection" class="collection">
-          <a href="#collections" role="tab" data-toggle="tab" data-bypass="true">
-            <span class="coll-length">{{collections.length}}</span>
-            <h3>Collections</h3>
           </a>
         </li>
         <li id="contribution" class="contributions">

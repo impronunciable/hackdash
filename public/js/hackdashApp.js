@@ -4200,7 +4200,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.$el
       .addClass(this.model.get("status"))
       .attr({
-        "title": this.model.get("status"),
         "data-placement": "left"
       })
       .tooltip({});
@@ -4208,6 +4207,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   serializeData: function(){
     var url;
+    var isProject = false;
 
     switch(this.type){
       case "collections":
@@ -4220,6 +4220,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
       case "contributions":
       case "likes":
         url = "/projects/" + this.model.get("_id");
+        isProject = true;
         break;
     }
 
@@ -4230,6 +4231,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     return _.extend({
       showImage: showImage,
+      isProject: isProject,
       type: this.type,
       url: url
     }, this.model.toJSON());
@@ -4382,12 +4384,19 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "      <img src=\""
+  return "        <div class=\"progress\" title=\""
+    + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
+    + "\">\n          <div class=\"progress-bar progress-bar-success progress-bar-striped "
+    + escapeExpression(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"status","hash":{},"data":data}) : helper)))
+    + "\" role=\"progressbar\">\n          </div>\n        </div>\n";
+},"3":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "        <img src=\""
     + escapeExpression(((helper = (helper = helpers.cover || (depth0 != null ? depth0.cover : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"cover","hash":{},"data":data}) : helper)))
     + "\" style=\"width: 64px; height: 64px;\">\n";
-},"3":function(depth0,helpers,partials,data) {
+},"5":function(depth0,helpers,partials,data) {
   var helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "      <i class=\"item-letter\">"
+  return "        <i class=\"item-letter\">"
     + escapeExpression(((helpers.firstLetter || (depth0 && depth0.firstLetter) || helperMissing).call(depth0, (depth0 != null ? depth0.title : depth0), {"name":"firstLetter","hash":{},"data":data})))
     + "</i>\n";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -4395,10 +4404,12 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + escapeExpression(((helper = (helper = helpers.type || (depth0 != null ? depth0.type : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"type","hash":{},"data":data}) : helper)))
     + "\" href=\""
     + escapeExpression(((helper = (helper = helpers.url || (depth0 != null ? depth0.url : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"url","hash":{},"data":data}) : helper)))
-    + "\">\n  <div class=\"well media\">\n    <div class=\"media-left\">\n";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.showImage : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data});
+    + "\">\n  <div class=\"well media\">\n    <div class=\"media-left\">\n      <div class=\"cover\">\n";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isProject : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "    </div>\n    <div class=\"media-body\">\n      <h4 class=\"media-heading\">"
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.showImage : depth0), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.program(5, data),"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "      </div>\n    </div>\n    <div class=\"media-body\">\n      <h4 class=\"media-heading\">"
     + escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper)))
     + "</h4>\n      <p>"
     + escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"description","hash":{},"data":data}) : helper)))
@@ -4408,15 +4419,20 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 },{"hbsfy/runtime":96}],78:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
   var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression;
-  return "\n<div class=\"header\">\n  <div class=\"container\">\n\n    <div class=\"profile-card\"></div>\n\n    <div class=\"col-md-12 text-center\">\n\n      <ul class=\"nav nav-tabs\" role=\"tablist\">\n\n        <li id=\"dashboard\" class=\"dashboard\">\n          <a href=\"#dashboards\" role=\"tab\" data-toggle=\"tab\" data-bypass=\"true\">\n            <span class=\"dash-length\">"
+  return "        <li id=\"collection\" class=\"collection\">\n          <a href=\"#collections\" role=\"tab\" data-toggle=\"tab\" data-bypass=\"true\">\n            <span class=\"coll-length\">"
+    + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.collections : depth0)) != null ? stack1.length : stack1), depth0))
+    + "</span>\n            <h3>Collections</h3>\n          </a>\n        </li>\n";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+  var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression, buffer = "\n<div class=\"header\">\n  <div class=\"container\">\n\n    <div class=\"profile-card\"></div>\n\n    <div class=\"text-center\">\n\n      <ul class=\"nav nav-tabs\" role=\"tablist\">\n\n";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 != null ? depth0.collections : depth0)) != null ? stack1.length : stack1), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "\n        <li id=\"dashboard\" class=\"dashboard\">\n          <a href=\"#dashboards\" role=\"tab\" data-toggle=\"tab\" data-bypass=\"true\">\n            <span class=\"dash-length\">"
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.dashboards : depth0)) != null ? stack1.length : stack1), depth0))
     + "</span>\n            <h3>Dashboards</h3>\n          </a>\n        </li>\n        <li id=\"project\" class=\"project\">\n          <a href=\"#projects\" role=\"tab\" data-toggle=\"tab\" data-bypass=\"true\">\n            <span class=\"proj-length\">"
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.projects : depth0)) != null ? stack1.length : stack1), depth0))
-    + "</span>\n            <h3>Projects</h3>\n          </a>\n        </li>\n        <li id=\"collection\" class=\"collection\">\n          <a href=\"#collections\" role=\"tab\" data-toggle=\"tab\" data-bypass=\"true\">\n            <span class=\"coll-length\">"
-    + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.collections : depth0)) != null ? stack1.length : stack1), depth0))
-    + "</span>\n            <h3>Collections</h3>\n          </a>\n        </li>\n        <li id=\"contribution\" class=\"contributions\">\n          <a href=\"#contributions\" role=\"tab\" data-toggle=\"tab\" data-bypass=\"true\">\n            <span class=\"contrib-length\">"
+    + "</span>\n            <h3>Projects</h3>\n          </a>\n        </li>\n        <li id=\"contribution\" class=\"contributions\">\n          <a href=\"#contributions\" role=\"tab\" data-toggle=\"tab\" data-bypass=\"true\">\n            <span class=\"contrib-length\">"
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.contributions : depth0)) != null ? stack1.length : stack1), depth0))
     + "</span>\n            <h3>Contributions</h3>\n          </a>\n        </li>\n        <li id=\"like\" class=\"likes\">\n          <a href=\"#likes\" role=\"tab\" data-toggle=\"tab\" data-bypass=\"true\">\n            <span class=\"likes-length\">"
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.likes : depth0)) != null ? stack1.length : stack1), depth0))
