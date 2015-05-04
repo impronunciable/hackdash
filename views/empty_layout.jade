@@ -11,16 +11,17 @@ html
 
     link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Oswald:400,700,300|Montserrat:400,700')
 
-    link(rel='stylesheet', href='/styles/vendor.css?v=' + version)
+    link(rel='stylesheet', href='/styles/vendor.css')
+    link(rel='stylesheet', href='/styles/app.css')
+    link(rel='stylesheet', href='/styles/errors.css')
 
   body
 
-    header
-
-    #main
-      block content
-
-    footer
+    .top-arrow
+      div
+    block content
+    .bottom-arrow
+      div
 
     if (googleAnalytics)
       script().

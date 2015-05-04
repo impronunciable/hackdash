@@ -1,5 +1,12 @@
 extends empty_layout
 
 block content
-  h1 Internal Server Error
-  h3 There is a problem with your request, please try again later or contact the admin
+  .page-500
+    .logo
+    .code
+      h2 500
+    h1 Something went wrong.
+    a(href="/")
+      h3 Go home
+    a(href="https://twitter.com/Hack_Dash", target="_blank")
+      h4 Contact us

@@ -6,6 +6,21 @@ var User = mongoose.model('User')
   , Dashboard = mongoose.model('Dashboard')
   , Collection = mongoose.model('Collection');
 
+function checkEntityResponse(res, err, entity){
+  if (err) {
+    console.log(err);
+    res.status(500);
+    res.render('500');
+    return true;
+  }
+
+  if (!entity) {
+    res.status(404);
+    res.render('404');
+    return true;
+  }
+}
+
 module.exports = function(app){
 
   var config = app.get('config');
@@ -29,8 +44,7 @@ module.exports = function(app){
       var domain = getDashboardName(req);
 
       Project.findById(req.params.pid, function(err, project) {
-        if (err || !project) return next();
-        // TODO: NotFound
+        if (checkEntityResponse(res, err, project)) return;
 
         res.locals.meta = {
           url: baseURL + '/projects/' + project._id,
@@ -76,8 +90,7 @@ module.exports = function(app){
       }
 
       Dashboard.findOne({ domain: domain }, function(err, dashboard) {
-        if(err || !dashboard) return next();
-        // TODO: NotFound
+        if (checkEntityResponse(res, err, dashboard)) return;
 
         res.locals.meta = {
           url: 'http://' + domain + '.' + hdDomain,
@@ -112,8 +125,7 @@ module.exports = function(app){
 
     collection: function(req, res, next){
       Collection.findById(req.params.cid, function(err, collection) {
-        if (err || !collection) return next();
-        // TODO: NotFound
+        if (checkEntityResponse(res, err, collection)) return;
 
         res.locals.meta = {
           url: baseURL + '/collections/' + collection._id,
@@ -137,8 +149,7 @@ module.exports = function(app){
 
     user: function(req, res, next){
       User.findById(req.params.user_id, function(err, user){
-        if(err || !user) return next();
-        // TODO: NotFound
+        if (checkEntityResponse(res, err, user)) return;
 
         res.locals.meta = {
           url: baseURL + '/users/' + user._id,

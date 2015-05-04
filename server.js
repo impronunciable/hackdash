@@ -72,14 +72,14 @@ app.configure(function(){
   app.use(express.static(__dirname + '/public', { maxAge: staticsMaxAge }));
 
   app.use(function(req, res) {
-     res.status(400);
-     res.render('404');
+    res.status(404);
+    res.render('404');
   });
 
   app.use(function(error, req, res, next) {
     console.log(error);
-     res.status(500);
-     res.render('500');
+    res.status(500);
+    res.render('500');
   });
 
   app.set('statuses', require('./models/statuses'));
