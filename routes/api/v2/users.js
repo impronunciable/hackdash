@@ -76,6 +76,7 @@ var setQuery = function(req, res, next){
       { bio: { $exists: true } },
       { $where: "this.bio.length>0" }
     ];
+    req.isLanding = true;
     return next();
   }
 
@@ -96,10 +97,15 @@ var getUser = function(req, res, next){
 };
 
 var getUsers = function(req, res, next){
+  var sort = "name username";
+  if (req.isLanding){
+    sort = "-created_at " + sort;
+  }
+
   User
     .find(req.search_query || {})
     .limit(req.limit || maxLimit)
-    .sort("name username")
+    .sort(sort)
     .exec(function(err, users) {
       if(err) return res.send(500);
       req.users = users;
