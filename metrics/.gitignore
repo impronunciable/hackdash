@@ -3,3 +3,4 @@ config.json
 metrics.json
 !config.json.sample
 dashboards.csv
+dashboards_admins.csv

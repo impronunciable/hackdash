@@ -45,7 +45,7 @@ module.exports = function(base_url, config, testUsers){
           expect(response.body).to.be.an('array');
 
           dataBuilder.count('Dashboard', function(err, count){
-            expect(response.body.length).to.be.equal(count);
+            expect(response.body.length).to.be.equal(count-1); // only with projects
             done();
           });
 
@@ -134,7 +134,7 @@ module.exports = function(base_url, config, testUsers){
           expect(response.statusCode).to.be.equal(200);
 
           expect(response.body).to.be.an('array');
-          expect(response.body.length).to.be.equal(1);
+          expect(response.body.length).to.be.equal(1);// only with projects
 
           done();
         });
@@ -162,6 +162,7 @@ module.exports = function(base_url, config, testUsers){
           expect(dashboard._id).to.be.ok;
           expect(dashboard.domain).to.be.equal('newdash');
           expect(dashboard.open).to.be.true;
+          expect(dashboard.owner).to.be.equal(testUsers[0]._id.toString());
 
           dataBuilder.clear('Dashboard', [dashboard._id], function(){
             done();
@@ -205,6 +206,143 @@ module.exports = function(base_url, config, testUsers){
 
     });
 
+    describe('DELETE /dashboards/:domain', function(){
+
+      it('must validate if domain exists', function(done){
+
+        request.del({
+          uri: uri + '/NotFound',
+          auth: auth
+        }, function (error, response, body) {
+          expect(error).to.not.be.ok();
+          expect(response.statusCode).to.be.equal(404);
+          done();
+        });
+
+      });
+
+      it('must validate if has Owner', function(done){
+
+        request.del({
+          uri: uri + '/domaina',
+          auth: auth
+        }, function (error, response, body) {
+          expect(error).to.not.be.ok();
+          expect(response.statusCode).to.be.equal(403);
+          expect(body).to.be.equal("This dashboard cannot be removed because it has no owner.");
+          done();
+        });
+
+      });
+
+      it('must validate if user is Owner', function(done){
+
+        request.del({
+          uri: uri + '/domainb',
+          auth: auth
+        }, function (error, response, body) {
+          expect(error).to.not.be.ok();
+          expect(response.statusCode).to.be.equal(403);
+          expect(body).to.be.equal("Only Owner can remove this dashboard.");
+          done();
+        });
+
+      });
+
+      it('must validate if has projects', function(done){
+
+        request.del({
+          uri: uri + '/domaind',
+          auth: auth
+        }, function (error, response, body) {
+          expect(error).to.not.be.ok();
+          expect(response.statusCode).to.be.equal(403);
+          expect(body).to.be.equal("Only Dashboards with no projects can be removed.");
+          done();
+        });
+
+      });
+
+      it('must validate if has only one admin', function(done){
+
+        function updateUserAdmin(userId, domain, _done){
+          dataBuilder.getById('User', userId, function(err, usr){
+            usr.admin_in = [];
+            usr.admin_in.push(domain);
+
+            usr.save(function(err){
+              _done(usr);
+            });
+
+          });
+        }
+
+        updateUserAdmin(testUsers[0]._id, 'domainc', function(user0){
+          updateUserAdmin(testUsers[1]._id, 'domainc', function(user1){
+
+            request.del({
+              uri: uri + '/domainc',
+              auth: auth
+            }, function (error, response, body) {
+
+              expect(error).to.not.be.ok();
+              expect(response.statusCode).to.be.equal(403);
+              expect(body).to.be.equal("Only Dashboards with ONE admin can be removed.");
+
+              user0.admin_in = [];
+              user1.admin_in = [];
+
+              user0.save(function(err){
+                user1.save(function(err){
+                  done();
+                });
+              });
+
+            });
+
+          });
+        });
+
+      });
+
+      it('must remove the dashboard and admin_in field from user', function(done){
+
+        dataBuilder.getById('User', testUsers[0]._id, function(err, usr){
+          usr.admin_in = ['testdom1', 'domainc', 'testdom2'];
+
+          usr.save(function(err){
+            expect(usr.admin_in.length).to.be.equal(3);
+
+            request.del({
+              uri: uri + '/domainc',
+              auth: auth
+            }, function (error, response, body) {
+              expect(error).to.not.be.ok();
+              expect(response.statusCode).to.be.equal(204);
+
+              request.get({
+                uri: uri + '/domainc',
+                auth: auth
+              }, function (error, response, body) {
+                expect(error).to.not.be.ok();
+                expect(response.statusCode).to.be.equal(404);
+
+                dataBuilder.getById('User', testUsers[0]._id, function(err, usr){
+                  expect(usr.admin_in.length).to.be.equal(2);
+                  done();
+                });
+
+              });
+            });
+
+          });
+        });
+
+      });
+
+    });
+
+
   });
 
 };
@@ -229,20 +367,38 @@ function createTestDashboards(testUsers, done){
     , "link": "http://example.com/some/link"
     , "open": true
     , "showcase": []
+    , "projectsCount": 3
+    , "covers": ['1', '2', '3']
   }, {
       "domain": "domainb"
     , "title": "Dashboard Title B"
     , "description": "description b"
     , "link": "http://example.com/some/link"
     , "open": true
+    , "owner": testUsers[1]._id.toString()
     , "showcase": []
+    , "projectsCount": 3
+    , "covers": ['1', '2', '3']
   }, {
       "domain": "domainc"
     , "title": "Dashboard Title C"
     , "description": "description c"
     , "link": "http://example.com/some/link"
     , "open": true
+    , "owner": testUsers[0]._id.toString()
     , "showcase": []
+    , "projectsCount": 0
+    , "covers": ['1', '2', '3']
+  }, {
+      "domain": "domaind"
+    , "title": "Dashboard With projects"
+    , "description": "description d"
+    , "link": "http://example.com/some/link"
+    , "open": true
+    , "owner": testUsers[0]._id.toString()
+    , "showcase": []
+    , "projectsCount": 3
+    , "covers": ['1', '2', '3']
   }], done);
 
 }

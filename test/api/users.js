@@ -45,7 +45,7 @@ module.exports = function(base_url, config, testUsers){
           expect(response.body).to.be.an('array');
 
           dataBuilder.count('User', function(err, count){
-            expect(response.body.length).to.be.equal(count);
+            expect(response.body.length).to.be.equal(count - 2); // - testusers
             done();
           });
 

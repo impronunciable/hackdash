@@ -32,6 +32,8 @@ module.exports = function(app, uri, common) {
   app.put(uri + '/dashboards/:domain', common.isAuth, getDashboard, isAdminDashboard, updateDashboard, sendDashboard);
   app.put(uri + '/', common.isAuth, getDashboard, isAdminDashboard, updateDashboard, sendDashboard);
 
+  app.del(uri + '/dashboards/:domain', common.isAuth, getDashboard, isOwnerDashboard, removeDashboard);
+
   app.post(uri + '/', common.notAllowed);
   app.del(uri + '/', common.notAllowed);
 };
@@ -53,7 +55,11 @@ var createDashboard =  function(app){
         return res.json(409, { error: "subdomain_inuse" });
       }
 
-      var dash = new Dashboard({ domain: req.body.domain});
+      var dash = new Dashboard({
+        domain: req.body.domain,
+        owner: req.user._id
+      });
+
       dash.save(function(err){
 
         User.findById(req.user.id, function(err, user) {
@@ -131,6 +137,7 @@ var getDashboard = function(req, res, next){
           Dashboard
             .findOne({ domain: domain })
             .select('-__v')
+            .populate('owner', '_id name picture bio')
             .lean()
             .exec(done);
         },
@@ -175,6 +182,7 @@ var getDashboard = function(req, res, next){
 
   Dashboard
     .findOne({ domain: domain })
+    .populate('owner', '_id name picture bio')
     .exec(function(err, dashboard) {
       if(err) return res.send(500);
       if(!dashboard) return res.send(404);
@@ -197,6 +205,29 @@ var isAdminDashboard = function(req, res, next){
   }
 
   next();
+};
+
+var isOwnerDashboard = function(req, res, next){
+
+  if (!req.dashboard.owner) {
+    return res.send(403, "This dashboard cannot be removed because it has no owner.");
+  }
+
+  if (req.dashboard.owner._id.toString() !== req.user._id.toString()) {
+    return res.send(403, "Only Owner can remove this dashboard.");
+  }
+
+  if (req.dashboard.projectsCount > 0) {
+    return res.send(403, "Only Dashboards with no projects can be removed.");
+  }
+
+  User.count({ admin_in: req.dashboard.domain }, function(err, count){
+    if (count > 1){
+      return res.send(403, "Only Dashboards with ONE admin can be removed.");
+    }
+
+    next();
+  });
 };
 
 var updateDashboard = function(req, res, next) {
@@ -224,6 +255,19 @@ var updateDashboard = function(req, res, next) {
     if(err) return res.send(500);
     req.dashboard = dashboard;
     next();
+  });
+};
+
+var removeDashboard = function(req, res){
+  var domain = req.dashboard.domain;
+
+  req.dashboard.remove(function (err){
+    if (err) return res.send(500, "An error ocurred when removing this dashboard");
+
+    User.update({ admin_in: domain }, { $pull: { admin_in: domain } }, function(err, users) {
+      if (err) console.log("error removing users admin_in from dashboard: " + domain);
+      res.send(204);
+    });
   });
 };
 

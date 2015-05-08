@@ -6,13 +6,13 @@
  */
 
 var
-    config = require('../config.json')
+    config = require('../../config.json')
   , async = require('async')
   , mongoose = require('mongoose');
 
 mongoose.connect(config.db.url || ('mongodb://' + config.db.host + '/'+ config.db.name));
 
-require('../models')({
+require('../../models')({
   get: function(){
     return ['brainstorming','wireframing','building','researching','prototyping','releasing'];
   }
