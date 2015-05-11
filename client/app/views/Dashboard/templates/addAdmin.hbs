@@ -3,14 +3,17 @@
   <h3>Add Dashboard Admin</h3>
 </div>
 <div class="modal-body">
-  <div class="input-prepend">
-    <span class="add-on" style="padding: 10px;">
-      <i class="icon-user"></i>
+  {{#if showAdmin}}
+    <p class="bg-warning">Warning! you will NOT be able to delete this dashboard if you add an admin!</p>
+  {{/if}}
+  <div class="input-group">
+    <span class="input-group-addon">
+      <i class="fa fa-user"></i>
     </span>
-    <input id="txtUser" type="text" class="input-xlarge" placeholder="type name or username" autocomplete="off" style="padding: 10px;">
+    <input id="txtUser" type="text" class="form-control" placeholder="type name or username" autocomplete="off">
   </div>
 </div>
 <div class="modal-footer">
-  <input id="save" type="button" class="btn primary btn-success pull-right" style="margin-left: 10px;" value="Save">
-  <input type="button" class="btn primary pull-right" data-dismiss="modal" value="Cancel">
+  <input id="save" type="button" class="btn btn-success pull-right" value="ADD">
+  <a class="btn-cancel pull-left" data-dismiss="modal">cancel</a>
 </div>

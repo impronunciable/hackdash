@@ -36,6 +36,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.initTypehead();
   },
 
+  serializeData: function(){
+    return _.extend({
+      showAdmin: (this.collection.length > 1 ? false : true)
+    }, (this.model && this.model.toJSON()) || {});
+  },
+
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------

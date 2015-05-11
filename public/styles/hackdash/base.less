@@ -66,6 +66,15 @@ label, span, p {
   background-color: @color-project;
 }
 
+.btn-cancel {
+  color: @color-white;
+  font-size: @fsize-20;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-family: @secondary-font;
+  padding-top: 20px;
+}
+
 body {
   .no-select;
   margin: 0;
@@ -415,6 +424,23 @@ a.login {
     background-color: @color-blackC;
     color: @color-whiteB;
   }
+}
+
+.typeahead {
+
+  li {
+
+    .avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+    }
+
+    &:nth-child(even) {
+      background-color: @color-whiteD;
+    }
+  }
+
 }
 
 @media (max-width: 768px) {
