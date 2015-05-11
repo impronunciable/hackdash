@@ -2,7 +2,7 @@
   "author": "Hackdash",
   "name": "Hackdash",
   "description": "",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "engines": {
     "node": "0.8.x"
   },
