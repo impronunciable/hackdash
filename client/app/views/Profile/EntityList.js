@@ -16,7 +16,8 @@ module.exports = Backbone.Marionette.CollectionView.extend({
 
   childViewOptions: function() {
     return {
-      type: this.type
+      type: this.type,
+      isMyProfile: this.isMyProfile
     };
   },
 
@@ -29,6 +30,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   initialize: function(options){
     this.fullList = options.collection || new Backbone.Collection();
     this.type = (options && options.type) || false;
+    this.isMyProfile = (options && options.isMyProfile) || false;
   },
 
   onBeforeRender: function(){

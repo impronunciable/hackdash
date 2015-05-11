@@ -5,6 +5,7 @@
 
 var HackdashRouter = require('./HackdashRouter')
   , LoginView = require("./views/Login")
+  , MessageView = require("./views/MessageBox")
   , ModalRegion = require('./views/ModalRegion');
 
 module.exports = function(){
@@ -24,6 +25,12 @@ module.exports = function(){
 
       app.modals.show(new LoginView({
         model: new Backbone.Model({ providers: providers.split(',') })
+      }));
+    };
+
+    app.showOKMessage = function(opts){
+      app.modals.show(new MessageView({
+        model: new Backbone.Model(opts)
       }));
     };
 

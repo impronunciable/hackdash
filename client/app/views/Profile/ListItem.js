@@ -3,7 +3,8 @@
  *
  */
 
-var template = require('./templates/listItem.hbs');
+var template = require('./templates/listItem.hbs'),
+  Dashboard = require('../../models/Dashboard');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -11,8 +12,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  tagName: "li tooltips",
+  tagName: "li",
   template: template,
+
+  events: {
+    "click .remove-entity": "removeEntity"
+  },
 
   //--------------------------------------
   //+ INHERITED / OVERRIDES
@@ -20,20 +25,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   initialize: function(options){
     this.type = (options && options.type) || "projects";
-  },
-
-  onRender: function(){
-    this.$el
-      .addClass(this.model.get("status"))
-      .attr({
-        "data-placement": "left"
-      })
-      .tooltip({});
+    this.isMyProfile = (options && options.isMyProfile) || false;
   },
 
   serializeData: function(){
-    var url;
-    var isProject = false;
+    var url,
+      isProject = false,
+      showDelete = false;
 
     switch(this.type){
       case "collections":
@@ -41,6 +39,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
         break;
       case "dashboards":
         url = "/dashboards/" + this.model.get("domain");
+        showDelete = this.isMyProfile && Dashboard.isAdmin(this.model);
         break;
       case "projects":
       case "contributions":
@@ -58,10 +57,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
     return _.extend({
       showImage: showImage,
       isProject: isProject,
+      showDelete: showDelete,
       type: this.type,
       url: url
     }, this.model.toJSON());
-  }
+  },
 
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
@@ -71,8 +71,49 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
+  removeEntity: function(e){
+    if (this.type !== "dashboards"){
+      return;
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!Dashboard.isAdmin(this.model)){
+      this.showMessage("Only the Owner can remove this Dashboard.");
+      return;
+    }
+
+    if (!Dashboard.isOwner(this.model)){
+      this.showMessage("Only Dashboards with ONE admin can be removed.");
+      return;
+    }
+
+    if (this.model.get("projectsCount") > 0){
+      this.showMessage("Only Dashboards without Projects can be removed.");
+      return;
+    }
+
+    if (window.confirm('This action will remove Dashboard ' +
+      this.model.get("domain") + '. Are you sure?')){
+
+        var dash = new Dashboard({ domain: this.model.get('domain') });
+        dash.destroy().done(function(){
+          window.location.reload();
+        });
+    }
+  },
+
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
+
+  showMessage: function(msg){
+    hackdash.app.showOKMessage({
+      title: "Cannot Remove " + this.model.get('domain') + " Dashboard",
+      message: msg,
+      type: "danger"
+    });
+  }
 
 });

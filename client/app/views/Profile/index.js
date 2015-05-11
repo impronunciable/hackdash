@@ -38,6 +38,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   initialize: function(options){
     this.section = (options && options.section) || "dashboards";
+    this.isMyProfile = (hackdash.user && this.model.get("_id") === hackdash.user._id ? true : false);
   },
 
   onRender: function(){
@@ -48,7 +49,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       this.ui[this.section].addClass("active");
     }
 
-    if (hackdash.user && this.model.get("_id") === hackdash.user._id){
+    if (this.isMyProfile){
       this.profileCard.show(new ProfileCardEdit({
         model: this.model
       }));
@@ -69,7 +70,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
       this[this.section].show(new EntityList({
         collection: this.model.get(this.section),
-        type: this.section
+        type: this.section,
+        isMyProfile: this.isMyProfile
       }));
     }
 
