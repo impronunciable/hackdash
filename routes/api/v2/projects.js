@@ -37,14 +37,14 @@ module.exports = function(app, uri, common) {
 
   app.get(uri + '/projects/:pid', getProject, sendProject);
 
-  app.del(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, removeProject);
+  app.delete(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, removeProject);
   app.put(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, updateProject, sendProject);
 
   app.post(uri + '/projects/:pid/followers', common.isAuth, getProject, validate, addFollower);
-  app.del(uri + '/projects/:pid/followers', common.isAuth, getProject, validate, removeFollower);
+  app.delete(uri + '/projects/:pid/followers', common.isAuth, getProject, validate, removeFollower);
 
   app.post(uri + '/projects/:pid/contributors', common.isAuth, getProject, validate, addContributor);
-  app.del(uri + '/projects/:pid/contributors', common.isAuth, getProject, validate, removeContributor);
+  app.delete(uri + '/projects/:pid/contributors', common.isAuth, getProject, validate, removeContributor);
 
 };
 
