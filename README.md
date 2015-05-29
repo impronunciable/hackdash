@@ -1,6 +1,8 @@
 HackDash
 ========
 
+[![Join the chat at https://gitter.im/danzajdband/hackdash](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/danzajdband/hackdash?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Organize hackaton ideas into a dashboard
 
 ![HackDash Logo](http://i.imgur.com/XLQGF3y.png)
