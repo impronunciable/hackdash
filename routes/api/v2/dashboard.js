@@ -32,10 +32,10 @@ module.exports = function(app, uri, common) {
   app.put(uri + '/dashboards/:domain', common.isAuth, getDashboard, isAdminDashboard, updateDashboard, sendDashboard);
   app.put(uri + '/', common.isAuth, getDashboard, isAdminDashboard, updateDashboard, sendDashboard);
 
-  app.del(uri + '/dashboards/:domain', common.isAuth, getDashboard, isOwnerDashboard, removeDashboard);
+  app.delete(uri + '/dashboards/:domain', common.isAuth, getDashboard, isOwnerDashboard, removeDashboard);
 
   app.post(uri + '/', common.notAllowed);
-  app.del(uri + '/', common.notAllowed);
+  app.delete(uri + '/', common.notAllowed);
 };
 
 var validateSubdomain = function(req, res, next) {

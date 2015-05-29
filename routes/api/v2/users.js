@@ -32,7 +32,6 @@ module.exports = function(app, uri, common) {
 
   app.get(uri + '/profiles/:uid', getUser, setCollections, setDashboards, setProjects, setContributions, setLikes, sendUser);
   app.put(uri + '/profiles/:uid', common.isAuth, getUser, canUpdate, updateUser);
-
 };
 
 var getInstanceAdmins = function(req, res, next){

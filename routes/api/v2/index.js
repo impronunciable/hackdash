@@ -28,6 +28,7 @@ var common = {
   },
 
   isAuth: function(req, res, next){
+            console.log(req.isAuthenticated());
     if (!req.isAuthenticated()){
       return res.send(401, "User not authenticated");
     }

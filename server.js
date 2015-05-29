@@ -3,13 +3,19 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , passport = require('passport')
-  , mongoose = require('mongoose')
-  , MongoStore = require('connect-mongo')(express)
-  , http = require('http')
-  , path = require('path')
-  , clientVersion = require('./client/package.json').version;
+var express = require('express');
+var passport = require('passport');
+var mongoose = require('mongoose');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+var http = require('http');
+var path = require('path');
+var clientVersion = require('./client/package.json').version;
+var favicon = require('serve-favicon');
+var morgan = require('morgan');
+var compression = require('compression');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
 
 var app = exports.app = express();
 
@@ -39,57 +45,40 @@ mongoose.connect(config.db.url || ('mongodb://' + config.db.host + '/'+ config.d
  * Application config
  */
 
-app.configure(function(){
-  app.set('config', config);
-  app.set('clientVersion', clientVersion);
-  app.set('port', process.env.PORT || app.get('config').port);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(require('less-middleware')(path.join(__dirname, 'public')));
-  app.use(express.favicon(__dirname + '/public/favicon.ico'));
-  app.use(express.logger('dev'));
-  app.use(express.compress());
-  app.use(express.bodyParser());
-  app.use(express.limit('3.5mb'));
-  app.use(express.methodOverride());
+app.set('config', config);
+app.set('clientVersion', clientVersion);
+app.set('port', process.env.PORT || app.get('config').port);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+app.use(require('less-middleware')(path.join(__dirname, 'public')));
+app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(morgan('combined'));
+app.use(compression());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(methodOverride());
 
-  var prCfg = app.get('config').prerender;
-  if (prCfg && prCfg.enabled){
-    app.use(require('./seo')(app));
-  }
+var prCfg = app.get('config').prerender;
+if (prCfg && prCfg.enabled){
+  app.use(require('./seo')(app));
+}
 
-  app.use(express.cookieParser(app.get('config').session));
-  app.use(express.session({
-      secret: app.get('config').session
-    , store: new MongoStore({db: app.get('config').db.name, url: app.get('config').db.url})
-    , cookie: { maxAge: sessionMaxAge, path: '/', domain: '.' + app.get('config').host }
-  }));
+app.use(session({
+  secret: app.get('config').session,
+  store: new MongoStore({db: app.get('config').db.name, url: app.get('config').db.url}),
+  cookie: { maxAge: sessionMaxAge, path: '/', domain: '.' + app.get('config').host },
+  resave: false,
+  saveUninitialized: false
+}));
 
-  app.use(passport.initialize());
-  app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public', { maxAge: staticsMaxAge }));
+app.use(express.static(__dirname + '/public', { maxAge: staticsMaxAge }));
 
-  app.use(function(req, res) {
-    res.status(404);
-    res.render('404');
-  });
+app.set('statuses', require('./models/statuses'));
 
-  app.use(function(error, req, res, next) {
-    console.log(error);
-    res.status(500);
-    res.render('500');
-  });
-
-  app.set('statuses', require('./models/statuses'));
-
-	app.locals.title = config.title;
-});
-
-app.configure('development', function(){
-  app.use(express.errorHandler());
-});
+app.locals.title = config.title;
 
 /*
  * Models
@@ -126,6 +115,18 @@ var server = module.exports = http.Server(app);
 if(config.live) {
 	require('./live')(app, server);
 }
+
+app.use(function(req, res) {
+  res.status(404);
+  res.render('404');
+});
+
+app.use(function(error, req, res, next) {
+  console.log(error);
+  res.status(500);
+  res.render('500');
+});
+
 
 server.listen(app.get('port'), function() {
   console.log("Express server listening on port " + app.get('port'));

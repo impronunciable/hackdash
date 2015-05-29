@@ -31,13 +31,13 @@ module.exports = function(app, uri, common) {
   app.put(uri + '/collections/:cid', common.isAuth, getCollection, isOwner, updateCollection);
 
   // Delete a user collection
-  app.del(uri + '/collections/:cid', common.isAuth, getCollection, isOwner, removeCollection);
+  app.delete(uri + '/collections/:cid', common.isAuth, getCollection, isOwner, removeCollection);
 
   // Add dashboard to a collection
   app.post(uri + '/collections/:cid/dashboards/:did', common.isAuth, getCollection, isOwner, addDashboard);
 
   // Remove dashboard from a collection
-  app.del(uri + '/collections/:cid/dashboards/:did', common.isAuth, getCollection, isOwner, removeDashboard);
+  app.delete(uri + '/collections/:cid/dashboards/:did', common.isAuth, getCollection, isOwner, removeDashboard);
 
 };
 
