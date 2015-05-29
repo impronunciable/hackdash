@@ -10,7 +10,7 @@ Organize hackaton ideas into a dashboard
 Install
 ===========
 
-I wrote a [blog post](http://zajdband.com/installing-hackdash) explaining the installation process.
+I wrote a [blog post](http://zajdband.com/installing-hackdash) explaining the installation process. Also check the [wiki](https://github.com/danzajdband/hackdash/wiki) for more info and docs
 
 Config
 ======
@@ -46,35 +46,4 @@ Add your own Dashboard!
 
 Contribute
 ==========
-
-### Requirements
-[NodeJS v0.10+](http://nodejs.org)  
-[NPM v1.3+](http://npmjs.org/)  
-[MongoDB v2.4+](http://mongodb.org)  
-[GruntJS](http://gruntjs.com)  
-
-### Create a configuration file
-Create a `config.test.json` file using the config.json.sample with the configuration of your local for test. (i.e. mongoDB url for tests)
-
-### Running Tests
-```bash
-npm install
-npm test
-```
-
-or 
-
-```bash
-grunt test
-```
-
-Using a watcher while you develop
-
-```bash
-grunt watch
-```
-
-#### Chat
-If you want to contact us go to [our gitter](https://gitter.im/danzajdband/hackdash)
-
-
+Please check the [WIKI](https://github.com/danzajdband/hackdash/wiki)
