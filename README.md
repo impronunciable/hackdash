@@ -71,3 +71,8 @@ Using a watcher while you develop
 ```bash
 grunt watch
 ```
+
+#### Chat
+If you want to contact us go to [our gitter](https://gitter.im/danzajdband/hackdash)
+
+
