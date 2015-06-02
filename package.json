@@ -1,6 +1,6 @@
 {
   "name": "hackdash",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "private": true,
   "scripts": {
     "start": "node server",
@@ -33,7 +33,8 @@
     "serve-favicon": "2.2.1",
     "socket.io": "0.9.14",
     "superagent": "0.10.0",
-    "underscore": "1.4.4"
+    "underscore": "1.4.4",
+    "multer": "~0.1.8"
   },
   "devDependencies": {
     "chai": "1.10.0",
