@@ -7,7 +7,7 @@
 
 var passport = require('passport')
   , mongoose = require('mongoose')
-  , fs = require('fs')
+  , multer = require('multer')
   , config = require('../../../config.json');
 
 var Project = mongoose.model('Project')
@@ -33,7 +33,7 @@ module.exports = function(app, uri, common) {
   app.get(uri + '/projects', setQuery, setProjects, sendProjects);
 
   app.post(uri + '/projects', common.isAuth, canCreateProject, createProject, sendProject);
-  app.post(uri + '/projects/cover', common.isAuth, uploadCover);
+  app.post(uri + '/projects/cover', common.isAuth, uploadCover(), sendCover);
 
   app.get(uri + '/projects/:pid', getProject, sendProject);
 
@@ -139,22 +139,33 @@ var createProject = function(req, res, next){
 
 };
 
-var uploadCover = function(req, res, next) {
-  var cover = (req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1
-    && '/uploads/' + req.files.cover.path.split('/').pop() + '.' + req.files.cover.name.split('.').pop());
+var uploadCover = function(){
+  return multer({ // enables multipart/form
+    dest: './public/uploads/',
+    putSingleFilesInArray: true, // upon migration
+    limits: {
+      fields: 1,
+      files: 1,
+      fileSize: 3145728 // 3 Mb
+    }
+  });
+};
 
-  if(req.files && req.files.cover && req.files.cover.type.indexOf('image/') != -1) {
-    var tmp_path = req.files.cover.path
-      , target_path = './public' + cover;
+var sendCover = function(req, res) {
 
-    fs.rename(tmp_path, target_path, function(err) {
-      if (err) throw err;
-      fs.unlink(tmp_path, function() {
-        if (err) throw err;
-        res.json({ href: cover });
-      });
-    });
+  if (!req.files.hasOwnProperty('cover')){
+    res.status(400).send({ error: 'cover-field-expected' });
+    return;
   }
+
+  var cover = req.files.cover[0];
+
+  if (!cover.mimetype || cover.mimetype.indexOf('image/') === -1){
+    res.status(400).send({ error: 'image-mimetype-expected' });
+    return;
+  }
+
+  res.send({ href: cover.path.replace('public/', '/') });
 };
 
 var updateProject = function(req, res, next) {
