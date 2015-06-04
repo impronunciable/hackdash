@@ -1,21 +1,33 @@
 
 <div class="row main-header">
 
-  <div class="hidden-xs col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-md-offset-1 search-ctn"></div>
+  {{!-- <div class="hidden-xs col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-md-offset-1 search-ctn"></div>
 
   <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1 my-profile">
     {{#isLoggedIn}}
-    <div class="pull-right col-xs-3 col-md-3">
-      <a class="btn-profile" href="/users/profile">
-        {{getMyProfileImageHex}}
-      </a>
-      <a class="logout" href="/logout" data-bypass>Log out</a>
-    </div>
+        <div class="pull-right col-xs-3 col-md-3">
+          <a class="btn-profile" href="/users/profile">
+            {{getMyProfileImageHex}}
+          </a>
+          <a class="logout" href="/logout" data-bypass>Log out</a>
+        </div>
     {{else}}
-    <a class="login">Log in</a>
+        <a class="login">Log in</a>
     {{/isLoggedIn}}
+  </div> --}}
+
+
+  <div class="col-lg-2">
+    <a class="logo" href="{{hackdashURL}}" data-bypass>Hack <span>/</span> Dash</a>
   </div>
-
-  <a class="logo" href="{{hackdashURL}}" data-bypass></a>
-
+  <div class="col-lg-10">
+    <nav class="main-nav">
+      <a href="" class="sign-up pull-right">Sign Up</a>
+      <ul class="list-inline pull-right">
+        <li class="active"><a href="">Dashboard</a></li>
+        <li><a href="">About this hackaton</a></li>
+        <li><a href="">Login</a></li>
+      </ul>
+    </nav>
+  </div>
 </div>

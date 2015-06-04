@@ -80,7 +80,7 @@ body {
   margin: 0;
   font-family: @primary-font;
   color: @default-font-color;
-  /*background-color: @color-whiteB;*/
+  background-color: @color-blackB3;
 }
 
 h1, h2, h3 { font-family: @secondary-font; text-transform: uppercase; }
@@ -102,12 +102,14 @@ h6 { font-size: @fsize-12; }
 }
 
 .logo {
-  background: url(@logo-url) no-repeat;
-  width: 120px;
-  height: 145px;
-  margin: 5px auto;
-  background-size: 100%;
-  display: inline-block;
+  font-family: @primary-font;
+  font-weight: bold;
+  color: white;
+  font-size: @fsize-25;
+
+  span {
+    color: @color-green;
+  }
 }
 
 .form-control {

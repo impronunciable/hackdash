@@ -8,7 +8,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "container-fluid",
+  className: "container",
   template: template,
 
   regions: {

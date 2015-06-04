@@ -2716,7 +2716,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ PUBLIC PROPERTIES / CONSTANTS
   //--------------------------------------
 
-  className: "container-fluid",
+  className: "container",
   template: template,
 
   regions: {
@@ -2785,21 +2785,11 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 },{"./Search":41,"./templates/header.hbs":43}],43:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
+module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "    <div class=\"pull-right col-xs-3 col-md-3\">\n      <a class=\"btn-profile\" href=\"/users/profile\">\n        "
-    + escapeExpression(((helper = (helper = helpers.getMyProfileImageHex || (depth0 != null ? depth0.getMyProfileImageHex : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"getMyProfileImageHex","hash":{},"data":data}) : helper)))
-    + "\n      </a>\n      <a class=\"logout\" href=\"/logout\" data-bypass>Log out</a>\n    </div>\n";
-},"3":function(depth0,helpers,partials,data) {
-  return "    <a class=\"login\">Log in</a>\n";
-  },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, escapeExpression=this.escapeExpression, buffer = "\n<div class=\"row main-header\">\n\n  <div class=\"hidden-xs col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-md-offset-1 search-ctn\"></div>\n\n  <div class=\"col-xs-2 col-sm-1 col-md-1 col-lg-1 my-profile\">\n";
-  stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.isLoggedIn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "  </div>\n\n  <a class=\"logo\" href=\""
+  return "\n<div class=\"row main-header\">\n\n\n\n  <div class=\"col-lg-2\">\n    <a class=\"logo\" href=\""
     + escapeExpression(((helper = (helper = helpers.hackdashURL || (depth0 != null ? depth0.hackdashURL : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"hackdashURL","hash":{},"data":data}) : helper)))
-    + "\" data-bypass></a>\n\n</div>\n";
+    + "\" data-bypass>Hack <span>/</span> Dash</a>\n  </div>\n  <div class=\"col-lg-10\">\n    <nav class=\"main-nav\">\n      <a href=\"\" class=\"sign-up pull-right\">Sign Up</a>\n      <ul class=\"list-inline pull-right\">\n        <li class=\"active\"><a href=\"\">Dashboard</a></li>\n        <li><a href=\"\">About this hackaton</a></li>\n        <li><a href=\"\">Login</a></li>\n      </ul>\n    </nav>\n  </div>\n</div>\n";
 },"useData":true});
 
 },{"hbsfy/runtime":98}],44:[function(require,module,exports){

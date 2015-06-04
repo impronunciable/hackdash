@@ -29,12 +29,34 @@ footer, #main:after {
 }
 
 .main-header {
-  background-color: @color-blackB;
+  margin: 45px 0;
 
-  .logo {
-    width: 100px;
-    height: 115px;
-    display: block;
+  .main-nav {
+    ul {
+      margin-bottom: 0;
+    }
+
+    li {
+      padding: 8px 10px;
+
+      a {
+        color: @color-white;
+      }
+
+      &.active a {
+        color: @color-green;
+        border-bottom: 2px solid @color-green;
+        padding-bottom: 4px;
+      }
+    }
+
+    .sign-up {
+      color: @color-green;
+      border: 2px solid @color-green;
+      border-radius: 5px;
+      padding: 6px 8px;
+      margin-left: 10px;
+    }
   }
 }
 
