@@ -41,4 +41,5 @@ module.exports = function(){
   Dropzone.autoDiscover = false;
 
   window.hackdash.apiURL = "/api/v2";
+  window._gaq = window._gaq || [];
 };

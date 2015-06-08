@@ -46,7 +46,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
   },
 
   onRoute: function(name, path){
-    _gaq.push(['_trackPageview', path]);
+    window._gaq.push(['_trackPageview', path]);
   },
 
   showHome: function(){

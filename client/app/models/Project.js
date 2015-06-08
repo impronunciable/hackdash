@@ -58,28 +58,28 @@ module.exports = Backbone.Model.extend({
   join: function(){
     this.doAction("POST", "contributors", function(){
       this.updateList("contributors", true);
-      _gaq.push(['_trackEvent', 'Project', 'Join']);
+      window._gaq.push(['_trackEvent', 'Project', 'Join']);
     });
   },
 
   leave: function(){
     this.doAction("DELETE", "contributors", function(){
       this.updateList("contributors", false);
-      _gaq.push(['_trackEvent', 'Project', 'Leave']);
+      window._gaq.push(['_trackEvent', 'Project', 'Leave']);
     });
   },
 
   follow: function(){
     this.doAction("POST", "followers", function(){
       this.updateList("followers", true);
-      _gaq.push(['_trackEvent', 'Project', 'Follow']);
+      window._gaq.push(['_trackEvent', 'Project', 'Follow']);
     });
   },
 
   unfollow: function(){
     this.doAction("DELETE", "followers", function(){
       this.updateList("followers", false);
-      _gaq.push(['_trackEvent', 'Project', 'Unfollow']);
+      window._gaq.push(['_trackEvent', 'Project', 'Unfollow']);
     });
   },
 

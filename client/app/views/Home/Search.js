@@ -70,6 +70,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
             reset: true,
             data: $.param({ q: keyword })
           });
+
+          window._gaq.push(['_trackEvent', 'HomeSearch', fragment, keyword]);
         }
         else {
           hackdash.app.router.navigate(fragment, { trigger: true, replace: true });

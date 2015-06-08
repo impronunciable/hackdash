@@ -85,12 +85,15 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
         hackdash.app.router.navigate(url);
         self.collection.search(keyword);
-        _gaq.push(['_trackEvent', 'Search', 'Project', keyword]);
 
         var top = $('#dashboard-projects').offset().top;
         var offset = self.$el.parent().height();
         var pos = (top - offset >= 0 ? top - offset : 0);
         $(window).scrollTop(pos);
+
+        var dash = hackdash.app.dashboard;
+        var domain = dash && dash.get('domain') || 'unkonwn';
+        window._gaq.push(['_trackEvent', 'DashSearch', domain, keyword]);
       }
 
     }, 300);
