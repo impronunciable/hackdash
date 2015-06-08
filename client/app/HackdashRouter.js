@@ -45,6 +45,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
   },
 
+  onRoute: function(name, path){
+    window._gaq.push(['_trackPageview', path]);
+  },
+
   showHome: function(){
     this.homeView = new HomeLayout();
     var app = window.hackdash.app;

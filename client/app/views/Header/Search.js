@@ -90,6 +90,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
         var offset = self.$el.parent().height();
         var pos = (top - offset >= 0 ? top - offset : 0);
         $(window).scrollTop(pos);
+
+        var dash = hackdash.app.dashboard;
+        var domain = dash && dash.get('domain') || 'unkonwn';
+        window._gaq.push(['_trackEvent', 'DashSearch', domain, keyword]);
       }
 
     }, 300);
