@@ -1,5 +1,5 @@
 /*! 
-* Hackdash - v0.9.1
+* Hackdash - v0.9.2
 * Copyright (c) 2015 Hackdash 
 *  
 */ 
@@ -120,6 +120,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     , "users/profile": "showProfile"
     , "users/:user_id" : "showProfile"
 
+  },
+
+  onRoute: function(name, path){
+    window._gaq.push(['_trackPageview', path]);
   },
 
   showHome: function(){
@@ -384,6 +388,7 @@ module.exports = function(){
   Dropzone.autoDiscover = false;
 
   window.hackdash.apiURL = "/api/v2";
+  window._gaq = window._gaq || [];
 };
 
 },{"./helpers/backboneOverrides":4,"./helpers/handlebars":5}],4:[function(require,module,exports){
@@ -987,24 +992,28 @@ module.exports = Backbone.Model.extend({
   join: function(){
     this.doAction("POST", "contributors", function(){
       this.updateList("contributors", true);
+      window._gaq.push(['_trackEvent', 'Project', 'Join']);
     });
   },
 
   leave: function(){
     this.doAction("DELETE", "contributors", function(){
       this.updateList("contributors", false);
+      window._gaq.push(['_trackEvent', 'Project', 'Leave']);
     });
   },
 
   follow: function(){
     this.doAction("POST", "followers", function(){
       this.updateList("followers", true);
+      window._gaq.push(['_trackEvent', 'Project', 'Follow']);
     });
   },
 
   unfollow: function(){
     this.doAction("DELETE", "followers", function(){
       this.updateList("followers", false);
+      window._gaq.push(['_trackEvent', 'Project', 'Unfollow']);
     });
   },
 
@@ -2695,6 +2704,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
         var offset = self.$el.parent().height();
         var pos = (top - offset >= 0 ? top - offset : 0);
         $(window).scrollTop(pos);
+
+        var dash = hackdash.app.dashboard;
+        var domain = dash && dash.get('domain') || 'unkonwn';
+        window._gaq.push(['_trackEvent', 'DashSearch', domain, keyword]);
       }
 
     }, 300);
@@ -2705,6 +2718,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
 });
+
 },{"./templates/search.hbs":44}],42:[function(require,module,exports){
 var
     template = require('./templates/header.hbs')
@@ -3246,6 +3260,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
             reset: true,
             data: $.param({ q: keyword })
           });
+
+          window._gaq.push(['_trackEvent', 'HomeSearch', fragment, keyword]);
         }
         else {
           hackdash.app.router.navigate(fragment, { trigger: true, replace: true });
