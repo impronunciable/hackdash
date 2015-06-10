@@ -7,6 +7,7 @@
 var passport = require('passport')
   , mongoose = require('mongoose')
   , _ = require('underscore')
+  , cors = require('cors')
   , config = require('../../../config.json');
 
 var Collection = mongoose.model('Collection');
@@ -16,7 +17,7 @@ module.exports = function(app, uri, common) {
   maxLimit = app.get('config').maxQueryLimit || 50;
 
   // Get & Search all collections
-  app.get(uri + '/collections', setQuery, getAllCollections, sendCollections);
+  app.get(uri + '/collections', cors(), setQuery, getAllCollections, sendCollections);
 
   // Get user collections
   app.get(uri + '/collections/own', getUserCollections, sendCollections);
@@ -25,7 +26,7 @@ module.exports = function(app, uri, common) {
   app.post(uri + '/collections', common.isAuth, createCollection, sendCollection);
 
   // Get a collection
-  app.get(uri + '/collections/:cid', getCollection, sendCollection);
+  app.get(uri + '/collections/:cid', cors(), getCollection, sendCollection);
 
   // Update a user collection
   app.put(uri + '/collections/:cid', common.isAuth, getCollection, isOwner, updateCollection);

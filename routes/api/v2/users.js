@@ -22,15 +22,15 @@ module.exports = function(app, uri, common) {
   teamIds = app.get('config').team || [];
   maxLimit = app.get('config').maxQueryLimit || 50;
 
-  app.get(uri + '/:domain/admins', getInstanceAdmins, sendUsers);
+  app.get(uri + '/:domain/admins', cors(), getInstanceAdmins, sendUsers);
   app.post(uri + '/:domain/admins/:uid', common.isAuth, isDashboardAdmin, getUser, addAdmin, sendUser);
 
-  app.get(uri + '/users', setQuery, getUsers, sendUsers);
+  app.get(uri + '/users', cors(), setQuery, getUsers, sendUsers);
 
   app.get(uri + '/users/team', getTeam, sendUsers);
-  app.get(uri + '/users/:uid', getUser, sendUser);
+  app.get(uri + '/users/:uid', cors(), getUser, sendUser);
 
-  app.get(uri + '/profiles/:uid', getUser, setCollections, setDashboards, setProjects, setContributions, setLikes, sendUser);
+  app.get(uri + '/profiles/:uid', cors(), getUser, setCollections, setDashboards, setProjects, setContributions, setLikes, sendUser);
   app.put(uri + '/profiles/:uid', common.isAuth, getUser, canUpdate, updateUser);
 };
 

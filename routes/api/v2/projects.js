@@ -8,7 +8,8 @@
 var passport = require('passport')
   , mongoose = require('mongoose')
   , multer = require('multer')
-  , config = require('../../../config.json');
+  , config = require('../../../config.json')
+  , cors = require('cors');
 
 var Project = mongoose.model('Project')
   , Dashboard = mongoose.model('Dashboard');
@@ -28,14 +29,14 @@ module.exports = function(app, uri, common) {
     });
   };
 
-  app.get(uri + '/:domain/projects', setQuery, setProjects, sendProjects);
+  app.get(uri + '/:domain/projects', cors(), setQuery, setProjects, sendProjects);
 
-  app.get(uri + '/projects', setQuery, setProjects, sendProjects);
+  app.get(uri + '/projects', cors(), setQuery, setProjects, sendProjects);
 
   app.post(uri + '/projects', common.isAuth, canCreateProject, createProject, sendProject);
   app.post(uri + '/projects/cover', common.isAuth, uploadCover(), sendCover);
 
-  app.get(uri + '/projects/:pid', getProject, sendProject);
+  app.get(uri + '/projects/:pid', cors(), getProject, sendProject);
 
   app.delete(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, removeProject);
   app.put(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, updateProject, sendProject);

@@ -9,7 +9,8 @@ var passport = require('passport')
   , mongoose = require('mongoose')
   , _ = require('underscore')
   , config = require('../../../config.json')
-  , async = require('async');
+  , async = require('async')
+  , cors = require('cors');
 
 var Project = mongoose.model('Project')
   , User = mongoose.model('User')
@@ -21,12 +22,12 @@ module.exports = function(app, uri, common) {
   maxLimit = app.get('config').maxQueryLimit || 50;
 
   app.post(uri + '/dashboards', common.isAuth, validateSubdomain, createDashboard(app), sendDashboard);
-  app.get(uri + '/dashboards', setQuery, setDashboards, sendDashboards);
+  app.get(uri + '/dashboards', cors(), setQuery, setDashboards, sendDashboards);
 
   app.get(uri + '/dashboards/:domain/csv', common.isAuth, getDashboard, isAdminDashboard, sendDashboardCSV);
 
   app.get(uri + '/dashboards/:domain.jsonp', setFullOption, getDashboard, sendDashboard);
-  app.get(uri + '/dashboards/:domain', getDashboard, sendDashboard);
+  app.get(uri + '/dashboards/:domain', cors(), getDashboard, sendDashboard);
   app.get(uri + '/', getDashboard, sendDashboard);
 
   app.put(uri + '/dashboards/:domain', common.isAuth, getDashboard, isAdminDashboard, updateDashboard, sendDashboard);
