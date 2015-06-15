@@ -26,7 +26,7 @@ module.exports = function(app){
   var config = app.get('config');
   var hdTitle = config.title || "HackDash";
   var hdDomain = config.host;
-  var baseURL = 'http://' + hdDomain;
+  var baseURL = 'https://' + hdDomain;
 
   return {
 
@@ -93,7 +93,7 @@ module.exports = function(app){
         if (checkEntityResponse(res, err, dashboard)) return;
 
         res.locals.meta = {
-          url: 'http://' + domain + '.' + hdDomain,
+          url: baseURL + '/dashboards/' + domain,
           title: dashboard.title,
           description: dashboard.description
         };

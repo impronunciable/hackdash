@@ -544,7 +544,7 @@ Handlebars.registerHelper('getProfileImage', function(user) {
   $(img)
     .load(function () { })
     .error(function () {
-      $('.' + this.id).attr('src', 'http://avatars.io/' + user.provider + '/' + user.username);
+      $('.' + this.id).attr('src', '//avatars.io/' + user.provider + '/' + user.username);
     })
     .prop({
       id: 'pic-' + user._id,
@@ -570,7 +570,7 @@ function getProfileImageHex(user) {
     .load(function () { })
     .error(function () {
       $('.' + this.id)
-        .css('background-image', 'url(http://avatars.io/' + user.provider + '/' + user.username + ')');
+        .css('background-image', 'url(//avatars.io/' + user.provider + '/' + user.username + ')');
     })
     .prop({
       src: user.picture,
@@ -1684,7 +1684,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   templateHelpers: {
     hackdashURL: function(){
-      return "http://" + hackdash.baseURL;
+      return "//" + hackdash.baseURL;
     },
     isAdmin: function(){
       var user = hackdash.user;
@@ -2733,7 +2733,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   templateHelpers: {
     hackdashURL: function(){
-      return "http://" + hackdash.baseURL;
+      return "//" + hackdash.baseURL;
     },
     isDashboardAdmin: function(){
       var isDashboard = (hackdash.app.type === "dashboard" ? true : false);
@@ -3298,7 +3298,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -3307,7 +3307,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -3316,7 +3316,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -3325,7 +3325,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -3334,7 +3334,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -3343,7 +3343,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",

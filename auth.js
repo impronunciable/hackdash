@@ -27,7 +27,7 @@ module.exports = function(app) {
   var saveSubdomain = function(req, res, next) {
     if(!req.session) req.session = {};
 
-    req.session.subdomain = (req.subdomains.length && req.subdomains[0]) || '';
+    //req.session.subdomain = (req.subdomains.length && req.subdomains[0]) || '';
 
     var redirect = ((req.query && req.query.redirect) || '');
     redirect = (redirect.charAt(0) === '/' ? redirect : '/' + redirect);
@@ -38,14 +38,14 @@ module.exports = function(app) {
 
   var redirectSubdomain = function(req, res) {
     var domain = app.get('config').host;
-
-    if (req.session.subdomain !== '') {
+/*
+    if (//req.session.subdomain !== '') {
       domain = req.session.subdomain + '.' + domain;
     }
-
+*/
     var url = req.session.redirectUrl || '';
 
-    res.redirect('http://' + domain + ':' + app.get('config').port + url);
+    res.redirect(url);
   };
 
   app.set('providers', Object.keys(keys));
@@ -69,7 +69,7 @@ module.exports = function(app) {
               user.picture =  profile.photos[0].value.replace('_normal', '_bigger');
             }
             else if(profile.provider == 'facebook') {
-              user.picture = "https://graph.facebook.com/" + profile.id + "/picture";
+              user.picture = "//graph.facebook.com/" + profile.id + "/picture";
               user.picture += "?width=73&height=73";
             }
             else {

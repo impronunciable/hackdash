@@ -23,7 +23,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   templateHelpers: {
     hackdashURL: function(){
-      return "http://" + hackdash.baseURL;
+      return "//" + hackdash.baseURL;
     }
   },
 
