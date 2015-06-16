@@ -1,5 +1,5 @@
 /*! 
-* Hackdash - v0.9.1
+* Hackdash - v0.9.4
 * Copyright (c) 2015 Hackdash 
 *  
 */ 
@@ -120,6 +120,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     , "users/profile": "showProfile"
     , "users/:user_id" : "showProfile"
 
+  },
+
+  onRoute: function(name, path){
+    window._gaq.push(['_trackPageview', path]);
   },
 
   showHome: function(){
@@ -384,6 +388,7 @@ module.exports = function(){
   Dropzone.autoDiscover = false;
 
   window.hackdash.apiURL = "/api/v2";
+  window._gaq = window._gaq || [];
 };
 
 },{"./helpers/backboneOverrides":4,"./helpers/handlebars":5}],4:[function(require,module,exports){
@@ -544,7 +549,7 @@ Handlebars.registerHelper('getProfileImage', function(user) {
   $(img)
     .load(function () { })
     .error(function () {
-      $('.' + this.id).attr('src', 'http://avatars.io/' + user.provider + '/' + user.username);
+      $('.' + this.id).attr('src', '//avatars.io/' + user.provider + '/' + user.username);
     })
     .prop({
       id: 'pic-' + user._id,
@@ -570,7 +575,7 @@ function getProfileImageHex(user) {
     .load(function () { })
     .error(function () {
       $('.' + this.id)
-        .css('background-image', 'url(http://avatars.io/' + user.provider + '/' + user.username + ')');
+        .css('background-image', 'url(//avatars.io/' + user.provider + '/' + user.username + ')');
     })
     .prop({
       src: user.picture,
@@ -987,24 +992,28 @@ module.exports = Backbone.Model.extend({
   join: function(){
     this.doAction("POST", "contributors", function(){
       this.updateList("contributors", true);
+      window._gaq.push(['_trackEvent', 'Project', 'Join']);
     });
   },
 
   leave: function(){
     this.doAction("DELETE", "contributors", function(){
       this.updateList("contributors", false);
+      window._gaq.push(['_trackEvent', 'Project', 'Leave']);
     });
   },
 
   follow: function(){
     this.doAction("POST", "followers", function(){
       this.updateList("followers", true);
+      window._gaq.push(['_trackEvent', 'Project', 'Follow']);
     });
   },
 
   unfollow: function(){
     this.doAction("DELETE", "followers", function(){
       this.updateList("followers", false);
+      window._gaq.push(['_trackEvent', 'Project', 'Unfollow']);
     });
   },
 
@@ -1684,7 +1693,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   templateHelpers: {
     hackdashURL: function(){
-      return "http://" + hackdash.baseURL;
+      return "//" + hackdash.baseURL;
     },
     isAdmin: function(){
       var user = hackdash.user;
@@ -2695,6 +2704,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
         var offset = self.$el.parent().height();
         var pos = (top - offset >= 0 ? top - offset : 0);
         $(window).scrollTop(pos);
+
+        var dash = hackdash.app.dashboard;
+        var domain = dash && dash.get('domain') || 'unkonwn';
+        window._gaq.push(['_trackEvent', 'DashSearch', domain, keyword]);
       }
 
     }, 300);
@@ -2705,6 +2718,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
 });
+
 },{"./templates/search.hbs":44}],42:[function(require,module,exports){
 var
     template = require('./templates/header.hbs')
@@ -2733,7 +2747,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   templateHelpers: {
     hackdashURL: function(){
-      return "http://" + hackdash.baseURL;
+      return "//" + hackdash.baseURL;
     },
     isDashboardAdmin: function(){
       var isDashboard = (hackdash.app.type === "dashboard" ? true : false);
@@ -3246,6 +3260,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
             reset: true,
             data: $.param({ q: keyword })
           });
+
+          window._gaq.push(['_trackEvent', 'HomeSearch', fragment, keyword]);
         }
         else {
           hackdash.app.router.navigate(fragment, { trigger: true, replace: true });
@@ -3298,7 +3314,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -3307,7 +3323,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -3316,7 +3332,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -3325,7 +3341,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -3334,7 +3350,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -3343,7 +3359,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",

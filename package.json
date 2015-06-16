@@ -1,6 +1,6 @@
 {
   "name": "hackdash",
-  "version": "0.9.1",
+  "version": "0.9.4",
   "private": true,
   "scripts": {
     "start": "node server",
@@ -15,7 +15,7 @@
     "cors": "2.7.1",
     "express": "4.12.4",
     "express-session": "1.11.2",
-    "gravatar": "1.0.6",
+    "gravatar": "1.1.1",
     "jade": "1.1.5",
     "less-middleware": "1.0.4",
     "markdown": "0.4.0",

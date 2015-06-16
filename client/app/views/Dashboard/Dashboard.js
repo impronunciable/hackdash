@@ -26,7 +26,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   templateHelpers: {
     hackdashURL: function(){
-      return "http://" + hackdash.baseURL;
+      return "//" + hackdash.baseURL;
     },
     isAdmin: function(){
       var user = hackdash.user;

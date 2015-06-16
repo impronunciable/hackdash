@@ -136,7 +136,7 @@ Handlebars.registerHelper('getProfileImage', function(user) {
   $(img)
     .load(function () { })
     .error(function () {
-      $('.' + this.id).attr('src', 'http://avatars.io/' + user.provider + '/' + user.username);
+      $('.' + this.id).attr('src', '//avatars.io/' + user.provider + '/' + user.username);
     })
     .prop({
       id: 'pic-' + user._id,
@@ -162,7 +162,7 @@ function getProfileImageHex(user) {
     .load(function () { })
     .error(function () {
       $('.' + this.id)
-        .css('background-image', 'url(http://avatars.io/' + user.provider + '/' + user.username + ')');
+        .css('background-image', 'url(//avatars.io/' + user.provider + '/' + user.username + ')');
     })
     .prop({
       src: user.picture,

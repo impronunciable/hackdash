@@ -34,7 +34,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -43,7 +43,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -52,7 +52,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -61,7 +61,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -70,7 +70,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",
@@ -79,7 +79,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
             user: {
               _id: "54909d0f7fd3d5704c0006c6",
               name: "Alvaro Graves",
-              picture: "http://www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
+              picture: "//www.gravatar.com/avatar/5d79ff6eb94d9754235c7bad525bee81?s=73"
             },
             title: "Is now a collaborator on:",
             description: "una mañana tras un sueño intranquilo Gregorio Samsa",

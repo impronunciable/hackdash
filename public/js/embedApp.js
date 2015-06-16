@@ -1,5 +1,5 @@
 /*! 
-* Hackdash - v0.9.1
+* Hackdash - v0.9.4
 * Copyright (c) 2015 Hackdash 
 *  
 */ 
@@ -156,6 +156,7 @@ module.exports = function(){
   Dropzone.autoDiscover = false;
 
   window.hackdash.apiURL = "/api/v2";
+  window._gaq = window._gaq || [];
 };
 
 },{"./helpers/backboneOverrides":4,"./helpers/handlebars":5}],4:[function(require,module,exports){
@@ -316,7 +317,7 @@ Handlebars.registerHelper('getProfileImage', function(user) {
   $(img)
     .load(function () { })
     .error(function () {
-      $('.' + this.id).attr('src', 'http://avatars.io/' + user.provider + '/' + user.username);
+      $('.' + this.id).attr('src', '//avatars.io/' + user.provider + '/' + user.username);
     })
     .prop({
       id: 'pic-' + user._id,
@@ -342,7 +343,7 @@ function getProfileImageHex(user) {
     .load(function () { })
     .error(function () {
       $('.' + this.id)
-        .css('background-image', 'url(http://avatars.io/' + user.provider + '/' + user.username + ')');
+        .css('background-image', 'url(//avatars.io/' + user.provider + '/' + user.username + ')');
     })
     .prop({
       src: user.picture,
@@ -586,24 +587,28 @@ module.exports = Backbone.Model.extend({
   join: function(){
     this.doAction("POST", "contributors", function(){
       this.updateList("contributors", true);
+      window._gaq.push(['_trackEvent', 'Project', 'Join']);
     });
   },
 
   leave: function(){
     this.doAction("DELETE", "contributors", function(){
       this.updateList("contributors", false);
+      window._gaq.push(['_trackEvent', 'Project', 'Leave']);
     });
   },
 
   follow: function(){
     this.doAction("POST", "followers", function(){
       this.updateList("followers", true);
+      window._gaq.push(['_trackEvent', 'Project', 'Follow']);
     });
   },
 
   unfollow: function(){
     this.doAction("DELETE", "followers", function(){
       this.updateList("followers", false);
+      window._gaq.push(['_trackEvent', 'Project', 'Unfollow']);
     });
   },
 
@@ -833,7 +838,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   templateHelpers: {
     hackdashURL: function(){
-      return "http://" + hackdash.baseURL;
+      return "//" + hackdash.baseURL;
     },
     isAdmin: function(){
       var user = hackdash.user;
@@ -938,7 +943,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   templateHelpers: {
     hackdashURL: function(){
-      return "http://" + hackdash.baseURL;
+      return "//" + hackdash.baseURL;
     }
   },
 
