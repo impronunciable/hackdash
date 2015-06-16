@@ -1,8 +1,8 @@
 
 /*
  * RESTfull API
- * 
- * 
+ *
+ *
  */
 
 
@@ -22,13 +22,13 @@ module.exports = function(app) {
 };
 
 var common = {
-  
+
   notAllowed: function(req, res){
     res.send(405); //Not Allowd
   },
 
   isAuth: function(req, res, next){
-            console.log(req.isAuthenticated());
+
     if (!req.isAuthenticated()){
       return res.send(401, "User not authenticated");
     }

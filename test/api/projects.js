@@ -7,6 +7,8 @@ var dataBuilder;
 var chai = require('chai');
 var expect = chai.expect;
 
+var projects;
+
 module.exports = function(base_url, config, testUsers){
   var auth = testUsers[0].auth;
   var uri = base_url + '/projects';
@@ -14,7 +16,6 @@ module.exports = function(base_url, config, testUsers){
   dataBuilder = require('./dataBuilder')();
 
   describe('Projects', function(){
-    var projects;
 
     before(function(done){
       createTestProjects(testUsers, function(err, _projects){
@@ -46,6 +47,11 @@ module.exports = function(base_url, config, testUsers){
 
           dataBuilder.count('Project', function(err, count){
             expect(response.body.length).to.be.equal(count);
+
+            response.body.forEach(function(project, i){
+              checkProject(project, getById(project._id));
+            });
+
             done();
           });
 
@@ -144,23 +150,72 @@ module.exports = function(base_url, config, testUsers){
 
     });
 
+    describe('GET /projects/:id', function(){
+
+      it('must return a project', function(done){
+        var p = projects[0];
+
+        request.get({
+          uri: uri + '/' + p._id,
+          auth: auth
+        }, function (error, response, body) {
+          expect(error).to.not.be.ok();
+          expect(response.statusCode).to.be.equal(200);
+
+          expect(response.body).to.be.an('object');
+          checkProject(response.body, p);
+
+          done();
+        });
+
+      });
+
+    });
+
   });
 
 };
 
+function getById(id){
+  var found;
+
+  projects.forEach(function(p){
+    if (p._id.toString() === id){
+      found = p;
+      return false;
+    }
+  });
+
+  return found;
+}
+
 function checkProject(project, expected){
-  expect(project._id.toString()).to.be.equal(expected._id.toString());
+  expect(project).not.to.have.property('__v');
+
+  expect(project._id.toString()).to.be.eql(expected._id.toString());
   expect(project.title).to.be.equal(expected.title);
   expect(project.domain).to.be.equal(expected.domain);
   expect(project.description).to.be.equal(expected.description);
   expect(project.cover).to.be.equal(expected.cover);
   expect(project.status).to.be.equal(expected.status);
   expect(project.link).to.be.equal(expected.link);
-  expect(project.tags).to.be.equal(expected.tags);
+  expect(project.tags.length).to.be.equal(expected.tags.length);
 
   expect(project.leader).to.be.an("object");
-  expect(project.leader._id.toString()).to.be.equal(expected.leader._id.toString());
-  expect(project.leader.name).to.be.equal(expected.leader.name);
+  expect(project.leader._id.toString()).to.be.equal(expected.leader.toString());
+
+  expect(project.leader).to.have.property('_id');
+  expect(project.leader).to.have.property('name');
+  expect(project.leader).to.have.property('picture');
+  expect(project.leader).to.have.property('bio');
+  expect(project.leader).to.have.property('admin_in');
+
+  expect(project.leader).to.have.property('provider');
+  expect(project.leader).to.have.property('username');
+
+  expect(project.leader).not.to.have.property('__v');
+  expect(project.leader).not.to.have.property('email');
+  expect(project.leader).not.to.have.property('provider_id');
 
   expect(new Date(project.created_at).toString()).to.be.equal(expected.created_at.toString());
 }

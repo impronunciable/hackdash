@@ -17,6 +17,8 @@ var Project = mongoose.model('Project')
 var notify;
 var maxLimit;
 
+var userPVT = '-__v -email -provider_id';
+
 module.exports = function(app, uri, common) {
   maxLimit = app.get('config').maxQueryLimit || 50;
 
@@ -51,9 +53,10 @@ module.exports = function(app, uri, common) {
 
 var getProject = function(req, res, next){
   Project.findById(req.params.pid)
-    .populate('leader')
-    .populate('contributors')
-    .populate('followers')
+    .select('-__v')
+    .populate('leader', userPVT)
+    .populate('contributors', userPVT)
+    .populate('followers', userPVT)
     .exec(function(err, project) {
       if (err) return res.send(500);
       if (!project) return res.send(404);
@@ -344,9 +347,10 @@ var setProjects = function(req, res, next){
   }
 
   Project.find(req.search_query || {})
-    .populate('leader')
-    .populate('contributors')
-    .populate('followers')
+    .select('-__v')
+    .populate('leader', userPVT)
+    .populate('contributors', userPVT)
+    .populate('followers', userPVT)
     .limit(limit)
     .sort( { "created_at" : -1 } )
     .exec(function(err, projects) {

@@ -8,7 +8,8 @@
 var passport = require('passport')
   , mongoose = require('mongoose')
   , _ = require('underscore')
-  , config = require('../../../config.json');
+  , config = require('../../../config.json')
+  , cors = require('cors');
 
 var User = mongoose.model('User')
   , Dashboard = mongoose.model('Dashboard')
@@ -39,6 +40,7 @@ var getInstanceAdmins = function(req, res, next){
 
   User
     .find({ "admin_in": domain })
+    .select('-__v -provider_id -email')
     .exec(function(err, users) {
       if(err) return res.send(500);
       req.users = users || [];
@@ -87,7 +89,9 @@ var setQuery = function(req, res, next){
 
 var getUser = function(req, res, next){
   User
-    .findById(req.params.uid, function(err, user){
+    .findById(req.params.uid)
+    .select('-__v -provider_id ' + (req.isAuthenticated() ? '' : '-email') )
+    .exec(function(err, user){
       if(err) return res.send(500);
       if(!user) return res.send(404);
       req.user_profile = user.toObject();
@@ -103,6 +107,7 @@ var getUsers = function(req, res, next){
 
   User
     .find(req.search_query || {})
+    .select('-__v -provider_id -email')
     .limit(req.limit || maxLimit)
     .sort(sort)
     .exec(function(err, users) {
@@ -165,7 +170,9 @@ var updateUser = function(req, res){
 var setCollections = function(req, res, next){
 
   Collection
-    .find({ "owner": req.user_profile._id }, function(err, collections) {
+    .find({ "owner": req.user_profile._id })
+    .select('-__v')
+    .exec(function(err, collections) {
       if(err) return res.send(500);
       req.user_profile.collections = collections || [];
       next();
@@ -175,7 +182,9 @@ var setCollections = function(req, res, next){
 var setDashboards = function(req, res, next){
 
   Dashboard
-    .find({ "domain": { $in: req.user_profile.admin_in } }, function(err, dashboards) {
+    .find({ "domain": { $in: req.user_profile.admin_in } })
+    .select('-__v')
+    .exec(function(err, dashboards) {
       if(err) return res.send(500);
       req.user_profile.dashboards = dashboards || [];
       next();
@@ -186,7 +195,9 @@ var setDashboards = function(req, res, next){
 var setProjects = function(req, res, next){
 
   Project
-    .find({ "leader": req.user_profile._id }, function(err, projects) {
+    .find({ "leader": req.user_profile._id })
+    .select('-__v')
+    .exec(function(err, projects) {
       if(err) return res.send(500);
       req.user_profile.projects = projects || [];
       next();
@@ -197,7 +208,9 @@ var setContributions = function(req, res, next){
   var uid = req.user_profile._id;
 
   Project
-    .find({ "leader": { $ne: uid } , "contributors": uid }, function(err, projects) {
+    .find({ "leader": { $ne: uid } , "contributors": uid })
+    .select('-__v')
+    .exec(function(err, projects) {
       if(err) return res.send(500);
       req.user_profile.contributions = projects || [];
       next();
@@ -209,7 +222,9 @@ var setLikes = function(req, res, next){
   var uid = req.user_profile._id;
 
   Project
-    .find({ "leader": { $ne: uid }, "followers": uid }, function(err, projects) {
+    .find({ "leader": { $ne: uid }, "followers": uid })
+    .select('-__v')
+    .exec(function(err, projects) {
       if(err) return res.send(500);
       req.user_profile.likes = projects || [];
       next();

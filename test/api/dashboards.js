@@ -6,6 +6,7 @@ var dataBuilder;
 
 var chai = require('chai');
 var expect = chai.expect;
+var dashboards;
 
 module.exports = function(base_url, config, testUsers){
   var auth = testUsers[0].auth;
@@ -14,7 +15,6 @@ module.exports = function(base_url, config, testUsers){
   dataBuilder = require('./dataBuilder')();
 
   describe('Dashboards', function(){
-    var dashboards;
 
     before(function(done){
       createTestDashboards(testUsers, function(err, _dashboards){
@@ -46,6 +46,11 @@ module.exports = function(base_url, config, testUsers){
 
           dataBuilder.count('Dashboard', function(err, count){
             expect(response.body.length).to.be.equal(count-1); // only with projects
+
+            response.body.forEach(function(dashboard, i){
+              checkDashboard(dashboard, getById(dashboard._id), true);
+            });
+
             done();
           });
 
@@ -135,6 +140,28 @@ module.exports = function(base_url, config, testUsers){
 
           expect(response.body).to.be.an('array');
           expect(response.body.length).to.be.equal(1);// only with projects
+
+          done();
+        });
+
+      });
+
+    });
+
+    describe('GET /dashboards/:domain', function(){
+
+      it('must return a dashboard', function(done){
+        var d = dashboards[0];
+
+        request.get({
+          uri: uri + '/' + d.domain,
+          auth: auth
+        }, function (error, response, body) {
+          expect(error).to.not.be.ok();
+          expect(response.statusCode).to.be.equal(200);
+
+          expect(response.body).to.be.an('object');
+          checkDashboard(response.body, d);
 
           done();
         });
@@ -347,7 +374,22 @@ module.exports = function(base_url, config, testUsers){
 
 };
 
-function checkDashboard(dashboard, expected){
+function getById(id){
+  var found;
+
+  dashboards.forEach(function(d){
+    if (d._id.toString() === id){
+      found = d;
+      return false;
+    }
+  });
+
+  return found;
+}
+
+function checkDashboard(dashboard, expected, ownerString){
+  expect(dashboard).not.to.have.property('__v');
+
   expect(dashboard._id.toString()).to.be.equal(expected._id.toString());
   expect(dashboard.title).to.be.equal(expected.title);
   expect(dashboard.domain).to.be.equal(expected.domain);
@@ -356,6 +398,27 @@ function checkDashboard(dashboard, expected){
   expect(dashboard.open).to.be.equal(expected.open);
 
   expect(new Date(dashboard.created_at).toString()).to.be.equal(expected.created_at.toString());
+
+  if (ownerString && dashboard.owner){
+    expect(dashboard.owner.toString()).to.be.equal(expected.owner.toString());
+  }
+  else if (!ownerString && dashboard.owner){
+
+    expect(dashboard.owner).to.be.an("object");
+    expect(dashboard.owner._id.toString()).to.be.equal(expected.owner.toString());
+
+    expect(dashboard.owner).to.have.property('_id');
+    expect(dashboard.owner).to.have.property('name');
+    expect(dashboard.owner).to.have.property('picture');
+    expect(dashboard.owner).to.have.property('bio');
+
+    expect(dashboard.owner).not.to.have.property('provider');
+    expect(dashboard.owner).not.to.have.property('username');
+    expect(dashboard.owner).not.to.have.property('admin_in');
+    expect(dashboard.owner).not.to.have.property('__v');
+    expect(dashboard.owner).not.to.have.property('email');
+    expect(dashboard.owner).not.to.have.property('provider_id');
+  }
 }
 
 function createTestDashboards(testUsers, done){

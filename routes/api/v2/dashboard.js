@@ -108,6 +108,7 @@ var setDashboards = function(req, res, next){
   var limit = req.limit || maxLimit;
 
   Dashboard.find(req.search_query || {})
+    .select('-__v')
     .skip(req.page ? req.page*limit : 0)
     .limit(limit)
     .sort( { "created_at" : -1 } )
@@ -183,6 +184,7 @@ var getDashboard = function(req, res, next){
 
   Dashboard
     .findOne({ domain: domain })
+    .select('-__v')
     .populate('owner', '_id name picture bio')
     .exec(function(err, dashboard) {
       if(err) return res.send(500);

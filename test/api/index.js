@@ -36,8 +36,8 @@ describe('/api', function(){
 function createUsers(done){
 
   dataBuilder.create('User', [
-    { name: 'User Auth A', provider: 'basic', provider_id: 1, username: 'testa' },
-    { name: 'User Auth B', provider: 'basic', provider_id: 1, username: 'testb' }
+    { name: 'User Auth A', provider: 'basic', provider_id: 1, username: 'testa', picture: '//test.com/a.png' },
+    { name: 'User Auth B', provider: 'basic', provider_id: 2, username: 'testb', picture: '//test.com/b.png' }
   ], function(err, users){
     userAuthA._id = users[0]._id;
     userAuthB._id = users[1]._id;

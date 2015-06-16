@@ -1,8 +1,8 @@
 /**
  * VIEW: ProfileCard
- * 
+ *
  */
- 
+
 var template = require('./templates/card.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
@@ -12,6 +12,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   template: template,
+
+  events: {
+    "click .login": "showLogin"
+  },
 
   modelEvents:{
     "change": "render"
@@ -28,6 +32,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  showLogin: function(){
+    hackdash.app.showLogin();
+  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
