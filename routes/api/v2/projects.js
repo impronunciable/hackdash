@@ -8,13 +8,16 @@
 var passport = require('passport')
   , mongoose = require('mongoose')
   , multer = require('multer')
-  , config = require('../../../config.json');
+  , config = require('../../../config.json')
+  , cors = require('cors');
 
 var Project = mongoose.model('Project')
   , Dashboard = mongoose.model('Dashboard');
 
 var notify;
 var maxLimit;
+
+var userPVT = '-__v -email -provider_id';
 
 module.exports = function(app, uri, common) {
   maxLimit = app.get('config').maxQueryLimit || 50;
@@ -28,14 +31,14 @@ module.exports = function(app, uri, common) {
     });
   };
 
-  app.get(uri + '/:domain/projects', setQuery, setProjects, sendProjects);
+  app.get(uri + '/:domain/projects', cors(), setQuery, setProjects, sendProjects);
 
-  app.get(uri + '/projects', setQuery, setProjects, sendProjects);
+  app.get(uri + '/projects', cors(), setQuery, setProjects, sendProjects);
 
   app.post(uri + '/projects', common.isAuth, canCreateProject, createProject, sendProject);
   app.post(uri + '/projects/cover', common.isAuth, uploadCover(), sendCover);
 
-  app.get(uri + '/projects/:pid', getProject, sendProject);
+  app.get(uri + '/projects/:pid', cors(), getProject, sendProject);
 
   app.delete(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, removeProject);
   app.put(uri + '/projects/:pid', common.isAuth, getProject, canChangeProject, updateProject, sendProject);
@@ -50,9 +53,10 @@ module.exports = function(app, uri, common) {
 
 var getProject = function(req, res, next){
   Project.findById(req.params.pid)
-    .populate('leader')
-    .populate('contributors')
-    .populate('followers')
+    .select('-__v')
+    .populate('leader', userPVT)
+    .populate('contributors', userPVT)
+    .populate('followers', userPVT)
     .exec(function(err, project) {
       if (err) return res.send(500);
       if (!project) return res.send(404);
@@ -343,9 +347,10 @@ var setProjects = function(req, res, next){
   }
 
   Project.find(req.search_query || {})
-    .populate('leader')
-    .populate('contributors')
-    .populate('followers')
+    .select('-__v')
+    .populate('leader', userPVT)
+    .populate('contributors', userPVT)
+    .populate('followers', userPVT)
     .limit(limit)
     .sort( { "created_at" : -1 } )
     .exec(function(err, projects) {

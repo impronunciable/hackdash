@@ -6,6 +6,7 @@ var dataBuilder;
 
 var chai = require('chai');
 var expect = chai.expect;
+var users;
 
 module.exports = function(base_url, config, testUsers){
   var auth = testUsers[0].auth;
@@ -14,7 +15,6 @@ module.exports = function(base_url, config, testUsers){
   dataBuilder = require('./dataBuilder')();
 
   describe('Users', function(){
-    var users;
 
     before(function(done){
       createTestUsers(function(err, _users){
@@ -46,6 +46,11 @@ module.exports = function(base_url, config, testUsers){
 
           dataBuilder.count('User', function(err, count){
             expect(response.body.length).to.be.equal(count - 2); // - testusers
+
+            response.body.forEach(function(user, i){
+              checkUser(user, getById(user._id), true);
+            });
+
             done();
           });
 
@@ -146,15 +151,38 @@ module.exports = function(base_url, config, testUsers){
 
 };
 
-function checkUser(user, expected){
+function getById(id){
+  var found;
+
+  users.forEach(function(u){
+    if (u._id.toString() === id){
+      found = u;
+      return false;
+    }
+  });
+
+  return found;
+}
+
+function checkUser(user, expected, isPrivate){
   expect(user._id.toString()).to.be.equal(expected._id.toString());
   expect(user.username).to.be.equal(expected.username);
   expect(user.provider).to.be.equal(expected.provider);
-  expect(user.provider_id).to.be.equal(expected.provider_id);
   expect(user.picture).to.be.equal(expected.picture);
   expect(user.name).to.be.equal(expected.name);
   expect(user.bio).to.be.equal(expected.bio);
   expect(new Date(user.created_at).toString()).to.be.equal(expected.created_at.toString());
+
+  expect(user).not.to.have.property('__v');
+
+  if (isPrivate) {
+    expect(user).not.to.have.property('provider_id');
+    expect(user).not.to.have.property('email');
+  }
+  else {
+    expect(user.provider_id).to.be.equal(expected.provider_id);
+    expect(user.email).to.be.equal(expected.email);
+  }
 }
 
 function createTestUsers(done){
@@ -163,6 +191,7 @@ function createTestUsers(done){
     username: 'lui_kang',
     provider: 'twitter',
     provider_id: 1234,
+    email: 'test@gmail.com',
     picture: 'http://example.com/images/lui_kang.png',
     name: 'Liu Kang',
     bio: 'He became the Grand Champion of Mortal Kombat throughout the first four tournaments, a title that remained undisputed in the original timeline.'
@@ -170,6 +199,7 @@ function createTestUsers(done){
     username: 'many_calavera',
     provider: 'twitter',
     provider_id: 1235,
+    email: 'test2@gmail.com',
     picture: 'http://example.com/images/many_calavera.png',
     name: 'Many Calavera',
     bio: 'Bound only by the paper-thin wrappings of mortality, a soul here lies, struggling to be free. And so it shall, thanks to a bowl of bad gazpacho, and a man named… Calavera'
@@ -177,6 +207,7 @@ function createTestUsers(done){
     username: 'lara_croft',
     provider: 'twitter',
     provider_id: 1236,
+    email: 'test3@gmail.com',
     picture: 'http://example.com/images/lara_croft.png',
     name: 'Lara Croft',
     bio: "The world's most famous archaeologist who's whereabouts are unknown."

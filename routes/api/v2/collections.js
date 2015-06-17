@@ -1,22 +1,25 @@
 /*
  * RESTfull API: Collection Resources
- * 
- * 
+ *
+ *
  */
 
 var passport = require('passport')
   , mongoose = require('mongoose')
   , _ = require('underscore')
+  , cors = require('cors')
   , config = require('../../../config.json');
 
 var Collection = mongoose.model('Collection');
 var maxLimit;
 
+var userPVT = '-__v -email -provider_id';
+
 module.exports = function(app, uri, common) {
   maxLimit = app.get('config').maxQueryLimit || 50;
 
   // Get & Search all collections
-  app.get(uri + '/collections', setQuery, getAllCollections, sendCollections);
+  app.get(uri + '/collections', cors(), setQuery, getAllCollections, sendCollections);
 
   // Get user collections
   app.get(uri + '/collections/own', getUserCollections, sendCollections);
@@ -25,7 +28,7 @@ module.exports = function(app, uri, common) {
   app.post(uri + '/collections', common.isAuth, createCollection, sendCollection);
 
   // Get a collection
-  app.get(uri + '/collections/:cid', getCollection, sendCollection);
+  app.get(uri + '/collections/:cid', cors(), getCollection, sendCollection);
 
   // Update a user collection
   app.put(uri + '/collections/:cid', common.isAuth, getCollection, isOwner, updateCollection);
@@ -62,11 +65,12 @@ var setQuery = function(req, res, next){
 };
 
 var getAllCollections = function(req, res, next){
-  
+
   Collection.find(req.search_query || {})
+    .select('-__v')
     .limit(req.limit || maxLimit)
     .sort( { "created_at" : -1 } )
-    .populate('owner')
+    .populate('owner', userPVT)
     .populate('dashboards')
     .exec(function(err, collections) {
       if(err) return res.send(500);
@@ -77,7 +81,8 @@ var getAllCollections = function(req, res, next){
 
 var getUserCollections = function(req, res, next){
   Collection.find({ "owner": req.user._id })
-    .populate('owner')
+    .select('-__v')
+    .populate('owner', userPVT)
     .populate('dashboards')
     .exec(function(err, collections) {
       if(err) return res.send(500);
@@ -88,7 +93,8 @@ var getUserCollections = function(req, res, next){
 
 var getCollection = function(req, res, next){
   Collection.findById(req.params.cid)
-    .populate('owner')
+    .select('-__v')
+    .populate('owner', userPVT)
     .populate('dashboards')
     .exec(function(err, collection) {
       if (err) return res.send(500);
@@ -101,7 +107,7 @@ var getCollection = function(req, res, next){
 
 var isOwner = function(req, res, next){
   var isOwner = req.user.id === req.collection.owner.id;
-  
+
   if (!isOwner) {
     return res.send(403, "Only Owner can modify this collection.");
   }
@@ -110,7 +116,7 @@ var isOwner = function(req, res, next){
 };
 
 var createCollection = function(req, res, next){
-    
+
   var collection = new Collection({
       title: req.body.title
     , description: req.body.description
@@ -119,7 +125,7 @@ var createCollection = function(req, res, next){
   });
 
   collection.save(function(err, collection){
-    if(err) return res.send(500); 
+    if(err) return res.send(500);
     req.collection = collection;
     next();
   });
@@ -129,12 +135,12 @@ var updateCollection = function(req, res){
   var collection = req.collection;
 
   function getValue(prop){
-    return req.body.hasOwnProperty(prop) ? req.body[prop] : collection[prop];    
+    return req.body.hasOwnProperty(prop) ? req.body[prop] : collection[prop];
   }
 
   collection.title = getValue("title");
   collection.description = getValue("description");
-  
+
   collection.save(function(err, collection){
     if(err) return res.send(500);
     res.send(204);

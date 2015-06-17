@@ -4,12 +4,15 @@
 
 <form>
   <div class="form-content">
-
+    <label class="profile-fields-required">all fields required</label>
     <div class="form-group">
       <input name="name" type="text" placeholder="Name" value="{{name}}" class="form-control"/>
     </div>
     <div class="form-group">
       <input name="email" type="text" placeholder="Email" value="{{email}}" class="form-control"/>
+      {{#unless email}}
+      <label class="email-info">email only visible for logged in users</label>
+      {{/unless}}
     </div>
     <div class="form-group">
       <textarea name="bio" placeholder="Some about you" class="form-control" rows="4">{{bio}}</textarea>
@@ -18,6 +21,8 @@
   <div class="form-actions">
     <input id="save" type="button" data-loading-text="saving.." value="Save profile" class="btn-primary pull-right"/>
     <label class="saved pull-right">Profile saved!</label>
+    {{#if email}}
     <a id="cancel" class="btn-cancel pull-left">cancel</a>
+    {{/if}}
   </div>
 </form>
