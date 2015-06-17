@@ -174,13 +174,12 @@ function checkUser(user, expected, isPrivate){
   expect(new Date(user.created_at).toString()).to.be.equal(expected.created_at.toString());
 
   expect(user).not.to.have.property('__v');
+  expect(user).not.to.have.property('provider_id');
 
   if (isPrivate) {
-    expect(user).not.to.have.property('provider_id');
     expect(user).not.to.have.property('email');
   }
   else {
-    expect(user.provider_id).to.be.equal(expected.provider_id);
     expect(user.email).to.be.equal(expected.email);
   }
 }

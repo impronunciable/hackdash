@@ -142,13 +142,15 @@ module.exports = function(base_url, config, testUsers){
 };
 
 function checkProfile(profile, expected){
+
   expect(profile._id.toString()).to.be.equal(expected._id.toString());
   expect(profile.username).to.be.equal(expected.username);
   expect(profile.provider).to.be.equal(expected.provider);
-  expect(profile.provider_id).to.be.equal(expected.provider_id);
   expect(profile.picture).to.be.equal(expected.picture);
   expect(profile.name).to.be.equal(expected.name);
   expect(profile.bio).to.be.equal(expected.bio);
+
+  expect(profile).not.to.have.property('provider_id');
 
   expect(profile.collections).to.be.an("array");
   expect(profile.admin_in).to.be.an("array");
