@@ -24,10 +24,8 @@ module.exports = function(app) {
 
   // Helpers
 
-  var saveSubdomain = function(req, res, next) {
-    if(!req.session) req.session = {};
-
-    //req.session.subdomain = (req.subdomains.length && req.subdomains[0]) || '';
+  var saveRedirect = function(req, res, next) {
+    req.session = req.session || {};
 
     var redirect = ((req.query && req.query.redirect) || '');
     redirect = (redirect.charAt(0) === '/' ? redirect : '/' + redirect);
@@ -37,15 +35,7 @@ module.exports = function(app) {
   };
 
   var redirectSubdomain = function(req, res) {
-    var domain = app.get('config').host;
-/*
-    if (//req.session.subdomain !== '') {
-      domain = req.session.subdomain + '.' + domain;
-    }
-*/
-    var url = req.session.redirectUrl || '';
-
-    res.redirect(url);
+    res.redirect(req.session.redirectUrl || '/');
   };
 
   app.set('providers', Object.keys(keys));
@@ -54,7 +44,7 @@ module.exports = function(app) {
 
     (function(provider){
 
-      app.get('/auth/' + provider, saveSubdomain, passport.authenticate(provider));
+      app.get('/auth/' + provider, saveRedirect, passport.authenticate(provider));
       app.get('/auth/' + provider + '/callback',
         passport.authenticate(provider, { failureRedirect: '/' }), redirectSubdomain);
 
@@ -65,6 +55,7 @@ module.exports = function(app) {
         User.findOne({provider_id: profile.id, provider: provider}, function(err, user){
 
           function setPicture(){
+
             if(profile.photos && profile.photos.length && profile.photos[0].value) {
               user.picture =  profile.photos[0].value.replace('_normal', '_bigger');
             }
@@ -80,6 +71,7 @@ module.exports = function(app) {
           }
 
           if(!user) {
+
             var user = new User();
             user.provider = provider;
             user.provider_id = profile.id;
@@ -94,23 +86,26 @@ module.exports = function(app) {
             user.save(function(err, user){
               done(null, user);
             });
-          } else {
 
-            //Update user picture provider if url changed
-            var picBefore = user.picture;
-            setPicture();
-
-            if (user.picture !== picBefore){
-              user.save(function(err, user){
-                done(null, user);
-              });
-            }
-            else {
-              done(null, user);
-            }
-
+            return;
           }
+
+          //Update user picture provider if url changed
+          var picBefore = user.picture;
+          setPicture();
+
+          if (user.picture !== picBefore){
+            user.save(function(err, user){
+              done(null, user);
+            });
+
+            return;
+          }
+
+          done(null, user);
+
         });
+
       }));
 
     })(strategy);
