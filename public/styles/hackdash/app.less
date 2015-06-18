@@ -1211,6 +1211,94 @@ footer {
   }
 }
 
+.sharer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: @color-blackB;
+
+  a {
+    color: @color-white;
+    text-align: center;
+  }
+
+  .embed {
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: @secondary-font;
+
+    background-color: @color-blackB2;
+    &:hover {
+      background-color: darken(@color-blackB2, 6.5%);
+    }
+
+    a {
+      line-height: 2em;
+      font-size: 22px;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .social-buttons {
+    width: 100%;
+  }
+
+  ul {
+    padding:0;
+    margin: 0;
+
+    li {
+      list-style: none;
+      width: 45px;
+      height: 40px;
+      float: left;
+
+      a {
+        font-size: 30px;
+        display: block;
+      }
+
+      &.twitter {
+        background-color: #0ba8d6;
+
+        &:hover {
+          background-color: darken(#0ba8d6, 6.5%);
+        }
+      }
+
+      &.facebook {
+        background-color: #4264b3;
+
+        &:hover {
+          background-color: darken(#4264b3, 6.5%);
+        }
+      }
+
+      &.linkedin {
+        background-color: #007bb6;
+
+        &:hover {
+          background-color: darken(#007bb6, 6.5%);
+        }
+      }
+
+      &.google-plus {
+        background-color: #dd4b39;
+
+        &:hover {
+          background-color: darken(#dd4b39, 6.5%);
+        }
+      }
+    }
+  }
+
+}
+
 
 @media (max-width: 950px) {
 

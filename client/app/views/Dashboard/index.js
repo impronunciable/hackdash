@@ -7,7 +7,7 @@ var template = require('./templates/index.hbs')
   , UsersView = require('./Users')
   , DashboardView = require('./Dashboard')
   , ProjectsView = require('../Project/Collection')
-  , Share = require("./Share");
+  , Sharer = require("../Sharer");
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
@@ -19,7 +19,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   template: template,
 
   ui: {
-    inactiveCtn: ".inactive-ctn"
+    inactiveCtn: ".inactive-ctn",
+    shareLink: '.share'
   },
 
   events: {
@@ -107,9 +108,10 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
 
   showShare: function(){
-    hackdash.app.modals.show(new Share({
+    Sharer.show(this.ui.shareLink, {
+      type: 'dashboard',
       model: this.model
-    }));
+    });
   },
 
   onStartEditShowcase: function(){
