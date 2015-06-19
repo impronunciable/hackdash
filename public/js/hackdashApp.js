@@ -5731,11 +5731,11 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
  *
  */
 
-/*jshint scripturl: true */
-
 var template = require('./templates/sharer.hbs'),
   DashboardEmbed = require("./Dashboard/Share"),
   ProjectEmbed = require("./Project/Share");
+
+/*jshint scripturl:true */
 
 var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -5749,8 +5749,10 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
 
   events: {
     "click .embed": "showEmbed",
+    "click .close": "destroy",
+
     "click .facebook": "showFBShare",
-    "click .close": "destroy"
+    "click .linkedin": "showLinkedInShare"
   },
 
   shareText: {
@@ -5909,6 +5911,33 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
     });
   },
 
+  showLinkedInShare: function(e){
+    e.preventDefault();
+
+    var link = 'https://www.linkedin.com/shareArticle?mini=true&'
+      , url = 'url=' + window.location.protocol + "//" + window.location.host
+      , stitle = 'title='
+      , text = 'summary='
+      , source = '&source=HackDash';
+
+    var domain = this.model.get('domain');
+    var title = this.model.get('title');
+
+    if (this.type === 'dashboard'){
+      url += '/dashboards/' + domain;
+    }
+    else if (this.type === 'project'){
+      url += '/projects/' + this.model.get('_id');
+    }
+
+    var textShort = 'Hacking at ' + (title || domain);
+    stitle += textShort;
+    text += textShort + ' - HackDash';
+
+    link += this.enc(url) + '&' + this.enc(stitle) + '&' + this.enc(text) + source;
+    window.open(link,'LinkedIn','height=350,width=520');
+  },
+
   getNetworks: function(){
 
     var networks = [{
@@ -5923,11 +5952,10 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
     }
 
     return networks.concat([{
-      name: 'linkedin',
-      link: 'http://linkedin.com'
+      name: 'linkedin'
     }, {
       name: 'google-plus',
-      link: 'http://googleplus.com'
+      link: "javascript:void(window.open('https://plus.google.com/share?url='+encodeURIComponent(location), 'Share to Google+','width=600,height=460,menubar=no,location=no,status=no'));"
     }]);
 
   }
