@@ -24,5 +24,6 @@
     "516d1997b2951b02280000e6"
   ],
   "maxQueryLimit": 30,
-  "googleAnalytics": "UA-XXXXXXXX-X"
+  "googleAnalytics": "UA-XXXXXXXX-X",
+  "facebookAppId": "YYYYYYYYYYYY"
 }

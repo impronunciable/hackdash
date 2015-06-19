@@ -42,4 +42,14 @@ module.exports = function(){
 
   window.hackdash.apiURL = "/api/v2";
   window._gaq = window._gaq || [];
+
+  if (window.hackdash.fbAppId){
+    $.getScript('//connect.facebook.net/en_US/sdk.js', function(){
+      window.FB.init({
+        appId: window.hackdash.fbAppId,
+        version: 'v2.3'
+      });
+    });
+  }
+
 };

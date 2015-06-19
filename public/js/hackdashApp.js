@@ -389,6 +389,16 @@ module.exports = function(){
 
   window.hackdash.apiURL = "/api/v2";
   window._gaq = window._gaq || [];
+
+  if (window.hackdash.fbAppId){
+    $.getScript('//connect.facebook.net/en_US/sdk.js', function(){
+      window.FB.init({
+        appId: window.hackdash.fbAppId,
+        version: 'v2.3'
+      });
+    });
+  }
+
 };
 
 },{"./helpers/backboneOverrides":4,"./helpers/handlebars":5}],4:[function(require,module,exports){
@@ -5721,6 +5731,8 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
  *
  */
 
+/*jshint scripturl: true */
+
 var template = require('./templates/sharer.hbs'),
   DashboardEmbed = require("./Dashboard/Share"),
   ProjectEmbed = require("./Project/Share");
@@ -5737,6 +5749,7 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
 
   events: {
     "click .embed": "showEmbed",
+    "click .facebook": "showFBShare",
     "click .close": "destroy"
   },
 
@@ -5803,19 +5816,18 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
     var title = this.model.get('title');
 
     function getPeople(list){
-      return _.map(list, function(u){
+      return _.map(list, function(user){
 
-        if (hackdash.user && hackdash.user._id ===
-          (u.get && u.get('_id') || u._id) ){
+        if (hackdash.user && hackdash.user._id === user._id){
           // remove me
           return '';
         }
 
-        if ((u.get && u.get('provider') || u.provider) === 'twitter'){
-          return '@' + (u.get && u.get('username') || u.username);
+        if (user.provider === 'twitter'){
+          return '@' + user.username;
         }
         else {
-          return (u.get && u.get('name') || u.name);
+          return user.name;
         }
 
         return '';
@@ -5824,7 +5836,7 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
     }
 
     if (this.type === 'dashboard'){
-      people = getPeople(this.model.get('admins'));
+      people = getPeople(this.model.get('admins').toJSON());
       url += '/dashboards/' + domain;
     }
 
@@ -5834,26 +5846,90 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
     }
 
     hashtags += ['hackdash', domain].join(',');
-    text = 'text=Hacking at ' + (title || domain) + ' via ' + people;
+    text += 'Hacking at ' + (title || domain) + ' via ' + people;
 
     link += this.enc(url) + '&' + this.enc(hashtags) + '&' + this.enc(text);
     return link;
   },
 
+  showFBShare: function(e){
+    e.preventDefault();
+
+    var people = ''
+      , url = '' + window.location.protocol + "//" + window.location.host
+      , text = ''
+      , picture = '';
+
+    var domain = this.model.get('domain');
+    var title = this.model.get('title');
+
+    function getPeople(list){
+      return _.map(list, function(user){
+
+        if (hackdash.user && hackdash.user._id === user._id){
+          // remove me
+          return '';
+        }
+
+        return user.name;
+
+      }).join(', ');
+    }
+
+    if (this.type === 'dashboard'){
+      people = getPeople(this.model.get('admins').toJSON());
+
+      var covers = this.model.get('covers');
+      picture = url + ((covers && covers.length && covers[0]) || '/images/logohack.png');
+
+      url += '/dashboards/' + domain;
+    }
+
+    else if (this.type === 'project'){
+      people = getPeople(this.model.get('contributors'));
+
+      var cover = this.model.get('cover');
+      picture = url + (cover || '/images/logohack.png');
+
+      url += '/projects/' + this.model.get('_id');
+    }
+
+    var textShort = 'Hacking at ' + (title || domain);
+    text += textShort + ' via ' + people;
+    text += ' ' + ['#hackdash', domain].join(' #');
+
+    window.FB.ui({
+      method: 'feed',
+      name: textShort,
+      link: url,
+      picture: picture,
+      caption: text
+    }, function( response ) {
+      console.log(response);
+    });
+  },
+
   getNetworks: function(){
-    return [{
+
+    var networks = [{
       name: 'twitter',
       link: this.getTwitterLink()
-    }, {
-      name: 'facebook',
-      link: 'http://facebook.com'
-    }, {
+    }];
+
+    if (window.hackdash.fbAppId){
+      networks.push({
+        name: 'facebook'
+      });
+    }
+
+    return networks.concat([{
       name: 'linkedin',
       link: 'http://linkedin.com'
     }, {
       name: 'google-plus',
       link: 'http://googleplus.com'
-    }];
+    }]);
+
   }
 
 }, {
@@ -5939,14 +6015,19 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "    <li class=\""
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "    <li class=\""
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
-    + "\">\n      <a href=\""
-    + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
-    + "\">\n        <i class=\"fa fa-"
+    + "\">\n      <a ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.link : depth0), {"name":"if","hash":{},"fn":this.program(2, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + ">\n        <i class=\"fa fa-"
     + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
     + "\"></i>\n      </a>\n    </li>\n";
+},"2":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "href=\""
+    + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
+    + "\"";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, buffer = "<div class=\"embed\">\n  <a>embed/insert</a>\n</div>\n<div class=\"social-buttons\">\n  <ul>\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.networks : depth0), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});

@@ -48,13 +48,16 @@ html
 
     script(src="/js/vendor.js?v=" + version)
 
+    script(src="https://platform.twitter.com/widgets.js")
+
     script.
       window.hackdash = {
         subdomain: "!{subdomain}",
         baseURL: "!{host}",
         disqus_shortname: "!{disqus_shortname}",
         statuses: "!{statuses}",
-        providers: "!{providers}"
+        providers: "!{providers}",
+        fbAppId: "!{fbAppId}"
       };
 
     if ("undefined" == typeof user)

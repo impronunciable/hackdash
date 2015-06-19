@@ -5,7 +5,7 @@
   <ul>
     {{#each networks}}
     <li class="{{name}}">
-      <a href="{{link}}">
+      <a {{#if link}}href="{{link}}"{{/if}}>
         <i class="fa fa-{{name}}"></i>
       </a>
     </li>

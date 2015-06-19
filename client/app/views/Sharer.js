@@ -3,6 +3,8 @@
  *
  */
 
+/*jshint scripturl: true */
+
 var template = require('./templates/sharer.hbs'),
   DashboardEmbed = require("./Dashboard/Share"),
   ProjectEmbed = require("./Project/Share");
@@ -19,6 +21,7 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
 
   events: {
     "click .embed": "showEmbed",
+    "click .facebook": "showFBShare",
     "click .close": "destroy"
   },
 
@@ -85,19 +88,18 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
     var title = this.model.get('title');
 
     function getPeople(list){
-      return _.map(list, function(u){
+      return _.map(list, function(user){
 
-        if (hackdash.user && hackdash.user._id ===
-          (u.get && u.get('_id') || u._id) ){
+        if (hackdash.user && hackdash.user._id === user._id){
           // remove me
           return '';
         }
 
-        if ((u.get && u.get('provider') || u.provider) === 'twitter'){
-          return '@' + (u.get && u.get('username') || u.username);
+        if (user.provider === 'twitter'){
+          return '@' + user.username;
         }
         else {
-          return (u.get && u.get('name') || u.name);
+          return user.name;
         }
 
         return '';
@@ -106,7 +108,7 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
     }
 
     if (this.type === 'dashboard'){
-      people = getPeople(this.model.get('admins'));
+      people = getPeople(this.model.get('admins').toJSON());
       url += '/dashboards/' + domain;
     }
 
@@ -116,26 +118,90 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
     }
 
     hashtags += ['hackdash', domain].join(',');
-    text = 'text=Hacking at ' + (title || domain) + ' via ' + people;
+    text += 'Hacking at ' + (title || domain) + ' via ' + people;
 
     link += this.enc(url) + '&' + this.enc(hashtags) + '&' + this.enc(text);
     return link;
   },
 
+  showFBShare: function(e){
+    e.preventDefault();
+
+    var people = ''
+      , url = '' + window.location.protocol + "//" + window.location.host
+      , text = ''
+      , picture = '';
+
+    var domain = this.model.get('domain');
+    var title = this.model.get('title');
+
+    function getPeople(list){
+      return _.map(list, function(user){
+
+        if (hackdash.user && hackdash.user._id === user._id){
+          // remove me
+          return '';
+        }
+
+        return user.name;
+
+      }).join(', ');
+    }
+
+    if (this.type === 'dashboard'){
+      people = getPeople(this.model.get('admins').toJSON());
+
+      var covers = this.model.get('covers');
+      picture = url + ((covers && covers.length && covers[0]) || '/images/logohack.png');
+
+      url += '/dashboards/' + domain;
+    }
+
+    else if (this.type === 'project'){
+      people = getPeople(this.model.get('contributors'));
+
+      var cover = this.model.get('cover');
+      picture = url + (cover || '/images/logohack.png');
+
+      url += '/projects/' + this.model.get('_id');
+    }
+
+    var textShort = 'Hacking at ' + (title || domain);
+    text += textShort + ' via ' + people;
+    text += ' ' + ['#hackdash', domain].join(' #');
+
+    window.FB.ui({
+      method: 'feed',
+      name: textShort,
+      link: url,
+      picture: picture,
+      caption: text
+    }, function( response ) {
+      console.log(response);
+    });
+  },
+
   getNetworks: function(){
-    return [{
+
+    var networks = [{
       name: 'twitter',
       link: this.getTwitterLink()
-    }, {
-      name: 'facebook',
-      link: 'http://facebook.com'
-    }, {
+    }];
+
+    if (window.hackdash.fbAppId){
+      networks.push({
+        name: 'facebook'
+      });
+    }
+
+    return networks.concat([{
       name: 'linkedin',
       link: 'http://linkedin.com'
     }, {
       name: 'google-plus',
       link: 'http://googleplus.com'
-    }];
+    }]);
+
   }
 
 }, {

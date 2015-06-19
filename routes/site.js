@@ -1,6 +1,7 @@
 
 var passport = require('passport')
   , config = require('../config.json')
+  , keys = require('../keys.json')
   , mongoose = require('mongoose');
 
 var Dashboard = mongoose.model('Dashboard');
@@ -35,6 +36,8 @@ module.exports = function(app) {
     setViewVar('statuses', app.get('statuses')),
     setViewVar('disqus_shortname', config.disqus_shortname),
     setViewVar('googleAnalytics', config.googleAnalytics || null),
+    setViewVar('fbAppId', (keys.facebook && keys.facebook.clientID) || config.facebookAppId || null),
+
     metas.check()
   ];
 
