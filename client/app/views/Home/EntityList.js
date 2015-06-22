@@ -18,6 +18,11 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  initialize: function(options){
+    // option for fixed slides & not responsive (embeds)
+    this.slides = options && options.slides;
+  },
+
   onBeforeRender: function(){
     if (this.initialized && !this.$el.is(':empty')){
       this.destroySlick();
@@ -68,18 +73,27 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       return;
     }
 
-    var breakpoints = [1450, 1200, 1024, 750, 430];
-    var cols = 5;
+    var cols = this.slides;
+    var responsive = [];
 
-    var responsive = _.map(breakpoints, function(value){
-      return {
-        breakpoint: value,
-        settings: {
-          slidesToShow: cols,
-          slidesToScroll: cols--
-        }
-      };
-    });
+    if (!this.slides) {
+      // is home page
+
+      cols = 5;
+
+      responsive = [1450, 1200, 1024, 750, 430].map(function(value){
+        return {
+          breakpoint: value,
+          settings: {
+            slidesToShow: cols,
+            slidesToScroll: cols--
+          }
+        };
+      });
+
+      cols = 6;
+    }
+    // else is embeds
 
     this.$el.slick({
       dots: false,
@@ -87,8 +101,8 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       infinite: false,
       adaptiveHeight: true,
       speed: 300,
-      slidesToShow: 6,
-      slidesToScroll: 6,
+      slidesToShow: cols,
+      slidesToScroll: cols,
       responsive: responsive
     });
 

@@ -13,6 +13,12 @@ var Projects = module.exports = BaseCollection.extend({
 
   idAttribute: "_id",
 
+  comparators: {
+    title: function(a){ return a.get('title'); },
+    created_at: function(a){ return -a.get('created_at'); },
+    showcase: function(a){ return a.get('showcase'); }
+  },
+
   url: function(){
     if (this.domain){
       return hackdash.apiURL + '/' + this.domain + '/projects';
@@ -51,6 +57,11 @@ var Projects = module.exports = BaseCollection.extend({
     });
 
     return response;
+  },
+
+  runSort: function(key){
+    this.comparator = this.comparators[key];
+    this.sort().trigger('reset');
   },
 
   buildShowcase: function(showcase){
@@ -118,4 +129,3 @@ var Projects = module.exports = BaseCollection.extend({
   }
 
 });
-

@@ -112,7 +112,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
 });
 
-},{"./models/Dashboard":9,"./models/Project":10,"./models/Projects":11,"./views/Dashboard/Embed":15,"./views/Project/Embed":22}],3:[function(require,module,exports){
+},{"./models/Dashboard":9,"./models/Project":10,"./models/Projects":11,"./views/Dashboard/Embed":15,"./views/Project/Embed":23}],3:[function(require,module,exports){
 
 module.exports = function(){
 
@@ -418,7 +418,7 @@ Handlebars.registerHelper('each_upto_rnd', function(ary, max, options) {
 });
 
 
-},{"hbsfy/runtime":32}],6:[function(require,module,exports){
+},{"hbsfy/runtime":33}],6:[function(require,module,exports){
 jQuery(function() {
   require('./Initializer')();
   window.hackdash.startApp = require('./EmbedApp');
@@ -677,6 +677,12 @@ var Projects = module.exports = BaseCollection.extend({
 
   idAttribute: "_id",
 
+  comparators: {
+    title: function(a){ return a.get('title'); },
+    created_at: function(a){ return -a.get('created_at'); },
+    showcase: function(a){ return a.get('showcase'); }
+  },
+
   url: function(){
     if (this.domain){
       return hackdash.apiURL + '/' + this.domain + '/projects';
@@ -715,6 +721,11 @@ var Projects = module.exports = BaseCollection.extend({
     });
 
     return response;
+  },
+
+  runSort: function(key){
+    this.comparator = this.comparators[key];
+    this.sort().trigger('reset');
   },
 
   buildShowcase: function(showcase){
@@ -782,7 +793,6 @@ var Projects = module.exports = BaseCollection.extend({
   }
 
 });
-
 
 },{"./BaseCollection":8,"./Project":10}],12:[function(require,module,exports){
 /**
@@ -935,7 +945,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
 var template = require('./templates/index.hbs')
   , DashboardView = require('./Dashboard')
-  , ProjectsView = require('../Project/Collection');
+  , ProjectsView = require('../Project/Collection')
+
+// Slider View Mode
+  , ProjectItemView = require('../Project/Card')
+  , EntityList = require("../Home/EntityList")
+  , ProjectListSlider = EntityList.extend({ childView: ProjectItemView });
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
@@ -971,6 +986,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     var sort = hackdash.getQueryVariable('sort');
     var query = hackdash.getQueryVariable('query');
     var status = hackdash.getQueryVariable('status');
+    var slider = hackdash.getQueryVariable('slider');
 
     if (query){
       hackdash.app.projects.search(query);
@@ -986,12 +1002,48 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       model: this.model
     });
 
-    var projectsView = new ProjectsView({
-      model: this.model,
-      collection: hackdash.app.projects,
-      showcaseMode: false,
-      showcaseSort: false
-    });
+    var projectsView;
+
+    if (slider){
+      this.$el.addClass('slider');
+
+      if (sort){
+        var s = '';
+
+        switch(sort){
+          case 'name': s = 'title'; break;
+          case 'date': s = 'created_at'; break;
+          case 'showcase': s = 'showcase'; break;
+          default: s = 'created_at'; break;
+        }
+
+        if (s === 'showcase'){
+          hackdash.app.projects = hackdash.app.projects.getActives();
+        }
+
+        hackdash.app.projects.runSort(s);
+      }
+
+      projectsView = new ProjectListSlider({
+        model: this.model,
+        collection: hackdash.app.projects,
+        slides: parseInt(slider, 10)
+      });
+    }
+    else {
+      projectsView = new ProjectsView({
+        model: this.model,
+        collection: hackdash.app.projects,
+        showcaseMode: false,
+        showcaseSort: false
+      });
+
+      projectsView.on('ended:render', function(){
+        if (sort){
+          hackdash.app.projects.trigger("sort:" + sort);
+        }
+      });
+    }
 
     dashboardView.on('show', function(){
       var ctn = self.dashboard.$el;
@@ -1029,12 +1081,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       }
     });
 
-    projectsView.on('ended:render', function(){
-      if (sort){
-        hackdash.app.projects.trigger("sort:" + sort);
-      }
-    });
-
     this.dashboard.show(dashboardView);
     this.projects.show(projectsView);
 
@@ -1068,7 +1114,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
 
 });
-},{"../Project/Collection":21,"./Dashboard":14,"./templates/index.hbs":17}],16:[function(require,module,exports){
+},{"../Home/EntityList":18,"../Project/Card":21,"../Project/Collection":22,"./Dashboard":14,"./templates/index.hbs":17}],16:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -1113,7 +1159,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   else { return ''; }
   },"useData":true});
 
-},{"hbsfy/runtime":32}],17:[function(require,module,exports){
+},{"hbsfy/runtime":33}],17:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -1139,7 +1185,132 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer + "      <a class=\"share tooltips\" data-original-title=\"Share this Dashboard\">\n        <i class=\"fa fa-share-alt\"></i>\n      </a>\n    </div>\n\n  </div>\n</div>\n\n<div class=\"body\">\n\n  <div class=\"container\">\n\n    <div id=\"dashboard-projects\"></div>\n    <div id=\"inactive-projects\" class=\"hide inactive-ctn\"></div>\n\n  </div>\n\n</div>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":32}],18:[function(require,module,exports){
+},{"hbsfy/runtime":33}],18:[function(require,module,exports){
+/**
+ * VIEW: A collection of Items for a Home Search
+ *
+ */
+
+var Item = require('./Item');
+
+module.exports = Backbone.Marionette.CollectionView.extend({
+
+  //--------------------------------------
+  //+ PUBLIC PROPERTIES / CONSTANTS
+  //--------------------------------------
+
+  className: 'entities',
+  childView: Item,
+
+  //--------------------------------------
+  //+ INHERITED / OVERRIDES
+  //--------------------------------------
+
+  initialize: function(options){
+    // option for fixed slides & not responsive (embeds)
+    this.slides = options && options.slides;
+  },
+
+  onBeforeRender: function(){
+    if (this.initialized && !this.$el.is(':empty')){
+      this.destroySlick();
+      this.$el.empty();
+    }
+  },
+
+  onRender: function(){
+    var self = this;
+    _.defer(function(){
+      self.updateGrid();
+    });
+  },
+
+  //--------------------------------------
+  //+ PUBLIC METHODS / GETTERS / SETTERS
+  //--------------------------------------
+
+  //--------------------------------------
+  //+ EVENT HANDLERS
+  //--------------------------------------
+
+  //--------------------------------------
+  //+ PRIVATE AND PROTECTED METHODS
+  //--------------------------------------
+
+  initialized: false,
+  destroyed: false,
+
+  destroySlick: function(){
+    this.$el.slick('unslick');
+
+    var slick = this.$el.slick('getSlick');
+    slick.$list.remove();
+    slick.destroy();
+
+    this.destroyed = true;
+  },
+
+  updateGrid: function(){
+
+    if (this.initialized && !this.destroyed){
+      this.destroySlick();
+    }
+
+    if (this.$el.is(':empty')){
+      this.initialized = false;
+      return;
+    }
+
+    var cols = this.slides;
+    var responsive = [];
+
+    if (!this.slides) {
+      // is home page
+
+      cols = 5;
+
+      responsive = [1450, 1200, 1024, 750, 430].map(function(value){
+        return {
+          breakpoint: value,
+          settings: {
+            slidesToShow: cols,
+            slidesToScroll: cols--
+          }
+        };
+      });
+
+      cols = 6;
+    }
+    // else is embeds
+
+    this.$el.slick({
+      dots: false,
+      autoplay: false,
+      infinite: false,
+      adaptiveHeight: true,
+      speed: 300,
+      slidesToShow: cols,
+      slidesToScroll: cols,
+      responsive: responsive
+    });
+
+    this.$el
+      .off('setPosition')
+      .on('setPosition', this.replaceIcons.bind(this));
+
+    this.replaceIcons();
+
+    this.initialized = true;
+    this.destroyed = false;
+  },
+
+  replaceIcons: function(){
+    $('.slick-prev', this.$el).html('<i class="fa fa-chevron-left"></i>');
+    $('.slick-next', this.$el).html('<i class="fa fa-chevron-right"></i>');
+  }
+
+});
+},{"./Item":19}],19:[function(require,module,exports){
 /**
  * VIEW: An Item of HOME Search
  *
@@ -1197,7 +1368,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
 });
-},{"./templates/item.hbs":19}],19:[function(require,module,exports){
+},{"./templates/item.hbs":20}],20:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -1207,7 +1378,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":32}],20:[function(require,module,exports){
+},{"hbsfy/runtime":33}],21:[function(require,module,exports){
 /**
  * VIEW: An Project of HOME Search
  *
@@ -1361,7 +1532,7 @@ module.exports = ItemView.extend({
   }
 
 });
-},{"../Home/Item.js":18,"./templates/card.hbs":23}],21:[function(require,module,exports){
+},{"../Home/Item.js":19,"./templates/card.hbs":24}],22:[function(require,module,exports){
 /**
  * VIEW: Projects of an Instance
  *
@@ -1511,7 +1682,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   },
 
 });
-},{"./Card":20}],22:[function(require,module,exports){
+},{"./Card":21}],23:[function(require,module,exports){
 /**
  * VIEW: An Embed Project
  *
@@ -1578,7 +1749,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 
 });
-},{"./templates/embed.hbs":24}],23:[function(require,module,exports){
+},{"./templates/embed.hbs":25}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -1713,7 +1884,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer;
 },"useData":true});
 
-},{"hbsfy/runtime":32}],24:[function(require,module,exports){
+},{"hbsfy/runtime":33}],25:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -1811,7 +1982,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer;
 },"useData":true});
 
-},{"hbsfy/runtime":32}],25:[function(require,module,exports){
+},{"hbsfy/runtime":33}],26:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -1847,7 +2018,7 @@ Handlebars.create = create;
 Handlebars['default'] = Handlebars;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":26,"./handlebars/exception":27,"./handlebars/runtime":28,"./handlebars/safe-string":29,"./handlebars/utils":30}],26:[function(require,module,exports){
+},{"./handlebars/base":27,"./handlebars/exception":28,"./handlebars/runtime":29,"./handlebars/safe-string":30,"./handlebars/utils":31}],27:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -2079,7 +2250,7 @@ var createFrame = function(object) {
   return frame;
 };
 exports.createFrame = createFrame;
-},{"./exception":27,"./utils":30}],27:[function(require,module,exports){
+},{"./exception":28,"./utils":31}],28:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -2108,7 +2279,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -2302,7 +2473,7 @@ exports.noop = noop;function initData(context, data) {
   }
   return data;
 }
-},{"./base":26,"./exception":27,"./utils":30}],29:[function(require,module,exports){
+},{"./base":27,"./exception":28,"./utils":31}],30:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -2314,7 +2485,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -2403,12 +2574,12 @@ exports.isEmpty = isEmpty;function appendContextPath(contextPath, id) {
 }
 
 exports.appendContextPath = appendContextPath;
-},{"./safe-string":29}],31:[function(require,module,exports){
+},{"./safe-string":30}],32:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":25}],32:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":26}],33:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":31}]},{},[6]);
+},{"handlebars/runtime":32}]},{},[6]);

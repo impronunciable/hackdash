@@ -21,6 +21,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     'desc': '#desc',
     'logo': '#logo',
     'contrib': '#contrib',
+    'slider': '#slider',
     'acnbar': '#acnbar',
     'searchbox': '#keywords',
 
@@ -35,6 +36,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "keyup @ui.searchbox": "onKeyword",
     "click .btn-group>.btn": "sortClicked",
     "change @ui.status": "onChangeStatus",
+    "change #slides": "onChangeSlider"
   },
 
   //--------------------------------------
@@ -74,12 +76,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
   keywords: '',
   sorting: '',
   status: '',
+  slider: 0,
 
   onClickSetting: function(e){
     var ele = $('input', e.currentTarget);
     var id = ele.attr('id');
     var checked = $(ele).is(':checked');
     var idx = this.hiddenSettings.indexOf(id);
+
+    if (id === 'slider'){
+      this.onChangeSlider();
+      return;
+    }
 
     if (ele.attr('disabled')){
       return;
@@ -113,6 +121,15 @@ module.exports = Backbone.Marionette.ItemView.extend({
       this.reloadPreview();
       toggleLogo.call(this);
     }
+  },
+
+  onChangeSlider: function(){
+    var checked = $("#slider", this.$el).is(':checked');
+    var slides = parseInt($('#slides', this.$el).val(), 10);
+
+    this.slider = checked ? (slides || 1) : 0;
+
+    this.reloadPreview();
   },
 
   onChangeStatus: function(){
@@ -154,13 +171,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var query = (this.keywords ? '&query=' + this.keywords : '');
     var sort = (this.sorting ? '&sort=' + this.sorting : '');
     var status = (this.status ? '&status=' + this.status : '');
+    var slider = (this.slider > 0 ? '&slider=' + this.slider : '');
 
     _.each(this.hiddenSettings, function(id){
       hide += id + ',';
     }, this);
 
     var url = embedUrl + fragment + '?' +
-      (this.hiddenSettings.length ? hide : '') + query + sort + status;
+      (this.hiddenSettings.length ? hide : '') + query + sort + status + slider;
 
     this.ui.preview.attr('src', url);
     this.ui.code.val(this.embedTmpl({ url: url }));

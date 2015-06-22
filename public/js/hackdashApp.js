@@ -1082,6 +1082,12 @@ var Projects = module.exports = BaseCollection.extend({
 
   idAttribute: "_id",
 
+  comparators: {
+    title: function(a){ return a.get('title'); },
+    created_at: function(a){ return -a.get('created_at'); },
+    showcase: function(a){ return a.get('showcase'); }
+  },
+
   url: function(){
     if (this.domain){
       return hackdash.apiURL + '/' + this.domain + '/projects';
@@ -1120,6 +1126,11 @@ var Projects = module.exports = BaseCollection.extend({
     });
 
     return response;
+  },
+
+  runSort: function(key){
+    this.comparator = this.comparators[key];
+    this.sort().trigger('reset');
   },
 
   buildShowcase: function(showcase){
@@ -1187,7 +1198,6 @@ var Projects = module.exports = BaseCollection.extend({
   }
 
 });
-
 
 },{"./BaseCollection":8,"./Project":15}],17:[function(require,module,exports){
 /**
@@ -1806,6 +1816,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     'desc': '#desc',
     'logo': '#logo',
     'contrib': '#contrib',
+    'slider': '#slider',
     'acnbar': '#acnbar',
     'searchbox': '#keywords',
 
@@ -1820,6 +1831,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "keyup @ui.searchbox": "onKeyword",
     "click .btn-group>.btn": "sortClicked",
     "change @ui.status": "onChangeStatus",
+    "change #slides": "onChangeSlider"
   },
 
   //--------------------------------------
@@ -1859,12 +1871,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
   keywords: '',
   sorting: '',
   status: '',
+  slider: 0,
 
   onClickSetting: function(e){
     var ele = $('input', e.currentTarget);
     var id = ele.attr('id');
     var checked = $(ele).is(':checked');
     var idx = this.hiddenSettings.indexOf(id);
+
+    if (id === 'slider'){
+      this.onChangeSlider();
+      return;
+    }
 
     if (ele.attr('disabled')){
       return;
@@ -1898,6 +1916,15 @@ module.exports = Backbone.Marionette.ItemView.extend({
       this.reloadPreview();
       toggleLogo.call(this);
     }
+  },
+
+  onChangeSlider: function(){
+    var checked = $("#slider", this.$el).is(':checked');
+    var slides = parseInt($('#slides', this.$el).val(), 10);
+
+    this.slider = checked ? (slides || 1) : 0;
+
+    this.reloadPreview();
   },
 
   onChangeStatus: function(){
@@ -1939,13 +1966,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var query = (this.keywords ? '&query=' + this.keywords : '');
     var sort = (this.sorting ? '&sort=' + this.sorting : '');
     var status = (this.status ? '&status=' + this.status : '');
+    var slider = (this.slider > 0 ? '&slider=' + this.slider : '');
 
     _.each(this.hiddenSettings, function(id){
       hide += id + ',';
     }, this);
 
     var url = embedUrl + fragment + '?' +
-      (this.hiddenSettings.length ? hide : '') + query + sort + status;
+      (this.hiddenSettings.length ? hide : '') + query + sort + status + slider;
 
     this.ui.preview.attr('src', url);
     this.ui.code.val(this.embedTmpl({ url: url }));
@@ -2376,7 +2404,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<div class=\"modal-body\">\n\n  <button type=\"button\" class=\"close\" data-dismiss=\"modal\">\n    <i class=\"fa fa-close\"></i>\n  </button>\n\n  <div class=\"row\">\n    <div class=\"col-md-5 col-lg-3\">\n\n      <h1>embed this dashboard</h1>\n\n      <div class=\"settings\">\n\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.settings : depth0), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "\n        <div class=\"\">\n        <h5>Projects</h5>\n\n";
+  buffer += "\n        <form class=\"form-inline slider\">\n          <div class=\"form-group\">\n            <div class=\"checkbox\">\n              <label>\n                <input id=\"slider\" type=\"checkbox\">\n              </label>\n            </div>\n            <label for=\"slider\">Slider</label>\n            <input id=\"slides\" type=\"number\" min=\"1\" max=\"6\" value=\"1\">\n          </div>\n        </form>\n\n        <div>\n          <h5>Projects</h5>\n\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.pSettings : depth0), {"name":"each","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n          <div class=\"form-group\">\n            <select name=\"status\" class=\"form-control status\" value=\""
@@ -2963,6 +2991,11 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //+ INHERITED / OVERRIDES
   //--------------------------------------
 
+  initialize: function(options){
+    // option for fixed slides & not responsive (embeds)
+    this.slides = options && options.slides;
+  },
+
   onBeforeRender: function(){
     if (this.initialized && !this.$el.is(':empty')){
       this.destroySlick();
@@ -3013,18 +3046,27 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       return;
     }
 
-    var breakpoints = [1450, 1200, 1024, 750, 430];
-    var cols = 5;
+    var cols = this.slides;
+    var responsive = [];
 
-    var responsive = _.map(breakpoints, function(value){
-      return {
-        breakpoint: value,
-        settings: {
-          slidesToShow: cols,
-          slidesToScroll: cols--
-        }
-      };
-    });
+    if (!this.slides) {
+      // is home page
+
+      cols = 5;
+
+      responsive = [1450, 1200, 1024, 750, 430].map(function(value){
+        return {
+          breakpoint: value,
+          settings: {
+            slidesToShow: cols,
+            slidesToScroll: cols--
+          }
+        };
+      });
+
+      cols = 6;
+    }
+    // else is embeds
 
     this.$el.slick({
       dots: false,
@@ -3032,8 +3074,8 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       infinite: false,
       adaptiveHeight: true,
       speed: 300,
-      slidesToShow: 6,
-      slidesToScroll: 6,
+      slidesToShow: cols,
+      slidesToScroll: cols,
       responsive: responsive
     });
 

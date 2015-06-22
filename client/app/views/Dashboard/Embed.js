@@ -5,7 +5,12 @@
 
 var template = require('./templates/index.hbs')
   , DashboardView = require('./Dashboard')
-  , ProjectsView = require('../Project/Collection');
+  , ProjectsView = require('../Project/Collection')
+
+// Slider View Mode
+  , ProjectItemView = require('../Project/Card')
+  , EntityList = require("../Home/EntityList")
+  , ProjectListSlider = EntityList.extend({ childView: ProjectItemView });
 
 module.exports = Backbone.Marionette.LayoutView.extend({
 
@@ -41,6 +46,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     var sort = hackdash.getQueryVariable('sort');
     var query = hackdash.getQueryVariable('query');
     var status = hackdash.getQueryVariable('status');
+    var slider = hackdash.getQueryVariable('slider');
 
     if (query){
       hackdash.app.projects.search(query);
@@ -56,12 +62,48 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       model: this.model
     });
 
-    var projectsView = new ProjectsView({
-      model: this.model,
-      collection: hackdash.app.projects,
-      showcaseMode: false,
-      showcaseSort: false
-    });
+    var projectsView;
+
+    if (slider){
+      this.$el.addClass('slider');
+
+      if (sort){
+        var s = '';
+
+        switch(sort){
+          case 'name': s = 'title'; break;
+          case 'date': s = 'created_at'; break;
+          case 'showcase': s = 'showcase'; break;
+          default: s = 'created_at'; break;
+        }
+
+        if (s === 'showcase'){
+          hackdash.app.projects = hackdash.app.projects.getActives();
+        }
+
+        hackdash.app.projects.runSort(s);
+      }
+
+      projectsView = new ProjectListSlider({
+        model: this.model,
+        collection: hackdash.app.projects,
+        slides: parseInt(slider, 10)
+      });
+    }
+    else {
+      projectsView = new ProjectsView({
+        model: this.model,
+        collection: hackdash.app.projects,
+        showcaseMode: false,
+        showcaseSort: false
+      });
+
+      projectsView.on('ended:render', function(){
+        if (sort){
+          hackdash.app.projects.trigger("sort:" + sort);
+        }
+      });
+    }
 
     dashboardView.on('show', function(){
       var ctn = self.dashboard.$el;
@@ -96,12 +138,6 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       }
       if (!self.settings.pacnbar){
         $('.action-bar', ctn).remove();
-      }
-    });
-
-    projectsView.on('ended:render', function(){
-      if (sort){
-        hackdash.app.projects.trigger("sort:" + sort);
       }
     });
 

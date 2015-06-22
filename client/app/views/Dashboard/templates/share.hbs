@@ -21,8 +21,20 @@
 
       {{/each}}
 
-        <div class="">
-        <h5>Projects</h5>
+        <form class="form-inline slider">
+          <div class="form-group">
+            <div class="checkbox">
+              <label>
+                <input id="slider" type="checkbox">
+              </label>
+            </div>
+            <label for="slider">Slider</label>
+            <input id="slides" type="number" min="1" max="6" value="1">
+          </div>
+        </form>
+
+        <div>
+          <h5>Projects</h5>
 
         {{#each pSettings}}
 
