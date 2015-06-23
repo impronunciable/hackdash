@@ -380,11 +380,6 @@ module.exports = function(){
 
   Placeholders.init({ live: true, hideOnFocus: true });
 
-  window.smoothScroll.init({
-    speed: 100,
-    easing: 'Linear'
-  });
-
   Dropzone.autoDiscover = false;
 
   window.hackdash.apiURL = "/api/v2";
@@ -3260,7 +3255,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   events: {
-    "keyup #search": "search"
+    "keyup @ui.searchbox": "search",
+    "click @ui.searchbox": "moveScroll"
   },
 
   //--------------------------------------
@@ -3324,6 +3320,17 @@ module.exports = Backbone.Marionette.ItemView.extend({
       }
 
     }, 300);
+  },
+
+  moveScroll: function(){
+    var tabs = $('.nav-tabs.landing');
+    var mobileMenu = $('.mobile-menu');
+
+    var offsetMob = (mobileMenu.is(':visible') ? 0 : 60);
+    var top = tabs.offset().top + offsetMob;
+    var offset = tabs.height();
+    var pos = (top - offset >= 0 ? top - offset : 0);
+    $(window).scrollTop(pos);
   }
 
   //--------------------------------------
@@ -3887,11 +3894,12 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   animateScroll: function(){
     if (this.section){
-      window.smoothScroll.animateScroll(null, '#' + this.section, {
-        offset: (this.ui.mobileMenu.is(':visible') ? 0 : 60),
-        speed: 100,
-        easing: 'Linear'
-      });
+
+      var offsetMob = (this.ui.mobileMenu.is(':visible') ? 0 : 60);
+      var top = this.ui.tabs.offset().top + offsetMob;
+      var offset = this.ui.tabs.height();
+      var pos = (top - offset >= 0 ? top - offset : 0);
+      $(window).scrollTop(pos);
     }
   },
 

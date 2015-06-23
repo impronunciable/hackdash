@@ -148,11 +148,6 @@ module.exports = function(){
 
   Placeholders.init({ live: true, hideOnFocus: true });
 
-  window.smoothScroll.init({
-    speed: 100,
-    easing: 'Linear'
-  });
-
   Dropzone.autoDiscover = false;
 
   window.hackdash.apiURL = "/api/v2";

@@ -230,11 +230,12 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
   animateScroll: function(){
     if (this.section){
-      window.smoothScroll.animateScroll(null, '#' + this.section, {
-        offset: (this.ui.mobileMenu.is(':visible') ? 0 : 60),
-        speed: 100,
-        easing: 'Linear'
-      });
+
+      var offsetMob = (this.ui.mobileMenu.is(':visible') ? 0 : 60);
+      var top = this.ui.tabs.offset().top + offsetMob;
+      var offset = this.ui.tabs.height();
+      var pos = (top - offset >= 0 ? top - offset : 0);
+      $(window).scrollTop(pos);
     }
   },
 

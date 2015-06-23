@@ -16,7 +16,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   events: {
-    "keyup #search": "search"
+    "keyup @ui.searchbox": "search",
+    "click @ui.searchbox": "moveScroll"
   },
 
   //--------------------------------------
@@ -80,6 +81,17 @@ module.exports = Backbone.Marionette.ItemView.extend({
       }
 
     }, 300);
+  },
+
+  moveScroll: function(){
+    var tabs = $('.nav-tabs.landing');
+    var mobileMenu = $('.mobile-menu');
+
+    var offsetMob = (mobileMenu.is(':visible') ? 0 : 60);
+    var top = tabs.offset().top + offsetMob;
+    var offset = tabs.height();
+    var pos = (top - offset >= 0 ? top - offset : 0);
+    $(window).scrollTop(pos);
   }
 
   //--------------------------------------
