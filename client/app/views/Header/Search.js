@@ -26,6 +26,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   lastSearch: "",
+  currentSort: "",
 
   initialize: function(options){
     this.showSort = (options && options.showSort) || false;
@@ -35,9 +36,23 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   onRender: function(){
     var query = hackdash.getQueryVariable("q");
+    var sort = hackdash.getQueryVariable('sort');
+
     if (query && query.length > 0){
       this.ui.searchbox.val(query);
       this.search();
+    }
+
+    if (sort && sort.length > 0){
+      $('input[type=radio]', this.$el)
+        .parents('label')
+        .removeClass('active');
+
+      $('input[type=radio]#' + sort, this.$el)
+        .parents('label')
+        .addClass('active');
+
+      this.updateSort(sort);
     }
   },
 
@@ -63,7 +78,16 @@ module.exports = Backbone.Marionette.ItemView.extend({
   sortClicked: function(e){
     e.preventDefault();
     var val = $('input[type=radio]', e.currentTarget)[0].id;
-    this.collection.trigger("sort:" + val);
+    this.updateSort(val);
+  },
+
+  updateSort: function(sort){
+    this.collection.trigger("sort:" + sort);
+
+    if (sort !== this.currentSort){
+      this.currentSort = sort;
+      this.updateURL();
+    }
   },
 
   search: function(){
@@ -72,18 +96,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     this.timer = window.setTimeout(function(){
       var keyword = self.ui.searchbox.val();
-      var currentSearch = decodeURI(Backbone.history.location.search);
-      var fragment = Backbone.history.fragment.replace(currentSearch, "");
 
       if (keyword !== self.lastSearch) {
         self.lastSearch = keyword;
 
-        var url = fragment + "?q=" + keyword;
-        if (keyword.length === 0) {
-          url = fragment;
-        }
-
-        hackdash.app.router.navigate(url);
+        self.updateURL();
         self.collection.search(keyword);
 
         var top = $('#dashboard-projects').offset().top;
@@ -97,7 +114,27 @@ module.exports = Backbone.Marionette.ItemView.extend({
       }
 
     }, 300);
-  }
+  },
+
+  updateURL: function(){
+    var keywords = (this.lastSearch ? 'q=' + this.lastSearch : '');
+    var sort = (this.currentSort ? 'sort=' + this.currentSort : '');
+
+    var current = decodeURI(Backbone.history.location.search);
+    var fragment = Backbone.history.fragment.replace(current, "");
+
+    var search = '?';
+
+    if (keywords){
+      search += keywords;
+    }
+
+    if (sort){
+      search += (keywords ? '&' + sort : sort);
+    }
+
+    hackdash.app.router.navigate(fragment + search);
+  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS

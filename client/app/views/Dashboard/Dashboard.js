@@ -63,7 +63,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
-  
+
   stopPropagation: function(e){
     e.stopPropagation();
   },

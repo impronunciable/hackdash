@@ -1745,7 +1745,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
-  
+
   stopPropagation: function(e){
     e.stopPropagation();
   },
@@ -1916,6 +1916,15 @@ module.exports = Backbone.Marionette.ItemView.extend({
   onChangeSlider: function(){
     var checked = $("#slider", this.$el).is(':checked');
     var slides = parseInt($('#slides', this.$el).val(), 10);
+
+    if (!slides || slides < 1){
+      slides = 1;
+    }
+    if (slides > 6){
+      slides = 6;
+    }
+
+    $('#slides', this.$el).val(slides);
 
     this.slider = checked ? (slides || 1) : 0;
 
@@ -2192,12 +2201,21 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     else {
       this.ui.inactiveCtn.addClass("hide");
 
-      this.projects.show(new ProjectsView({
+      var pView = new ProjectsView({
         model: this.model,
         collection: hackdash.app.projects,
         showcaseMode: false,
         showcaseSort: this.showcaseSort
-      }));
+      });
+
+      pView.on('ended:render', function(){
+        var sort = hackdash.getQueryVariable('sort');
+        if (!self.showcaseSort && sort){
+          pView['sortBy' + sort.charAt(0).toUpperCase() + sort.slice(1)]();
+        }
+      });
+
+      this.projects.show(pView);
     }
 
     $(".tooltips", this.$el).tooltip({});
@@ -2675,6 +2693,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   lastSearch: "",
+  currentSort: "",
 
   initialize: function(options){
     this.showSort = (options && options.showSort) || false;
@@ -2684,9 +2703,23 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   onRender: function(){
     var query = hackdash.getQueryVariable("q");
+    var sort = hackdash.getQueryVariable('sort');
+
     if (query && query.length > 0){
       this.ui.searchbox.val(query);
       this.search();
+    }
+
+    if (sort && sort.length > 0){
+      $('input[type=radio]', this.$el)
+        .parents('label')
+        .removeClass('active');
+
+      $('input[type=radio]#' + sort, this.$el)
+        .parents('label')
+        .addClass('active');
+
+      this.updateSort(sort);
     }
   },
 
@@ -2712,7 +2745,16 @@ module.exports = Backbone.Marionette.ItemView.extend({
   sortClicked: function(e){
     e.preventDefault();
     var val = $('input[type=radio]', e.currentTarget)[0].id;
-    this.collection.trigger("sort:" + val);
+    this.updateSort(val);
+  },
+
+  updateSort: function(sort){
+    this.collection.trigger("sort:" + sort);
+
+    if (sort !== this.currentSort){
+      this.currentSort = sort;
+      this.updateURL();
+    }
   },
 
   search: function(){
@@ -2721,18 +2763,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     this.timer = window.setTimeout(function(){
       var keyword = self.ui.searchbox.val();
-      var currentSearch = decodeURI(Backbone.history.location.search);
-      var fragment = Backbone.history.fragment.replace(currentSearch, "");
 
       if (keyword !== self.lastSearch) {
         self.lastSearch = keyword;
 
-        var url = fragment + "?q=" + keyword;
-        if (keyword.length === 0) {
-          url = fragment;
-        }
-
-        hackdash.app.router.navigate(url);
+        self.updateURL();
         self.collection.search(keyword);
 
         var top = $('#dashboard-projects').offset().top;
@@ -2746,7 +2781,27 @@ module.exports = Backbone.Marionette.ItemView.extend({
       }
 
     }, 300);
-  }
+  },
+
+  updateURL: function(){
+    var keywords = (this.lastSearch ? 'q=' + this.lastSearch : '');
+    var sort = (this.currentSort ? 'sort=' + this.currentSort : '');
+
+    var current = decodeURI(Backbone.history.location.search);
+    var fragment = Backbone.history.fragment.replace(current, "");
+
+    var search = '?';
+
+    if (keywords){
+      search += keywords;
+    }
+
+    if (sort){
+      search += (keywords ? '&' + sort : sort);
+    }
+
+    hackdash.app.router.navigate(fragment + search);
+  },
 
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
@@ -4902,22 +4957,47 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
 
   sortByName: function(){
+    if (!this.wall){
+      this.updateGrid();
+    }
+
     this.wall.sortBy(function(a, b) {
-      return $(a).attr('data-name') > $(b).attr('data-name');
+      var at = $(a).attr('data-name').toLowerCase()
+        , bt = $(b).attr('data-name').toLowerCase();
+
+      if(at < bt) { return -1; }
+      if(at > bt) { return 1; }
+      return 0;
+
     }).filter('*');
 
     this.fixSize();
+
   },
 
   sortByDate: function(){
+    if (!this.wall){
+      this.updateGrid();
+    }
+
     this.wall.sortBy(function(a, b) {
-      return $(a).attr('data-date') < $(b).attr('data-date');
+      var at = new Date($(a).attr('data-date'))
+        , bt = new Date($(b).attr('data-date'));
+
+      if(at > bt) { return -1; }
+      if(at < bt) { return 1; }
+      return 0;
+
     }).filter('*');
 
     this.fixSize();
   },
 
   sortByShowcase: function(){
+    if (!this.wall){
+      this.updateGrid();
+    }
+
     this.wall.sortBy(function(a, b) {
       return $(a).attr('data-showcase') - $(b).attr('data-showcase');
     }).filter('.filter-active');
@@ -4946,7 +5026,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       gutterY: this.gutter,
       gutterX: this.gutter,
       onResize: this.refresh.bind(this),
-      onComplete: function(/*lastItem, lastBlock, setting*/) { },
+      onComplete: function() { },
       onBlockDrop: function() {
 
         var cols = self.$el.attr('data-total-col');

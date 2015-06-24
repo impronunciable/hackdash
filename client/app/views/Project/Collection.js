@@ -67,22 +67,47 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   //--------------------------------------
 
   sortByName: function(){
+    if (!this.wall){
+      this.updateGrid();
+    }
+
     this.wall.sortBy(function(a, b) {
-      return $(a).attr('data-name') > $(b).attr('data-name');
+      var at = $(a).attr('data-name').toLowerCase()
+        , bt = $(b).attr('data-name').toLowerCase();
+
+      if(at < bt) { return -1; }
+      if(at > bt) { return 1; }
+      return 0;
+
     }).filter('*');
 
     this.fixSize();
+
   },
 
   sortByDate: function(){
+    if (!this.wall){
+      this.updateGrid();
+    }
+
     this.wall.sortBy(function(a, b) {
-      return $(a).attr('data-date') < $(b).attr('data-date');
+      var at = new Date($(a).attr('data-date'))
+        , bt = new Date($(b).attr('data-date'));
+
+      if(at > bt) { return -1; }
+      if(at < bt) { return 1; }
+      return 0;
+
     }).filter('*');
 
     this.fixSize();
   },
 
   sortByShowcase: function(){
+    if (!this.wall){
+      this.updateGrid();
+    }
+
     this.wall.sortBy(function(a, b) {
       return $(a).attr('data-showcase') - $(b).attr('data-showcase');
     }).filter('.filter-active');
@@ -111,7 +136,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       gutterY: this.gutter,
       gutterX: this.gutter,
       onResize: this.refresh.bind(this),
-      onComplete: function(/*lastItem, lastBlock, setting*/) { },
+      onComplete: function() { },
       onBlockDrop: function() {
 
         var cols = self.$el.attr('data-total-col');

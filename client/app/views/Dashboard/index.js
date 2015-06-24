@@ -88,12 +88,21 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     else {
       this.ui.inactiveCtn.addClass("hide");
 
-      this.projects.show(new ProjectsView({
+      var pView = new ProjectsView({
         model: this.model,
         collection: hackdash.app.projects,
         showcaseMode: false,
         showcaseSort: this.showcaseSort
-      }));
+      });
+
+      pView.on('ended:render', function(){
+        var sort = hackdash.getQueryVariable('sort');
+        if (!self.showcaseSort && sort){
+          pView['sortBy' + sort.charAt(0).toUpperCase() + sort.slice(1)]();
+        }
+      });
+
+      this.projects.show(pView);
     }
 
     $(".tooltips", this.$el).tooltip({});

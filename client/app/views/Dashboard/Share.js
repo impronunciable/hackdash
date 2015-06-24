@@ -127,6 +127,15 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var checked = $("#slider", this.$el).is(':checked');
     var slides = parseInt($('#slides', this.$el).val(), 10);
 
+    if (!slides || slides < 1){
+      slides = 1;
+    }
+    if (slides > 6){
+      slides = 6;
+    }
+
+    $('#slides', this.$el).val(slides);
+
     this.slider = checked ? (slides || 1) : 0;
 
     this.reloadPreview();
