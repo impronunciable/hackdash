@@ -27,7 +27,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     'status': 'select[name=status]',
     'preview': '.preview iframe',
-    'code': '#embed-code'
+    'code': '#embed-code',
+    'sharelink': '.dash-share-link a'
   },
 
   events: {
@@ -191,6 +192,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     this.ui.preview.attr('src', url);
     this.ui.code.val(this.embedTmpl({ url: url }));
+    this.ui.sharelink.attr({ href: url }).text(url);
   },
 
   settings: [{
