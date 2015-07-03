@@ -5888,8 +5888,8 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   shareText: {
-    dashboard: 'Hacking ',
-    project: ''
+    dashboard: 'Hacking at ',
+    project: 'Hacking '
   },
 
   //--------------------------------------
@@ -5980,7 +5980,7 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
     }
 
     hashtags += ['hackdash', domain].join(',');
-    text += 'Hacking at ' + (title || domain) + ' via ' + people;
+    text += this.shareText[this.type] + (title || domain) + ' via ' + people;
 
     link += this.enc(url) + '&' + this.enc(hashtags) + '&' + this.enc(text);
     return link;
