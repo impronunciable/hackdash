@@ -186,6 +186,37 @@ function getProfileImageHex(user) {
 
 Handlebars.registerHelper('getProfileImageHex', getProfileImageHex);
 
+function getProfileImageRounded(user) {
+  if (!user) return '';
+
+  var img = new window.Image();
+
+  $(img)
+    .load(function(){})
+    .error(function() {
+      $('.' + this.id)
+        .css('background-image', 'url(http:://avatars.io/' + user.provider + '/' + user.username + ')');
+    })
+    .prop({
+      src: user.picture,
+      id: 'pic-' + user._id
+    });
+
+    var div = $('<div>')
+      .prop({
+        'data-id': user._id,
+        title: user.name,
+        class: 'avatar tooltips pic-' + user._id,
+        rel: 'tooltip'
+      })
+      .css('background-image', 'url(' + user.picture + ')')
+      .addClass('rounded');
+
+  return new Handlebars.SafeString(div[0].outerHTML);
+}
+
+Handlebars.registerHelper('getProfileImageRounded', getProfileImageRounded);
+
 Handlebars.registerHelper('getMyProfileImageHex', function() {
   return getProfileImageHex(window.hackdash.user);
 });

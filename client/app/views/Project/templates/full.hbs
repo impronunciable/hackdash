@@ -1,4 +1,68 @@
+<div class="feature-new-design">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row">
+          <div class="col-md-offset-2 col-md-8 text-center">
+            <div class="cover">
+              {{#if cover}}
+                <div class="item-cover" style="background-image: url({{cover}});"></div>
+              {{else}}
+                <i class="item-letter">{{firstLetter title}}</i>
+              {{/if}}
+            </div>
+            <h1>{{title}}</h1>
+            <hr class="section">
+            <div class="description">
+              {{{markdown description}}}
+            </div>
+            <div class="people">
+              <h3>Integrantes</h3>
+              <hr class="subsection">
+              <ul class="integrantes">
+                <li>
+                  <a href="/users/{{leader._id}}">
+                    {{getProfileImageRounded leader}}
+                  </a>
+                </li>
 
+                {{#each contributors}}
+                  <li>
+                    <a href="/users/{{_id}}">
+                      {{getProfileImageRounded .}}
+                    </a>
+                  </li>
+                {{/each}}
+
+                {{#each followers}}
+                  <li>
+                    <a href="/users/{{_id}}">
+                      {{getProfileImageRounded .}}
+                    </a>
+                  </li>
+                {{/each}}
+              </ul>
+            </div>
+            <h3>Tecnologias</h3>
+            <hr class="subsection">
+            <ul class="tags">
+              {{#each tags}}
+              {{#if .}}
+              <li>
+                <a href="/projects?q={{.}}" data-bypass="true">{{.}}</a>
+              </li>
+              {{/if}}
+              {{/each}}
+            </ul>
+            <h3>Redes Sociales</h3>
+            <hr class="subsection">
+          </div>
+        </div>
+        <a href="" class="join">Ask to join</a>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="header">
   <div class="container">
     <h1>{{title}}</h1>
