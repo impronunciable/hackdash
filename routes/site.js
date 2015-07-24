@@ -151,7 +151,10 @@ var setSubdomain = function(req, res, next){
 
 var checkProfile = function(req, res, next){
   if (req.user && !req.user.email){
-    res.redirect('/users/profile');
+    var r = (req.session && req.session.redirectUrl ?
+      '?from=' + req.session.redirectUrl : '');
+
+    res.redirect('/users/profile' + r);
   }
 
   next();

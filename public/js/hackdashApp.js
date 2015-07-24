@@ -314,6 +314,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "profile";
 
+    if (userId && userId.indexOf('from') >= 0){
+      userId = null;
+    }
+
     if (!userId){
       if (hackdash.user){
         userId = hackdash.user._id;
@@ -2830,7 +2834,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   },
 
   events: {
-    "click .login": "showLogin"
+    "click .login": "showLogin",
+    "click .btn-profile": "openProfile"
   },
 
   modelEvents: {
@@ -2871,6 +2876,12 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     this.$el.addClass(hackdash.app.type);
   },
 
+  serializeData: function(){
+    return _.extend({
+      fromUrl: this.getURLFrom()
+    }, this.model && this.model.toJSON() || {});
+  },
+
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
@@ -2878,6 +2889,17 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  openProfile: function(e){
+    e.preventDefault();
+
+    window.fromURL = '/' + Backbone.history.fragment;
+
+    hackdash.app.router.navigate("/users/profile", {
+      trigger: true,
+      replace: true
+    });
+  },
 
   showLogin: function(){
     hackdash.app.showLogin();
@@ -2887,13 +2909,17 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
+  getURLFrom: function(){
+    return '?from=' + window.encodeURI('/' + Backbone.history.fragment);
+  }
+
 });
 },{"./Search":41,"./templates/header.hbs":43}],43:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "    <div class=\"pull-right col-xs-3 col-md-3\">\n      <a class=\"btn-profile\" href=\"/users/profile\">\n        "
+  return "    <div class=\"pull-right col-xs-3 col-md-3\">\n      <a class=\"btn-profile\">\n        "
     + escapeExpression(((helper = (helper = helpers.getMyProfileImageHex || (depth0 != null ? depth0.getMyProfileImageHex : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"getMyProfileImageHex","hash":{},"data":data}) : helper)))
     + "\n      </a>\n      <a class=\"logout\" href=\"/logout\" data-bypass>Log out</a>\n    </div>\n";
 },"3":function(depth0,helpers,partials,data) {
@@ -4304,7 +4330,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   cancel: function(){
-    window.location.reload();
+    this.exit();
   },
 
   //--------------------------------------
@@ -4317,16 +4343,31 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "email_invalid": "Invalid Email"
   },
 
+  exit: function(){
+    window.fromURL = window.fromURL || window.hackdash.getQueryVariable('from') || '';
+
+    if (window.fromURL){
+      hackdash.app.router.navigate(window.fromURL, {
+        trigger: true,
+        replace: true
+      });
+
+      window.fromURL = "";
+      return;
+    }
+
+    window.location = "/";
+  },
+
   showError: function(err){
     $("#save", this.$el).button('reset');
 
     if (err.responseText === "OK"){
-      var saved = $(".saved", this.$el).addClass('show');
+
+      $(".saved", this.$el).addClass('show');
 
       window.clearTimeout(this.timer);
-      this.timer = window.setTimeout(function(){
-        saved.removeClass('show');
-      }, 2000);
+      this.timer = window.setTimeout(this.exit.bind(this), 2000);
 
       return;
     }

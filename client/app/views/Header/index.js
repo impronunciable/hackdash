@@ -16,7 +16,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   },
 
   events: {
-    "click .login": "showLogin"
+    "click .login": "showLogin",
+    "click .btn-profile": "openProfile"
   },
 
   modelEvents: {
@@ -57,6 +58,12 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     this.$el.addClass(hackdash.app.type);
   },
 
+  serializeData: function(){
+    return _.extend({
+      fromUrl: this.getURLFrom()
+    }, this.model && this.model.toJSON() || {});
+  },
+
   //--------------------------------------
   //+ PUBLIC METHODS / GETTERS / SETTERS
   //--------------------------------------
@@ -65,6 +72,17 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ EVENT HANDLERS
   //--------------------------------------
 
+  openProfile: function(e){
+    e.preventDefault();
+
+    window.fromURL = '/' + Backbone.history.fragment;
+
+    hackdash.app.router.navigate("/users/profile", {
+      trigger: true,
+      replace: true
+    });
+  },
+
   showLogin: function(){
     hackdash.app.showLogin();
   },
@@ -72,5 +90,9 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
+
+  getURLFrom: function(){
+    return '?from=' + window.encodeURI('/' + Backbone.history.fragment);
+  }
 
 });

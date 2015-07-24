@@ -237,6 +237,10 @@ module.exports = Backbone.Marionette.AppRouter.extend({
     var app = window.hackdash.app;
     app.type = "profile";
 
+    if (userId && userId.indexOf('from') >= 0){
+      userId = null;
+    }
+
     if (!userId){
       if (hackdash.user){
         userId = hackdash.user._id;

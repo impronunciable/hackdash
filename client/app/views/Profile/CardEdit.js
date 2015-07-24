@@ -57,7 +57,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   cancel: function(){
-    window.location.reload();
+    this.exit();
   },
 
   //--------------------------------------
@@ -70,16 +70,31 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "email_invalid": "Invalid Email"
   },
 
+  exit: function(){
+    window.fromURL = window.fromURL || window.hackdash.getQueryVariable('from') || '';
+
+    if (window.fromURL){
+      hackdash.app.router.navigate(window.fromURL, {
+        trigger: true,
+        replace: true
+      });
+
+      window.fromURL = "";
+      return;
+    }
+
+    window.location = "/";
+  },
+
   showError: function(err){
     $("#save", this.$el).button('reset');
 
     if (err.responseText === "OK"){
-      var saved = $(".saved", this.$el).addClass('show');
+
+      $(".saved", this.$el).addClass('show');
 
       window.clearTimeout(this.timer);
-      this.timer = window.setTimeout(function(){
-        saved.removeClass('show');
-      }, 2000);
+      this.timer = window.setTimeout(this.exit.bind(this), 2000);
 
       return;
     }
