@@ -21,7 +21,7 @@
   </div>
 </div>
 
-<ul class="contributors">
+<ul class="contributors {{#if noActions}}no-actions{{/if}}">
   {{#each_upto contributors 5}}
   <li>
     <a href="/users/{{_id}}"
@@ -36,7 +36,7 @@
   {{/each_upto}}
 </ul>
 
-<div class="action-bar text-right">
+<div class="action-bar text-right {{#if noActions}}no-actions{{/if}}">
 
   <i class="fa fa-clock-o timer tooltips"
     data-original-title="{{timeAgo created_at}}"></i>

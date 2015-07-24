@@ -69,12 +69,21 @@ module.exports = ItemView.extend({
 
   serializeData: function(){
     var me = (hackdash.user && hackdash.user._id) || '';
+    var isOwner = (this.model.get('leader')._id === me ? true : false);
+    var isEmbed = (window.hackdash.app.source === "embed" ? true : false);
+
+    var noActions = false;
+
+    if (!isEmbed && isOwner && !this.model.get('link')){
+      noActions = true;
+    }
 
     return _.extend({
+      noActions: noActions,
       isShowcaseMode: this.isShowcaseMode(),
       contributing: this.model.isContributor(),
       following: this.model.isFollower(),
-      isOwner: (this.model.get('leader')._id === me ? true : false)
+      isOwner: isOwner
     }, this.model.toJSON());
   },
 
