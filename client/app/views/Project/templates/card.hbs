@@ -41,6 +41,8 @@
   <i class="fa fa-clock-o timer tooltips"
     data-original-title="{{timeAgo created_at}}"></i>
 
+  <div class="action-links">
+
   {{#isEmbed}}
     <a href="/projects/{{_id}}"
       class="tooltips contribute" target="_blank"
@@ -81,6 +83,9 @@
   {{#if link}}
   <a class="demo-link" href="{{link}}" target="_blank" data-bypass>Demo</a>
   {{/if}}
+
+  </div>
+
 </div>
 
 {{#isLoggedIn}}

@@ -14,7 +14,7 @@
 
     <div class="col-md-4">
 
-      <div class="cover">
+      <div class="cover {{#unless cover}}no-cover{{/unless}}">
 
         <div class="progress" title="{{status}}">
           <div class="{{status}}"></div>
@@ -27,6 +27,42 @@
         {{else}}
         <i class="item-letter">{{firstLetter title}}</i>
         {{/if}}
+      </div>
+
+
+      <div class="buttons-panel top-buttons">
+
+      {{#isLoggedIn}}
+
+        {{#if showActions}}
+
+          <div class="contributor">
+            {{#if contributing}}
+            <a data-loading-text="leaving..." class="btn btn-default leave">Leave</a>
+            {{else}}
+            <a data-loading-text="joining..." class="btn btn-default join">Join</a>
+            {{/if}}
+          </div>
+          <div class="follower">
+            {{#if following}}
+            <a data-loading-text="unfollowing..." class="btn btn-default unfollow">Unfollow</a>
+            {{else}}
+            <a data-loading-text="following..." class="btn btn-default follow">Follow</a>
+            {{/if}}
+          </div>
+
+        {{/if}}
+
+      {{else}}
+
+        <a class="btn btn-default login">Follow</a>
+        <a class="btn btn-default login">Join</a>
+
+      {{/isLoggedIn}}
+
+        <a class="share tooltips share-top" data-original-title="Share this Project">
+          <i class="fa fa-share-alt"></i>
+        </a>
       </div>
 
       <div class="people">
@@ -73,7 +109,7 @@
         {{/if}}
         {{/each}}
       </ul>
-      <div class="share-ctn clearfix col-md-2">
+      <div class="share-ctn clearfix col-md-2 share-inner">
         <a class="share tooltips" data-original-title="Share this Project">
           <i class="fa fa-share-alt"></i>
         </a>
@@ -101,7 +137,7 @@
 
       {{#if showActions}}
 
-      <div class="col-md-4 pull-left">
+      <div class="pull-left bottom-buttons">
 
         <div class="pull-left contributor">
           {{#if contributing}}
@@ -123,7 +159,7 @@
 
     {{else}}
 
-      <div class="col-md-4 pull-left">
+      <div class="pull-left bottom-buttons">
         <a class="btn btn-default login">Follow</a>
         <a class="btn btn-default login">Join</a>
       </div>

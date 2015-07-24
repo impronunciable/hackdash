@@ -494,7 +494,7 @@
 
         a {
 
-          &:nth-child(2) {
+          &:nth-child(1) {
             border: none;
           }
         }
@@ -510,4 +510,109 @@
   .wireframing { width: 50%; }
   .building { width: 75%; }
   .releasing { width: 100%; }
+}
+
+@media (max-width: 415px) {
+
+  .page-ctn.dashboard {
+    .entities {
+
+      .project {
+
+        .details{
+
+          >div {
+
+            h2 {
+              font-size: @fsize-25;
+              width: 97%;
+              height: 137px;
+            }
+
+            .description {
+              display: none;
+              font-size: @fsize-12;
+              color: @color-white;
+            }
+          }
+
+        }
+
+        .contributors {
+          bottom: 82px;
+          width: 97%;
+
+          li {
+            width: 50px;
+            height: 50px;
+
+            img {
+              width: 50px;
+              height: 50px;
+            }
+          }
+        }
+
+        .action-bar {
+          display: inline-block;
+          text-align: center;
+          padding: 0;
+          width: 97%;
+
+          .timer {
+            display: none;
+          }
+
+          .action-links {
+
+            a {
+              font-size: 20px;
+              padding: 10px;
+              display: inline-block;
+              border-left: 2px solid #4F5B67;
+              margin-left: -4px;
+
+              &:nth-child(1) {
+                border: none;
+                margin-left: 0;
+              }
+
+              &:hover, &:active {
+                text-decoration: none;
+                background-color: @color-whiteC;
+                color: @color-blackC;
+              }
+            }
+
+            /* one item */
+            a:nth-child(1):nth-last-child(1) {
+              width: 97%;
+            }
+
+            /* two items */
+            a:nth-child(1):nth-last-child(2),
+            a:nth-child(2):nth-last-child(1) {
+              width: 50%;
+            }
+
+            /* three items */
+            a:nth-child(1):nth-last-child(3),
+            a:nth-child(2):nth-last-child(2),
+            a:nth-child(3):nth-last-child(1) {
+              width: 33.3%;
+            }
+
+            /* four items */
+            a:nth-child(1):nth-last-child(4),
+            a:nth-child(2):nth-last-child(3),
+            a:nth-child(3):nth-last-child(2),
+            a:nth-child(4):nth-last-child(1) {
+              width: 25%;
+            }
+          }
+
+        }
+      }
+    }
+  }
 }

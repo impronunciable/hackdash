@@ -566,6 +566,8 @@ footer {
       h1 {
         margin-top: 20px;
         margin-bottom: 20px;
+        word-break: break-word;
+        word-wrap: break-word;
       }
 
       .container {
@@ -603,6 +605,11 @@ footer {
         padding-top: 40px;
         padding-bottom: 60px;
         margin-bottom: 30px;
+
+        .description {
+          word-break: break-word;
+          word-wrap: break-word;
+        }
 
         .project-link {
           position: absolute;
@@ -734,22 +741,22 @@ footer {
 
         .share-ctn {
           margin: 20px 0;
+        }
 
-          .share {
+        .share {
+          text-decoration: none;
+          color: @color-white;
+          background-color: @color-action;
+
+          padding: 12px 14px;
+          font-size: @fsize-17;
+          border-radius: 3px;
+          float: right;
+
+          &:hover {
             text-decoration: none;
-            color: @color-white;
-            background-color: @color-action;
-
-            padding: 12px 14px;
-            font-size: @fsize-17;
-            border-radius: 3px;
-            float: right;
-
-            &:hover {
-              text-decoration: none;
-              cursor: pointer;
-              background-color: darken(@color-action, 20%);
-            }
+            cursor: pointer;
+            background-color: darken(@color-action, 20%);
           }
         }
 
@@ -764,6 +771,25 @@ footer {
             min-width: 100px;
             margin: 0 2px;
           }
+        }
+
+        .share-top {
+          display: none;
+        }
+
+        .share-inner {
+          display: block;
+        }
+
+        .top-buttons {
+          display: none;
+          position: static;
+          text-align: center;
+          width: 100%;
+        }
+
+        .bottom-buttons {
+          display: block;
         }
 
         &.disqus-ctn {
@@ -1373,6 +1399,49 @@ footer {
 
     }
   }
+
+  .page-ctn {
+
+    &.project {
+
+      .body {
+        .container {
+
+          .cover {
+            &.no-cover {
+              height: 18px;
+
+              .item-letter {
+                display: none;
+              }
+            }
+          }
+
+          .share-top {
+            display: inline-block;
+          }
+
+          .share-inner {
+            display: none;
+          }
+
+          .top-buttons {
+            display: inline-block;
+
+            div {
+              display: inline-block;
+            }
+          }
+
+          .bottom-buttons {
+            display: none;
+          }
+
+        }
+      }
+    }
+
+  }
 }
 
 
@@ -1396,6 +1465,7 @@ footer {
       }
 
     }
+
   }
 }
 
