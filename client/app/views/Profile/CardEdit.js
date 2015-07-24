@@ -91,7 +91,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     if (err.responseText === "OK"){
 
-      $(".saved", this.$el).addClass('show');
+      $('#cancel').addClass('hidden');
+      $('#save').addClass('hidden');
+      $(".saved", this.$el).removeClass('hidden').addClass('show');
 
       window.clearTimeout(this.timer);
       this.timer = window.setTimeout(this.exit.bind(this), 2000);

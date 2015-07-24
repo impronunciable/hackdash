@@ -4364,7 +4364,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     if (err.responseText === "OK"){
 
-      $(".saved", this.$el).addClass('show');
+      $('#cancel').addClass('hidden');
+      $('#save').addClass('hidden');
+      $(".saved", this.$el).removeClass('hidden').addClass('show');
 
       window.clearTimeout(this.timer);
       this.timer = window.setTimeout(this.exit.bind(this), 2000);
@@ -4704,7 +4706,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   if (stack1 != null) { buffer += stack1; }
   buffer += "    </div>\n    <div class=\"form-group\">\n      <textarea name=\"bio\" placeholder=\"Some about you\" class=\"form-control\" rows=\"4\">"
     + escapeExpression(((helper = (helper = helpers.bio || (depth0 != null ? depth0.bio : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"bio","hash":{},"data":data}) : helper)))
-    + "</textarea>\n    </div>\n  </div>\n  <div class=\"form-actions\">\n    <input id=\"save\" type=\"button\" data-loading-text=\"saving..\" value=\"Save profile\" class=\"btn-primary pull-right\"/>\n    <label class=\"saved pull-right\">Profile saved!</label>\n";
+    + "</textarea>\n    </div>\n  </div>\n  <div class=\"form-actions\">\n    <input id=\"save\" type=\"button\" data-loading-text=\"saving..\" value=\"Save profile\" class=\"btn-primary pull-right\"/>\n    <label class=\"saved pull-left hidden\">Profile saved, going back to business ...</label>\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.email : depth0), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + "  </div>\n</form>";
