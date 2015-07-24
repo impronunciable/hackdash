@@ -63,6 +63,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     $('.tooltips', this.$el).tooltip({});
 
     $('a[data-toggle="tab"]', this.$el).on('shown.bs.tab', this.setSection.bind(this));
+    $('html, body').scrollTop(0);
   },
 
   changeTab: function(){
