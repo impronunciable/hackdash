@@ -19,7 +19,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "description": "textarea[name=description]",
     "link": "input[name=link]",
     "tags": "input[name=tags]",
-    "status": "select[name=status]"
+    "status": "select[name=status]",
+    "errorCover": ".error-cover"
   },
 
   events: {
@@ -189,14 +190,27 @@ module.exports = Backbone.Marionette.ItemView.extend({
       url: hackdash.apiURL + '/projects/cover',
       paramName: 'cover',
       maxFiles: 1,
-      maxFilesize: 3, // MB
+      maxFilesize: 0.5, // MB
       acceptedFiles: 'image/jpeg,image/png,image/gif',
       uploadMultiple: false,
       clickable: true,
-      dictDefaultMessage: 'Drop Image Here'
+      dictDefaultMessage: 'Drop Image Here',
+      dictFileTooBig: 'File is too big, 500 Kb is the max',
+      dictInvalidFileType: 'Only jpg, png and gif are allowed'
+    });
+
+    coverZone.on("error", function(file, message) {
+      self.ui.errorCover.removeClass('hidden').text(message);
     });
 
     coverZone.on("complete", function(file) {
+      if (!file.accepted){
+        coverZone.removeFile(file);
+        return;
+      }
+
+      self.ui.errorCover.addClass('hidden').text('');
+
       var url = JSON.parse(file.xhr.response).href;
       self.model.set({ "cover": url }, { silent: true });
 

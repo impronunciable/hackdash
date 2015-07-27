@@ -5139,7 +5139,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     "description": "textarea[name=description]",
     "link": "input[name=link]",
     "tags": "input[name=tags]",
-    "status": "select[name=status]"
+    "status": "select[name=status]",
+    "errorCover": ".error-cover"
   },
 
   events: {
@@ -5309,14 +5310,27 @@ module.exports = Backbone.Marionette.ItemView.extend({
       url: hackdash.apiURL + '/projects/cover',
       paramName: 'cover',
       maxFiles: 1,
-      maxFilesize: 3, // MB
+      maxFilesize: 0.5, // MB
       acceptedFiles: 'image/jpeg,image/png,image/gif',
       uploadMultiple: false,
       clickable: true,
-      dictDefaultMessage: 'Drop Image Here'
+      dictDefaultMessage: 'Drop Image Here',
+      dictFileTooBig: 'File is too big, 500 Kb is the max',
+      dictInvalidFileType: 'Only jpg, png and gif are allowed'
+    });
+
+    coverZone.on("error", function(file, message) {
+      self.ui.errorCover.removeClass('hidden').text(message);
     });
 
     coverZone.on("complete", function(file) {
+      if (!file.accepted){
+        coverZone.removeFile(file);
+        return;
+      }
+
+      self.ui.errorCover.addClass('hidden').text('');
+
       var url = JSON.parse(file.xhr.response).href;
       self.model.set({ "cover": url }, { silent: true });
 
@@ -5778,7 +5792,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   buffer += "            </select>\n          </div>\n        </div>\n\n        <div id=\"dragdrop\" class=\"dropzone item-cover\"\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.cover : depth0), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += ">\n        </div>\n\n      </div>\n\n    </div>\n\n    <div class=\"col-md-8\">\n      <div class=\"description\">\n        <textarea id=\"description\" name=\"description\" placeholder=\"Description\">"
+  buffer += ">\n        </div>\n        <p class=\"error-cover bg-danger text-danger hidden\"></p>\n\n      </div>\n\n    </div>\n\n    <div class=\"col-md-8\">\n      <div class=\"description\">\n        <textarea id=\"description\" name=\"description\" placeholder=\"Description\">"
     + escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"description","hash":{},"data":data}) : helper)))
     + "</textarea>\n      </div>\n      <div class=\"tags\">\n        <input id=\"tags\" type=\"text\" name=\"tags\" placeholder=\"Tags ( comma separated values )\" class=\"form-control\" value=\""
     + escapeExpression(((helper = (helper = helpers.getTags || (depth0 != null ? depth0.getTags : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"getTags","hash":{},"data":data}) : helper)))
@@ -6215,9 +6229,7 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
     var $el = $(el),
       offset = $el.offset(),
       mw = $(window).width(),
-      //mh = $(window).height(),
       elW = sharer.$el.width(),
-      //elH = sharer.$el.height(),
       w = sharer.$el.width()/2 - $el.width()/2,
       h = sharer.$el.height()/2 - $el.height()/2,
       l = offset.left - w,
