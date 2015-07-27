@@ -3133,9 +3133,15 @@ module.exports = Backbone.Marionette.CollectionView.extend({
       cols = 5;
 
       responsive = [1450, 1200, 1024, 750, 430].map(function(value){
+        var cmode = false;
+        if (value <= 430 ){
+          cmode = true;
+        }
+
         return {
           breakpoint: value,
           settings: {
+            centerMode: cmode,
             slidesToShow: cols,
             slidesToScroll: cols--
           }
@@ -3147,6 +3153,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
     // else is embeds
 
     this.$el.slick({
+      centerMode: false,
       dots: false,
       autoplay: false,
       infinite: false,
