@@ -22,7 +22,7 @@ function createSiteMap(urls, done) {
 
   var sitemap = sm.createSitemap({
     hostname: url.format({ 
-      protocol: 'http', hostname: config.host, port: config.port }),
+      protocol: 'https', hostname: config.host, port: config.port }),
     cacheTime: 600000,  // 10 min
     urls: urls
   });
