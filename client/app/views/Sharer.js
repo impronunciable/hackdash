@@ -258,12 +258,20 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
 
     var $el = $(el),
       offset = $el.offset(),
+      mw = $(window).width(),
+      elW = sharer.$el.width(),
       w = sharer.$el.width()/2 - $el.width()/2,
-      h = sharer.$el.height()/2 - $el.height()/2;
+      h = sharer.$el.height()/2 - $el.height()/2,
+      l = offset.left - w,
+      t = offset.top - h;
+
+    if (l + elW > mw){
+      l -= (l + (elW*1.2)) - mw;
+    }
 
     sharer.$el.css({
-      top: offset.top - h,
-      left: offset.left - w
+      top: t,
+      left: l
     });
 
     sharer.on('close destroy', function(){

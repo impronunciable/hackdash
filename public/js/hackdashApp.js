@@ -5453,8 +5453,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
     hackdash.app.showLogin();
   },
 
-  showShare: function(){
-    Sharer.show(this.ui.shareLink, {
+  showShare: function(e){
+    var el = $(e.target);
+    Sharer.show(el, {
       type: 'project',
       model: this.model
     });
@@ -6213,12 +6214,22 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
 
     var $el = $(el),
       offset = $el.offset(),
+      mw = $(window).width(),
+      //mh = $(window).height(),
+      elW = sharer.$el.width(),
+      //elH = sharer.$el.height(),
       w = sharer.$el.width()/2 - $el.width()/2,
-      h = sharer.$el.height()/2 - $el.height()/2;
+      h = sharer.$el.height()/2 - $el.height()/2,
+      l = offset.left - w,
+      t = offset.top - h;
+
+    if (l + elW > mw){
+      l -= (l + (elW*1.2)) - mw;
+    }
 
     sharer.$el.css({
-      top: offset.top - h,
-      left: offset.left - w
+      top: t,
+      left: l
     });
 
     sharer.on('close destroy', function(){

@@ -108,8 +108,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
     hackdash.app.showLogin();
   },
 
-  showShare: function(){
-    Sharer.show(this.ui.shareLink, {
+  showShare: function(e){
+    var el = $(e.target);
+    Sharer.show(el, {
       type: 'project',
       model: this.model
     });
