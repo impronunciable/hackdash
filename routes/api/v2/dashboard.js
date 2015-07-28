@@ -23,6 +23,7 @@ module.exports = function(app, uri, common) {
 
   app.post(uri + '/dashboards', common.isAuth, validateSubdomain, createDashboard(app), sendDashboard);
   app.get(uri + '/dashboards', cors(), setQuery, setDashboards, sendDashboards);
+  app.get(uri + '/d', cors(), setQuery, setDashboards, sendDashboards); // /dashboards alias
 
   app.get(uri + '/dashboards/:domain/csv', common.isAuth, getDashboard, isAdminDashboard, sendDashboardCSV);
 
