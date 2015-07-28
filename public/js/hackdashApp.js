@@ -6088,12 +6088,12 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
 
     if (this.type === 'dashboard'){
       people = getPeople(this.model.get('admins').toJSON());
-      url += '/dashboards/' + domain;
+      url += '/d/' + domain;
     }
 
     else if (this.type === 'project'){
       people = getPeople(this.model.get('contributors'));
-      url += '/projects/' + this.model.get('_id');
+      url += '/p/' + this.model.get('_id');
     }
 
     hashtags += ['hackdash', domain].join(',');
@@ -6133,7 +6133,7 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
       var covers = this.model.get('covers');
       picture = url + ((covers && covers.length && covers[0]) || '/images/logohack.png');
 
-      url += '/dashboards/' + domain;
+      url += '/d/' + domain;
     }
 
     else if (this.type === 'project'){
@@ -6142,7 +6142,7 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
       var cover = this.model.get('cover');
       picture = url + (cover || '/images/logohack.png');
 
-      url += '/projects/' + this.model.get('_id');
+      url += '/p/' + this.model.get('_id');
     }
 
     var textShort = 'Hacking at ' + (title || domain);
@@ -6173,10 +6173,10 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
     var title = this.model.get('title');
 
     if (this.type === 'dashboard'){
-      url += '/dashboards/' + domain;
+      url += '/d/' + domain;
     }
     else if (this.type === 'project'){
-      url += '/projects/' + this.model.get('_id');
+      url += '/p/' + this.model.get('_id');
     }
 
     var textShort = 'Hacking at ' + (title || domain);
