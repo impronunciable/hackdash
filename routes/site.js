@@ -108,9 +108,14 @@ module.exports = function(app) {
   app.get('/projects/:pid', metas.project, appStack);
   app.get('/projects/:pid/edit', appStack);
 
-  // keep old projects url
+  // Short REDIRECT URLs
+
   app.get('/p/:pid', function(req, res){
-    res.redirect(301, '/projects/' + req.params.pid);
+    res.redirect(302, '/projects/' + req.params.pid);
+  });
+
+  app.get('/d/:domain', function(req, res){
+    res.redirect(302, '/dashboards/' + req.params.domain);
   });
 
 
