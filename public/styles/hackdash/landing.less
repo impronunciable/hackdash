@@ -24,13 +24,14 @@ html, body, #main, #main>div {
 .landing-header {
   background: url(@landing-photo-url) no-repeat center center fixed;
   display: table;
-  height: 100%;
+  height: 115%;
   position: relative;
   width: 100%;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  margin-bottom: -7%;
 
   .call-action {
 
@@ -100,6 +101,22 @@ html, body, #main, #main>div {
           height: 60px;
           z-index: 2;
         }
+      }
+    }
+
+    .continue {
+      cursor:pointer;
+      margin: 50px;
+      display: inline-block;
+      font-size: 50px;
+      padding: 8px 26px;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      border-radius: 50%;
+
+      &:hover {
+        background: rgba(255,255,255,0.8);
+        color: #000;
       }
     }
 

@@ -53,7 +53,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "click @ui.domain": "checkLogin",
     "click @ui.create": "createDashboard",
     "click .up-button": "goTop",
-    "click @ui.mobileMenu": "toggleMobileMenu"
+    "click @ui.mobileMenu": "toggleMobileMenu",
+    "click .continue": "animateScroll"
   },
 
   lists: {
@@ -228,13 +229,19 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //+ PRIVATE AND PROTECTED METHODS
   //--------------------------------------
 
-  animateScroll: function(){
+  animateScroll: function(animate){
     if (this.section){
 
       var offsetMob = (this.ui.mobileMenu.is(':visible') ? 0 : 60);
       var top = this.ui.tabs.offset().top + offsetMob;
       var offset = this.ui.tabs.height();
       var pos = (top - offset >= 0 ? top - offset : 0);
+
+      if (animate){
+        $("html, body").animate({ scrollTop: pos }, 1500, 'swing');
+        return;
+      }
+
       $(window).scrollTop(pos);
     }
   },
