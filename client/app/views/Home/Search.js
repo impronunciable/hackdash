@@ -87,10 +87,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
     var tabs = $('.nav-tabs.landing');
     var mobileMenu = $('.mobile-menu');
 
-    var offsetMob = (mobileMenu.is(':visible') ? 0 : 60);
-    var top = tabs.offset().top + offsetMob;
+    var isMobile = mobileMenu.is(':visible');
+
+    var top = tabs.offset().top + 60;
     var offset = tabs.height();
+
+    if (isMobile){
+      top = this.ui.tabContent.offset().top;
+      offset = 0;
+    }
+
     var pos = (top - offset >= 0 ? top - offset : 0);
+    
     $(window).scrollTop(pos);
   }
 

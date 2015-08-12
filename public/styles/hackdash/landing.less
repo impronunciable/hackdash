@@ -33,6 +33,11 @@ html, body, #main, #main>div {
   background-size: cover;
   margin-bottom: -7%;
 
+  @media (max-width: 500px) {
+    height: 100%;
+    margin-bottom: 0;
+  }
+
   .call-action {
 
     width: 100%;
@@ -43,6 +48,12 @@ html, body, #main, #main>div {
 
     .logo {
       margin: -50px auto 50px auto;
+
+      @media (max-width: 500px) {
+        margin: 0 auto;
+        width: 80px;
+        height: 105px;
+      }
     }
 
     h1 {
@@ -66,21 +77,11 @@ html, body, #main, #main>div {
       margin: 2% 0;
     }
 
-    .arrow {
-      color: @color-action;
-      height: 64px;
-      width: 100%;
-      max-width: 160px;
-
-      i {
-        font-size: 9em;
-        line-height: 0.5em;
-      }
-    }
-
     .input-group {
 
       font-family: @secondary-font;
+      margin: 20px auto;
+      max-width: 500px;
 
       .form-control,
       .btn {
@@ -92,6 +93,11 @@ html, body, #main, #main>div {
         font-size: @fsize-25;
         height: 60px;
         border: solid 2px @color-whiteC;
+
+        @media (max-width: 500px) {
+          font-size: @fsize-20;
+          height: 45px;
+        }
       }
 
       .input-group-btn {
@@ -117,6 +123,12 @@ html, body, #main, #main>div {
       &:hover {
         background: rgba(255,255,255,0.8);
         color: #000;
+      }
+
+      @media (max-width: 500px) {
+        margin: 10px;
+        font-size: 40px;
+        padding: 0px 16px;
       }
     }
 

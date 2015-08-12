@@ -46,6 +46,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
     "tabs": ".nav-tabs.landing",
     "mobileMenu": ".mobile-menu",
+    "tabContent": ".tab-content"
   },
 
   events: {
@@ -54,7 +55,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "click @ui.create": "createDashboard",
     "click .up-button": "goTop",
     "click @ui.mobileMenu": "toggleMobileMenu",
-    "click .continue": "animateScroll"
+    "click .continue": "clickContiune"
   },
 
   lists: {
@@ -135,6 +136,10 @@ module.exports = Backbone.Marionette.LayoutView.extend({
         this.ui.tabs.addClass('hidden');
       }
     }
+  },
+
+  clickContiune: function(){
+    this.animateScroll(true);
   },
 
   //--------------------------------------
@@ -232,9 +237,16 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   animateScroll: function(animate){
     if (this.section){
 
-      var offsetMob = (this.ui.mobileMenu.is(':visible') ? 0 : 60);
-      var top = this.ui.tabs.offset().top + offsetMob;
+      var isMobile = this.ui.mobileMenu.is(':visible');
+
+      var top = this.ui.tabs.offset().top + 60;
       var offset = this.ui.tabs.height();
+
+      if (isMobile){
+        top = this.ui.tabContent.offset().top;
+        offset = 0;
+      }
+
       var pos = (top - offset >= 0 ? top - offset : 0);
 
       if (animate){
