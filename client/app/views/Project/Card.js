@@ -71,6 +71,7 @@ module.exports = ItemView.extend({
     var me = (hackdash.user && hackdash.user._id) || '';
     var isOwner = (this.model.get('leader')._id === me ? true : false);
     var isEmbed = (window.hackdash.app.source === "embed" ? true : false);
+    var contribs = this.model.get('contributors');
 
     var noActions = false;
 
@@ -83,7 +84,8 @@ module.exports = ItemView.extend({
       isShowcaseMode: this.isShowcaseMode(),
       contributing: this.model.isContributor(),
       following: this.model.isFollower(),
-      isOwner: isOwner
+      isOwner: isOwner,
+      contributorsMore: contribs.length > 5 ? contribs.length-4 : 0 
     }, this.model.toJSON());
   },
 

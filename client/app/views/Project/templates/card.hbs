@@ -22,18 +22,48 @@
 </div>
 
 <ul class="contributors {{#if noActions}}no-actions{{/if}}">
-  {{#each_upto contributors 5}}
-  <li>
-    <a href="/users/{{_id}}"
-    {{#isEmbed}}
-      target="_blank"
-    {{else}}
-      {{#isLandingView}}data-bypass{{/isLandingView}}
-    {{/isEmbed}}>
-      {{getProfileImage .}}
-    </a>
-  </li>
-  {{/each_upto}}
+
+  {{#if contributorsMore}}
+
+    {{#each_upto contributors 4}}
+    <li>
+      <a href="/users/{{_id}}"
+      {{#isEmbed}}
+        target="_blank"
+      {{else}}
+        {{#isLandingView}}data-bypass{{/isLandingView}}
+      {{/isEmbed}}>
+        {{getProfileImage .}}
+      </a>
+    </li>
+    {{/each_upto}}
+    <li class="contrib-plus">
+      <a href="/projects/{{../_id}}"
+      {{#isEmbed}}
+        target="_blank"
+      {{else}}
+        {{#isLandingView}}data-bypass{{/isLandingView}}
+      {{/isEmbed}}>
+        {{contributorsMore}}+
+      </a>
+    </li>
+
+  {{else}}
+
+    {{#each_upto contributors 5}}
+    <li>
+      <a href="/users/{{_id}}"
+      {{#isEmbed}}
+        target="_blank"
+      {{else}}
+        {{#isLandingView}}data-bypass{{/isLandingView}}
+      {{/isEmbed}}>
+        {{getProfileImage .}}
+      </a>
+    </li>
+    {{/each_upto}}
+
+  {{/if}}
 </ul>
 
 <div class="action-bar text-right {{#if noActions}}no-actions{{/if}}">
