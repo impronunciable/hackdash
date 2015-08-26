@@ -1,5 +1,5 @@
 /*! 
-* Hackdash - v0.9.11
+* Hackdash - v0.9.12
 * Copyright (c) 2015 Hackdash 
 *  
 */ 
