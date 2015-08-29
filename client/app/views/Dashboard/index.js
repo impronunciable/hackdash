@@ -24,7 +24,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   },
 
   events: {
-    "click .share": "showShare"
+    "click .share": "showShare",
+    "click .login": "showLogin"
   },
 
   regions: {
@@ -38,6 +39,16 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     "edit:showcase": "onStartEditShowcase",
     "end:showcase": "onEndEditShowcase",
     "save:showcase": "onSaveEditShowcase"
+  },
+
+  templateHelpers: {
+    isDashOpen: function(){
+      var isDashboard = (hackdash.app.type === "dashboard" ? true : false);
+      if (!isDashboard){
+        return false;
+      }
+      return this.open;
+    }
   },
 
   //--------------------------------------
@@ -115,6 +126,10 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   //--------------------------------------
   //+ EVENT HANDLERS
   //--------------------------------------
+
+  showLogin: function(){
+    hackdash.app.showLogin();
+  },
 
   showShare: function(){
     Sharer.show(this.ui.shareLink, {
