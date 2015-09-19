@@ -63,6 +63,9 @@ module.exports = function(app) {
               user.picture = "//graph.facebook.com/" + profile.id + "/picture";
               user.picture += "?width=73&height=73";
             }
+            else if (profile.provider === "github"){
+              user.picture = user.picture || profile._json.avatar_url;
+            }
             else {
               user.picture = gravatar.url(user.email || '', {s: '73'});
             }
@@ -81,9 +84,11 @@ module.exports = function(app) {
 
             setPicture();
 
-            user.name = profile.displayName || '';
+            user.name = profile.displayName || profile.username;
             user.username = profile.username || profile.displayName;
+
             user.save(function(err, user){
+              if (err) console.dir(err);
               done(null, user);
             });
 
@@ -129,4 +134,3 @@ module.exports = function(app) {
   }
 
 };
-
