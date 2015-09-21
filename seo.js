@@ -10,12 +10,13 @@
 var prerender = require('prerender-node');
 var mongo = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
+var config = require('config');
 
 var db;
 
 module.exports = function(app) {
 
-  var prCfg = app.get('config').prerender;
+  var prCfg = config.prerender;
   var db_uri = prCfg.db || 'mongodb://localhost/prerender'
 
   MongoClient.connect(db_uri, function(err, _db) {
