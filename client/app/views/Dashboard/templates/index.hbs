@@ -22,6 +22,19 @@
       </a>
     </div>
 
+    {{#isDashOpen}}
+    <div class="dash-create visible-xs">
+      <h3 class="create-project">
+        <i class="fa fa-plus"></i>
+        {{#isLoggedIn}}
+        <a href="/dashboards/{{domain}}/create">Create Project</a>
+        {{else}}
+        <a class="login">Create Project</a>
+        {{/isLoggedIn}}
+      </h3>
+    </div>
+    {{/isDashOpen}}
+
   </div>
 </div>
 
