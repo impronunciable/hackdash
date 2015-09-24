@@ -1,47 +1,41 @@
 
-var config = require('../../config.test')
-  , baseURL = "http://" + config.host + ":" + config.port
-  , baseAPI = baseURL + "/api/v2"
-  , request = require('request');
+import request from 'supertest';
+import {expect} from 'chai';
 
-var dataBuilder = require('./dataBuilder')(config);
+import {User} from 'lib/models';
 
-var userAuthA = { auth: { user: 'testa', pass: "x" } };
-var userAuthB = { auth: { user: 'testb', pass: "x" } };
+describe('API', () => {
 
-describe('/api', function(){
+  before( done => {
 
-  before(function(done){
-    dataBuilder.clearAll(function(){
-      createUsers(function(){
-        // give time to start Express Server
-        setTimeout(done, 500);
-      });
+    // create some test users for auth routes
+    User.create([{
+      provider: 'twitter',
+      provider_id: '1111111',
+      username: 'testuser1',
+      displayName: 'Test User 1',
+      name: 'Test User 1'
+    }, {
+      provider: 'twitter',
+      provider_id: '2222222',
+      username: 'testuser2',
+      displayName: 'Test User 2',
+      name: 'Test User 2'
+    }], (err, _users) => {
+      global.users = _users;
+      done(err);
+    });
+
+  });
+
+  it ('must return 200 ok', done => {
+    let agent = request.agent(server);
+    agent.get('/').expect(200).end((err, res) => {
+      expectCode(200, res);
+      done();
     });
   });
 
-  after(function(done){
-    dataBuilder.dropDatabase(done);
-  });
-
-  //require('./embeds')(baseAPI, config, [ userAuthA, userAuthB ]);
-  require('./users')(baseAPI, config, [ userAuthA, userAuthB ]);
-  require('./profiles')(baseAPI, config, [ userAuthA, userAuthB ]);
-  require('./projects')(baseAPI, config, [ userAuthA, userAuthB ]);
-  require('./dashboards')(baseAPI, config, [ userAuthA, userAuthB ]);
-  require('./collections')(baseAPI, config, [ userAuthA, userAuthB ]);
+  require('./dashboard');
 
 });
-
-function createUsers(done){
-
-  dataBuilder.create('User', [
-    { name: 'User Auth A', provider: 'basic', provider_id: 1, username: 'testa', picture: '//test.com/a.png' },
-    { name: 'User Auth B', provider: 'basic', provider_id: 2, username: 'testb', picture: '//test.com/b.png' }
-  ], function(err, users){
-    userAuthA._id = users[0]._id;
-    userAuthB._id = users[1]._id;
-    done();
-  });
-
-}

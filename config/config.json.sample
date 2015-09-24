@@ -1,0 +1,29 @@
+{
+  db: {
+    name: "hackdash",
+    host: "localhost",
+    url: null
+  },
+  host: "local.host",
+  port: 3000,
+  session: "wefewfef",
+  disqus_shortname: null,
+  title: "hackdash",
+  live: true,
+  mailer: null,
+  prerender: {
+    enabled: false,
+    db: "mongodb://localhost/prerender"
+  },
+  team: [
+    "516d1997b2951b02280000e1",
+    "516d1997b2951b02280000e2",
+    "516d1997b2951b02280000e3",
+    "516d1997b2951b02280000e4",
+    "516d1997b2951b02280000e5",
+    "516d1997b2951b02280000e6"
+  ],
+  maxQueryLimit: 30,
+  googleAnalytics: "UA-XXXXXXXX-X",
+  facebookAppId: "YYYYYYYYYYYY"
+}
