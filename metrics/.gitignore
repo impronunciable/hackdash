@@ -4,3 +4,4 @@ metrics.json
 !config.json.sample
 dashboards.csv
 dashboards_admins.csv
+active_users_*.csv
