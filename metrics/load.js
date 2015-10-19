@@ -1,3 +1,4 @@
+require('babel/register');
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
@@ -5,23 +6,23 @@ var mongoose = require('mongoose'),
   jf = require('jsonfile'),
   executing = false;
 
-var config = require('../config.json');
+var config = require('../config');
 var configM = require('./config.json');
 
 jf.spaces = 2;
 
-mongoose.connect(config.db.url || 
+mongoose.connect(config.db.url ||
   ('mongodb://' + config.db.host + '/'+ config.db.name));
 
-mongoose.model('User', new Schema(require('../models/User')) );
-mongoose.model('Project', new Schema(require('../models/Project')) );
-mongoose.model('Dashboard', new Schema(require('../models/Dashboard')) );
-mongoose.model('Collection', new Schema(require('../models/Collection')) );
+mongoose.model('User', new Schema(require('../lib/models/user')) );
+mongoose.model('Project', new Schema(require('../lib/models/project')) );
+mongoose.model('Dashboard', new Schema(require('../lib/models/dashboard')) );
+mongoose.model('Collection', new Schema(require('../lib/models/collection')) );
 
 var hasCreated = { created_at: { $exists: true } };
 var aggregation = [
   { $match: hasCreated },
-  { 
+  {
     $group: {
       _id: {
         year: { $year: "$created_at" },
@@ -30,7 +31,7 @@ var aggregation = [
       },
       count: { $sum: 1 }
     }
-  }, 
+  },
 
   { $project: { date: "$_id", count: 1, _id: 0 } },
   { $sort: { "date": 1 } }
@@ -70,7 +71,7 @@ var exec = {
   },
   dashboards: function(done){
     var Dashboard = mongoose.model('Dashboard');
-    
+
     Dashboard.aggregate(aggregation, function(err, dashboards){
       if (err) { return done(err); }
 
@@ -107,8 +108,8 @@ module.exports = function(done){
   console.log('>>>>>  Runing %s', new Date());
 
   async.parallel(exec, function(err, data){
-    if (err){ 
-      return console.log(err); 
+    if (err){
+      return console.log(err);
       console.log('Metrics NOT updated!');
     }
 
@@ -123,9 +124,9 @@ module.exports = function(done){
     console.dir(data.dashboards.data);
     console.dir(data.collections.data);
 */
-    
+
     jf.writeFile('./' + configM.filename, data, function(err) {
-      
+
       if(err) {
         console.log("Metrics NOT updated!");
         console.log(err);
@@ -136,7 +137,7 @@ module.exports = function(done){
       executing = false;
 
       done && done();
-    }); 
+    });
 
   });
 

@@ -1,16 +1,17 @@
+require('babel/register');
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   fs = require('fs'),
   moment = require('moment');
 
-var config = require('../config.json');
+var config = require('../config');
 
 mongoose.connect(config.db.url ||
   ('mongodb://' + config.db.host + '/'+ config.db.name));
 
-mongoose.model('Project', new Schema(require('../models/Project')) );
-mongoose.model('Dashboard', new Schema(require('../models/Dashboard')) );
+mongoose.model('Project', new Schema(require('../lib/models/project')) );
+mongoose.model('Dashboard', new Schema(require('../lib/models/dashboard')) );
 
 var Dashboard = mongoose.model('Dashboard');
 var Project = mongoose.model('Project');
