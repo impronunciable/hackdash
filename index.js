@@ -7,7 +7,7 @@ require('babel/register');
 var app = require('lib/server');
 var debug = require('debug')('hackdash:server');
 var http = require('http');
-var config = require('../config');
+var config = require('./config');
 var live = require('lib/live');
 
 /**

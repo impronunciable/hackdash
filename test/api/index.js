@@ -37,5 +37,6 @@ describe('API', () => {
   });
 
   require('./dashboard');
+  require('./collection');
 
 });
