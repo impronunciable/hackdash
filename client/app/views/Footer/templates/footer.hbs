@@ -13,19 +13,19 @@
 
       <a href="/api/v2/dashboards/{{domain}}/csv" target="_blank" data-bypass>
         <i class="fa fa-download"></i>
-        <div>Export .CSV File</div>
+        <div>{{__ "Export .CSV File"}}</div>
       </a>
 
       <a data-placement="top" data-original-title="{{switcherMsg}}"
         class="tooltips dashboard-btn {{#if open}}dash-open{{else}}dash-close{{/if}}">
-        <i class="txt {{#if open}}btn-success{{else}}btn-danger{{/if}}">{{#if open}}Open{{else}}Close{{/if}}</i>
-        <div>Dashboard Status</div>
+        <i class="txt {{#if open}}btn-success{{else}}btn-danger{{/if}}">{{#if open}}{{__ "Open"}}{{else}}{{__ "Close"}}{{/if}}</i>
+        <div>{{__ "Dashboard Status"}}</div>
       </a>
 
     </div>
 
     <a class="btn-showcase-mode">
-      <i class="btn-danger txt">off</i><div>Edit Showcase</div>
+      <i class="btn-danger txt">{{__ "off"}}</i><div>{{__ "Edit Showcase"}}</div>
     </a>
 
   </div>
@@ -34,5 +34,5 @@
 
 <a class="up-button">
   <i class="fa fa-long-arrow-up"></i>
-  <span>up</span>
+  <span>{{__ "up"}}</span>
 </a>

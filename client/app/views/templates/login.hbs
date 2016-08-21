@@ -2,7 +2,7 @@
   <button type="button" class="close" data-dismiss="modal">
     <i class="fa fa-close"></i>
   </button>
-  <h2 class="modal-title">Log In</h2>
+  <h2 class="modal-title">{{__ "Log In"}}</h2>
 </div>
 
 <div class="modal-body">
@@ -11,7 +11,7 @@
 
       <div class="col-xs-12 col-md-8 col-md-offset-2">
         <a href="/auth/{{.}}{{../redirectURL}}" class="btn btn-primary signup-btn signup-{{.}}" data-bypass>
-          <i class="fa fa-{{.}}"></i>Access with {{firstUpper .}}
+          <i class="fa fa-{{.}}"></i>{{__ "Access with"}} {{firstUpper .}}
         </a>
       </div>
 

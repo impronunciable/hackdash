@@ -4,16 +4,16 @@
 </div>
 <div class="modal-body">
   {{#if showAdmin}}
-    <p class="bg-warning">Warning! you will NOT be able to delete this dashboard if you add an admin!</p>
+    <p class="bg-warning">{{__ "Warning! you will NOT"}}</p>
   {{/if}}
   <div class="input-group">
     <span class="input-group-addon">
       <i class="fa fa-user"></i>
     </span>
-    <input id="txtUser" type="text" class="form-control" placeholder="type name or username" autocomplete="off">
+    <input id="txtUser" type="text" class="form-control" placeholder='{{__ "type name or username"}}' autocomplete="off">
   </div>
 </div>
 <div class="modal-footer">
   <input id="save" type="button" class="btn btn-success pull-right" value="ADD">
-  <a class="btn-cancel pull-left" data-dismiss="modal">cancel</a>
+  <a class="btn-cancel pull-left" data-dismiss="modal">{{__ "cancel"}}</a>
 </div>

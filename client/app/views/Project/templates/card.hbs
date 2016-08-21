@@ -76,10 +76,10 @@
   {{#isEmbed}}
     <a href="/projects/{{_id}}"
       class="tooltips contribute" target="_blank"
-      data-original-title="{{contributors.length}} contributors">Join</a>
+      data-original-title="{{contributors.length}} contributors">{{__ "Join"}}</a>
     <a href="/projects/{{_id}}"
       class="tooltips follow" target="_blank"
-      data-original-title="{{followers.length}} followers">Follow</a>
+      data-original-title="{{followers.length}} followers">{{__ "Follow"}}</a>
   {{else}}
 
     {{#unless isOwner}}
@@ -87,31 +87,31 @@
       <a
         class="tooltips contribute"
         data-loading-text="leaving..."
-        data-original-title="{{contributors.length}} contributors">Leave</a>
+        data-original-title="{{contributors.length}} contributors">{{__ "Leave"}}</a>
       {{else}}
       <a
         class="tooltips contribute"
         data-loading-text="joining..."
-        data-original-title="{{contributors.length}} contributors">Join</a>
+        data-original-title="{{contributors.length}} contributors">{{__ "Join"}}</a>
       {{/if}}
 
       {{#if following}}
       <a
         class="tooltips follow"
         data-loading-text="unfollowing..."
-        data-original-title="{{followers.length}} followers">Unfollow</a>
+        data-original-title="{{followers.length}} followers">{{__ "Unfollow"}}</a>
       {{else}}
       <a
         class="tooltips follow"
         data-loading-text="following..."
-        data-original-title="{{followers.length}} followers">Follow</a>
+        data-original-title="{{followers.length}} followers">{{__ "Follow"}}</a>
       {{/if}}
     {{/unless}}
 
   {{/isEmbed}}
 
   {{#if link}}
-  <a class="demo-link" href="{{link}}" target="_blank" data-bypass>Demo</a>
+  <a class="demo-link" href="{{link}}" target="_blank" data-bypass>{{__ "Demo"}}</a>
   {{/if}}
 
   </div>

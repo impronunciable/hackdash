@@ -5,7 +5,7 @@
 
     <div class="logo"></div>
 
-    <h1>Ideas for a <span class="highlight">hackathon</span></h1>
+    <h1>{{__ "Ideas for a"}} <span class="highlight">{{__ "hackathon"}}</span></h1>
 
     <div class="container-fluid">
 
@@ -15,10 +15,10 @@
           <div class="input-group">
             <input id="domain" type="text" class="form-control" placeholder="dashboard name (5-10 chars)">
             <span class="input-group-btn">
-              <button id="create-dashboard" class="btn btn-primary" type="button">{{__ "create_now"}}</button>
+              <button id="create-dashboard" class="btn btn-primary" type="button">{{__ "create now"}}</button>
             </span>
           </div>
-          <p id="new-dashboard-error" class="text-center text-danger hidden">ERROR</p>
+          <p id="new-dashboard-error" class="text-center text-danger hidden">{{__ "ERROR"}}</p>
         </div>
 
       </div>
@@ -48,16 +48,16 @@
       <ul class="nav nav-tabs landing" role="tablist">
 
         <li id="collection" class="collection">
-          <a href="#collections" role="tab" data-toggle="tab">Collections</a>
+          <a href="#collections" role="tab" data-toggle="tab">{{__ "Collections"}}</a>
         </li>
         <li id="dashboard" class="dashboard">
-          <a href="#dashboards" role="tab" data-toggle="tab">{{__ "dashboards"}}</a>
+          <a href="#dashboards" role="tab" data-toggle="tab">{{__ "Dashboards"}}</a>
         </li>
         <li id="project" class="project">
-          <a href="#projects" role="tab" data-toggle="tab">Projects</a>
+          <a href="#projects" role="tab" data-toggle="tab">{{__ "Projects"}}</a>
         </li>
         <li id="user" class="user">
-          <a href="#users" role="tab" data-toggle="tab">People</a>
+          <a href="#users" role="tab" data-toggle="tab">{{__ "People"}}</a>
         </li>
 
       </ul>
@@ -75,24 +75,23 @@
 
 <div class="col-md-12 stats-ctn"></div>
 
-<h3 class="team-tab visible-xs">team</h3>
+<h3 class="team-tab visible-xs">{{__ "team"}}</h3>
 <div class="col-md-12 team-ctn"></div>
 
 <div class="team-partners hidden-xs">
   <div class="col-sm-5 col-sm-offset-1 col-md-3 col-md-offset-3 col-lg-2 col-lg-offset-4 partners-tab">
-    <h3>partners</h3>
+    <h3>{{__ "partners"}}</h3>
   </div>
   <div class="col-sm-5 col-md-3 col-lg-2 team-tab">
-    <h3>team</h3>
+    <h3>{{__ "team"}}</h3>
   </div>
 </div>
 
-<h3 class="partners-tab visible-xs">partners</h3>
+<h3 class="partners-tab visible-xs">{{__ "partners"}}</h3>
 <div class="col-md-12 partners-ctn"></div>
 
 <div class="col-md-12 about-ctn">
-  The HackDash was born by accident and by a need. We were looking for a platform to track ideas through hackathons in the line to the <a href="http://mediaparty.info/" data-bypass="true" target="__blank">Hacks/Hackers Media Party</a> organized by <a href="https://twitter.com/HacksHackersBA" data-bypass="true" target="__blank">@HacksHackersBA</a> where hackers and journalists share ideas. We spread the need through Twitter and that was the context of the HackDash born. <a href="https://twitter.com/blejman" data-bypass="true" target="__blank">@blejman</a> had an idea and <a href="https://twitter.com/dzajdband" data-bypass="true" target="__blank">@dzajdband</a> was interested in implement that idea. So we started building the app hoping we can get to the Buenos Aires Media Party with something that doesn't suck. The Media Party Hackathon day came followed by a grateful surprise. Not only the people liked the HackDash implementation but a couple of coders added the improvement of the HackDash as a Hackaton project. After the Media Party we realized that this small app was filling a real need. Three years later, the dashboard is becoming an standard to track innovative ideas around the world.
-  <p><a class="up-button">Create your own dashboard</a>, be part of a global community.</p>
+  {{__ "The HackDash was born"}}
 
 </div>
 <div class="col-md-12 footer-ctn"></div>
