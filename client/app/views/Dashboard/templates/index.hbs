@@ -13,11 +13,11 @@
     <div class="dash-buttons">
       {{#if link}}
         <a class="link tooltips" href="{{link}}" target="_blank"
-        data-bypass data-original-title="Open dashboard website">
+        data-bypass data-original-title='{{__ "Open dashboard website"}}'>
           <i class="fa fa-link"></i>
         </a>
       {{/if}}
-      <a class="share tooltips" data-original-title="Share this Dashboard">
+      <a class="share tooltips" data-original-title='{{__ "Share this Dashboard"}}'>
         <i class="fa fa-share-alt"></i>
       </a>
     </div>
@@ -27,9 +27,9 @@
       <h3 class="create-project">
         <i class="fa fa-plus"></i>
         {{#isLoggedIn}}
-        <a href="/dashboards/{{domain}}/create">Create Project</a>
+        <a href="/dashboards/{{domain}}/create">{{__ "Create Project"}}</a>
         {{else}}
-        <a class="login">Create Project</a>
+        <a class="login">{{__ "Create Project"}}</a>
         {{/isLoggedIn}}
       </h3>
     </div>

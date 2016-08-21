@@ -54,13 +54,13 @@
 
     <a href="/projects/{{_id}}"
       class="tooltips contribute" target="_blank"
-      data-original-title="{{contributors.length}} contributors">Join</a>
+      data-original-title="{{contributors.length}} contributors">{{__ "Join"}}</a>
     <a href="/projects/{{_id}}"
       class="tooltips follow" target="_blank"
-      data-original-title="{{followers.length}} followers">Follow</a>
+      data-original-title="{{followers.length}} followers">{{__ "Follow"}}</a>
 
   {{#if link}}
-  <a class="demo-link" href="{{link}}" target="_blank">Demo</a>
+  <a class="demo-link" href="{{link}}" target="_blank">{{__ "Demo"}}</a>
   {{/if}}
 </div>
 {{/if}}
