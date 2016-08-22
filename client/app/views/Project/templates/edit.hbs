@@ -2,7 +2,7 @@
 <div class="header">
   <div class="container">
     <h1>
-      <input name="title" type="text" placeholder="Project Title" value="{{title}}" class="form-control"/>
+      <input name="title" type="text" placeholder='{{__ "Project Title"}}' value="{{title}}" class="form-control"/>
     </h1>
     <h3 class="page-link-left">
       <a href="/dashboards/{{domain}}">{{domain}}</a>
@@ -19,10 +19,10 @@
 
       <div class="project-link">
         <a id="ghImportBtn" >
-          <label>Import Project</label>
+          <label>{{__ "Import Project"}}</label>
           <div>
             <i class="fa fa-github"></i>
-            <span class="github">GitHub</span>
+            <span class="github">{{__ "GitHub"}}</span>
           </div>
         </a>
       </div>
@@ -30,8 +30,8 @@
       <div class="gh-import input-group col-md-4 hide">
         <input id="txt-repo" type="text" class="form-control" placeholder="username / repository">
         <span class="input-group-btn">
-          <button id="searchGh" class="btn btn-blue" type="button" data-loading-text="LOADING">
-            import
+          <button id="searchGh" class="btn btn-blue" type="button" data-loading-text='{{__ "LOADING"}}'>
+            {{__ "import"}}
           </button>
         </span>
       </div>
@@ -69,17 +69,17 @@
         <textarea id="description" name="description" placeholder="Description">{{description}}</textarea>
       </div>
       <div class="tags">
-        <input id="tags" type="text" name="tags" placeholder="Tags ( comma separated values )" class="form-control" value="{{getTags}}"/>
+        <input id="tags" type="text" name="tags" placeholder='{{__ "Tags"}}' class="form-control" value="{{getTags}}"/>
       </div>
       <div class="link">
-        <input id="link" type="text" name="link" placeholder="Project URL Demo" class="form-control" value="{{link}}"/>
+        <input id="link" type="text" name="link" placeholder='{{__ "Project URL Demo"}}' class="form-control" value="{{link}}"/>
       </div>
     </div>
 
     <div class="col-md-8 buttons-panel">
 
       <div class="pull-right save">
-        <a id="save" class="btn btn-success">Save</a>
+        <a id="save" class="btn btn-success">{{__ "Save"}}</a>
       </div>
 
       <div class="pull-right cancel">
@@ -89,7 +89,7 @@
           {{else}}
           href="/dashboards/{{domain}}"
           {{/if}}
-        >Cancel</a>
+        >{{__ "Cancel"}}</a>
       </div>
 
     </div>

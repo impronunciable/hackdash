@@ -14,13 +14,13 @@
 {{#isDashboardView}}
 <div class="btn-group col-xs-6 col-sm-7 col-sm-offset-1 col-md-5 col-md-offset-0 col-lg-4" data-toggle="buttons">
   <label class="btn btn-default col-xs-4 col-md-4">
-    <input type="radio" name="options" id="name" autocomplete="off"> By Name
+    <input type="radio" name="options" id="name" autocomplete="off"> {{__ "By Name"}}
   </label>
   <label class="btn btn-default col-xs-4 col-md-4 active">
-    <input type="radio" name="options" id="date" autocomplete="off"> By Date
+    <input type="radio" name="options" id="date" autocomplete="off"> {{__ "By Date"}}
   </label>
   <label class="btn btn-default col-xs-4 col-md-4">
-    <input type="radio" name="options" id="showcase" autocomplete="off"> Showcase
+    <input type="radio" name="options" id="showcase" autocomplete="off"> {{__ "Showcase"}}
   </label>
 </div>
 
@@ -29,9 +29,9 @@
   <h3 class="create-project">
     <i class="fa fa-plus"></i>
     {{#isLoggedIn}}
-    <a href="/dashboards/{{domain}}/create">Create Project</a>
+    <a href="/dashboards/{{domain}}/create">{{__ "Create Project"}}</a>
     {{else}}
-    <a class="login">Create Project</a>
+    <a class="login">{{__ "Create Project"}}</a>
     {{/isLoggedIn}}
   </h3>
   {{/if}}

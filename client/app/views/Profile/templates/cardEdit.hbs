@@ -1,28 +1,28 @@
-<h1 class="header edit">Edit Your Profile</h1>
+<h1 class="header edit">{{__ "Edit Your Profile"}}</h1>
 
 <div class="cover">{{getProfileImageHex .}}</div>
 
 <form>
   <div class="form-content">
-    <label class="profile-fields-required">all fields required</label>
+    <label class="profile-fields-required">{{__ "all fields required"}}</label>
     <div class="form-group">
       <input name="name" type="text" placeholder="Name" value="{{name}}" class="form-control"/>
     </div>
     <div class="form-group">
       <input name="email" type="text" placeholder="Email" value="{{email}}" class="form-control"/>
       {{#unless email}}
-      <label class="email-info">email only visible for logged in users</label>
+      <label class="email-info">{{__ "email only visible for logged in users"}}</label>
       {{/unless}}
     </div>
     <div class="form-group">
-      <textarea name="bio" placeholder="Some about you" class="form-control" rows="4">{{bio}}</textarea>
+      <textarea name="bio" placeholder='{{__ "Some about you"}}' class="form-control" rows="4">{{bio}}</textarea>
     </div>
   </div>
   <div class="form-actions">
-    <input id="save" type="button" data-loading-text="saving.." value="Save profile" class="btn-primary pull-right"/>
-    <label class="saved pull-left hidden">Profile saved, going back to business ...</label>
+    <input id="save" type="button" data-loading-text='{{__ "saving..."}}' value='{{__ "Save profile"}}' class="btn-primary pull-right"/>
+    <label class="saved pull-left hidden">{{__ "Profile saved, going back to business ..."}}</label>
     {{#if email}}
-    <a id="cancel" class="btn-cancel pull-left">cancel</a>
+    <a id="cancel" class="btn-cancel pull-left">{{__ "cancel"}}</a>
     {{/if}}
   </div>
 </form>

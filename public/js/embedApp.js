@@ -1,6 +1,6 @@
 /*! 
 * Hackdash - v0.10.1
-* Copyright (c) 2015 Hackdash 
+* Copyright (c) 2016 Hackdash 
 *  
 */ 
 
@@ -112,7 +112,7 @@ module.exports = Backbone.Marionette.AppRouter.extend({
 
 });
 
-},{"./models/Dashboard":9,"./models/Project":10,"./models/Projects":11,"./views/Dashboard/Embed":15,"./views/Project/Embed":23}],3:[function(require,module,exports){
+},{"./models/Dashboard":12,"./models/Project":13,"./models/Projects":14,"./views/Dashboard/Embed":18,"./views/Project/Embed":26}],3:[function(require,module,exports){
 
 module.exports = function(){
 
@@ -142,6 +142,16 @@ module.exports = function(){
     'releasing'
   ];
 
+  var lan =
+    window.navigator.languages ?
+      window.navigator.languages[0] :
+      (window.navigator.language || window.navigator.userLanguage || 'en-US');
+
+  var locales = require('./locale');
+  locales.setLocale(lan);
+
+  window.__ = hackdash.i18n = locales.__;
+
   // Init Helpers
   require('./helpers/handlebars');
   require('./helpers/backboneOverrides');
@@ -164,7 +174,7 @@ module.exports = function(){
 
 };
 
-},{"./helpers/backboneOverrides":4,"./helpers/handlebars":5}],4:[function(require,module,exports){
+},{"./helpers/backboneOverrides":4,"./helpers/handlebars":5,"./locale":9}],4:[function(require,module,exports){
 /*
  * Backbone Global Overrides
  *
@@ -376,6 +386,10 @@ Handlebars.registerHelper('getMyProfileImageHex', function() {
   return getProfileImageHex(window.hackdash.user);
 });
 
+Handlebars.registerHelper('__', function(key) {
+  return window.__(key);
+});
+
 Handlebars.registerHelper('each_upto', function(ary, max, options) {
     if(!ary || ary.length === 0) {
       return options.inverse(this);
@@ -412,13 +426,457 @@ Handlebars.registerHelper('each_upto_rnd', function(ary, max, options) {
     return result.join('');
 });
 
-
-},{"hbsfy/runtime":33}],6:[function(require,module,exports){
+},{"hbsfy/runtime":36}],6:[function(require,module,exports){
 jQuery(function() {
   require('./Initializer')();
   window.hackdash.startApp = require('./EmbedApp');
 });
 },{"./EmbedApp":1,"./Initializer":3}],7:[function(require,module,exports){
+/*eslint-disable */
+module.exports = {
+  "code": "en-US",
+  "time_format": "HH:mm",
+  "date_locale": "en",
+  "date_format": "MM\/DD\/YYYY",
+  "datetime_format": "MM\/DD\/YYYY HH:mm",
+  "colloquial_date_format": "ddd Do MMMM YYYY",
+
+
+/* Home Directory */
+
+/* home.hbs */
+
+  "Dashboards": "Dashboards",
+  "create now": "create now",
+  "ERROR":"ERROR",
+  "Ideas for a": "Ideas for a",
+  "hackathon":"hackathon",
+  "Collections":"Collections",
+  "Projects":"Projects",
+  "People":"People",
+  "team":"team",
+  "partners":"partners",
+  "The HackDash was born":"The HackDash was born by accident and by a need. We were looking for a platform to track ideas through hackathons in the line to the <a href=\"http://mediaparty.info/\" data-bypass=\"true\" target=\"__blank\">Hacks/Hackers Media Party</a> organized by <a href=\"https://twitter.com/HacksHackersBA\" data-bypass=\"true\" target=\"__blank\">@HacksHackersBA</a> where hackers and journalists share ideas. We spread the need through Twitter and that was the context of the HackDash born. <a href=\"https://twitter.com/blejman\" data-bypass=\"true\" target=\"__blank\">@blejman</a> had an idea and <a href=\"https://twitter.com/dzajdband\" data-bypass=\"true\" target=\"__blank\">@dzajdband</a> was interested in implement that idea. So we started building the app hoping we can get to the Buenos Aires Media Party with something that doesn't suck. The Media Party Hackathon day came followed by a grateful surprise. Not only the people liked the HackDash implementation but a couple of coders added the improvement of the HackDash as a Hackaton project. After the Media Party we realized that this small app was filling a real need. Three years later, the dashboard is becoming an standard to track innovative ideas around the world.<p><a class=\"up-button\">Create your own dashboard</a>, be part of a global community.</p>",
+  
+/* collection.hbs */  
+
+/* counts.hbs */
+
+"dashboards":"dashboards",
+"projects":"projects",
+"registered users":"registered users",
+"collections":"collections",
+"released projects":"released projects",
+
+/* footer.hbs */
+
+"up":"up",
+
+/* search.hbs */
+
+"Inform Progress to community.":"Inform Progress to community.",
+"Upload your project to the platform.":"Upload your project to the platform.",
+"find it":"find it",
+"Add Collaborators to your projects.":"Add Collaborators to your projects.",
+"Share your app to the world.":"Share your app to the world.",
+
+/* tabContent.hbs */
+
+"HEAD":"HEAD",
+
+/* Collections directory */
+
+/* list.hbs */
+
+"My Collections: adding":"My Collections: adding",
+
+/* listItem.hbs */
+
+"View":"View",
+
+/* Dashboard directory */
+
+/* addAdmin.hbs */
+
+"Warning! you will NOT":"Warning! you will NOT be able to delete this dashboard if you add an admin!",
+"type name or username":"type name or username",
+"cancel":"cancel",
+
+/* index.hbs */
+
+"Open dashboard website":"Open dashboard website",
+"Share this Dashboard":"Share this Dashboard",
+"Create Project":"Create Project",
+
+/* share.hbs */
+
+"embed this dashboard":"embed this dashboard",
+"Slider":"Slider",
+"ANY STATUS":"ANY STATUS",
+"Add this dashboard to your website by coping this code below":"Add this dashboard to your website by coping this code below",
+"By Name":"By Name",
+"By Date":"By Date",
+"Showcase":"Showcase",
+"Share Link":"Share Link",
+"Preview":"Preview",
+"embedded_code":"The embedded code will show exactly what's below",
+
+
+/* users.hbs */
+
+"Add admins":"Add admins",
+
+
+/* Footer directory */
+
+/* footer.hbs */
+
+"Export .CSV File":"Export .CSV File",
+"Open":"Open",
+"Close":"Close",
+"Dashboard Status":"Dashboard Status",
+"off":"off",
+"Edit Showcase":"Edit Showcase",
+
+/* Header directory */
+
+/* header.hbs */
+
+"Log out":"Log out",
+"Log in":"Log in",
+
+/* Profile directory */
+
+/* card.hbs */
+
+"[ Log in to reveal e-mail ]":"[ Log in to reveal e-mail ]",
+
+/* cardEdit.hbs */
+
+"Edit Your Profile":"Edit Your Profile",
+"all fields required":"all fields required",
+"email only visible for logged in users":"email only visible for logged in users",
+"about_you":"Some about you",
+"saving...":"saving...",
+"Save profile":"Save profile",
+"Profile saved, going back to business ...":"Profile saved, going back to business ...",
+
+/* listItem.hbs */
+
+"Remove":"Remove",
+
+/* profile.hbs */
+
+"Contributions":"Contributions",
+"following":"Following",
+
+/* Project directory */
+
+/* card.hbs */
+
+"Join":"Join",
+"Follow":"Follow",
+"Leave":"Leave",
+"Unfollow":"Unfollow",
+"Demo":"Demo",
+
+/* edit.hbs */
+
+"Project Title":"Project Title",
+"Import Project":"Import Project",
+"GitHub":"GitHub",
+"LOADING":"LOADING",
+"import":"import",
+"Tags":"Tags ( comma separated values )",
+"Project URL Demo":"Project URL Demo",
+"Save":"Save",
+"Cancel":"Cancel",
+
+/* full.hbs */
+
+"leaving...":"leaving...",
+"joining...":"joining...",
+"unfollowing...":"unfollowing...",
+"following...":"following...",
+"Share this Project":"Share this Project",
+"Managed by":"Managed by",
+"Contributors":"Contributors",
+"Edit":"Edit",
+
+
+/* share.hbs */
+
+"embed this project":"embed this project",
+"Add this project to your website by coping this code below":"Add this project to your website by coping this code below",
+
+
+/* templates directory */
+
+"Log In":"Log In",
+"Access with":"Access with",
+
+"embed/insert":"embed/insert"
+
+
+};
+
+},{}],8:[function(require,module,exports){
+/*eslint-disable */
+module.exports = {
+  "code": "es-ES",
+  "time_format": "HH:mm",
+  "date_locale": "es",
+  "date_format": "DD\/MM\/YYYY",
+  "datetime_format": "DD\/MM\/YYYY HH:mm",
+  "colloquial_date_format": "ddd Do MMMM YYYY",
+
+
+  /* Home Directory */
+
+/* home.hbs */
+
+  "Dashboards": "Tableros",
+  "create now": "crear ahora",
+  "ERROR":"ERROR",
+  "Ideas for a": "Ideas para una",
+  "hackathon":"hackatón",
+  "Collections":"Colecciones",
+  "Projects":"Proyectos",
+  "People":"Personas",
+  "team":"equipo",
+  "partners":"socios",
+  "The HackDash was born":"HackDash nació por accidente y por necesidad. Estábamos buscando una plataforma para hacer seguimiento de ideas durante los hackatones en la línea de <a href=\"http://mediaparty.info/\" data-bypass=\"true\" target=\"__blank\">Hacks/Hackers Media Party</a> organizado por <a href=\"https://twitter.com/HacksHackersBA\" data-bypass=\"true\" target=\"__blank\">@HacksHackersBA</a> en la que hackers y periodistas comparten ideas. Corrimos la voz de nuestra necesidad por Twitter y ese fue el contexto en el que nació HackDash. <a href=\"https://twitter.com/blejman\" data-bypass=\"true\" target=\"__blank\">@blejman</a> tuvo una idea y a <a href=\"https://twitter.com/dzajdband\" data-bypass=\"true\" target=\"__blank\">@dzajdband</a> le interesó implementar esa idea. Así que empezamos a crear la aplicación esperando llegar al Buenos Aires Media Party con algo que no fuera horrible. El día del hackatón de Media Party llegó acompañado de una grata sorpresa: No solamente HackDash le gustó a la gente, sino que también algunos programadores agregaron la mejora de HackDash como su proyecto de Hackatón. Después del Media Party nos dimos cuenta de que esta pequeña aplicación estaba cubriendo una necesidad real. Tres años después, el tablero se está convirtiendo en un estándar para hacer seguimiento de ideas innovadores alrededor del mundo.<p><a class=\"up-button\">Creá tu propio tablero</a>, sé parte de una comunidad global.</p>",
+  
+/* collection.hbs */  
+
+/* counts.hbs */
+
+"dashboards":"tableros",
+"projects":"proyectos",
+"registered users":"usuarios registrados",
+"collections":"colectciones",
+"released projects":"proyectos lanzados",
+
+/* footer.hbs */
+
+"up":"subir",
+
+/* search.hbs */
+
+"Inform Progress to community.":"Informa el progreso a la comunidad.",
+"Upload your project to the platform.":"Sube tu proyecto a la plataforma.",
+"find it":"encuéntralo",
+"Add Collaborators to your projects.":"Agrega colaboradores a tu proyecto.",
+"Share your app to the world.":"Comparte tu aplicación con el mundo.",
+
+/* tabContent.hbs */
+
+"HEAD":"ENCABEZADO",
+
+/* Collections directory */
+
+/* list.hbs */
+
+"My Collections: adding":"Mis colecciones: agregando",
+
+/* listItem.hbs */
+
+"View":"Ver",
+
+/* Dashboard directory */
+
+/* addAdmin.hbs */
+
+"Warning! you will NOT":"¡Atención! ¡NO podrás eliminar este tablero si agregas un administrador!",
+"type name or username":"escribe nombre o nombre de usuario",
+"cancel":"cancelar",
+
+/* index.hbs */
+
+"Open dashboard website":"Abrir el sitio del tablero",
+"Share this Dashboard":"Compartir este tablero",
+"Create Project":"Crear proyecto",
+
+/* share.hbs */
+
+"embed this dashboard":"insertar este tablero",
+"Slider":"Slider",
+"ANY STATUS":"CUALQUIER ESTADO",
+"Add this dashboard to your website by coping this code below":"Agrega este tablero a tu sitio web copiando el código de abajo",
+"By Name":"Por nombre",
+"By Date":"Por fecha",
+"Showcase":"Galería",
+"Share Link":"Enlace para compartir",
+"Preview":"Previsualización",
+"embedded_code":"El código de inserción mostrará exactamente lo que está abajo",
+
+
+/* users.hbs */
+
+"Add admins":"Agregar administradores",
+
+
+/* Footer directory */
+
+/* footer.hbs */
+
+"Export .CSV File":"Exportar archivo .CSV",
+"Open":"Abrir",
+"Close":"Cerrar",
+"Dashboard Status":"Estado del tablero",
+"off":"apagar",
+"Edit Showcase":"Editar garlería",
+
+/* Header directory */
+
+/* header.hbs */
+
+"Log out":"Salir",
+"Log in":"Ingresar",
+
+/* Profile directory */
+
+/* card.hbs */
+
+"[ Log in to reveal e-mail ]":"[ Ingresa para revelar el correo ]",
+
+/* cardEdit.hbs */
+
+"Edit Your Profile":"Edita tu perfil",
+"all fields required":"todos los campos obligatorios",
+"email only visible for logged in users":"correo sólo visible para usuarios ingresados",
+"about_you":"Algo sobre tí",
+"saving...":"guardando...",
+"Save profile":"Guardar perfil",
+"Profile saved, going back to business ...":"Perfil guardado, volviendo...",
+
+/* listItem.hbs */
+
+"Remove":"Eliminar",
+
+/* profile.hbs */
+
+"Contributions":"Colaboraciones",
+"following":"Siguiendo",
+
+/* Project directory */
+
+/* card.hbs */
+
+"Join":"Unirse",
+"Follow":"Seguir",
+"Leave":"Abandonar",
+"Unfollow":"Dejar de seguir",
+"Demo":"Demo",
+
+/* edit.hbs */
+
+"Project Title":"Título del proyecto",
+"Import Project":"Importar proyecto",
+"GitHub":"GitHub",
+"LOADING":"CARGANDO",
+"import":"importar",
+"Tags":"Etiquetas (valores separados por comas)",
+"Project URL Demo":"URL de demo del proyecto",
+"Save":"Guardar",
+"Cancel":"Cancelar",
+
+/* full.hbs */
+
+"leaving...":"abandondando...",
+"joining...":"uniéndose...",
+"unfollowing...":"dejando de seguir...",
+"following...":"siguiendo...",
+"Share this Project":"Comparte este proyecto",
+"Managed by":"Administrado por",
+"Contributors":"Colaboradores",
+"Edit":"Editar",
+
+
+/* share.hbs */
+
+"embed this project":"inserta este proyecto",
+"Add this project to your website by coping this code below":"Agrega este proyecto a tu sitio copiando el código de abajo",
+
+
+/* templates directory */
+
+"Access with":"Acceder con",
+
+"embed/insert":"insertar" 
+  
+  
+};
+
+},{}],9:[function(require,module,exports){
+/*eslint no-console:0*/
+var locales = {
+  en: require('./en'),
+  es: require('./es')
+};
+
+var current = locales.es;
+var _lan = 'es';
+
+module.exports = {
+
+  setLocale: function(lan) {
+    //console.log(`i18n: setting Language [${lan}]`);
+    if (!locales.hasOwnProperty(lan)){
+
+      if (lan.indexOf('-') > -1 || lan.indexOf('_') > -1){
+        var parsed = lan.replace('-', '$').replace('_', '$');
+        var newLan = parsed.split('$')[0];
+
+        if (newLan && locales.hasOwnProperty(newLan)){
+          lan = newLan;
+        }
+        else {
+          var tr = 'i18n: Could not resolve Language from [${lan}] or language [${newLan}] not found';
+          console.warn(tr.replace('${lan}', lan).replace('${newLan}', newLan));
+          return;
+        }
+      }
+      else {
+        console.warn('i18n: Language [${lan}] not found'.replace('${lan}', lan));
+        return;
+      }
+    }
+
+    _lan = lan;
+    current = locales[lan];
+  },
+
+  locales: function() {
+    return current;
+  },
+
+  __: function() {
+    var key = arguments[0];
+    var params = Array.prototype.slice.call(arguments).slice(1);
+
+    var phrase = current[key];
+
+    if (!phrase){
+      if (locales.en.hasOwnProperty(key)){
+        phrase = locales.en[key];
+        console.warn(
+          'i18n: Key [${key}] not found for language [${_lan}]'.replace('${key}', key).replace('${_lan}', _lan));
+      }
+      else {
+        phrase = key;
+        console.error('i18n: Key [${key}] not found'.replace('${key}', key));
+      }
+    }
+
+    return params.reduce(function(str, p, i) {
+      return str.replace('{'+ (i+1) +'}', p);
+    }, phrase);
+  }
+
+};
+
+},{"./en":7,"./es":8}],10:[function(require,module,exports){
 /**
  * Collection: Administrators of a Dashboard
  *
@@ -450,7 +908,7 @@ module.exports = Users.extend({
 });
 
 
-},{"./User":12,"./Users":13}],8:[function(require,module,exports){
+},{"./User":15,"./Users":16}],11:[function(require,module,exports){
 
 module.exports = Backbone.Collection.extend({
 
@@ -463,7 +921,7 @@ module.exports = Backbone.Collection.extend({
   }
 
 });
-},{}],9:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /**
  * MODEL: Project
  *
@@ -531,7 +989,7 @@ module.exports = Backbone.Model.extend({
 });
 
 
-},{"./Admins":7}],10:[function(require,module,exports){
+},{"./Admins":10}],13:[function(require,module,exports){
 /**
  * MODEL: Project
  *
@@ -656,7 +1114,7 @@ module.exports = Backbone.Model.extend({
 });
 
 
-},{}],11:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /**
  * Collection: Projectss
  *
@@ -789,7 +1247,7 @@ var Projects = module.exports = BaseCollection.extend({
 
 });
 
-},{"./BaseCollection":8,"./Project":10}],12:[function(require,module,exports){
+},{"./BaseCollection":11,"./Project":13}],15:[function(require,module,exports){
 /**
  * MODEL: User
  *
@@ -801,7 +1259,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{}],13:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /**
  * Collection: Users
  *
@@ -824,7 +1282,7 @@ module.exports = BaseCollection.extend({
 });
 
 
-},{"./BaseCollection":8,"./User":12}],14:[function(require,module,exports){
+},{"./BaseCollection":11,"./User":15}],17:[function(require,module,exports){
 /**
  * VIEW: DashboardHeader Layout
  *
@@ -932,7 +1390,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
 });
-},{"./templates/dashboard.hbs":16}],15:[function(require,module,exports){
+},{"./templates/dashboard.hbs":19}],18:[function(require,module,exports){
 /**
  * VIEW: Dashboard Projects Layout
  *
@@ -1109,7 +1567,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
 
 });
-},{"../Home/EntityList":18,"../Project/Card":21,"../Project/Collection":22,"./Dashboard":14,"./templates/index.hbs":17}],16:[function(require,module,exports){
+},{"../Home/EntityList":21,"../Project/Card":24,"../Project/Collection":25,"./Dashboard":17,"./templates/index.hbs":20}],19:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -1154,7 +1612,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   else { return ''; }
   },"useData":true});
 
-},{"hbsfy/runtime":33}],17:[function(require,module,exports){
+},{"hbsfy/runtime":36}],20:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -1168,7 +1626,9 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "        <a class=\"link tooltips\" href=\""
     + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
-    + "\" target=\"_blank\"\n        data-bypass data-original-title=\"Open dashboard website\">\n          <i class=\"fa fa-link\"></i>\n        </a>\n";
+    + "\" target=\"_blank\"\n        data-bypass data-original-title='"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Open dashboard website", {"name":"__","hash":{},"data":data})))
+    + "'>\n          <i class=\"fa fa-link\"></i>\n        </a>\n";
 },"7":function(depth0,helpers,partials,data) {
   var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, buffer = "    <div class=\"dash-create visible-xs\">\n      <h3 class=\"create-project\">\n        <i class=\"fa fa-plus\"></i>\n";
   stack1 = ((helper = (helper = helpers.isLoggedIn || (depth0 != null ? depth0.isLoggedIn : depth0)) != null ? helper : helperMissing),(options={"name":"isLoggedIn","hash":{},"fn":this.program(8, data),"inverse":this.program(10, data),"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
@@ -1179,25 +1639,32 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "        <a href=\"/dashboards/"
     + escapeExpression(((helper = (helper = helpers.domain || (depth0 != null ? depth0.domain : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"domain","hash":{},"data":data}) : helper)))
-    + "/create\">Create Project</a>\n";
+    + "/create\">"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Create Project", {"name":"__","hash":{},"data":data})))
+    + "</a>\n";
 },"10":function(depth0,helpers,partials,data) {
-  return "        <a class=\"login\">Create Project</a>\n";
-  },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, buffer = "\n<div class=\"header\">\n  <div class=\"container\">\n\n";
+  var helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "        <a class=\"login\">"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Create Project", {"name":"__","hash":{},"data":data})))
+    + "</a>\n";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, escapeExpression=this.escapeExpression, buffer = "\n<div class=\"header\">\n  <div class=\"container\">\n\n";
   stack1 = ((helper = (helper = helpers.isEmbed || (depth0 != null ? depth0.isEmbed : depth0)) != null ? helper : helperMissing),(options={"name":"isEmbed","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.isEmbed) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n    <div class=\"dash-admins\"></div>\n\n    <div class=\"dash-buttons\">\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.link : depth0), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "      <a class=\"share tooltips\" data-original-title=\"Share this Dashboard\">\n        <i class=\"fa fa-share-alt\"></i>\n      </a>\n    </div>\n\n";
+  buffer += "      <a class=\"share tooltips\" data-original-title='"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Share this Dashboard", {"name":"__","hash":{},"data":data})))
+    + "'>\n        <i class=\"fa fa-share-alt\"></i>\n      </a>\n    </div>\n\n";
   stack1 = ((helper = (helper = helpers.isDashOpen || (depth0 != null ? depth0.isDashOpen : depth0)) != null ? helper : helperMissing),(options={"name":"isDashOpen","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.isDashOpen) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n  </div>\n</div>\n\n<div class=\"body\">\n\n  <div class=\"container\">\n\n    <div id=\"dashboard-projects\"></div>\n    <div id=\"inactive-projects\" class=\"hide inactive-ctn\"></div>\n\n  </div>\n\n</div>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":33}],18:[function(require,module,exports){
+},{"hbsfy/runtime":36}],21:[function(require,module,exports){
 /**
  * VIEW: A collection of Items for a Home Search
  *
@@ -1329,7 +1796,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   }
 
 });
-},{"./Item":19}],19:[function(require,module,exports){
+},{"./Item":22}],22:[function(require,module,exports){
 /**
  * VIEW: An Item of HOME Search
  *
@@ -1387,7 +1854,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
 });
-},{"./templates/item.hbs":20}],20:[function(require,module,exports){
+},{"./templates/item.hbs":23}],23:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -1397,7 +1864,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":33}],21:[function(require,module,exports){
+},{"hbsfy/runtime":36}],24:[function(require,module,exports){
 /**
  * VIEW: An Project of HOME Search
  *
@@ -1563,7 +2030,7 @@ module.exports = ItemView.extend({
 
 });
 
-},{"../Home/Item.js":19,"./templates/card.hbs":24}],22:[function(require,module,exports){
+},{"../Home/Item.js":22,"./templates/card.hbs":27}],25:[function(require,module,exports){
 /**
  * VIEW: Projects of an Instance
  *
@@ -1738,7 +2205,7 @@ module.exports = Backbone.Marionette.CollectionView.extend({
   },
 
 });
-},{"./Card":21}],23:[function(require,module,exports){
+},{"./Card":24}],26:[function(require,module,exports){
 /**
  * VIEW: An Embed Project
  *
@@ -1805,7 +2272,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 
 });
-},{"./templates/embed.hbs":25}],24:[function(require,module,exports){
+},{"./templates/embed.hbs":28}],27:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -1866,11 +2333,15 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
     + "\"\n      class=\"tooltips contribute\" target=\"_blank\"\n      data-original-title=\""
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.contributors : depth0)) != null ? stack1.length : stack1), depth0))
-    + " contributors\">Join</a>\n    <a href=\"/projects/"
+    + " contributors\">"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Join", {"name":"__","hash":{},"data":data})))
+    + "</a>\n    <a href=\"/projects/"
     + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
     + "\"\n      class=\"tooltips follow\" target=\"_blank\"\n      data-original-title=\""
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.followers : depth0)) != null ? stack1.length : stack1), depth0))
-    + " followers\">Follow</a>\n";
+    + " followers\">"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Follow", {"name":"__","hash":{},"data":data})))
+    + "</a>\n";
 },"21":function(depth0,helpers,partials,data) {
   var stack1, buffer = "\n";
   stack1 = helpers.unless.call(depth0, (depth0 != null ? depth0.isOwner : depth0), {"name":"unless","hash":{},"fn":this.program(22, data),"inverse":this.noop,"data":data});
@@ -1885,30 +2356,40 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   if (stack1 != null) { buffer += stack1; }
   return buffer;
 },"23":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression;
+  var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
   return "      <a\n        class=\"tooltips contribute\"\n        data-loading-text=\"leaving...\"\n        data-original-title=\""
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.contributors : depth0)) != null ? stack1.length : stack1), depth0))
-    + " contributors\">Leave</a>\n";
+    + " contributors\">"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Leave", {"name":"__","hash":{},"data":data})))
+    + "</a>\n";
 },"25":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression;
+  var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
   return "      <a\n        class=\"tooltips contribute\"\n        data-loading-text=\"joining...\"\n        data-original-title=\""
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.contributors : depth0)) != null ? stack1.length : stack1), depth0))
-    + " contributors\">Join</a>\n";
+    + " contributors\">"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Join", {"name":"__","hash":{},"data":data})))
+    + "</a>\n";
 },"27":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression;
+  var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
   return "      <a\n        class=\"tooltips follow\"\n        data-loading-text=\"unfollowing...\"\n        data-original-title=\""
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.followers : depth0)) != null ? stack1.length : stack1), depth0))
-    + " followers\">Unfollow</a>\n";
+    + " followers\">"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Unfollow", {"name":"__","hash":{},"data":data})))
+    + "</a>\n";
 },"29":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression;
+  var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
   return "      <a\n        class=\"tooltips follow\"\n        data-loading-text=\"following...\"\n        data-original-title=\""
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.followers : depth0)) != null ? stack1.length : stack1), depth0))
-    + " followers\">Follow</a>\n";
+    + " followers\">"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Follow", {"name":"__","hash":{},"data":data})))
+    + "</a>\n";
 },"31":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "  <a class=\"demo-link\" href=\""
     + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
-    + "\" target=\"_blank\" data-bypass>Demo</a>\n";
+    + "\" target=\"_blank\" data-bypass>"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Demo", {"name":"__","hash":{},"data":data})))
+    + "</a>\n";
 },"33":function(depth0,helpers,partials,data) {
   var stack1, buffer = "";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.isShowcaseMode : depth0), {"name":"if","hash":{},"fn":this.program(34, data),"inverse":this.noop,"data":data});
@@ -1966,7 +2447,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer;
 },"useData":true,"useDepths":true});
 
-},{"hbsfy/runtime":33}],25:[function(require,module,exports){
+},{"hbsfy/runtime":36}],28:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
@@ -2029,11 +2510,15 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
     + "\"\n      class=\"tooltips contribute\" target=\"_blank\"\n      data-original-title=\""
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.contributors : depth0)) != null ? stack1.length : stack1), depth0))
-    + " contributors\">Join</a>\n    <a href=\"/projects/"
+    + " contributors\">"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Join", {"name":"__","hash":{},"data":data})))
+    + "</a>\n    <a href=\"/projects/"
     + escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"_id","hash":{},"data":data}) : helper)))
     + "\"\n      class=\"tooltips follow\" target=\"_blank\"\n      data-original-title=\""
     + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.followers : depth0)) != null ? stack1.length : stack1), depth0))
-    + " followers\">Follow</a>\n\n";
+    + " followers\">"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Follow", {"name":"__","hash":{},"data":data})))
+    + "</a>\n\n";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.link : depth0), {"name":"if","hash":{},"fn":this.program(18, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + "</div>\n";
@@ -2041,7 +2526,9 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "  <a class=\"demo-link\" href=\""
     + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
-    + "\" target=\"_blank\">Demo</a>\n";
+    + "\" target=\"_blank\">"
+    + escapeExpression(((helpers.__ || (depth0 && depth0.__) || helperMissing).call(depth0, "Demo", {"name":"__","hash":{},"data":data})))
+    + "</a>\n";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, buffer = "\n";
   stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 != null ? depth0.settings : depth0)) != null ? stack1.prg : stack1), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
@@ -2064,7 +2551,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
   return buffer;
 },"useData":true});
 
-},{"hbsfy/runtime":33}],26:[function(require,module,exports){
+},{"hbsfy/runtime":36}],29:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -2100,7 +2587,7 @@ Handlebars.create = create;
 Handlebars['default'] = Handlebars;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":27,"./handlebars/exception":28,"./handlebars/runtime":29,"./handlebars/safe-string":30,"./handlebars/utils":31}],27:[function(require,module,exports){
+},{"./handlebars/base":30,"./handlebars/exception":31,"./handlebars/runtime":32,"./handlebars/safe-string":33,"./handlebars/utils":34}],30:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -2332,7 +2819,7 @@ var createFrame = function(object) {
   return frame;
 };
 exports.createFrame = createFrame;
-},{"./exception":28,"./utils":31}],28:[function(require,module,exports){
+},{"./exception":31,"./utils":34}],31:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -2361,7 +2848,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],29:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -2555,7 +3042,7 @@ exports.noop = noop;function initData(context, data) {
   }
   return data;
 }
-},{"./base":27,"./exception":28,"./utils":31}],30:[function(require,module,exports){
+},{"./base":30,"./exception":31,"./utils":34}],33:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -2567,7 +3054,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],31:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -2656,12 +3143,12 @@ exports.isEmpty = isEmpty;function appendContextPath(contextPath, id) {
 }
 
 exports.appendContextPath = appendContextPath;
-},{"./safe-string":30}],32:[function(require,module,exports){
+},{"./safe-string":33}],35:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":26}],33:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":29}],36:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":32}]},{},[6]);
+},{"handlebars/runtime":35}]},{},[6]);
