@@ -41,7 +41,7 @@ module.exports = {
 /* search.hbs */
 
 "Inform Progress to community.":"Inform Progress to community.",
-"Upload your project to the platform.":"Upload your project to the platform."
+"Upload your project to the platform.":"Upload your project to the platform.",
 "find it":"find it",
 "Add Collaborators to your projects.":"Add Collaborators to your projects.",
 "Share your app to the world.":"Share your app to the world.",
