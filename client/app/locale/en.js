@@ -178,7 +178,6 @@ module.exports = {
 
 /* templates directory */
 
-"Log In":"Log In",
 "Access with":"Access with",
 "embed/insert":"embed/insert",
 
@@ -215,29 +214,65 @@ module.exports = {
 "Description":"Description",
 "Hackdash Logo":"Hackdash Logo",
 "Progress":"Progress",
-"Contributors":"Contributors",
 "Action Bar":"Action Bar",
 
+/* Footer directory */
+
+/* index.js */
+
+"This Dashboard is open: click to close":"This Dashboard is open: click to close",
+"This Dashboard is closed: click to reopen":"This Dashboard is closed: click to reopen",
+"off":"off",
+"Edit Showcase":"Edit Showcase",
+"Save Showcase":"Save Showcase",
+
+/* Header directory */
+
+/* index.js */
 
 
+"Enter your keywords":"Enter your keywords",
 
+/* Home directory */
+/* index.js */
 
+"5 to 10 chars, no spaces or special":"5 to 10 chars, no spaces or special",
+"Sorry, that one is in use. Try another one.":"Sorry, that one is in use. Try another one.",
 
+/* Profile directory */
+/* CardEdit.js */
 
+"Name is required":"Name is required",
+"Email is required":"Email is required",
+"Invalid Email":"Invalid Email",
 
+/* ListItem.js */
 
+"Only the Owner can remove this Dashboard.":"Only the Owner can remove this Dashboard.",
+"Only Dashboards with ONE admin can be removed.":"Only Dashboards with ONE admin can be removed.",
+"Only Dashboards without Projects can be removed.":"Only Dashboards without Projects can be removed.",
+'This action will remove Dashboard ':'This action will remove Dashboard ',
+'. Are you sure?':'. Are you sure?',
+"Cannot Remove ":"Cannot Remove ", // no se puede remover el tablero
+" Dashboard":" Dashboard", // dejar vacío en castellano
 
+/* Projects directory */
+/* Edit.js */
 
+"Title is required":"Title is required",
+"Description is required":"Description is required",
+'Drop Image Here':'Drop Image Here',
+'File is too big, 500 Kb is the max':'File is too big, 500 Kb is the max',
+'Only jpg, png and gif are allowed':'Only jpg, png and gif are allowed',
 
+/* Full.js */
 
+"This project is going to be deleted. Are you sure?":"This project is going to be deleted. Are you sure?",
 
+/* Share.js */
 
-
-
-
-
-
-
-
+'Picture':'Picture',
+'Title':'Title',
+'Description':'Description',
 
 };

@@ -58,10 +58,10 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
     if (this.model && this.model instanceof Dashboard){
 
-      var msg = "This Dashboard is open: click to close";
+      var msg = __("This Dashboard is open: click to close");
 
       if (!this.model.get("open")) {
-        msg = "This Dashboard is closed: click to reopen";
+        msg = __("This Dashboard is closed: click to reopen");
       }
 
       return _.extend({
@@ -119,7 +119,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       this.model.isShowcaseMode = false;
 
       this.ui.showcaseMode
-        .html("<i class='btn-danger txt'>off</i><div>Edit Showcase</div>")
+        .html("<i class='btn-danger txt'>" . _("off") . "</i><div>" . __("Edit Showcase") . "</div>")
         .removeClass("on");
 
       this.ui.createShowcase.removeClass("hide");
@@ -130,7 +130,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       this.model.trigger("edit:showcase");
 
       this.ui.showcaseMode
-        .text("Save Showcase")
+        .text(__("Save Showcase"))
         .addClass("btn btn-success on");
 
       this.ui.createShowcase.addClass("hide");

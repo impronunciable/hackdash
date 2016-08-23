@@ -100,22 +100,22 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   settings: [{
     code: 'prg',
-    name: 'Progress'
+    name: __('Progress')
   }, {
     code: 'pic',
-    name: 'Picture'
+    name: __('Picture')
   }, {
     code: 'title',
-    name: 'Title'
+    name: __('Title')
   }, {
     code: 'desc',
-    name: 'Description'
+    name: __('Description')
   }, {
     code: 'contrib',
-    name: 'Contributors'
+    name: __('Contributors')
   }, {
     code: 'acnbar',
-    name: 'Action Bar'
+    name: __('Action Bar')
   }]
 
 });

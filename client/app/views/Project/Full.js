@@ -93,7 +93,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   onRemove: function(){
-    if (window.confirm("This project is going to be deleted. Are you sure?")){
+    if (window.confirm(__("This project is going to be deleted. Are you sure?"))){
       var domain = this.model.get('domain');
       this.model.destroy();
 
