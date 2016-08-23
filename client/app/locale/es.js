@@ -179,8 +179,100 @@ module.exports = {
 /* templates directory */
 
 "Access with":"Acceder con",
-
 "embed/insert":"insertar" 
   
   
+/* ----------------------- js files ------------------------ */
+
+/* Sharer.js */
+
+"Hacking at":"Hackeando en",
+
+/* Collection directory */
+
+/* Collection.js */
+
+"Collection of Hackathons Title":"Título de la colección de hackatones",
+"brief description of this collection of hackathons":"breve descripción de esta colección de hackatones",
+
+/* List.js */
+
+" has been added to ":" ha sido agregado a ",
+" has been removed from ":" ha sido eliminado de ",
+
+/* Dashboard directory */
+
+/* Dashboard.js */
+
+"Hackathon Title":"Título de Hackatón",
+"brief description of this hackathon":"breve descripción de esta hackatón",
+"url to hackathon site":"url del sitio de la hackatón",
+
+/* Share.js */
+
+"Title":"Título",
+"Description":"Descripción",
+"Hackdash Logo":"Logo de Hackdash",
+"Progress":"Progreso",
+"Action Bar":"Barra de Acciones",
+
+/* Footer directory */
+
+/* index.js */
+
+"This Dashboard is open: click to close":"Este tablero está abierto: clic para cerrar",
+"This Dashboard is closed: click to reopen":"Este tablero está cerrado: clic para reabrir",
+"off":"apagado",
+"Edit Showcase":"Editar Galería",
+"Save Showcase":"Guardar Galería",
+
+/* Header directory */
+
+/* index.js */
+
+
+"Enter your keywords":"Ingresá las palabras clave",
+
+/* Home directory */
+/* index.js */
+
+"5 to 10 chars, no spaces or special":"5 a 10 caracteres, sin espacios o caracteres especiales",
+"Sorry, that one is in use. Try another one.":"Perdón, ya está en uso. Prueba otro.",
+
+/* Profile directory */
+/* CardEdit.js */
+
+"Name is required":"El nombre es requerido",
+"Email is required":"El correo es requerido",
+"Invalid Email":"Correo inválido",
+
+/* ListItem.js */
+
+"Only the Owner can remove this Dashboard.":"Sólo el dueño puede eliminar este tablero.",
+"Only Dashboards with ONE admin can be removed.":"Sólo tableros con UN admin pueden ser eliminador",
+"Only Dashboards without Projects can be removed.":"Sólo tableros sin proyectos pueden ser eliminados.",
+'This action will remove Dashboard ':'Esta acción eliminará el Tablero ',
+'. Are you sure?':'. ¿Estás seguro?',
+"Cannot Remove ":"No se puede eliminar el tablero ", // no se puede remover el tablero
+" Dashboard":"", // dejar vacío en castellano
+
+/* Projects directory */
+/* Edit.js */
+
+"Title is required":"El título es requerido",
+"Description is required":"La descripción es requerida",
+'Drop Image Here':'Suelta la imagen aquí',
+'File is too big, 500 Kb is the max':'El archivo es muy grande, 500 Kb es el máximo',
+'Only jpg, png and gif are allowed':'Sólo se permiten jpg, png y gif',
+
+/* Full.js */
+
+"This project is going to be deleted. Are you sure?":"Este proyecto será eliminado. ¿Estás seguro?",
+
+/* Share.js */
+
+'Picture':'Imagen',
+'Title':'Título',
+'Description':'Descripción',
+
 };
