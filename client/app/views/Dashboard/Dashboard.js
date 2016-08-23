@@ -73,9 +73,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   placeholders: {
-    title: "Hackathon Title",
-    description: "brief description of this hackathon",
-    link: "url to hackathon site"
+    title: __("Hackathon Title"),
+    description: __("brief description of this hackathon"),
+    link: __("url to hackathon site"),
   },
 
   initEditables: function(){

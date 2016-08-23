@@ -180,8 +180,64 @@ module.exports = {
 
 "Log In":"Log In",
 "Access with":"Access with",
+"embed/insert":"embed/insert",
 
-"embed/insert":"embed/insert"
+
+/* ----------------------- js files ------------------------ */
+
+/* Sharer.js */
+
+"Hacking at":"Hacking at",
+
+/* Collection directory */
+
+/* Collection.js */
+
+"Collection of Hackathons Title":"Collection of Hackathons Title",
+"brief description of this collection of hackathons":"brief description of this collection of hackathons",
+
+/* List.js */
+
+" has been added to ":" has been added to ",
+" has been removed from ":" has been removed from ",
+
+/* Dashboard directory */
+
+/* Dashboard.js */
+
+"Hackathon Title":"Hackathon Title",
+"brief description of this hackathon":"brief description of this hackathon",
+"url to hackathon site":"url to hackathon site",
+
+/* Share.js */
+
+"Title":"Title",
+"Description":"Description",
+"Hackdash Logo":"Hackdash Logo",
+"Progress":"Progress",
+"Contributors":"Contributors",
+"Action Bar":"Action Bar",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 };
