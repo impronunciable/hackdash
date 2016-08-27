@@ -22,16 +22,14 @@ html, body, #main, #main>div {
 }
 
 .landing-header {
-  background: url(@landing-photo-url) no-repeat center center fixed;
+  background: @color-blackC;
   display: table;
-  height: 115%;
   position: relative;
   width: 100%;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  margin-bottom: -7%;
 
   @media (max-width: 500px) {
     height: 100%;
@@ -39,16 +37,14 @@ html, body, #main, #main>div {
   }
 
   .call-action {
-
-    width: 100%;
-    height: 100%;
+    padding-top: 50px;
+    text-align: center;
     color: @color-white;
     display: table-cell;
-    background-color: rgba(0,0,0,0.65);
+    padding-bottom: 80px;
+
 
     .logo {
-      margin: -50px auto 50px auto;
-
       @media (max-width: 500px) {
         margin: 0 auto;
         width: 80px;
@@ -154,8 +150,16 @@ html, body, #main, #main>div {
   }
 }
 
+.nav-tabs-container.landing {
+  background: @color-blackC;
+}
+
+.landing-features {
+}
+
 .nav-tabs.landing {
   border-bottom: none;
+  margin-left: 0;
 
   li {
     float:none;
@@ -714,6 +718,7 @@ html, body, #main, #main>div {
     .call-action {
       h1{
         font-size: @fsize-50;
+        margin-bottom: 80px;
       }
 
       .input-group {
