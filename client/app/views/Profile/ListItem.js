@@ -89,7 +89,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
       return;
     }
 
-    if (this.model.get(__("projectsCount") > 0){
+    if (this.model.get(__("projectsCount")) > 0){
       this.showMessage(__("Only Dashboards without Projects can be removed."));
       return;
     }
@@ -110,7 +110,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   showMessage: function(msg){
     hackdash.app.showOKMessage({
-      title: __("Cannot Remove ") + this.model.get('domain') + __(" Dashboard"),
+      title: __("cannot_remove_dashboard", this.model.get('domain')),
       message: msg,
       type: "danger"
     });

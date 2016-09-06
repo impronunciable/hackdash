@@ -23,8 +23,8 @@ module.exports = {
   "team":"equipo",
   "partners":"socios",
   "The HackDash was born":"HackDash nació por accidente y por necesidad. Estábamos buscando una plataforma para hacer seguimiento de ideas durante los hackatones en la línea de <a href=\"http://mediaparty.info/\" data-bypass=\"true\" target=\"__blank\">Hacks/Hackers Media Party</a> organizado por <a href=\"https://twitter.com/HacksHackersBA\" data-bypass=\"true\" target=\"__blank\">@HacksHackersBA</a> en la que hackers y periodistas comparten ideas. Corrimos la voz de nuestra necesidad por Twitter y ese fue el contexto en el que nació HackDash. <a href=\"https://twitter.com/blejman\" data-bypass=\"true\" target=\"__blank\">@blejman</a> tuvo una idea y a <a href=\"https://twitter.com/dzajdband\" data-bypass=\"true\" target=\"__blank\">@dzajdband</a> le interesó implementar esa idea. Así que empezamos a crear la aplicación esperando llegar al Buenos Aires Media Party con algo que no fuera horrible. El día del hackatón de Media Party llegó acompañado de una grata sorpresa: No solamente HackDash le gustó a la gente, sino que también algunos programadores agregaron la mejora de HackDash como su proyecto de Hackatón. Después del Media Party nos dimos cuenta de que esta pequeña aplicación estaba cubriendo una necesidad real. Tres años después, el tablero se está convirtiendo en un estándar para hacer seguimiento de ideas innovadores alrededor del mundo.<p><a class=\"up-button\">Creá tu propio tablero</a>, sé parte de una comunidad global.</p>",
-  
-/* collection.hbs */  
+
+/* collection.hbs */
 
 /* counts.hbs */
 
@@ -102,7 +102,6 @@ module.exports = {
 "Close":"Cerrar",
 "Dashboard Status":"Estado del tablero",
 "off":"apagar",
-"Edit Showcase":"Editar garlería",
 
 /* Header directory */
 
@@ -179,9 +178,9 @@ module.exports = {
 /* templates directory */
 
 "Access with":"Acceder con",
-"embed/insert":"insertar" 
-  
-  
+"embed/insert":"insertar",
+
+
 /* ----------------------- js files ------------------------ */
 
 /* Sharer.js */
@@ -222,7 +221,7 @@ module.exports = {
 
 "This Dashboard is open: click to close":"Este tablero está abierto: clic para cerrar",
 "This Dashboard is closed: click to reopen":"Este tablero está cerrado: clic para reabrir",
-"off":"apagado",
+"turned_off":"apagado",
 "Edit Showcase":"Editar Galería",
 "Save Showcase":"Guardar Galería",
 
@@ -251,19 +250,18 @@ module.exports = {
 "Only the Owner can remove this Dashboard.":"Sólo el dueño puede eliminar este tablero.",
 "Only Dashboards with ONE admin can be removed.":"Sólo tableros con UN admin pueden ser eliminador",
 "Only Dashboards without Projects can be removed.":"Sólo tableros sin proyectos pueden ser eliminados.",
-'This action will remove Dashboard ':'Esta acción eliminará el Tablero ',
-'. Are you sure?':'. ¿Estás seguro?',
-"Cannot Remove ":"No se puede eliminar el tablero ", // no se puede remover el tablero
-" Dashboard":"", // dejar vacío en castellano
+"This action will remove Dashboard ":"Esta acción eliminará el Tablero ",
+". Are you sure?":". ¿Estás seguro?",
+"cannot_remove_dashboard": "No se puede eliminar el tablero {1}",
 
 /* Projects directory */
 /* Edit.js */
 
 "Title is required":"El título es requerido",
 "Description is required":"La descripción es requerida",
-'Drop Image Here':'Suelta la imagen aquí',
-'File is too big, 500 Kb is the max':'El archivo es muy grande, 500 Kb es el máximo',
-'Only jpg, png and gif are allowed':'Sólo se permiten jpg, png y gif',
+"Drop Image Here":"Suelta la imagen aquí",
+"File is too big, 500 Kb is the max":"El archivo es muy grande, 500 Kb es el máximo",
+"Only jpg, png and gif are allowed":"Sólo se permiten jpg, png y gif",
 
 /* Full.js */
 
@@ -271,8 +269,7 @@ module.exports = {
 
 /* Share.js */
 
-'Picture':'Imagen',
-'Title':'Título',
-'Description':'Descripción',
+"Picture":"Imagen",
+
 
 };
