@@ -47,7 +47,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       case "dashboard":
         this.search.show(new Search({
           showSort: true,
-          placeholder: "Enter your keywords",
+          placeholder: __("Enter your keywords"),
           model: this.model,
           collection: this.collection
         }));

@@ -80,22 +80,22 @@ module.exports = Backbone.Marionette.ItemView.extend({
     e.stopPropagation();
 
     if (!Dashboard.isAdmin(this.model)){
-      this.showMessage("Only the Owner can remove this Dashboard.");
+      this.showMessage(__("Only the Owner can remove this Dashboard."));
       return;
     }
 
     if (!Dashboard.isOwner(this.model)){
-      this.showMessage("Only Dashboards with ONE admin can be removed.");
+      this.showMessage(__("Only Dashboards with ONE admin can be removed."));
       return;
     }
 
-    if (this.model.get("projectsCount") > 0){
-      this.showMessage("Only Dashboards without Projects can be removed.");
+    if (this.model.get(__("projectsCount")) > 0){
+      this.showMessage(__("Only Dashboards without Projects can be removed."));
       return;
     }
 
-    if (window.confirm('This action will remove Dashboard ' +
-      this.model.get("domain") + '. Are you sure?')){
+    if (window.confirm(__('This action will remove Dashboard ') +
+      this.model.get("domain") + __('. Are you sure?'))){
 
         var dash = new Dashboard({ domain: this.model.get('domain') });
         dash.destroy().done(function(){
@@ -110,7 +110,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   showMessage: function(msg){
     hackdash.app.showOKMessage({
-      title: "Cannot Remove " + this.model.get('domain') + " Dashboard",
+      title: __("cannot_remove_dashboard", this.model.get('domain')),
       message: msg,
       type: "danger"
     });

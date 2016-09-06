@@ -168,7 +168,7 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
       url += '/p/' + this.model.get('_id');
     }
 
-    var textShort = 'Hacking at ' + (title || domain);
+    var textShort = __('Hacking at') + ' ' + (title || domain);
     text += textShort + ' via ' + people;
     text += ' ' + ['#hackdash', domain].join(' #');
 
@@ -202,7 +202,7 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
       url += '/p/' + this.model.get('_id');
     }
 
-    var textShort = 'Hacking at ' + (title || domain);
+    var textShort = __('Hacking at') + ' ' + (title || domain);
     stitle += textShort;
     text += textShort + ' - HackDash';
 

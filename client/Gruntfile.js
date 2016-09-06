@@ -151,6 +151,7 @@ module.exports = function(grunt) {
             ,Draggabilly: true
             ,Dropzone: true
             ,hackdash: true
+            ,__: true
           }
         }
       }

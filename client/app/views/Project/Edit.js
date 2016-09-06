@@ -138,8 +138,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   errors: {
-    "title_required": "Title is required",
-    "description_required": "Description is required"
+    "title_required": __("Title is required"),
+    "description_required": __("Description is required")
   },
 
   showError: function(err){
@@ -194,9 +194,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
       acceptedFiles: 'image/jpeg,image/png,image/gif',
       uploadMultiple: false,
       clickable: true,
-      dictDefaultMessage: 'Drop Image Here',
-      dictFileTooBig: 'File is too big, 500 Kb is the max',
-      dictInvalidFileType: 'Only jpg, png and gif are allowed'
+      dictDefaultMessage: __('Drop Image Here'),
+      dictFileTooBig: __('File is too big, 500 Kb is the max'),
+      dictInvalidFileType: __('Only jpg, png and gif are allowed')
     });
 
     coverZone.on("error", function(file, message) {

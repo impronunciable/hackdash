@@ -23,8 +23,8 @@ module.exports = {
   "team":"team",
   "partners":"partners",
   "The HackDash was born":"The HackDash was born by accident and by a need. We were looking for a platform to track ideas through hackathons in the line to the <a href=\"http://mediaparty.info/\" data-bypass=\"true\" target=\"__blank\">Hacks/Hackers Media Party</a> organized by <a href=\"https://twitter.com/HacksHackersBA\" data-bypass=\"true\" target=\"__blank\">@HacksHackersBA</a> where hackers and journalists share ideas. We spread the need through Twitter and that was the context of the HackDash born. <a href=\"https://twitter.com/blejman\" data-bypass=\"true\" target=\"__blank\">@blejman</a> had an idea and <a href=\"https://twitter.com/dzajdband\" data-bypass=\"true\" target=\"__blank\">@dzajdband</a> was interested in implement that idea. So we started building the app hoping we can get to the Buenos Aires Media Party with something that doesn't suck. The Media Party Hackathon day came followed by a grateful surprise. Not only the people liked the HackDash implementation but a couple of coders added the improvement of the HackDash as a Hackaton project. After the Media Party we realized that this small app was filling a real need. Three years later, the dashboard is becoming an standard to track innovative ideas around the world.<p><a class=\"up-button\">Create your own dashboard</a>, be part of a global community.</p>",
-  
-/* collection.hbs */  
+
+/* collection.hbs */
 
 /* counts.hbs */
 
@@ -102,7 +102,6 @@ module.exports = {
 "Close":"Close",
 "Dashboard Status":"Dashboard Status",
 "off":"off",
-"Edit Showcase":"Edit Showcase",
 
 /* Header directory */
 
@@ -178,10 +177,98 @@ module.exports = {
 
 /* templates directory */
 
-"Log In":"Log In",
 "Access with":"Access with",
+"embed/insert":"embed/insert",
 
-"embed/insert":"embed/insert"
 
+/* ----------------------- js files ------------------------ */
+
+/* Sharer.js */
+
+"Hacking at":"Hacking at",
+
+/* Collection directory */
+
+/* Collection.js */
+
+"Collection of Hackathons Title":"Collection of Hackathons Title",
+"brief description of this collection of hackathons":"brief description of this collection of hackathons",
+
+/* List.js */
+
+" has been added to ":" has been added to ",
+" has been removed from ":" has been removed from ",
+
+/* Dashboard directory */
+
+/* Dashboard.js */
+
+"Hackathon Title":"Hackathon Title",
+"brief description of this hackathon":"brief description of this hackathon",
+"url to hackathon site":"url to hackathon site",
+
+/* Share.js */
+
+"Description":"Description",
+"Hackdash Logo":"Hackdash Logo",
+"Progress":"Progress",
+"Action Bar":"Action Bar",
+
+/* Footer directory */
+
+/* index.js */
+
+"This Dashboard is open: click to close":"This Dashboard is open: click to close",
+"This Dashboard is closed: click to reopen":"This Dashboard is closed: click to reopen",
+"turned_off":"apagado",
+"Edit Showcase":"Edit Showcase",
+"Save Showcase":"Save Showcase",
+
+/* Header directory */
+
+/* index.js */
+
+
+"Enter your keywords":"Enter your keywords",
+
+/* Home directory */
+/* index.js */
+
+"5 to 10 chars, no spaces or special":"5 to 10 chars, no spaces or special",
+"Sorry, that one is in use. Try another one.":"Sorry, that one is in use. Try another one.",
+
+/* Profile directory */
+/* CardEdit.js */
+
+"Name is required":"Name is required",
+"Email is required":"Email is required",
+"Invalid Email":"Invalid Email",
+
+/* ListItem.js */
+
+"Only the Owner can remove this Dashboard.":"Only the Owner can remove this Dashboard.",
+"Only Dashboards with ONE admin can be removed.":"Only Dashboards with ONE admin can be removed.",
+"Only Dashboards without Projects can be removed.":"Only Dashboards without Projects can be removed.",
+"This action will remove Dashboard ":"This action will remove Dashboard ",
+". Are you sure?":". Are you sure?",
+"cannot_remove_dashboard": "Cannot Remove {1} dashboard",
+
+/* Projects directory */
+/* Edit.js */
+
+"Title is required":"Title is required",
+"Description is required":"Description is required",
+"Drop Image Here":"Drop Image Here",
+"File is too big, 500 Kb is the max":"File is too big, 500 Kb is the max",
+"Only jpg, png and gif are allowed":"Only jpg, png and gif are allowed",
+
+/* Full.js */
+
+"This project is going to be deleted. Are you sure?":"This project is going to be deleted. Are you sure?",
+
+/* Share.js */
+
+"Picture":"Picture",
+"Title":"Title",
 
 };

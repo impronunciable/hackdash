@@ -72,7 +72,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
   timer: null,
   showAction: function(type, title){
-    var msg = (type === 'add' ? ' has been added to ' : ' has been removed from ');
+    var msg = (type === 'add' ? __(' has been added to ') : __(' has been removed from '));
     var dash = this.model.get("domain");
 
     this.ui.events.empty();

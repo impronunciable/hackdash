@@ -693,8 +693,8 @@ module.exports = {
   "team":"team",
   "partners":"partners",
   "The HackDash was born":"The HackDash was born by accident and by a need. We were looking for a platform to track ideas through hackathons in the line to the <a href=\"http://mediaparty.info/\" data-bypass=\"true\" target=\"__blank\">Hacks/Hackers Media Party</a> organized by <a href=\"https://twitter.com/HacksHackersBA\" data-bypass=\"true\" target=\"__blank\">@HacksHackersBA</a> where hackers and journalists share ideas. We spread the need through Twitter and that was the context of the HackDash born. <a href=\"https://twitter.com/blejman\" data-bypass=\"true\" target=\"__blank\">@blejman</a> had an idea and <a href=\"https://twitter.com/dzajdband\" data-bypass=\"true\" target=\"__blank\">@dzajdband</a> was interested in implement that idea. So we started building the app hoping we can get to the Buenos Aires Media Party with something that doesn't suck. The Media Party Hackathon day came followed by a grateful surprise. Not only the people liked the HackDash implementation but a couple of coders added the improvement of the HackDash as a Hackaton project. After the Media Party we realized that this small app was filling a real need. Three years later, the dashboard is becoming an standard to track innovative ideas around the world.<p><a class=\"up-button\">Create your own dashboard</a>, be part of a global community.</p>",
-  
-/* collection.hbs */  
+
+/* collection.hbs */
 
 /* counts.hbs */
 
@@ -772,7 +772,6 @@ module.exports = {
 "Close":"Close",
 "Dashboard Status":"Dashboard Status",
 "off":"off",
-"Edit Showcase":"Edit Showcase",
 
 /* Header directory */
 
@@ -848,11 +847,99 @@ module.exports = {
 
 /* templates directory */
 
-"Log In":"Log In",
 "Access with":"Access with",
+"embed/insert":"embed/insert",
 
-"embed/insert":"embed/insert"
 
+/* ----------------------- js files ------------------------ */
+
+/* Sharer.js */
+
+"Hacking at":"Hacking at",
+
+/* Collection directory */
+
+/* Collection.js */
+
+"Collection of Hackathons Title":"Collection of Hackathons Title",
+"brief description of this collection of hackathons":"brief description of this collection of hackathons",
+
+/* List.js */
+
+" has been added to ":" has been added to ",
+" has been removed from ":" has been removed from ",
+
+/* Dashboard directory */
+
+/* Dashboard.js */
+
+"Hackathon Title":"Hackathon Title",
+"brief description of this hackathon":"brief description of this hackathon",
+"url to hackathon site":"url to hackathon site",
+
+/* Share.js */
+
+"Description":"Description",
+"Hackdash Logo":"Hackdash Logo",
+"Progress":"Progress",
+"Action Bar":"Action Bar",
+
+/* Footer directory */
+
+/* index.js */
+
+"This Dashboard is open: click to close":"This Dashboard is open: click to close",
+"This Dashboard is closed: click to reopen":"This Dashboard is closed: click to reopen",
+"turned_off":"apagado",
+"Edit Showcase":"Edit Showcase",
+"Save Showcase":"Save Showcase",
+
+/* Header directory */
+
+/* index.js */
+
+
+"Enter your keywords":"Enter your keywords",
+
+/* Home directory */
+/* index.js */
+
+"5 to 10 chars, no spaces or special":"5 to 10 chars, no spaces or special",
+"Sorry, that one is in use. Try another one.":"Sorry, that one is in use. Try another one.",
+
+/* Profile directory */
+/* CardEdit.js */
+
+"Name is required":"Name is required",
+"Email is required":"Email is required",
+"Invalid Email":"Invalid Email",
+
+/* ListItem.js */
+
+"Only the Owner can remove this Dashboard.":"Only the Owner can remove this Dashboard.",
+"Only Dashboards with ONE admin can be removed.":"Only Dashboards with ONE admin can be removed.",
+"Only Dashboards without Projects can be removed.":"Only Dashboards without Projects can be removed.",
+"This action will remove Dashboard ":"This action will remove Dashboard ",
+". Are you sure?":". Are you sure?",
+"cannot_remove_dashboard": "Cannot Remove {1} dashboard",
+
+/* Projects directory */
+/* Edit.js */
+
+"Title is required":"Title is required",
+"Description is required":"Description is required",
+"Drop Image Here":"Drop Image Here",
+"File is too big, 500 Kb is the max":"File is too big, 500 Kb is the max",
+"Only jpg, png and gif are allowed":"Only jpg, png and gif are allowed",
+
+/* Full.js */
+
+"This project is going to be deleted. Are you sure?":"This project is going to be deleted. Are you sure?",
+
+/* Share.js */
+
+"Picture":"Picture",
+"Title":"Title",
 
 };
 
@@ -882,8 +969,8 @@ module.exports = {
   "team":"equipo",
   "partners":"socios",
   "The HackDash was born":"HackDash nació por accidente y por necesidad. Estábamos buscando una plataforma para hacer seguimiento de ideas durante los hackatones en la línea de <a href=\"http://mediaparty.info/\" data-bypass=\"true\" target=\"__blank\">Hacks/Hackers Media Party</a> organizado por <a href=\"https://twitter.com/HacksHackersBA\" data-bypass=\"true\" target=\"__blank\">@HacksHackersBA</a> en la que hackers y periodistas comparten ideas. Corrimos la voz de nuestra necesidad por Twitter y ese fue el contexto en el que nació HackDash. <a href=\"https://twitter.com/blejman\" data-bypass=\"true\" target=\"__blank\">@blejman</a> tuvo una idea y a <a href=\"https://twitter.com/dzajdband\" data-bypass=\"true\" target=\"__blank\">@dzajdband</a> le interesó implementar esa idea. Así que empezamos a crear la aplicación esperando llegar al Buenos Aires Media Party con algo que no fuera horrible. El día del hackatón de Media Party llegó acompañado de una grata sorpresa: No solamente HackDash le gustó a la gente, sino que también algunos programadores agregaron la mejora de HackDash como su proyecto de Hackatón. Después del Media Party nos dimos cuenta de que esta pequeña aplicación estaba cubriendo una necesidad real. Tres años después, el tablero se está convirtiendo en un estándar para hacer seguimiento de ideas innovadores alrededor del mundo.<p><a class=\"up-button\">Creá tu propio tablero</a>, sé parte de una comunidad global.</p>",
-  
-/* collection.hbs */  
+
+/* collection.hbs */
 
 /* counts.hbs */
 
@@ -961,7 +1048,6 @@ module.exports = {
 "Close":"Cerrar",
 "Dashboard Status":"Estado del tablero",
 "off":"apagar",
-"Edit Showcase":"Editar garlería",
 
 /* Header directory */
 
@@ -1038,10 +1124,100 @@ module.exports = {
 /* templates directory */
 
 "Access with":"Acceder con",
+"embed/insert":"insertar",
 
-"embed/insert":"insertar" 
-  
-  
+
+/* ----------------------- js files ------------------------ */
+
+/* Sharer.js */
+
+"Hacking at":"Hackeando en",
+
+/* Collection directory */
+
+/* Collection.js */
+
+"Collection of Hackathons Title":"Título de la colección de hackatones",
+"brief description of this collection of hackathons":"breve descripción de esta colección de hackatones",
+
+/* List.js */
+
+" has been added to ":" ha sido agregado a ",
+" has been removed from ":" ha sido eliminado de ",
+
+/* Dashboard directory */
+
+/* Dashboard.js */
+
+"Hackathon Title":"Título de Hackatón",
+"brief description of this hackathon":"breve descripción de esta hackatón",
+"url to hackathon site":"url del sitio de la hackatón",
+
+/* Share.js */
+
+"Title":"Título",
+"Description":"Descripción",
+"Hackdash Logo":"Logo de Hackdash",
+"Progress":"Progreso",
+"Action Bar":"Barra de Acciones",
+
+/* Footer directory */
+
+/* index.js */
+
+"This Dashboard is open: click to close":"Este tablero está abierto: clic para cerrar",
+"This Dashboard is closed: click to reopen":"Este tablero está cerrado: clic para reabrir",
+"turned_off":"apagado",
+"Edit Showcase":"Editar Galería",
+"Save Showcase":"Guardar Galería",
+
+/* Header directory */
+
+/* index.js */
+
+
+"Enter your keywords":"Ingresá las palabras clave",
+
+/* Home directory */
+/* index.js */
+
+"5 to 10 chars, no spaces or special":"5 a 10 caracteres, sin espacios o caracteres especiales",
+"Sorry, that one is in use. Try another one.":"Perdón, ya está en uso. Prueba otro.",
+
+/* Profile directory */
+/* CardEdit.js */
+
+"Name is required":"El nombre es requerido",
+"Email is required":"El correo es requerido",
+"Invalid Email":"Correo inválido",
+
+/* ListItem.js */
+
+"Only the Owner can remove this Dashboard.":"Sólo el dueño puede eliminar este tablero.",
+"Only Dashboards with ONE admin can be removed.":"Sólo tableros con UN admin pueden ser eliminador",
+"Only Dashboards without Projects can be removed.":"Sólo tableros sin proyectos pueden ser eliminados.",
+"This action will remove Dashboard ":"Esta acción eliminará el Tablero ",
+". Are you sure?":". ¿Estás seguro?",
+"cannot_remove_dashboard": "No se puede eliminar el tablero {1}",
+
+/* Projects directory */
+/* Edit.js */
+
+"Title is required":"El título es requerido",
+"Description is required":"La descripción es requerida",
+"Drop Image Here":"Suelta la imagen aquí",
+"File is too big, 500 Kb is the max":"El archivo es muy grande, 500 Kb es el máximo",
+"Only jpg, png and gif are allowed":"Sólo se permiten jpg, png y gif",
+
+/* Full.js */
+
+"This project is going to be deleted. Are you sure?":"Este proyecto será eliminado. ¿Estás seguro?",
+
+/* Share.js */
+
+"Picture":"Imagen",
+
+
 };
 
 },{}],9:[function(require,module,exports){
@@ -1772,8 +1948,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   placeholders: {
-    title: "Collection of Hackathons Title",
-    description: "brief description of this collection of hackathons"
+    title: __("Collection of Hackathons Title"),
+    description: __("brief description of this collection of hackathons")
   },
 
   initEditables: function(){
@@ -2217,9 +2393,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   placeholders: {
-    title: "Hackathon Title",
-    description: "brief description of this hackathon",
-    link: "url to hackathon site"
+    title: __("Hackathon Title"),
+    description: __("brief description of this hackathon"),
+    link: __("url to hackathon site"),
   },
 
   initEditables: function(){
@@ -3053,10 +3229,10 @@ module.exports = Backbone.Marionette.LayoutView.extend({
 
     if (this.model && this.model instanceof Dashboard){
 
-      var msg = "This Dashboard is open: click to close";
+      var msg = __("This Dashboard is open: click to close");
 
       if (!this.model.get("open")) {
-        msg = "This Dashboard is closed: click to reopen";
+        msg = __("This Dashboard is closed: click to reopen");
       }
 
       return _.extend({
@@ -3114,7 +3290,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       this.model.isShowcaseMode = false;
 
       this.ui.showcaseMode
-        .html("<i class='btn-danger txt'>off</i><div>Edit Showcase</div>")
+        .html("<i class='btn-danger txt'>" + __("turned_off") + "</i><div>" + __("Edit Showcase") + "</div>")
         .removeClass("on");
 
       this.ui.createShowcase.removeClass("hide");
@@ -3125,7 +3301,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       this.model.trigger("edit:showcase");
 
       this.ui.showcaseMode
-        .text("Save Showcase")
+        .text(__("Save Showcase"))
         .addClass("btn btn-success on");
 
       this.ui.createShowcase.addClass("hide");
@@ -3152,6 +3328,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   }
 
 });
+
 },{"../../models/Dashboard":15,"./templates/footer.hbs":43}],43:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
@@ -3250,7 +3427,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   initialize: function(options){
     this.showSort = (options && options.showSort) || false;
     this.collection = options && options.collection;
-    this.placeholder = (options && options.placeholder) || "Enter your keywords";
+    this.placeholder = (options && options.placeholder) || __("Enter your keywords");
   },
 
   onRender: function(){
@@ -3411,7 +3588,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
       case "dashboard":
         this.search.show(new Search({
           showSort: true,
-          placeholder: "Enter your keywords",
+          placeholder: __("Enter your keywords"),
           model: this.model,
           collection: this.collection
         }));
@@ -4478,8 +4655,8 @@ module.exports = Backbone.Marionette.LayoutView.extend({
   },
 
   errors: {
-    "subdomain_invalid": "5 to 10 chars, no spaces or special",
-    "subdomain_inuse": "Sorry, that one is in use. Try another one."
+    "subdomain_invalid": __("5 to 10 chars, no spaces or special"),
+    "subdomain_inuse": __("Sorry, that one is in use. Try another one.")
   },
 
   //--------------------------------------
@@ -4992,9 +5169,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   errors: {
-    "name_required": "Name is required",
-    "email_required": "Email is required",
-    "email_invalid": "Invalid Email"
+    "name_required": __("Name is required"),
+    "email_required": __("Email is required"),
+    "email_invalid": __("Invalid Email")
   },
 
   exit: function(){
@@ -5181,22 +5358,22 @@ module.exports = Backbone.Marionette.ItemView.extend({
     e.stopPropagation();
 
     if (!Dashboard.isAdmin(this.model)){
-      this.showMessage("Only the Owner can remove this Dashboard.");
+      this.showMessage(__("Only the Owner can remove this Dashboard."));
       return;
     }
 
     if (!Dashboard.isOwner(this.model)){
-      this.showMessage("Only Dashboards with ONE admin can be removed.");
+      this.showMessage(__("Only Dashboards with ONE admin can be removed."));
       return;
     }
 
-    if (this.model.get("projectsCount") > 0){
-      this.showMessage("Only Dashboards without Projects can be removed.");
+    if (this.model.get(__("projectsCount")) > 0){
+      this.showMessage(__("Only Dashboards without Projects can be removed."));
       return;
     }
 
-    if (window.confirm('This action will remove Dashboard ' +
-      this.model.get("domain") + '. Are you sure?')){
+    if (window.confirm(__('This action will remove Dashboard ') +
+      this.model.get("domain") + __('. Are you sure?'))){
 
         var dash = new Dashboard({ domain: this.model.get('domain') });
         dash.destroy().done(function(){
@@ -5211,13 +5388,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   showMessage: function(msg){
     hackdash.app.showOKMessage({
-      title: "Cannot Remove " + this.model.get('domain') + " Dashboard",
+      title: __("cannot_remove_dashboard", this.model.get('domain')),
       message: msg,
       type: "danger"
     });
   }
 
 });
+
 },{"../../models/Dashboard":15,"./templates/listItem.hbs":81}],78:[function(require,module,exports){
 
 var
@@ -5949,8 +6127,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
   //--------------------------------------
 
   errors: {
-    "title_required": "Title is required",
-    "description_required": "Description is required"
+    "title_required": __("Title is required"),
+    "description_required": __("Description is required")
   },
 
   showError: function(err){
@@ -6005,9 +6183,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
       acceptedFiles: 'image/jpeg,image/png,image/gif',
       uploadMultiple: false,
       clickable: true,
-      dictDefaultMessage: 'Drop Image Here',
-      dictFileTooBig: 'File is too big, 500 Kb is the max',
-      dictInvalidFileType: 'Only jpg, png and gif are allowed'
+      dictDefaultMessage: __('Drop Image Here'),
+      dictFileTooBig: __('File is too big, 500 Kb is the max'),
+      dictInvalidFileType: __('Only jpg, png and gif are allowed')
     });
 
     coverZone.on("error", function(file, message) {
@@ -6143,7 +6321,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   },
 
   onRemove: function(){
-    if (window.confirm("This project is going to be deleted. Are you sure?")){
+    if (window.confirm(__("This project is going to be deleted. Are you sure?"))){
       var domain = this.model.get('domain');
       this.model.destroy();
 
@@ -6274,22 +6452,22 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   settings: [{
     code: 'prg',
-    name: 'Progress'
+    name: __('Progress')
   }, {
     code: 'pic',
-    name: 'Picture'
+    name: __('Picture')
   }, {
     code: 'title',
-    name: 'Title'
+    name: __('Title')
   }, {
     code: 'desc',
-    name: 'Description'
+    name: __('Description')
   }, {
     code: 'contrib',
-    name: 'Contributors'
+    name: __('Contributors')
   }, {
     code: 'acnbar',
-    name: 'Action Bar'
+    name: __('Action Bar')
   }]
 
 });
@@ -6950,7 +7128,7 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
       url += '/p/' + this.model.get('_id');
     }
 
-    var textShort = 'Hacking at ' + (title || domain);
+    var textShort = __('Hacking at') + ' ' + (title || domain);
     text += textShort + ' via ' + people;
     text += ' ' + ['#hackdash', domain].join(' #');
 
@@ -6984,7 +7162,7 @@ var Sharer = module.exports = Backbone.Marionette.ItemView.extend({
       url += '/p/' + this.model.get('_id');
     }
 
-    var textShort = 'Hacking at ' + (title || domain);
+    var textShort = __('Hacking at') + ' ' + (title || domain);
     stitle += textShort;
     text += textShort + ' - HackDash';
 

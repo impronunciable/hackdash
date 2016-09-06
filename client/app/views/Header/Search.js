@@ -31,7 +31,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   initialize: function(options){
     this.showSort = (options && options.showSort) || false;
     this.collection = options && options.collection;
-    this.placeholder = (options && options.placeholder) || "Enter your keywords";
+    this.placeholder = (options && options.placeholder) || __("Enter your keywords");
   },
 
   onRender: function(){
