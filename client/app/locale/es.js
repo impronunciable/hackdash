@@ -12,6 +12,8 @@ module.exports = {
 
 /* home.hbs */
 
+ 
+  "dashboard name (5-10 chars)":"nombre del tablero (corto)",
   "Dashboards": "Tableros",
   "create now": "crear ahora",
   "ERROR":"ERROR",
@@ -40,6 +42,7 @@ module.exports = {
 
 /* search.hbs */
 
+"enter keywords": "Palabras clave",
 "Inform Progress to community.":"Informa el progreso a la comunidad.",
 "Upload your project to the platform.":"Sube tu proyecto a la plataforma.",
 "find it":"encuéntralo",
