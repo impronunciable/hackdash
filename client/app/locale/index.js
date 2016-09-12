@@ -4,8 +4,8 @@ var locales = {
   es: require('./es')
 };
 
-var current = locales.es;
-var _lan = 'es';
+var current = locales.en;
+var _lan = 'en';
 
 module.exports = {
 
