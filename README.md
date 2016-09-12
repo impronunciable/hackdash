@@ -1,9 +1,6 @@
 HackDash
 ========
 
-# Important: We are splitting repos for the next version. Please read [HackDash v2: Call for devs and desginers](http://zajdband.com/hackdash-v2-call-for-devs-and-desginers/)
-
-[![Join the chat at https://gitter.im/danzajdband/hackdash](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/danzajdband/hackdash?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Organize hackaton ideas into a dashboard
 
