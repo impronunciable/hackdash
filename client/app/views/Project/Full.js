@@ -60,7 +60,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
   onRender: function(){
     this.$el.addClass(this.model.get("status"));
     $(".tooltips", this.$el).tooltip({});
-    $.getScript("/js/disqus.js");
+    if (hackdash.discourseUrl) {
+      $.getScript("/js/discourse.js");
+    }
+    if (hackdash.disqus_shortname) {
+      $.getScript("/js/disqus.js");
+    }
 
     $('html, body').scrollTop(0);
   },
