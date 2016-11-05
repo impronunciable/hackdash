@@ -15,13 +15,22 @@
       , "callbackURL": "http://local.host:3000/auth/facebook/callback"
     }
   , "github": {
-        "clientID": ""
+        "name": "GitHub"
+      , "clientID": ""
       , "clientSecret": ""
       , "callbackURL": "http://local.host:3000/auth/github/callback"
     }
   , "google": {
-        "clientID": ""
+      , "clientID": ""
       , "clientSecret": ""
-      , "callbackURL": "http://local.host:3000/auth/google/callback"
+      , "callbackURL": "http://local.host:3000/auth/google-oauth20/callback"
+    }
+  , "auth0": {
+        "name": "Others"
+        "icon": "paper-plane"
+      , "domain": ""
+      , "clientID": ""
+      , "clientSecret": ""
+      , "callbackURL": "http://local.host:3000/auth/auth0/callback"
     }
 }

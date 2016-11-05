@@ -10,8 +10,8 @@
       {{#each providers}}
 
       <div class="col-xs-12 col-md-8 col-md-offset-2">
-        <a href="/auth/{{.}}{{../redirectURL}}" class="btn btn-primary signup-btn signup-{{.}}" data-bypass>
-          <i class="fa fa-{{.}}"></i>{{__ "Access with"}} {{firstUpper .}}
+        <a href="/auth/{{key}}{{../redirectURL}}" class="btn btn-primary signup-btn signup-{{key}}" data-bypass>
+          <i class="fa {{icon}}"></i>{{__ "Access with"}} {{name}}
         </a>
       </div>
 

@@ -170,7 +170,7 @@ module.exports = Backbone.Marionette.LayoutView.extend({
     var app = window.hackdash.app;
 
     app.modals.show(new LoginView({
-      model: new Backbone.Model({ providers: providers.split(',') })
+      model: new Backbone.Model({ providers: providers })
     }));
 
     return false;

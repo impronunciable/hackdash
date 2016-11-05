@@ -56,7 +56,7 @@ html
         baseURL: "!{host}",
         disqus_shortname: "!{disqus_shortname}",
         statuses: "!{statuses}",
-        providers: "!{providers}",
+        providers: !{JSON.stringify(providers)},
         fbAppId: "!{fbAppId}"
       };
 
