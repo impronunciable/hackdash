@@ -23,7 +23,7 @@
   , "google": {
       , "clientID": ""
       , "clientSecret": ""
-      , "callbackURL": "http://local.host:3000/auth/google-oauth20/callback"
+      , "callbackURL": "http://local.host:3000/auth/google/callback"
     }
   , "auth0": {
         "name": "Others"
