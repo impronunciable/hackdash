@@ -32,6 +32,10 @@ Handlebars.registerHelper('markdown', function(md) {
   return "";
 });
 
+Handlebars.registerHelper('discourseUrl', function() {
+  return window.hackdash.discourseUrl;
+});
+
 Handlebars.registerHelper('disqus_shortname', function() {
   return window.hackdash.disqus_shortname;
 });
