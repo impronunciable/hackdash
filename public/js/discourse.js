@@ -1,7 +1,7 @@
 var discourseUrl = window.hackdash && window.hackdash.discourseUrl;
 if (discourseUrl) {
   DiscourseEmbed = {
-    discourseEmbedUrl: window.location.href,
+    discourseEmbedUrl: [location.protocol, '//', location.host, location.pathname].join(''),
     discourseUrl: discourseUrl
   };
   // The only way to re-execute Discourse embedding script seems to be to re-insert it.
