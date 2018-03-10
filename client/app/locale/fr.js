@@ -67,7 +67,7 @@ module.exports = {
 
 /* addAdmin.hbs */
 
-"Warning! you will NOT":"Attention ! vous ne pourrez PAS supprimer ce tableau de bord si vous ajoutez un admin !",
+"Warning! you will NOT":"Attention ! vous ne pourrez PAS supprimer ce tableau de bord si vous ajoutez un admin !",
 "type name or username":"entrez votre nom ou pseudonyme",
 "cancel":"annuler",
 
@@ -254,7 +254,7 @@ module.exports = {
 "Only Dashboards with ONE admin can be removed.":"Seuls les tableaux de bord avec UN admin peuvent être retirés.",
 "Only Dashboards without Projects can be removed.":"Seuls les tableaux de bord sans projet peuvent être retirés.",
 "This action will remove Dashboard ":"Cette action va retirer le tableau de bord ",
-". Are you sure?":". Êtes-vous sûr ?",
+". Are you sure?":". Êtes-vous sûr ?",
 "cannot_remove_dashboard": "Impossible de retirer le tableau de bord {1}",
 
 /* Projects directory */
@@ -268,7 +268,7 @@ module.exports = {
 
 /* Full.js */
 
-"This project is going to be deleted. Are you sure?":"Ce projet va être supprimé. Êtes-vous sûr ?",
+"This project is going to be deleted. Are you sure?":"Ce projet va être supprimé. Êtes-vous sûr ?",
 
 /* Share.js */
 
