@@ -12,6 +12,8 @@ module.exports = {
 
 /* home.hbs */
 
+
+  "dashboard name (5-10 chars)":"dashboard name (short)",
   "Dashboards": "Dashboards",
   "create now": "create now",
   "ERROR":"ERROR",
@@ -40,6 +42,7 @@ module.exports = {
 
 /* search.hbs */
 
+"enter keywords": "Enter keywords",
 "Inform Progress to community.":"Inform Progress to community.",
 "Upload your project to the platform.":"Upload your project to the platform.",
 "find it":"find it",
@@ -209,6 +212,7 @@ module.exports = {
 
 /* Share.js */
 
+"Title":"Title",
 "Description":"Description",
 "Hackdash Logo":"Hackdash Logo",
 "Progress":"Progress",
@@ -269,6 +273,6 @@ module.exports = {
 /* Share.js */
 
 "Picture":"Picture",
-"Title":"Title",
+
 
 };
