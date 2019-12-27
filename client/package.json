@@ -16,7 +16,7 @@
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-jshint": "~0.7.1",
     "grunt-contrib-watch": "~0.5.3",
-    "handlebars": "^2.0.0",
+    "handlebars": "^4.5.3",
     "hbsfy": "^2.2.1"
   }
 }
