@@ -24,7 +24,7 @@ module.exports = function(){
       var providers = window.hackdash.providers;
 
       app.modals.show(new LoginView({
-        model: new Backbone.Model({ providers: providers.split(',') })
+        model: new Backbone.Model({ providers: providers })
       }));
     };
 
