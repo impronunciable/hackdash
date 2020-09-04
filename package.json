@@ -23,7 +23,7 @@
     "markdown": "0.4.0",
     "method-override": "3.0.0",
     "moment": "2.24.0",
-    "mongodb": "^2.2.10",
+    "mongodb": "^3.6.1",
     "mongoose": "^5.8.3",
     "morgan": "1.9.1",
     "multer": "0.1.8",
