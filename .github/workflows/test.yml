@@ -25,6 +25,5 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Build the docker-compose stack
-      run: docker-compose up -d --build
-    - run: docker-compose exec nodejs npm test
+    - name: Run tests
+      run: docker-compose up --build --abort-on-container-exit
