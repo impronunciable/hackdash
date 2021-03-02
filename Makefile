@@ -11,4 +11,4 @@ logs:
 	docker-compose logs ${svc}
 
 exec:
-	docker-compose exec web ${cmd}
+	docker-compose exec nodejs ${cmd}

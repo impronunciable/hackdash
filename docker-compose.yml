@@ -38,6 +38,15 @@ services:
     depends_on:
       - db
 
+  test:
+    image: nodejs
+    command: 
+        sh -c "npm run test"
+    env_file: .env
+    depends_on:
+      - db
+      - nodejs
+
 networks:
   app-network:
     driver: bridge
