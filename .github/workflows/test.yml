@@ -26,4 +26,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Run tests
-      run: docker-compose up --build --abort-on-container-exit
+      run: docker-compose -f docker-compose_test.yml run nodejs
