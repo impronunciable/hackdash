@@ -28,8 +28,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
+      - .:/home/app
+      - node_modules:/home/app/node_modules
     networks:
       - app-network
     command: >
@@ -38,14 +38,14 @@ services:
     depends_on:
       - db
 
-  test:
-    image: nodejs
-    command: 
-        sh -c "npm run test"
-    env_file: .env
-    depends_on:
-      - db
-      - nodejs
+  # test:
+  #   image: nodejs
+  #   command: 
+  #       sh -c "npm run test"
+  #   env_file: .env
+  #   depends_on:
+  #     - db
+  #     - nodejs
 
 networks:
   app-network:

@@ -1,21 +1,15 @@
-FROM node:10-alpine
+FROM ubuntu:latest
+USER root
 
-# Dockerize is needed to sync containers startup
-ENV DOCKERIZE_VERSION v0.6.0
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+RUN mkdir -p /home/app/node_modules
 
-WORKDIR /home/node/app
+WORKDIR /home/app
 
 COPY package*.json ./
 
-USER node
-
+RUN apt-get update
+RUN apt-get -y install curl gnupg
+RUN curl -sL https://deb.nodesource.com/setup_10.x  | bash -
+RUN apt-get -y install nodejs
 RUN npm install
-
-COPY --chown=node:node . .
-
-# EXPOSE 3000
