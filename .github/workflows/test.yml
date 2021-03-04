@@ -24,4 +24,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Run tests
-      run: docker-compose -f docker-compose_test.yml run nodejs
+      run: docker-compose run nodejs npm run test
