@@ -1,1 +1,0 @@
-NODE_PATH=. DEBUG=hackdash:* nodemon index
