@@ -20,7 +20,7 @@ In your `config.js`: We can chanage defaut values and configuration will be load
 * `db`:
 	+ `url`: Overrides other db config. Full MongoDB URL. Override form environment variable `DB_URL`
 	+ `host` Override form environment variable `DB_HOST`
-	+ `port` Override form environment variable `DB_POST`
+	+ `port` Override form environment variable `DB_PORT`
 * `host`: Your instance host (i.e. yourdomain.com) Override form environment variable `HOST`
 * `port`: Your port (i.e. 3000) Override form environment variable `PORT`
 * `session`: Your session key (it must be a secret string) Override form environment variable `SESSION`
