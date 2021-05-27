@@ -14,12 +14,9 @@ services:
         USER_ID: ${USER_ID:-1001}
         GROUP_ID: ${GROUP_ID:-1001}
     environment:
-      - MONGO_USERNAME=$MONGO_USERNAME
-      - MONGO_PASSWORD=$MONGO_PASSWORD
-      - MONGO_HOSTNAME=db
-      - MONGO_PORT=$MONGO_PORT
-      - MONGO_DB=$MONGO_DB
       - HOST=localhost
+      - DATABASE_URL=mongodb://db:27017
+      - SESSION=not-so-secret-in-dev
     ports:
       - "3000:3000"
     volumes:
@@ -34,11 +31,7 @@ services:
         USER_ID: ${USER_ID:-1001}
         GROUP_ID: ${GROUP_ID:-1001}
     environment:
-      - MONGO_USERNAME=$MONGO_USERNAME
-      - MONGO_PASSWORD=$MONGO_PASSWORD
-      - MONGO_HOSTNAME=db
-      - MONGO_PORT=$MONGO_PORT
-      - MONGO_DB=$MONGO_DB
+      - DATABASE_URL=mongodb://db:27017
     volumes:
       - .:/home/app
     depends_on:
