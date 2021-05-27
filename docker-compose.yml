@@ -3,45 +3,47 @@ version: '3'
 services:
   db:
     image: mongo:4.1.8-xenial
-    container_name: db
-    restart: unless-stopped
     env_file: .env
     volumes:
       - dbdata:/data/db
-    networks:
-      - app-network
 
-  nodejs:
+  app:
     build:
       context: .
-      dockerfile: Dockerfile
-    image: nodejs
-    container_name: nodejs
-    restart: unless-stopped
-    env_file: .env
+      args:
+        USER_ID: ${USER_ID:-1001}
+        GROUP_ID: ${GROUP_ID:-1001}
     environment:
       - MONGO_USERNAME=$MONGO_USERNAME
       - MONGO_PASSWORD=$MONGO_PASSWORD
       - MONGO_HOSTNAME=db
       - MONGO_PORT=$MONGO_PORT
       - MONGO_DB=$MONGO_DB
+      - HOST=localhost
     ports:
       - "3000:3000"
     volumes:
       - .:/home/app
-      - node_modules:/home/app/node_modules
-    networks:
-      - app-network
-    command: >
-      sh -c "npm install && 
-      npm run start" 
     depends_on:
       - db
-      
 
-networks:
-  app-network:
-    driver: bridge
+  metrics:
+    build:
+      context: .
+      args:
+        USER_ID: ${USER_ID:-1001}
+        GROUP_ID: ${GROUP_ID:-1001}
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=db
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB
+    volumes:
+      - .:/home/app
+    depends_on:
+      - db
+    command: "./start_metrics.sh"
 
 volumes:
   dbdata:
