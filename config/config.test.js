@@ -1,13 +1,13 @@
 require('dotenv').config()
 module.exports = {
     "db": {
-      "name": process.env.DB_NAME || "hackdash",
-      "host": process.env.DB_HOST || "localhost",
-      "url": process.env.DB_URL || "mongodb://db:27017"
+      "name": process.env.DB_NAME,
+      "host": process.env.DB_HOST,
+      "url": process.env.DATABASE_URL,
     },
-    "host": process.env.HOST || "local.host",
+  "host": process.env.HOST,
     "port": parseInt(process.env.PORT) || 3000,
-    "session": process.env.SESSION || "wefewfef",
+    "session": process.env.SESSION,
     "discourseUrl": process.env.DISCOURSE_URL || null,
     "disqus_shortname": process.env.DISQUS_SHORTNAME || null,
     "title": process.env.TITLE || "hackdash",
