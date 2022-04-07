@@ -13,7 +13,7 @@ services:
         USER_ID: ${USER_ID:-1001}
         GROUP_ID: ${GROUP_ID:-1001}
     environment:
-      - HOST=localhost
+      - HOST=${HOST:-localhost}
       - DATABASE_URL=mongodb://db:27017
       - SESSION=not-so-secret-in-dev
     ports:
