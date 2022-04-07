@@ -14,5 +14,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Install test dependencies
+      run: docker-compose run --rm app npm install --also=dev
+      
     - name: Run tests
       run: docker-compose run --rm app npm run test
