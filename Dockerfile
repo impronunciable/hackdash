@@ -14,7 +14,7 @@ RUN apt-get -y install nodejs
 RUN set -ex; \
     npm install -g; \
     cd metrics; \
-    npm install
+    npm install -g
 
 ARG USER_ID=1001
 ARG GROUP_ID=1001
