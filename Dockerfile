@@ -1,16 +1,16 @@
 FROM ubuntu:latest
 
-RUN mkdir -p /home/app/node_modules /home/app/metrics/node_modules
+ENV NODE_PATH=.
+ENV NODE_ENV production
 
-WORKDIR /home/app
-
-COPY metrics/package*.json ./metrics/
-COPY package*.json ./
-
-RUN apt-get update
-RUN apt-get -y install curl gnupg
-RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash -
+RUN apt-get update; \
+    apt-get -y install curl gnupg; \
+    curl -sL https://deb.nodesource.com/setup_14.x  | bash -
 RUN apt-get -y install nodejs
+
+COPY . /app
+WORKDIR /app
+
 RUN set -ex; \
     npm install -g; \
     cd metrics; \
@@ -25,7 +25,5 @@ RUN set -ex; \
   chown -R containeruser:containeruser /home/app
 
 USER containeruser
-
-ENV NODE_PATH=.
 
 CMD node index.js
