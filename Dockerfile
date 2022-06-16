@@ -26,4 +26,6 @@ RUN set -ex; \
 
 USER containeruser
 
-CMD npm run start
+ENV NODE_PATH=.
+
+CMD node index.js
