@@ -38,26 +38,25 @@ You should now be able to login using your own github account via OAuth, and get
 Config
 ======
 
-In your `config.js`: We can chanage defaut values and configuration will be loaded form
-`.env` file.
+Configure by setting environment variables, setting values in a `.env` file, or by modifying `config.js`.
 
-* `db`:
-	+ `url`: Overrides other db config. Full MongoDB URL. Override form environment variable `DB_URL`
-	+ `host` Override form environment variable `DB_HOST`
-	+ `port` Override form environment variable `DB_PORT`
-* `host`: Your instance host (i.e. yourdomain.com) Override form environment variable `HOST`
-* `port`: Your port (i.e. 3000) Override form environment variable `PORT`
-* `session`: Your session key (it must be a secret string) Override form environment variable `SESSION`
-* `title`: Instance title used in the html title tag and other headings. Override form environment variable `TITLE`
-* `live`: Boolean (true, false) that enable/disable the live feed feature in yourdomain.com/live. Override form environment variable `LIVE`
-* `mailer`: SMTP mail info to enable email notifications using nodemailer. Check out the [options](https://github.com/andris9/Nodemailer#setting-up-smtp) Override form environment variable `MAILER`
-* `team`: An array of `user`.`_id` to be shown as Team on Landing Page.
-* `maxQueryLimit`: a Number for the max amount of results at the landing page searchs. Override form environment variable `MAX_QUERY_LIMIT`
-* `googleAnalytics`: the UA-XXXXXXXX-X code from Google Analytics. if not specified wont set the script. Override form environment variable `GOOGLE_ANALYTICS`
-* `facebookAppId`: the Facebook App Id for share buttons. It will take first from keys.json, if not will use this one. Don't set it to not show FB share buttons. Override form environment variable `FCAEBOOK_APP_ID`
-* `prerender`:
-	+ `enabled`: Boolean (true, false). Where the website would use the SEO Prerender. Override form environment variable `PREPENDER_ENABLE`
-	+ `db`: The Mongo URI of Cached Pages. Override form environment variable `PREPENDER_DB`
+| Environment variable or .env key | config.js key | Required | Default | Description |
+|----------------------------------|---------------|----------|---------|-------------|
+| `DATABASE_URL`                   | `db.url`      | Yes      |         | Overrides other db config. Full MongoDB URL. |
+| `DB_HOST`                        | `db.host`     | If DATABASE_URL not provided |         |             |
+| `DB_PORT`                        | `db.port`     | If DATABASE_URL not provided |         |             |
+| `HOST`                           | `host`        | Yes      |         | Your instance host (i.e. yourdomain.com) |
+| `PORT`                           | `port`        | No       | $PORT or 3000 | Your port (i.e. 3000) |
+| `SESSION`                        | `session`     | Yes      |         | Your session key (it must be a secret string) |
+| `TITLE`                          | `title`: Instance title used in the html title tag and other headings. |
+| `LIVE`                           | `live`        | No       | true    | Boolean (true, false) that enable/disable the live feed feature in yourdomain.com/live.
+| `MAILER`                         | `mailer`      | No       | `null`  | SMTP mail info to enable email notifications using nodemailer. Check out the [options](https://github.com/andris9/Nodemailer#setting-up-smtp) |
+|                                  | `team`        | No       | ?       | An array of `user`.`_id` to be shown as Team on Landing Page. |
+| `MAX_QUERY_LIMIT`                | `maxQueryLimit` | No     | 30      | a Number for the max amount of results at the landing page searchs. |
+| `GOOGLE_ANALYTICS`               | `googleAnalytics` | No   | `UA-XXXXXXXX-X` | the UA-XXXXXXXX-X code from Google Analytics. if not specified wont set the script. |
+| `FACEBOOK_APP_ID`                | `facebookAppId` | No     | `YYYYYYYYYYYY` | the Facebook App Id for share buttons. It will take first from keys.json, if not will use this one. Don't set it to not show FB share buttons. |
+| `PRERENDER_ENABLE`               | `prerender.enabled` | No | `false` | Boolean (true, false). Where the website would use the SEO Prerender.|
+| `PRERENDER_DB`                   | `db`          | No       | `"mongodb://localhost/prerender"` | The Mongo URI of Cached Pages.
 
 Running instances
 =================
