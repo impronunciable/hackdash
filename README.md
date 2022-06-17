@@ -60,7 +60,18 @@ Configure by setting environment variables, setting values in a `.env` file, or 
 | `GOOGLE_ANALYTICS`               | `googleAnalytics` | No   | `UA-XXXXXXXX-X` | the UA-XXXXXXXX-X code from Google Analytics. if not specified wont set the script. |
 | `FACEBOOK_APP_ID`                | `facebookAppId` | No     | `YYYYYYYYYYYY` | the Facebook App Id for share buttons. It will take first from keys.json, if not will use this one. Don't set it to not show FB share buttons. |
 | `PRERENDER_ENABLE`               | `prerender.enabled` | No | `false` | Boolean (true, false). Where the website would use the SEO Prerender.|
-| `PRERENDER_DB`                   | `presender.db`          | No       | `"mongodb://localhost/prerender"` | The Mongo URI of Cached Pages.
+| `PRERENDER_DB`                   | `presender.db`          | No       | `"mongodb://localhost/prerender"` | The Mongo URI of Cached Pages. |
+
+Authentication providers are configured using environment variables, .env file keys, or modifying `keys.js`.
+
+| Environment variable or .env key | config.js key | Required | Default | Description |
+|----------------------------------|---------------|----------|---------|-------------|
+| `GITHUB_CLIENT_ID`               | `github.clientID` | No       |         | [create a Github OAuth app](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app) |
+| `GITHUB_SECRET_KEY`              | `github.clientSecret` | No |       |             |
+| `GITHUB_CALLBACK_URL`            | `github.callbackURL` | No | `"fake"` | e.g. `http://localhost:3000/auth/github/callback` |
+
+See code for more authentication options.
+
 
 Running instances
 =================
