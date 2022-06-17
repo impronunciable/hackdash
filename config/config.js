@@ -15,8 +15,8 @@ module.exports = {
   "live": process.env.LIVE || true,
   "mailer": process.env.MAILER || null,
   "prerender": {
-    "enabled": process.env.PREPENDER_ENABLE || false,
-    "db": process.env.PREPENDER_DB || "mongodb://localhost/prerender"
+    "enabled": process.env.PRERENDER_ENABLE || false,
+    "db": process.env.PRERENDER_DB || "mongodb://localhost/prerender"
   },
   "team": [
     "516d1997b2951b02280000e1",

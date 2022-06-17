@@ -22,7 +22,7 @@ ARG GROUP_ID=1001
 RUN set -ex; \
   addgroup --gid $GROUP_ID --system containeruser; \
   adduser --system --uid $USER_ID --gid $GROUP_ID containeruser; \
-  chown -R containeruser:containeruser /home/app
+  chown -R containeruser:containeruser /app
 
 USER containeruser
 
