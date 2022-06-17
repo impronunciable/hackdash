@@ -9,12 +9,36 @@ Organize hackaton ideas into a dashboard
 Install
 ===========
 
-I wrote a [blog post](http://zajdband.com/installing-hackdash) explaining the installation process. Also check the [wiki](https://github.com/danzajdband/hackdash/wiki) for more info and docs
+Hackdash can now be run in a docker container - see an example [dokku app configuration using ansible](https://github.com/OpenUpSA/ansible-config/tree/master/apps/hackdash).
+
+Alternatively, see a [blog post](http://zajdband.com/installing-hackdash) explaining the installation process to run it natively. Also check the [wiki](https://github.com/danzajdband/hackdash/wiki) for more info and docs
+
+Development enviroment
+----------------------
+
+The quickest way to set up a local development environment is by running
+
+    docker-compose up
+
+Once the images have been pulled/built and started, you should be able to visit it at http://localhost:3000 and see the prompt to create a new dashboard. Once you click in the dashboard name input, it will try and fail to prompt you to login.
+
+To be able to login, create a `.env` file in the project root with the following config:
+
+    GITHUB_CLIENT_ID=
+    GITHUB_SECRET_KEY=
+    GITHUB_CALLBACK_URL=http://localhost:3000/auth/github/callback
+
+For the values of CLIENT_ID and SECRET_KEY, [create a Github OAuth app](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app) with the above callback URL, and enter the ID and key values in the .ev file.
+
+To apply the new environment variables to the running docker containers, stop them all and run `docker-compose up` again, or while they're running, run `docker-compose up -d` in another terminal.
+
+You should now be able to login using your own github account via OAuth, and get redirected back to your local hackdash instance with a logged-in session. You can now create a dashboard and a project.
+
 
 Config
 ======
 
-In your `config.js`: We can chanage defaut values and configuration will be loaded form 
+In your `config.js`: We can chanage defaut values and configuration will be loaded form
 `.env` file.
 
 * `db`:
@@ -32,7 +56,7 @@ In your `config.js`: We can chanage defaut values and configuration will be load
 * `googleAnalytics`: the UA-XXXXXXXX-X code from Google Analytics. if not specified wont set the script. Override form environment variable `GOOGLE_ANALYTICS`
 * `facebookAppId`: the Facebook App Id for share buttons. It will take first from keys.json, if not will use this one. Don't set it to not show FB share buttons. Override form environment variable `FCAEBOOK_APP_ID`
 * `prerender`:
-	+ `enabled`: Boolean (true, false). Where the website would use the SEO Prerender. Override form environment variable `PREPENDER_ENABLE` 
+	+ `enabled`: Boolean (true, false). Where the website would use the SEO Prerender. Override form environment variable `PREPENDER_ENABLE`
 	+ `db`: The Mongo URI of Cached Pages. Override form environment variable `PREPENDER_DB`
 
 Running instances
