@@ -16,9 +16,13 @@ Alternatively, see a [blog post](http://zajdband.com/installing-hackdash) explai
 Development enviroment
 ----------------------
 
-The quickest way to set up a local development environment is by running
+The quickest way to set up a local development environment is using docker-compose to manage the environment by running
 
     docker-compose up
+
+If you prefer to run it natively, refer to the blog post above, the config documentation below, and then run
+
+    yarn start
 
 Once the images have been pulled/built and started, you should be able to visit it at http://localhost:3000 and see the prompt to create a new dashboard. Once you click in the dashboard name input, it will try and fail to prompt you to login.
 
@@ -56,7 +60,7 @@ Configure by setting environment variables, setting values in a `.env` file, or 
 | `GOOGLE_ANALYTICS`               | `googleAnalytics` | No   | `UA-XXXXXXXX-X` | the UA-XXXXXXXX-X code from Google Analytics. if not specified wont set the script. |
 | `FACEBOOK_APP_ID`                | `facebookAppId` | No     | `YYYYYYYYYYYY` | the Facebook App Id for share buttons. It will take first from keys.json, if not will use this one. Don't set it to not show FB share buttons. |
 | `PRERENDER_ENABLE`               | `prerender.enabled` | No | `false` | Boolean (true, false). Where the website would use the SEO Prerender.|
-| `PRERENDER_DB`                   | `db`          | No       | `"mongodb://localhost/prerender"` | The Mongo URI of Cached Pages.
+| `PRERENDER_DB`                   | `presender.db`          | No       | `"mongodb://localhost/prerender"` | The Mongo URI of Cached Pages.
 
 Running instances
 =================
