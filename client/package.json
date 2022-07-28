@@ -10,7 +10,7 @@
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-browserify": "^3.2.1",
-    "grunt-commonjs-handlebars": "0.1.0-rc7",
+    "grunt-commonjs-handlebars": "^0.1.0-rc7",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-copy": "~0.4.1",
