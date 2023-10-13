@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  db:
+    image: mongo:4.1.8-xenial
+    volumes:
+      - dbdata:/data/db
+
+  app:
+    build:
+      context: .
+      args:
+        USER_ID: ${USER_ID:-1001}
+        GROUP_ID: ${GROUP_ID:-1001}
+    environment:
+      - HOST=${HOST:-localhost}
+      - DATABASE_URL=mongodb://db:27017
+      - SESSION=not-so-secret-in-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/home/app
+    depends_on:
+      - db
+
+  metrics:
+    build:
+      context: .
+      args:
+        USER_ID: ${USER_ID:-1001}
+        GROUP_ID: ${GROUP_ID:-1001}
+    environment:
+      - DATABASE_URL=mongodb://db:27017
+    volumes:
+      - .:/home/app
+    depends_on:
+      - db
+    command: "./start_metrics.sh"
+
+volumes:
+  dbdata:
+  node_modules:
