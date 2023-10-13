@@ -8,7 +8,7 @@
   "dependencies": {
     "async": "^0.9.0",
     "cache-manager": "^0.14.0",
-    "mongodb": "^1.4.23",
+    "mongodb": "^3.6.1",
     "prerender": "pjnovas/prerender#58f168e",
     "request": "^2.51.0"
   },
