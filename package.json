@@ -35,6 +35,8 @@
     "passport-meetup": "0.1.2",
     "passport-twitter": "1.0.3",
     "prerender-node": "1.1.1",
+    "remark": "^6.2.0",
+    "remark-html": "^5.1.0",
     "serve-favicon": "2.2.1",
     "socket.io": "0.9.14",
     "superagent": "5.1.3",
